@@ -1,12 +1,12 @@
 Eu
 spk_Gd.inp
 6
-h2o.xyz 
-h2o.xyz
-h2o.xyz
-h2o.xyz
-h2o.xyz
-h2o.xyz
+h2o 
+h2o
+h2o
+h2o
+h2o
+h2o
 
 
 ! a ordem importa

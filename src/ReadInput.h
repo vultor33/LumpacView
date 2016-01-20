@@ -13,6 +13,7 @@ public:
 	ReadInput();
 	~ReadInput();
 
+	void readLumpacViewInput();
 	void rePrintInput();
 
 private:
@@ -24,7 +25,6 @@ private:
 	std::string projectName;
 	std::vector<Ligand> allLigands;
 
-	void readLumpacViewInput();
 	void buildProjectName();
 	Ligand readConfigurations(std::string inputName);
 	void readAllLigands();

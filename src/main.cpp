@@ -1,13 +1,7 @@
 #include <stdlib.h>
 #include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <vector>
-#include <cmath>
-#include <time.h>
 
+#include "MyExceptions.h"
 #include "Coordstructs.h"
 #include "ReadInput.h"
 
@@ -16,6 +10,17 @@ using namespace std;
 int main()
 {
 	ReadInput readInp_;
+	try	{
+		readInp_.readLumpacViewInput();
+	}
+	catch (MyExceptions& e)	{
+		cout << e.what() << endl;
+		return 1;
+	}
+	catch (...) {
+		cout << "unknown error on input - check it or contact developers" << endl;
+		return 1;
+	}
 
 	readInp_.rePrintInput();
 
@@ -23,6 +28,12 @@ int main()
 	return 0;
 }
 
+/*
+ERROR HANDLING
+- Quando o destructor nao e chamado:
+- Destructor of the class is not called if exception is thrown in its constructor.
+- Exception is automatically re-thrown if caught in construction initialization list catch block.
+*/
 
 /*
 to string

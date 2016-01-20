@@ -9,12 +9,12 @@ public:
 	Ligand();
 	~Ligand();
 
-	void initializeLigand(std::vector<CoordXYZ> &coord_in, int x1_in, int x2_in);
+	void initializeLigand(std::vector<CoordXYZ> &coord_in);
 
 private:
 	std::vector<CoordXYZ> coord;
-	int x1; // centro da ligacao
-	int x2; // orientacao
+	int x1; // donor atom
+	int x2; // ligand orientation vactor
 
 };
 

@@ -42,6 +42,7 @@ void ReadInput::readLumpacViewInput()
 	{
 		input_ >> ligandFileName[i];
 	}
+	input_.close();
 
 	buildProjectName();
 	readAllLigands();
@@ -94,8 +95,12 @@ Ligand ReadInput::readConfigurations(string inputName)
 	mol_.close();
 
 	Ligand molecule;
-	//throw if x1 and x2 not found (close input)
-	molecule.initializeLigand(coord); 
+	if (!molecule.initializeLigand(coord))
+	{
+		cout << "problem on ligand:  " << nameinp << endl;
+		MyExceptions mexept2_(2);
+		throw mexept2_;
+	}
 	return molecule;
 }
 

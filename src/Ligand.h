@@ -9,14 +9,15 @@ public:
 	Ligand();
 	~Ligand();
 
-	void initializeLigand(std::vector<CoordXYZ> &coord_in);
+	bool initializeLigand(std::vector<CoordXYZ> &coord_in);
 
 private:
 	std::vector<CoordXYZ> coord;
-	int x1; // donor atom
-	int x2; // ligand orientation vactor
+	int chelation; // mono, bi or tri
 
 };
 
-
 #endif
+
+
+

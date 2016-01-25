@@ -16,6 +16,10 @@ const char * MyExceptions::what() const throw()
 		{
 		case 1:
 			return "Error 1 - Ligand file not found";
+		case 2:
+			return "Error 2 - Problem on ligands, check input";
+		case 3:
+			return "Error 3 - Wrong number of atoms at ligand file";
 
 		default:
 			return "unknow error - contact developers";

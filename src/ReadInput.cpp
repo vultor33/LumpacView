@@ -82,6 +82,11 @@ Ligand ReadInput::readConfigurations(string inputName)
 	{
 		if (auxline == "")
 			break;
+		if (i == nAtoms) {
+			cout << "problem on ligand:  " << nameinp << endl;
+			MyExceptions mexept_(3);
+			throw mexept_;
+		}
 
 		stringstream line;
 		line << auxline;
@@ -89,7 +94,6 @@ Ligand ReadInput::readConfigurations(string inputName)
 			>> coord[i].x
 			>> coord[i].y
 			>> coord[i].z;
-		
 		i++;
 	}
 	mol_.close();

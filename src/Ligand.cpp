@@ -1,5 +1,7 @@
 #include "Ligand.h"
 
+#include <fstream>
+
 #include "Coordstructs.h"
 #include "AuxMath.h"
 
@@ -28,7 +30,7 @@ bool Ligand::initializeLigand(vector<CoordXYZ> &coord_in)
 		(coord_in[size - 1].atomlabel == "Xt4") &&
 		(coord_in[size - 2].atomlabel == "Xt3") &&
 		(coord_in[size - 3].atomlabel == "Xt2") &&
-		(coord_in[size - 3].atomlabel == "Xt1"))
+		(coord_in[size - 4].atomlabel == "Xt1"))
 		chelation = 3;
 	else
 		return false;
@@ -57,7 +59,6 @@ bool Ligand::initializeLigand(vector<CoordXYZ> &coord_in)
 		X2.y = coord_in[size - 1].y;
 		X2.z = coord_in[size - 1].z;
 	}
-
 	else if (chelation == 3)
 	{
 		AuxMath math_;
@@ -91,8 +92,51 @@ bool Ligand::initializeLigand(vector<CoordXYZ> &coord_in)
 	else
 		return false;
 
+	size += 1 - chelation;
+	coord.resize(size);
+	for (int i = 0; i < size - 2; i++)
+	{
+		coord[i] = coord_in[i];
+
+	}
+	coord[size - 2] = X1;
+	coord[size - 1] = X2;
+
+#ifdef _DEBUG
+	printXyzLigandDirection();
+#endif
 
 	return true;
 }
+
+void Ligand::printXyzLigandDirection()
+{
+	ofstream out_("xyzTeste.xyz");
+	int size = coord.size();
+	out_ << size << endl
+		<< "useless" << endl;
+	for (int i = 0; i < (size-2); i++)
+	{
+		out_ << coord[i].atomlabel << "   "
+			<< coord[i].x << "   "
+			<< coord[i].y << "   "
+			<< coord[i].z << endl;
+	}
+	int x1 = size - 2;
+	int x2 = size - 1;
+	out_ << "Au  " << "   "
+		<< coord[x1].x << "   "
+		<< coord[x1].y << "   "
+		<< coord[x1].z << endl;
+
+	out_ << "Au " << "   "
+		<< coord[x2].x << "   "
+		<< coord[x2].y << "   "
+		<< coord[x2].z << endl;
+
+	out_.close();
+
+}
+
 
 

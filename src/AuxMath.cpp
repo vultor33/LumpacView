@@ -81,9 +81,10 @@ std::vector<double> AuxMath::normalVectorFrom3Points(
 std::vector<double> AuxMath::triangleCentroid(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3)
 {
 	vector<double> centroid(3);
-	centroid[0] = 0.5e0 * (x1 + x2 + x3);
-	centroid[1] = 0.5e0 * (y1 + y2 + y3);
-	centroid[2] = 0.5e0 * (z1 + z2 + z3);
+	double terc = 1.0e0 / 3.0e0;
+	centroid[0] = terc * (x1 + x2 + x3);
+	centroid[1] = terc * (y1 + y2 + y3);
+	centroid[2] = terc * (z1 + z2 + z3);
 
 	return centroid;
 }

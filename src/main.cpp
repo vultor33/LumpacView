@@ -28,6 +28,10 @@ int main()
 	return 0;
 }
 
+// Estou usando o preprocessor _DEBUG pra testes,
+// só vendo se a parada funciona, qualquer e so dar um find e apagar
+
+
 /*
 ERROR HANDLING
 - Quando o destructor nao e chamado:

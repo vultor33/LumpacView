@@ -15,6 +15,8 @@ private:
 	std::vector<CoordXYZ> coord;
 	int chelation; // mono, bi or tri
 
+	void printXyzLigandDirection(); //debug purpose
+
 };
 
 #endif

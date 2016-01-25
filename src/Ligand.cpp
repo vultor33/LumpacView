@@ -60,9 +60,6 @@ bool Ligand::initializeLigand(vector<CoordXYZ> &coord_in)
 
 	else if (chelation == 3)
 	{
-		//x1 e o ortocentro
-		//<xt4,N> maior q zero, se nao inverte n.
-		//x2 fica apenas como referencia
 		AuxMath math_;
 		vector<double> centroid = math_.triangleCentroid
 			(coord_in[size - 4].x, coord_in[size - 4].y, coord_in[size - 4].z,
@@ -92,7 +89,7 @@ bool Ligand::initializeLigand(vector<CoordXYZ> &coord_in)
 		}
 	}
 	else
-		throw 1;
+		return false;
 
 
 	return true;

@@ -29,12 +29,11 @@ private:
 	CoordXYZ X2; //vector - leaving from X1
 
 	bool getInfoFromTitle();
-	void printXyzLigandDirection(); //debug purpose
-
 	bool calculateMonodentate();
 	bool calculateBidentate();
 	bool calculateTridentate();
 
+	void printXyzLigandDirection(); //debug purpose
 
 };
 

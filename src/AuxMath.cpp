@@ -78,11 +78,7 @@ std::vector<double> AuxMath::normalVectorFrom3Points(
 	v2z = z1 - z3;
 
 	vector<double> n = vectorProduct(v1x, v1y, v1z, v2x, v2y, v2z);
-	double module = norm(n[0], n[1], n[2]);
-	n[0] /= module;
-	n[1] /= module;
-	n[2] /= module;
-
+	normalize(n);
 	return n;
 }
 
@@ -95,6 +91,23 @@ std::vector<double> AuxMath::triangleCentroid(double x1, double y1, double z1, d
 	centroid[2] = terc * (z1 + z2 + z3);
 
 	return centroid;
+}
+
+double AuxMath::angleFrom3Points(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3)
+{
+	vector<double> v(3);
+	vector<double> u(3);
+
+	v[0] = -x2 + x1;
+	v[1] = -y2 + y1;
+	v[2] = -z2 + z1;
+	u[0] = -x2 + x3;
+	u[1] = -y2 + y3;
+	u[2] = -z2 + z3;
+
+	normalize(v);
+	normalize(u);
+	return acos(v[0] * u[0] + v[1] * u[1] + v[2] * v[2]);
 }
 
 double AuxMath::escalarProduct(double x1, double y1, double z1, double x2, double y2, double z2)

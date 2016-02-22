@@ -37,7 +37,13 @@ label x y z  // coordendas no formato xyz
 ...
 ...
 ]
-
+!!! IMPORTANTE
+Monodentado - ligacao definida com o primeiro atomo e os outros
+              usados na direcao.
+Bidentado - ligacao definida com os dois primeiros e no
+            plano do terceiro.
+Tridentado - ligacao definida com os tres primeiros. Os outros
+             foram usados na direcao.
 
 
 Rotinas:
@@ -56,3 +62,8 @@ ReadInput -> Le o LumpacViewInput.txt e gera os ligantes.
 
 
 
+
+
+WARNING
+
+- em Ligand.cpp -> limite de atomos para bidentate e tridentate.

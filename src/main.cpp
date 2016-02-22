@@ -12,8 +12,7 @@ int main()
 	ReadInput readInp_;
 	try	{
 		readInp_.readLumpacViewInput();
-	}
-	catch (MyExceptions& e)	{
+	} catch (MyExceptions& e)	{
 		cout << e.what() << endl;
 		return 1;
 	}
@@ -22,15 +21,22 @@ int main()
 		return 1;
 	}
 
+#ifdef _DEBUG
 	readInp_.rePrintInput();
+#endif
+
+
+	// aplicar a matematica do simas.
+
 
 	cin.get();
 	return 0;
 }
 
+
+
 // Estou usando o preprocessor _DEBUG pra testes,
 // só vendo se a parada funciona, qualquer e so dar um find e apagar
-
 
 /*
 ERROR HANDLING

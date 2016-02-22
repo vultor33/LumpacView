@@ -8,13 +8,14 @@ class MyExceptions : public std::exception
 {
 public:
 	MyExceptions(int iError_in);
+	MyExceptions(std::string custom);
 	~MyExceptions();
 
 	const char * what() const throw ();
 
 private:
 	int iError;
-
+	std::string customMessage;
 
 };
 

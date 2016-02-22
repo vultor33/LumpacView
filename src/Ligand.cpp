@@ -11,11 +11,17 @@ Ligand::Ligand() {}
 
 Ligand::~Ligand() {}
 
+void Ligand::setLigandCoordinates(std::vector<CoordXYZ>& coord_in)
+{
+	coord = coord_in;
+}
+
 // xm1 xm2 - x1 e x2 monodentado
 // xb1 xb2 xb3 - 1 e 2 sao os atomos, 3 e a direcao.
 // xt1 xt2 xt3 xt4 - 1 2 e 3 sao os atomos. 4 e pra saber a direcao que ele nao pode ir.
-bool Ligand::initializeLigand(vector<CoordXYZ> &coord_in)
+bool Ligand::initializeLigand()
 {
+	vector<CoordXYZ> coord_in = coord;
 	int size = coord_in.size();
 	if (
 		(coord_in[size - 1].atomlabel == "Xm2") &&

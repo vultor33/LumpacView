@@ -16,23 +16,14 @@ ReadInput::ReadInput(){}
 
 ReadInput::~ReadInput(){}
 
-void ReadInput::rePrintInput()
-{
-	cout << "LUMPAC VIEW INPUT" << endl
-		<< "metal name:     " << metalName << endl
-		<< "metal params:   " << metalParams << endl
-		<< "ligand files" << endl;
-	for (int i = 0; i < (int)ligandFileName.size(); i++)
-	{
-		cout << ligandFileName[i] << endl;
-	}
-	cout << "END OF INPUT" << endl;
-}
-
-
 void ReadInput::readLumpacViewInput()
 {
+	// READING LUMPACVIEWINPUT
 	ifstream input_(inputName.c_str());
+	if (!input_.is_open()) { 
+		MyExceptions mexept_(4);
+		throw mexept_;
+	}
 	int nLigands;
 	input_ >> metalName;
 	input_ >> metalParams;
@@ -77,17 +68,15 @@ Ligand ReadInput::readConfigurations(string inputName)
 	vector<CoordXYZ> coord;
 	coord.resize(nAtoms);
 	int i = 0;
-	getline(mol_, auxline); //useless title
+	getline(mol_, auxline);
 	while (getline(mol_, auxline))
 	{
 		if (auxline == "")
 			break;
 		if (i == nAtoms) {
-			cout << "problem on ligand:  " << nameinp << endl;
-			MyExceptions mexept_(3);
+			MyExceptions mexept_("problem on ligand:  " + nameinp + " - check input");
 			throw mexept_;
 		}
-
 		stringstream line;
 		line << auxline;
 		line >> coord[i].atomlabel
@@ -99,12 +88,7 @@ Ligand ReadInput::readConfigurations(string inputName)
 	mol_.close();
 
 	Ligand molecule;
-	if (!molecule.initializeLigand(coord))
-	{
-		cout << "problem on ligand:  " << nameinp << endl;
-		MyExceptions mexept2_(2);
-		throw mexept2_;
-	}
+	molecule.setLigandCoordinates(coord);
 	return molecule;
 }
 
@@ -118,4 +102,24 @@ void ReadInput::readAllLigands()
 	}
 }
 
+void ReadInput::rePrintInput()
+{
+	cout << "LUMPAC VIEW INPUT" << endl
+		<< "metal name:     " << metalName << endl
+		<< "metal params:   " << metalParams << endl
+		<< "ligand files" << endl;
+	for (int i = 0; i < (int)ligandFileName.size(); i++)
+	{
+		cout << ligandFileName[i] << endl;
+	}
+	cout << "END OF INPUT" << endl;
+}
 
+
+
+/*
+if (!molecule.initializeLigand(coord)) {
+MyExceptions mexept2_("problem on ligand:  " + nameinp + " - check input");
+throw mexept2_;
+}
+*/

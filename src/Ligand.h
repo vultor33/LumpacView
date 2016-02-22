@@ -9,7 +9,8 @@ public:
 	Ligand();
 	~Ligand();
 
-	bool initializeLigand(std::vector<CoordXYZ> &coord_in);
+	void setLigandCoordinates(std::vector<CoordXYZ> &coord_in);
+	bool initializeLigand();
 
 private:
 	std::vector<CoordXYZ> coord;

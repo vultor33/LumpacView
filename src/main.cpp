@@ -4,6 +4,8 @@
 #include "MyExceptions.h"
 #include "Coordstructs.h"
 #include "ReadInput.h"
+#include "ComplexCreator.h"
+
 
 using namespace std;
 
@@ -24,11 +26,7 @@ int main()
 #ifdef _DEBUG
 	readInp_.rePrintInput();
 #endif
-	// passar as informacoes atraves de referencias.
 
-
-	// aplicar a matematica do simas.
-	// no caso do monodentdo o centro de massa funciona bem
 	bool sucess;
 	bool terminateExecution = false;
 	for (size_t i = 0; i < readInp_.allLigands.size(); i++)
@@ -43,7 +41,16 @@ int main()
 	if (terminateExecution)
 		return 1;
 
+	// objeto que vai gerar a estrutra - ele tem dois metodos
+	// um pela distancia e outro q n vou programar agora mas
+	// e atraves da repulsao das cargas.
 
+	ComplexCreator cpCreator(
+		readInp_.allLigands,
+		readInp_.getMetalName(),
+		readInp_.getMetalParams(),
+		readInp_.getProjectName()
+		);
 
 
 

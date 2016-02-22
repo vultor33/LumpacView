@@ -20,6 +20,8 @@ public:
 
 	bool initializeLigand2();
 
+	inline int getChelation() { return chelation; }
+
 private:
 	//data
 	std::vector<CoordXYZ> coord;

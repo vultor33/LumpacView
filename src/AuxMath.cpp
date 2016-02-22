@@ -26,6 +26,14 @@ double AuxMath::norm(const double x, const double y, const double z)
 	return sqrt(x * x + y * y + z * z);
 }
 
+void AuxMath::normalize(std::vector<double> &vector)
+{
+	double length = norm(vector[0], vector[1], vector[2]);
+	vector[0] /= length;
+	vector[1] /= length;
+	vector[2] /= length;
+}
+
 vector<double> AuxMath::vectorProduct(double x1, double y1, double z1, double x2, double y2, double z2)
 {
 	vector<double> prodvec(3);

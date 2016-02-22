@@ -5,14 +5,39 @@ Programa que automatiza a construção de estruturas.
 Funcionamento
 
 1. Le o lumpacViewInput.txt e salva os dados no objeto readInput.
-2. Procura os ligantes pelo nome, le as coordenadas e os salva para uso futuro.
+   - Procura os ligantes pelo nome, le as coordenadas e os salva para uso futuro.
 
-
-
+2. Usa a matemática do Simas para definir os pontos 
+   X1 - centro da coordenacao.
+   X2 - direção da coordenacao -> pX1 -pX2.
 
 Tarefas
 
 - Encontrar uma forma de tirar os ligantes do readInput.
+
+FORMATO DOS INPUTS
+
+LumpacViewInput.txt
+[
+Eu             // metal 
+spk_Gd.inp     // nome do arquivo de parametros
+6              // numero total de ligantes
+h2o            // nome dos arquivos dos ligantes sem .xyz
+btfa
+tta
+...
+...
+]
+
+Ligante.xyz
+[
+n            // numero de atomos
+dentity      // monodentate, bidentate ou tridentate
+label x y z  // coordendas no formato xyz
+...
+...
+]
+
 
 
 Rotinas:

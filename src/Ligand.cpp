@@ -1,6 +1,8 @@
 #include "Ligand.h"
 
+#include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "Coordstructs.h"
 #include "AuxMath.h"
@@ -11,15 +13,128 @@ Ligand::Ligand() {}
 
 Ligand::~Ligand() {}
 
-void Ligand::setLigandCoordinates(std::vector<CoordXYZ>& coord_in)
+void Ligand::setLigandCoordinates(
+	vector<CoordXYZ>& coord_in,
+	string titleInfo_in)
 {
 	coord = coord_in;
+	titleInfo = titleInfo_in;
 }
+
+bool Ligand::initializeLigand()
+{
+	bool success1 = getInfoFromTitle();
+	if (!success1)
+		return false;
+
+	// do math
+	bool sucess2;
+	switch (chelation)
+	{
+	case 1:
+		sucess2 = calculateMonodentate();
+		break;
+
+	case 2:
+		sucess2 = calculateBidentate();
+		break;
+
+	case 3:
+		sucess2 = calculateTridentate();
+
+	default:
+		sucess2 = false;
+	}
+
+	return sucess2;
+}
+
+
+bool Ligand::getInfoFromTitle()
+{
+	// can get other info like mass
+	stringstream line;
+	line << titleInfo;
+	string chelationLetter;
+	line >> chelationLetter;
+	if (chelationLetter == "monodentate")
+		chelation = 1;
+	else if (chelationLetter == "bidentate")
+		chelation = 2;
+	else if (chelationLetter == "tridentate")
+		chelation = 3;
+	else
+	{
+		cout << "chelation not found" << endl;
+		return false;
+	}
+	
+	return true;
+}
+
+bool Ligand::calculateMonodentate()
+{
+	// X1 e o primeiro atomo, X2 e o centro geometrico (normalizar).
+	X1 = coord[0];
+
+	vector<double> centroid(3);
+	centroid[0] = 0.0e0;
+	centroid[1] = 0.0e0;
+	centroid[2] = 0.0e0;
+	for (size_t i = 0; i < coord.size(); i++)
+	{
+		centroid[0] += coord[i].x;
+		centroid[1] += coord[i].y;
+		centroid[2] += coord[i].z;
+	}
+	centroid[0] /= coord.size();
+	centroid[1] /= coord.size();
+	centroid[2] /= coord.size();
+
+	//vector x1 positivo pra ele q eu vou
+	vector<double> direction(3);
+	direction[0] = X1.x - centroid[0];
+	direction[1] = X1.y - centroid[1];
+	direction[2] = X1.z - centroid[2];
+
+	AuxMath auxCalc_;
+	auxCalc_.normalize(direction);
+
+	//repensar acho q e so o direction
+
+	X2.x = direction[0] + X1.x;
+	X2.y = direction[1] + X1.y;
+	X2.z = direction[2] + X1.z;
+
+#ifdef _DEBUG
+	X1.atomlabel = "Au";
+	X2.atomlabel = "Cu";
+	coord.push_back(X1);
+	coord.push_back(X2);
+	printXyzLigandDirection();
+#endif
+
+	return true;
+}
+
+bool Ligand::calculateBidentate()
+{
+
+	return true;
+}
+
+bool Ligand::calculateTridentate()
+{
+
+	return true;
+}
+
+
 
 // xm1 xm2 - x1 e x2 monodentado
 // xb1 xb2 xb3 - 1 e 2 sao os atomos, 3 e a direcao.
 // xt1 xt2 xt3 xt4 - 1 2 e 3 sao os atomos. 4 e pra saber a direcao que ele nao pode ir.
-bool Ligand::initializeLigand()
+bool Ligand::initializeLigand2()
 {
 	vector<CoordXYZ> coord_in = coord;
 	int size = coord_in.size();
@@ -115,30 +230,20 @@ bool Ligand::initializeLigand()
 	return true;
 }
 
+
 void Ligand::printXyzLigandDirection()
 {
 	ofstream out_("xyzTeste.xyz");
 	int size = coord.size();
 	out_ << size << endl
-		<< "useless" << endl;
-	for (int i = 0; i < (size-2); i++)
+		<< titleInfo << endl;
+	for (int i = 0; i < size; i++)
 	{
 		out_ << coord[i].atomlabel << "   "
 			<< coord[i].x << "   "
 			<< coord[i].y << "   "
 			<< coord[i].z << endl;
 	}
-	int x1 = size - 2;
-	int x2 = size - 1;
-	out_ << "Au  " << "   "
-		<< coord[x1].x << "   "
-		<< coord[x1].y << "   "
-		<< coord[x1].z << endl;
-
-	out_ << "Au " << "   "
-		<< coord[x2].x << "   "
-		<< coord[x2].y << "   "
-		<< coord[x2].z << endl;
 
 	out_.close();
 

@@ -29,7 +29,8 @@ int main()
 
 	// aplicar a matematica do simas.
 	// no caso do monodentdo o centro de massa funciona bem
-	bool sucess, terminateExecution;
+	bool sucess;
+	bool terminateExecution = false;
 	for (size_t i = 0; i < readInp_.allLigands.size(); i++)
 	{
 		sucess = readInp_.allLigands[i].initializeLigand();
@@ -41,6 +42,8 @@ int main()
 	}
 	if (terminateExecution)
 		return 1;
+
+
 
 
 

@@ -65,10 +65,13 @@ Ligand ReadInput::readConfigurations(string inputName)
 	line0 << auxline;
 	line0 >> nAtoms;
 
-	vector<CoordXYZ> coord;
+	vector<CoordXYZ> coord; 
+	string titleInfo;
 	coord.resize(nAtoms);
+
 	int i = 0;
 	getline(mol_, auxline);
+	titleInfo = auxline;
 	while (getline(mol_, auxline))
 	{
 		if (auxline == "")
@@ -88,7 +91,7 @@ Ligand ReadInput::readConfigurations(string inputName)
 	mol_.close();
 
 	Ligand molecule;
-	molecule.setLigandCoordinates(coord);
+	molecule.setLigandCoordinates(coord, titleInfo);
 	return molecule;
 }
 

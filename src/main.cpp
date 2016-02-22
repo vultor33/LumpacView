@@ -24,9 +24,24 @@ int main()
 #ifdef _DEBUG
 	readInp_.rePrintInput();
 #endif
+	// passar as informacoes atraves de referencias.
 
 
 	// aplicar a matematica do simas.
+	// no caso do monodentdo o centro de massa funciona bem
+	bool sucess, terminateExecution;
+	for (size_t i = 0; i < readInp_.allLigands.size(); i++)
+	{
+		sucess = readInp_.allLigands[i].initializeLigand();
+		if (!sucess) 
+		{
+			cout << "Can't build ligand:  " << i << " check input" << endl;
+			terminateExecution = true;
+		}
+	}
+	if (terminateExecution)
+		return 1;
+
 
 
 	cin.get();

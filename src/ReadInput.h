@@ -16,14 +16,19 @@ public:
 	void readLumpacViewInput();
 	void rePrintInput();
 
+	std::vector<Ligand> allLigands;
+
+	inline std::string getMetalName() { return metalName; }
+	inline std::string getMetalParams() { return metalParams; }
+	inline std::string getProjectName() { return projectName; }
+
 private:
 	const std::string inputName = "LumpacViewInput.txt";
 	//data
 	std::string metalName;
 	std::string metalParams;
-	std::vector< std::string > ligandFileName;
 	std::string projectName;
-	std::vector<Ligand> allLigands;
+	std::vector< std::string > ligandFileName;
 
 	void buildProjectName();
 	Ligand readConfigurations(std::string inputName);

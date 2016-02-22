@@ -1,6 +1,14 @@
 Lumpac View
 
-Programa que a automatiza a construção de estruturas.
+Programa que automatiza a construção de estruturas.
+
+Funcionamento
+
+1. Le o lumpacViewInput.txt e salva os dados no objeto readInput.
+2. Procura os ligantes pelo nome, le as coordenadas e os salva para uso futuro.
+
+
+
 
 Tarefas
 

@@ -11,9 +11,14 @@ Funcionamento
    X1 - centro da coordenacao.
    X2 - direção da coordenacao -> pX1 -pX2.
 
-Tarefas
+3. ComplexCrator.start
+   3.1. Ordena os ligantes assim: tridentados, bidentados e monodentados.
+        !(seria necessario uma revisao em varios pontos para descrever polidentados)
+   3.2. Obtencao dos ponts na esfera.
+   3.3. Esticamento dos pontos.
+   3.4. Gera posicoes iniciais usando os pontos e rodando para o centro.
 
-- Encontrar uma forma de tirar os ligantes do readInput.
+
 
 FORMATO DOS INPUTS
 
@@ -63,12 +68,9 @@ ReadInput -> Le o LumpacViewInput.txt e gera os ligantes.
 
 
 
-
 WARNING
 
 - em Ligand.cpp -> limite de atomos para bidentate e tridentate.
-
-
 
 
 

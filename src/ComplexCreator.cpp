@@ -35,8 +35,6 @@ bool ComplexCreator::start()
 
 	vector<double> points = getPoints(sumChelation);
 
-	// PONTOS ERRADOS
-
 	stretchPoints(points);
 
 	setInitialPosition(points);
@@ -61,10 +59,10 @@ bool ComplexCreator::start()
 vector<double> ComplexCreator::getPoints(int totalChelation)
 {
 	Points allPoints;
-	// 2 points - 0 - 6; 3 points - 7 - 16; 4 points - 17 - 29 ...
+	// 2 points - 0 - 5; 3 points - 6 - 15; 4 points - 16 - 28 ...
 	int k = 0;
 	for (int i = 3; i <= totalChelation; i++)
-		k += (3 * (i - 1)) + 1;
+		k += (3 * (i - 1));
 
 	size_t size = totalChelation;
 	vector<double> out(3 * size);
@@ -282,7 +280,7 @@ void ComplexCreator::printAllAtoms()
 		allAtoms += allLigands[k].getNatoms();
 
 	ofstream xyzAll("xyzAll.xyz");
-	xyzAll << allAtoms << endl
+	xyzAll << allAtoms + 1 << endl
 		<< projectName << endl;
 	xyzAll << metalName << "   0.00000    0.00000     0.00000" << endl;
 	for (size_t i = 0; i < size; i++)

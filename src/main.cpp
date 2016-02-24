@@ -60,7 +60,7 @@ int main()
 	else
 		cout << "deu merda" << endl;
 
-	cin.get();
+//	cin.get();
 	return 0;
 }
 

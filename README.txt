@@ -67,3 +67,10 @@ ReadInput -> Le o LumpacViewInput.txt e gera os ligantes.
 WARNING
 
 - em Ligand.cpp -> limite de atomos para bidentate e tridentate.
+
+
+
+
+
+INEFICIENCIA
+

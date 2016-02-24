@@ -18,9 +18,9 @@ public:
 	
 	bool initializeLigand();
 
-	bool initializeLigand2();
-
 	inline int getChelation() { return chelation; }
+
+	void translateLigand(double x, double y, double z);
 
 private:
 	//data
@@ -34,6 +34,7 @@ private:
 	bool calculateMonodentate();
 	bool calculateBidentate();
 	bool calculateTridentate();
+
 
 	void printXyzLigandDirection(); //debug purpose
 

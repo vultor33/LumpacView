@@ -5,6 +5,7 @@
 
 #include "Ligand.h"
 #include "Points.h"
+#include "AuxMath.h"
 
 using namespace std;
 
@@ -37,8 +38,6 @@ bool ComplexCreator::start()
 	return true;
 }
 
-// posso seguir na ideia do Simas.
-// posso estabelecer a situacao pela construcao dos pontos.
 
 vector<double> ComplexCreator::getPoints(int totalChelation)
 {
@@ -142,10 +141,148 @@ int ComplexCreator::orderAllLigands()
 }
 
 
+void ComplexCreator::setInitialPosition(
+	const vector<double> &points)
+{
+	size_t nPoints = points.size() / 3;
+	vector<bool> pointsTaken(nPoints);
+	for (size_t k = 0; k < nPoints; k++)
+		pointsTaken[k] = false;
+
+	for (size_t i = 0; i < allLigands.size(); i++)
+	{
+		vector<double> translate = findGoodPoint(
+			allLigands[i].getChelation(),
+			points,
+			pointsTaken);
+
+		allLigands[i].translateLigand(translate[0], translate[1], translate[2]);
+	}
+}
+
+
+vector<double> ComplexCreator::findGoodPoint(
+	int chelation,
+	const vector<double> &points,
+	vector<bool>& pointsTaken)
+{
+	size_t nPoints = points.size() / 3;
+	int p1;
+	for (size_t k = 0; k < nPoints; k++)
+	{
+		if (!pointsTaken[k])
+		{
+			p1 = k;
+			break;
+		}
+	}
+	pointsTaken[p1] = true;
+	vector<int> pLig(1);
+	pLig[0] = p1;
+
+	// p2: closest - p3: closest to mean point.
+	if (chelation > 1)
+	{
+		pointsTaken[p1] = true;
+		int p2 = closestPoint(
+			points[p1],
+			points[p1 + nPoints],
+			points[p1 + 2 * nPoints],
+			points,
+			pointsTaken);
+		pLig.push_back(p2);
+		if (chelation > 2)
+		{
+			double xm = (points[p1] + points[p2]) / 2.0e0;
+			double ym = (points[p1 + nPoints] + points[p2 + nPoints]) / 2.0e0;
+			double zm = (points[p1 + 2 * nPoints] + points[p2 + 2 * nPoints]) / 2.0e0;
+			int p3 = closestPoint(
+				xm, ym, zm,
+				points,
+				pointsTaken);
+			pLig.push_back(p3);
+		}
+	}
+
+	vector<double> ligandPoint(3);
+	ligandPoint[0] = points[pLig[0]];
+	ligandPoint[1] = points[pLig[0] + nPoints];
+	ligandPoint[2] = points[pLig[0] + 2 * nPoints];
+	// chelation 2: mean - chelation 3: barycenter
+	if (chelation = 2)
+	{
+		ligandPoint[0] = (ligandPoint[0] + points[pLig[1]]) / 2.0e0;
+		ligandPoint[1] = (ligandPoint[1] + points[pLig[1] + nPoints]) / 2.0e0;
+		ligandPoint[2] = (ligandPoint[2] + points[pLig[1] + 2 * nPoints]) / 2.0e0;
+	}
+	else if (chelation == 3)
+	{
+		ligandPoint[0] = (
+			ligandPoint[0] + 
+			points[pLig[1]] + 
+			points[pLig[2]]) / 3.0e0;
+		ligandPoint[1] = (
+			ligandPoint[1] + 
+			points[pLig[1] + nPoints] + 
+			points[pLig[2] + nPoints]) / 3.0e0;
+		ligandPoint[2] = (
+			ligandPoint[2] + 
+			points[pLig[1] + 2 * nPoints] + 
+			points[pLig[2] + 2 * nPoints]) / 3.0e0;
+	}
+
+	return ligandPoint;
+}
+
+
+int ComplexCreator::closestPoint(
+	double x, double y, double z,
+	const vector<double> &points,
+	std::vector<bool>& pointsTaken)
+{
+	AuxMath auxMath_;
+	size_t nPoints = points.size();
+	double closest = 100.0e0;
+	int iClose = 0;
+	double r;
+	for (size_t i = 0; i < nPoints; i++)
+	{
+		r = auxMath_.norm(
+			x - points[i],
+			y - points[i + nPoints],
+			z - points[i + 2 * nPoints]);
+
+		if ((!pointsTaken[i]) &&
+			(r < closest))
+		{
+			closest = r;
+			iClose = i;
+		}
+	}
+	pointsTaken[iClose] = true;
+	return iClose;
+}
 
 
 
 
 
+/*
+int nPoints = size / 3;
+vector< vector<double> > distanceMatrix(nPoints);
+for (size_t l = 0; l < nPoints; l++)
+	distanceMatrix[l].resize(nPoints);
 
-
+for (size_t i = 0; i < (nPoints - 1); i++)
+{
+	for (size_t j = i + 1; j < nPoints; j++)
+	{
+		distanceMatrix[i][j] = auxMath_.norm(
+			points[i] - points[j],
+			points[i + nPoints] - points[j + nPoints],
+			points[i + 2 * nPoints] - points[j + 2 * nPoints]
+			);
+		distanceMatrix[j][i] = distanceMatrix[j][i];
+	}
+}
+*/

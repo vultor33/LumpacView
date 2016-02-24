@@ -32,6 +32,20 @@ private:
 	std::vector<double> getPoints(int totalChelation);
 	std::vector<double> arrayToVector(const double * array_in, size_t size);
 
+	void setInitialPosition(const std::vector<double> & points);
+	
+	std::vector<double> findGoodPoint(
+		int chelation, 
+		const std::vector<double> & points,
+		std::vector<bool> & pointsTaken);
+
+	int closestPoint(
+		double x, double y, double z,
+		const std::vector<double> &points,
+		std::vector<bool> &pointsTaken
+		);
+
+
 };
 
 

@@ -243,7 +243,7 @@ int ComplexCreator::closestPoint(
 	std::vector<bool>& pointsTaken)
 {
 	AuxMath auxMath_;
-	size_t nPoints = points.size();
+	size_t nPoints = points.size() / 3;
 	double closest = 100.0e0;
 	int iClose = 0;
 	double r;

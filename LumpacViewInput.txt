@@ -1,6 +1,8 @@
 Eu
 spk_Gd.inp
-6
+4
+h2o-b
+tta-tridentate-test
 h2o
 h2o
 h2o

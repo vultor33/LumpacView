@@ -29,17 +29,14 @@ int main()
 
 	bool sucess;
 	bool terminateExecution = false;
-	for (size_t i = 0; i < readInp_.allLigands.size(); i++)
-	{
+	for (size_t i = 0; i < readInp_.allLigands.size(); i++)	{
 		sucess = readInp_.allLigands[i].initializeLigand();
-		if (!sucess) 
-		{
+		if (!sucess) {
 			cout << "Can't build ligand:  " << i << " check input" << endl;
 			terminateExecution = true;
 		}
 	}
-	if (terminateExecution)
-		return 1;
+	if (terminateExecution) return 1;
 
 	// objeto que vai gerar a estrutra - ele tem dois metodos
 	// um pela distancia e outro q n vou programar agora mas
@@ -51,14 +48,11 @@ int main()
 		readInp_.getMetalParams(),
 		readInp_.getProjectName()
 		);
-
 	sucess = true;
 	sucess = cpCreator.start();
+	if (sucess) cout << "ligantes iniciados com sucesso" << endl;
+	else cout << "um problema aconteceu nos ligantes" << endl;
 
-	if (sucess)
-		cout << "execucao terminada com sucesso" << endl;
-	else
-		cout << "deu merda" << endl;
 
 //	cin.get();
 	return 0;

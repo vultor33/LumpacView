@@ -22,7 +22,7 @@ public:
 
 private:
 	const int maxChelation = 10;
-	const double stretchDistance = 5;
+	const double stretchDistance = 3;
 
 	std::vector<Ligand> & allLigands;
 	std::string metalName;

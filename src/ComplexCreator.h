@@ -45,9 +45,10 @@ private:
 		std::vector<bool> &pointsTaken
 		);
 
+	void printAllAtoms();
+
 
 };
-
 
 
 #endif

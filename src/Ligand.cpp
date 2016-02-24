@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <vector>
 
 #include "Coordstructs.h"
 #include "AuxMath.h"
@@ -266,23 +268,32 @@ void Ligand::translateLigand(double x, double y, double z)
 }
 
 
-void Ligand::printXyzLigandDirection()
+void Ligand::printLigand(ofstream &out)
 {
-	ofstream out_("xyzTeste.xyz");
-	int size = coord.size();
+	for (size_t i = 0; i < coord.size(); i++)
+	{
+		out << coord[i].atomlabel << "   "
+			<< coord[i].x << "   "
+			<< coord[i].y << "   "
+			<< coord[i].z << endl;
+	}
+}
+
+void Ligand::printXyzLigandDirection(string inputName)
+{
+	ofstream out_(inputName.c_str());
+	size_t size = coord.size();
 	out_ << size << endl
 		<< titleInfo << endl;
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		out_ << coord[i].atomlabel << "   "
 			<< coord[i].x << "   "
 			<< coord[i].y << "   "
 			<< coord[i].z << endl;
 	}
-
 	out_.close();
 
 }
-
 
 

@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <iostream>
+#include <sstream>
+#include <fstream>
 
 #include "Ligand.h"
 #include "Points.h"
@@ -33,7 +35,13 @@ bool ComplexCreator::start()
 
 	vector<double> points = getPoints(sumChelation);
 
+	//!!! stretch points to desired distance
 
+	//setInitialPosition(points);
+
+#ifdef _DEBUG
+	printAllAtoms();
+#endif 
 
 	return true;
 }
@@ -83,9 +91,13 @@ vector<double> ComplexCreator::arrayToVector(
 	const double * array_in, 
 	size_t size)
 {
-	vector<double> out(size);
+	vector<double> out(3 * size);
 	for (size_t i = 0; i < size; i++)
+	{
 		out[i] = array_in[i];
+		out[i] = array_in[i + size];
+		out[i] = array_in[i + 2 * size];
+	}
 
 	return out;
 }
@@ -264,6 +276,21 @@ int ComplexCreator::closestPoint(
 }
 
 
+void ComplexCreator::printAllAtoms()
+{
+	int allAtoms = 0;
+	size_t size = allLigands.size();
+	for (size_t k = 0; k < size; k++)
+		allAtoms += allLigands[k].getNatoms();
+
+	ofstream xyzAll("xyzAll.xyz");
+	xyzAll << allAtoms << endl
+		<< projectName << endl;
+	xyzAll << metalName << "   0.00000    0.00000     0.00000" << endl;
+	for (size_t i = 0; i < size; i++)
+		allLigands[i].printLigand(xyzAll);
+
+}
 
 
 

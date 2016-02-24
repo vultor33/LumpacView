@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 
 #include "Coordstructs.h"
 
@@ -22,6 +23,10 @@ public:
 
 	void translateLigand(double x, double y, double z);
 
+	void printLigand(std::ofstream &out);
+
+	inline int getNatoms() { return (int)coord.size(); }
+
 private:
 	//data
 	std::vector<CoordXYZ> coord;
@@ -35,8 +40,7 @@ private:
 	bool calculateBidentate();
 	bool calculateTridentate();
 
-
-	void printXyzLigandDirection(); //debug purpose
+	void printXyzLigandDirection(std::string inputName = "xyzTeste.xyz"); //debug purpose
 
 };
 

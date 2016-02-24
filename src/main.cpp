@@ -52,7 +52,13 @@ int main()
 		readInp_.getProjectName()
 		);
 
+	sucess = true;
+	sucess = cpCreator.start();
 
+	if (sucess)
+		cout << "execucao terminada com sucesso" << endl;
+	else
+		cout << "deu merda" << endl;
 
 	cin.get();
 	return 0;

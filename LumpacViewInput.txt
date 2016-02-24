@@ -1,6 +1,6 @@
 Eu
 spk_Gd.inp
-6
+3
 h2o
 h2o
 h2o

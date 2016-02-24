@@ -48,6 +48,14 @@ bool Ligand::initializeLigand()
 	default:
 		sucess2 = false;
 	}
+	if (!sucess2)
+		return false;
+
+	// center on x1
+	translateLigand(-X1.x, -X1.y, -X1.z);
+	X1.x = 0.0e0;
+	X1.y = 0.0e0;
+	X1.z = 0.0e0;
 
 	return sucess2;
 }
@@ -108,13 +116,6 @@ bool Ligand::calculateMonodentate()
 	X2.z = direction[2];
 
 #ifdef _DEBUG
-	X2.x += X1.x;
-	X2.y += X1.y;
-	X2.z += X1.z;
-	X1.atomlabel = "Au";
-	X2.atomlabel = "Cu";
-	coord.push_back(X1);
-	coord.push_back(X2);
 	printXyzLigandDirection();
 #endif
 	return true;
@@ -169,13 +170,6 @@ bool Ligand::calculateBidentate()
 	X2.z = direction[2];
 
 #ifdef _DEBUG
-	X2.x += X1.x;
-	X2.y += X1.y;
-	X2.z += X1.z;
-	X1.atomlabel = "Au";
-	X2.atomlabel = "Cu";
-	coord.push_back(X1);
-	coord.push_back(X2);
 	printXyzLigandDirection();
 #endif
 
@@ -240,13 +234,6 @@ bool Ligand::calculateTridentate()
 	}
 
 #ifdef _DEBUG
-	X2.x += X1.x;
-	X2.y += X1.y;
-	X2.z += X1.z;
-	X1.atomlabel = "Au";
-	X2.atomlabel = "Cu";
-	coord.push_back(X1);
-	coord.push_back(X2);
 	printXyzLigandDirection();
 #endif
 	
@@ -281,19 +268,29 @@ void Ligand::printLigand(ofstream &out)
 
 void Ligand::printXyzLigandDirection(string inputName)
 {
+	vector<CoordXYZ> coordTemp = coord;
+	CoordXYZ X1temp = X1;
+	CoordXYZ X2temp = X2;
+	X2temp.x += X1.x;
+	X2temp.y += X1.y;
+	X2temp.z += X1.z;
+	X1temp.atomlabel = "Au";
+	X2temp.atomlabel = "Cu";
+	coordTemp.push_back(X1temp);
+	coordTemp.push_back(X2temp);
+
 	ofstream out_(inputName.c_str());
-	size_t size = coord.size();
+	size_t size = coordTemp.size();
 	out_ << size << endl
 		<< titleInfo << endl;
 	for (size_t i = 0; i < size; i++)
 	{
-		out_ << coord[i].atomlabel << "   "
-			<< coord[i].x << "   "
-			<< coord[i].y << "   "
-			<< coord[i].z << endl;
+		out_ << coordTemp[i].atomlabel << "   "
+			<< coordTemp[i].x << "   "
+			<< coordTemp[i].y << "   "
+			<< coordTemp[i].z << endl;
 	}
 	out_.close();
-
 }
 
 

@@ -35,11 +35,22 @@ bool ComplexCreator::start()
 
 	vector<double> points = getPoints(sumChelation);
 
-	//!!! stretch points to desired distance
+	// PONTOS ERRADOS
 
-	//setInitialPosition(points);
+	stretchPoints(points);
+
+	setInitialPosition(points);
 
 #ifdef _DEBUG
+	ofstream points_("points.xyz");
+	int nPoints = (int)points.size() / 3;
+	points_ << nPoints << endl << "t" << endl;
+	for (int i = 0; i < nPoints; i++)
+		points_ << "H  " << points[i] << "   "
+			<< points[i + nPoints] << "   "
+			<< points[i + 2 * nPoints] << endl;
+	points_.close();
+
 	printAllAtoms();
 #endif 
 
@@ -50,39 +61,18 @@ bool ComplexCreator::start()
 vector<double> ComplexCreator::getPoints(int totalChelation)
 {
 	Points allPoints;
-	vector<double> out;
-	switch (totalChelation)
+	// 2 points - 0 - 6; 3 points - 7 - 16; 4 points - 17 - 29 ...
+	int k = 0;
+	for (int i = 3; i <= totalChelation; i++)
+		k += (3 * (i - 1)) + 1;
+
+	size_t size = totalChelation;
+	vector<double> out(3 * size);
+	for (size_t i = 0; i < size; i++)
 	{
-	case 2:
-		out = arrayToVector(allPoints.p2, 2);
-		break;
-	case 3:
-		out = arrayToVector(allPoints.p3, 3);
-		break;
-	case 4:
-		out = arrayToVector(allPoints.p4, 4);
-		break;
-	case 5:
-		out = arrayToVector(allPoints.p5, 5);
-		break;
-	case 6:
-		out = arrayToVector(allPoints.p6, 6);
-		break;
-	case 7:
-		out = arrayToVector(allPoints.p7, 7);
-		break;
-	case 8:
-		out = arrayToVector(allPoints.p8, 8);
-		break;
-	case 9:
-		out = arrayToVector(allPoints.p9, 9);
-		break;
-	case 10:
-		out = arrayToVector(allPoints.p10, 10);
-		break;
-	default:
-		cout << "Nao tenho essa quantidade de pontos" << endl;
-		exit(1);
+		out[i] = allPoints.p[k + i];
+		out[i + size] = allPoints.p[k + i + size];
+		out[i + 2 * size] = allPoints.p[k + i + 2 * size];
 	}
 	return out;
 }
@@ -221,7 +211,7 @@ vector<double> ComplexCreator::findGoodPoint(
 	ligandPoint[1] = points[pLig[0] + nPoints];
 	ligandPoint[2] = points[pLig[0] + 2 * nPoints];
 	// chelation 2: mean - chelation 3: barycenter
-	if (chelation = 2)
+	if (chelation == 2)
 	{
 		ligandPoint[0] = (ligandPoint[0] + points[pLig[1]]) / 2.0e0;
 		ligandPoint[1] = (ligandPoint[1] + points[pLig[1] + nPoints]) / 2.0e0;
@@ -273,6 +263,14 @@ int ComplexCreator::closestPoint(
 	}
 	pointsTaken[iClose] = true;
 	return iClose;
+}
+
+
+void ComplexCreator::stretchPoints(vector<double> &points)
+{
+	size_t size = points.size();
+	for (size_t i = 0; i < size; i++)
+		points[i] *= stretchDistance;
 }
 
 

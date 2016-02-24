@@ -22,6 +22,7 @@ public:
 
 private:
 	const int maxChelation = 10;
+	const double stretchDistance = 5;
 
 	std::vector<Ligand> & allLigands;
 	std::string metalName;
@@ -44,6 +45,8 @@ private:
 		const std::vector<double> &points,
 		std::vector<bool> &pointsTaken
 		);
+
+	void stretchPoints(std::vector<double> &points);
 
 	void printAllAtoms();
 

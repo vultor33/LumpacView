@@ -245,42 +245,51 @@ void Ligand::translateLigand(double x, double y, double z)
 
 void Ligand::rotateToCenter()
 {
+	// rotation about X1.
 	AuxMath auxMath_;
 
 	vector<double> normal = auxMath_.normalVectorFrom3Points(
-		X1.x, X1.y, X1.z,
+		-X1.x, -X1.y, -X1.z,
 		0.0e0, 0.0e0, 0.0e0,
 		X2.x, X2.y, X2.z);
 
 	double angle = auxMath_.angleFrom3Points(
-		X1.x, X1.y, X1.z,
+		-X1.x, -X1.y, -X1.z,
 		0.0e0, 0.0e0, 0.0e0,
 		X2.x, X2.y, X2.z);
 
-	rotateOnX1(normal[0], normal[1], normal[2], -angle);
-
+	rotateOnX1(normal[0], normal[1], normal[2], angle);
 }
 
 void Ligand::rotateOnX1(double vx, double vy, double vz, double ang)
 {
-	//fredproblema
 	AuxMath auxMath_;
 	vector< vector<double> > mrot = auxMath_.rotationMatrix(vx, vy, vz, ang);
 
 	CoordXYZ oldX1 = X1;
 	translateLigand(-X1.x, -X1.y, -X1.z);
-
+	
+	vector<double> auxRot;
 	for (size_t i = 0; i < coord.size(); i++)
 	{
-		vector<double> auxRot = auxMath_.matrixXVector(
+		auxRot = auxMath_.matrixXVector(
 			mrot, 
 			coord[i].x, 
 			coord[i].y, 
 			coord[i].z);
 		coord[i].x = auxRot[0];
-		coord[i].y = auxRot[0];
-		coord[i].z = auxRot[0];
+		coord[i].y = auxRot[1];
+		coord[i].z = auxRot[2];
 	}
+	auxRot = auxMath_.matrixXVector(
+		mrot,
+		X2.x,
+		X2.y,
+		X2.z);
+
+	X2.x = auxRot[0];
+	X2.y = auxRot[1];
+	X2.z = auxRot[2];
 
 	translateLigand(oldX1.x, oldX1.y, oldX1.z);
 }

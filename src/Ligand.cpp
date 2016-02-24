@@ -129,18 +129,9 @@ bool Ligand::calculateBidentate()
 		return false;
 	}
 
-	const double _pi = 3.14159265358979323846;
-
 	X1.x = 0.5e0 * (coord[0].x + coord[1].x);
 	X1.y = 0.5e0 * (coord[0].y + coord[1].y);
 	X1.z = 0.5e0 * (coord[0].z + coord[1].z);
-
-	/*
-	1. acho a normal
-	2. calculo o angulo 1, X1 e 3
-	3. aplico uma rotacao contraria
-	   vetor saindo da normal e girando no angulo (2).
-	*/
 
 	AuxMath auxMath_;
 	vector<double> normal = auxMath_.normalVectorFrom3Points(
@@ -154,7 +145,7 @@ bool Ligand::calculateBidentate()
 		coord[2].x, coord[2].y, coord[2].z
 		);
 
-	vector< vector<double> > rot = auxMath_.rotationMatrix(normal[0], normal[1], normal[2], -angle + _pi/2.0e0);
+	vector< vector<double> > rot = auxMath_.rotationMatrix(normal[0], normal[1], normal[2], -angle + auxMath_._pi/2.0e0);
 
 	vector<double> X2Points = auxMath_.matrixXVector(rot, coord[2].x, coord[2].y, coord[2].z);
 
@@ -184,8 +175,8 @@ bool Ligand::calculateTridentate()
 		return false;
 	}
 
-	AuxMath AuxMath_;
-	vector<double> geometricCenter = AuxMath_.triangleCentroid(
+	AuxMath auxMath_;
+	vector<double> geometricCenter = auxMath_.triangleCentroid(
 		coord[0].x, coord[0].y, coord[0].z,	
 		coord[1].x, coord[1].y, coord[1].z,
 		coord[2].x, coord[2].y, coord[2].z
@@ -208,7 +199,7 @@ bool Ligand::calculateTridentate()
 	centroid[1] /= coord.size();
 	centroid[2] /= coord.size();
 
-	vector<double> normal = AuxMath_.normalVectorFrom3Points(
+	vector<double> normal = auxMath_.normalVectorFrom3Points(
 		coord[0].x, coord[0].y, coord[0].z,
 		coord[1].x, coord[1].y, coord[1].z,
 		coord[2].x, coord[2].y, coord[2].z
@@ -217,16 +208,14 @@ bool Ligand::calculateTridentate()
 	X2.y = normal[1];
 	X2.z = normal[2];
 
-	// if it points to centroid change direction
-	double angle = AuxMath_.angleFrom3Points(
+	// if it points to centroid, change direction
+	double angle = auxMath_.angleFrom3Points(
 		X2.x + X1.x, X2.y + X1.y, X2.z + X1.z,
 		X1.x, X1.y, X1.z,
 		centroid[0], centroid[1], centroid[2]
 		);		
 
-	const double _pi = 3.14159265358979323846;
-
-	if (angle < _pi/2.0e0)
+	if (angle < auxMath_._pi/2.0e0)
 	{
 		X2.x *= -1.0e0;
 		X2.y *= -1.0e0;
@@ -252,6 +241,48 @@ void Ligand::translateLigand(double x, double y, double z)
 	X1.x += x;
 	X1.y += y;
 	X1.z += z;
+}
+
+void Ligand::rotateToCenter()
+{
+	AuxMath auxMath_;
+
+	vector<double> normal = auxMath_.normalVectorFrom3Points(
+		X1.x, X1.y, X1.z,
+		0.0e0, 0.0e0, 0.0e0,
+		X2.x, X2.y, X2.z);
+
+	double angle = auxMath_.angleFrom3Points(
+		X1.x, X1.y, X1.z,
+		0.0e0, 0.0e0, 0.0e0,
+		X2.x, X2.y, X2.z);
+
+	rotateOnX1(normal[0], normal[1], normal[2], -angle);
+
+}
+
+void Ligand::rotateOnX1(double vx, double vy, double vz, double ang)
+{
+	//fredproblema
+	AuxMath auxMath_;
+	vector< vector<double> > mrot = auxMath_.rotationMatrix(vx, vy, vz, ang);
+
+	CoordXYZ oldX1 = X1;
+	translateLigand(-X1.x, -X1.y, -X1.z);
+
+	for (size_t i = 0; i < coord.size(); i++)
+	{
+		vector<double> auxRot = auxMath_.matrixXVector(
+			mrot, 
+			coord[i].x, 
+			coord[i].y, 
+			coord[i].z);
+		coord[i].x = auxRot[0];
+		coord[i].y = auxRot[0];
+		coord[i].z = auxRot[0];
+	}
+
+	translateLigand(oldX1.x, oldX1.y, oldX1.z);
 }
 
 

@@ -6,6 +6,8 @@
 class AuxMath
 {
 public:
+	const double _pi = 3.14159265358979323846;
+
 	std::vector<double> matrixXVector(std::vector< std::vector<double> > &M, double x, double y, double z);
 	double fRand(double fMin, double fMax);
 	double norm(const double x, const double y, const double z);

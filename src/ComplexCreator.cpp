@@ -157,6 +157,8 @@ void ComplexCreator::setInitialPosition(
 			pointsTaken);
 
 		allLigands[i].translateLigand(translate[0], translate[1], translate[2]);
+		
+		allLigands[i].rotateToCenter();
 	}
 }
 

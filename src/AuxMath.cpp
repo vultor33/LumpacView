@@ -107,7 +107,7 @@ double AuxMath::angleFrom3Points(double x1, double y1, double z1, double x2, dou
 
 	normalize(v);
 	normalize(u);
-	return acos(v[0] * u[0] + v[1] * u[1] + v[2] * v[2]);
+	return acos(v[0] * u[0] + v[1] * u[1] + v[2] * u[2]);
 }
 
 double AuxMath::escalarProduct(double x1, double y1, double z1, double x2, double y2, double z2)

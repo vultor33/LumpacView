@@ -23,6 +23,10 @@ public:
 
 	void translateLigand(double x, double y, double z);
 
+	void rotateToCenter();
+
+	void rotateOnX1(double vx, double vy, double vz, double ang);
+
 	void printLigand(std::ofstream &out);
 
 	inline int getNatoms() { return (int)coord.size(); }

@@ -270,7 +270,7 @@ void ComplexCreator::simulatedAnnealing()
 {
 	AuxMath auxMath_;
 	vector<Ligand> x0 = allLigands;
-	double f0 = calculateAllfit(x0);
+	double f0 = calculateAllFit(x0);
 	
 	//Variable temperature - always 50/100
 	double cTemp = f0 / 500; 
@@ -287,7 +287,7 @@ void ComplexCreator::simulatedAnnealing()
 	{
 		x = x0;
 		perturbOperations(x);
-		f = calculateAllfit(x);
+		f = calculateAllFit(x);
 		if (f < f0)
 		{
 			x0 = x;

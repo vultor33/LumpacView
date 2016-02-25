@@ -37,6 +37,8 @@ public:
 
 	std::vector<CoordXYZ> getAllAtoms();
 
+	void setNewCoordinates(std::vector<CoordXYZ> &newCoord);
+
 	inline int getNatoms() { return (int)coord.size(); }
 
 private:

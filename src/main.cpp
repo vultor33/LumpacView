@@ -55,6 +55,8 @@ int main()
 
 	cpCreator.simulatedAnnealing();
 
+	//montar o input do mopac, rodar e tal.
+
 	return 0;
 }
 

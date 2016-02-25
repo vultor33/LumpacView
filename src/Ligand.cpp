@@ -338,6 +338,11 @@ vector<CoordXYZ> Ligand::getAllAtoms()
 	return coord;
 }
 
+void Ligand::setNewCoordinates(vector<CoordXYZ>& newCoord)
+{
+	coord = newCoord;
+}
+
 void Ligand::printLigand(ofstream &out)
 {
 	for (size_t i = 0; i < coord.size(); i++)

@@ -53,7 +53,7 @@ int main()
 	if (sucess) cout << "ligantes iniciados com sucesso" << endl;
 	else cout << "um problema aconteceu nos ligantes" << endl;
 
-	//cpCreator.simulatedAnnealing();
+	cpCreator.simulatedAnnealing();
 
 
 //	cin.get();

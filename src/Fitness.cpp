@@ -24,7 +24,7 @@ double Fitness::calculateFit(
 		{
 			for (size_t j = 0; j < ligand2.size(); j++)
 			{
-				fit += auxMath_.norm(
+				fit -= auxMath_.norm(
 					ligand1[i].x - ligand2[j].x,
 					ligand1[i].y - ligand2[j].y,
 					ligand1[i].z - ligand2[j].z);

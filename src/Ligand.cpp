@@ -109,8 +109,8 @@ bool Ligand::calculateMonodentate()
 	direction[1] = X1.y - centroid[1];
 	direction[2] = X1.z - centroid[2];
 
-	AuxMath auxCalc_;
-	auxCalc_.normalize(direction);
+	AuxMath auxMath_;
+	auxMath_.normalize(direction);
 	X2.x = direction[0];
 	X2.y = direction[1];
 	X2.z = direction[2];
@@ -247,7 +247,6 @@ void Ligand::rotateToCenter()
 {
 	// rotation about X1.
 	AuxMath auxMath_;
-
 	vector<double> normal = auxMath_.normalVectorFrom3Points(
 		-X1.x, -X1.y, -X1.z,
 		0.0e0, 0.0e0, 0.0e0,
@@ -292,6 +291,46 @@ void Ligand::rotateOnX1(double vx, double vy, double vz, double ang)
 	X2.z = auxRot[2];
 
 	translateLigand(oldX1.x, oldX1.y, oldX1.z);
+}
+
+void Ligand::rotateOnX2(double beta)
+{
+	rotateOnX1(X2.x, X2.y, X2.z, beta);
+}
+
+void Ligand::genericRotation(double vx, double vy, double vz, double ang)
+{
+	AuxMath auxMath_;
+	vector< vector<double> > mrot = auxMath_.rotationMatrix(vx, vy, vz, ang);
+	vector<double> auxRot;
+	for (size_t i = 0; i < coord.size(); i++)
+	{
+		auxRot = auxMath_.matrixXVector(
+			mrot,
+			coord[i].x,
+			coord[i].y,
+			coord[i].z);
+		coord[i].x = auxRot[0];
+		coord[i].y = auxRot[1];
+		coord[i].z = auxRot[2];
+	}
+	auxRot = auxMath_.matrixXVector(
+		mrot,
+		X1.x,
+		X1.y,
+		X1.z);
+	X1.x = auxRot[0];
+	X1.y = auxRot[1];
+	X1.z = auxRot[2];
+
+	auxRot = auxMath_.matrixXVector(
+		mrot,
+		X2.x,
+		X2.y,
+		X2.z);
+	X2.x = auxRot[0];
+	X2.y = auxRot[1];
+	X2.z = auxRot[2];
 }
 
 vector<CoordXYZ> Ligand::getAllAtoms()

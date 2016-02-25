@@ -49,7 +49,7 @@ bool ComplexCreator::start()
 			<< points[i + nPoints] << "   "
 			<< points[i + 2 * nPoints] << endl;
 	points_.close();
-	printAllAtoms();
+	printAllAtoms(allLigands);
 #endif 
 
 	return true;
@@ -288,31 +288,26 @@ double ComplexCreator::calculateAllfit(vector<Ligand> & ligands)
 		}
 	}
 	return allFit;
-
-	return true;
 }
 
 
 void ComplexCreator::simulatedAnnealing()
 {
 	AuxMath auxMath_;
-
-	int maxIterations = 100;
 	vector<Ligand> x0 = allLigands;
 	double f0 = calculateAllfit(x0);
-	double cTemp = f0; //Variable parameter is better
+	double cTemp = f0; //Variable temperature is better
 
 	vector<Ligand> xMin = x0;
 	double fMin = f0;
 	vector<Ligand> x;
 	double f;
 	double prob;
-	for (int i = 0; i < maxIterations; i++)
+	for (int i = 0; i < saMaxIterations; i++)
 	{
-		//x = x0 + 1.0e0 - auxMath_.fRand(0.0e0, 2.0e0);
-		
-		f = calculateAllfit(x0);
-
+		x = x0;
+		perturbOperations(x);
+		f = calculateAllfit(x);
 		if (f < f0)
 		{
 			x0 = x;
@@ -332,28 +327,53 @@ void ComplexCreator::simulatedAnnealing()
 			xMin = x;
 			fMin = f;
 		}
+
+#ifdef _DEBUG
+		//printAllAtoms(xMin);
+		cout << "i:  " << i << "  fMin:  " << fMin << endl;
+#endif
+	}
+
+}
+
+
+// uma operacao roda em relacao ao x2.
+// outra roda sem centrar - lembra de atualizar o x1 e o x2.
+void ComplexCreator::perturbOperations(vector<Ligand> & ligands)
+{
+	AuxMath auxMath_;
+	vector<double> randomRot(3);
+	double alfa, beta;
+	for (size_t i = 0; i < ligands.size(); i++)
+	{
+		randomRot[0] = auxMath_.fRand(0, 1.0e0);
+		randomRot[1] = auxMath_.fRand(0, 1.0e0);
+		randomRot[2] = auxMath_.fRand(0, 1.0e0);
+		auxMath_.normalize(randomRot);
+		alfa = auxMath_.fRand(0, maxAlfaAngle);
+
+		ligands[i].genericRotation(randomRot[0], randomRot[1], randomRot[2], alfa);
+
+		beta = auxMath_.fRand(0, maxBetaAngle);
+		ligands[i].rotateOnX2(beta);
 	}
 }
 
 
 
-
-
-
-
-void ComplexCreator::printAllAtoms()
+void ComplexCreator::printAllAtoms(vector<Ligand> & ligands)
 {
 	int allAtoms = 0;
-	size_t size = allLigands.size();
+	size_t size = ligands.size();
 	for (size_t k = 0; k < size; k++)
-		allAtoms += allLigands[k].getNatoms();
+		allAtoms += ligands[k].getNatoms();
 
 	ofstream xyzAll("xyzAll.xyz");
 	xyzAll << allAtoms + 1 << endl
 		<< projectName << endl;
 	xyzAll << metalName << "   0.00000    0.00000     0.00000" << endl;
 	for (size_t i = 0; i < size; i++)
-		allLigands[i].printLigand(xyzAll);
+		ligands[i].printLigand(xyzAll);
 
 }
 

@@ -13,10 +13,12 @@ public:
 	Ligand();
 	~Ligand();
 
+	/*		*/
 	void setLigandCoordinates(
 		std::vector<CoordXYZ> &coord_in, 
 		std::string titleInfo_in);
-	
+
+
 	bool initializeLigand();
 
 	inline int getChelation() { return chelation; }
@@ -26,6 +28,10 @@ public:
 	void rotateToCenter();
 
 	void rotateOnX1(double vx, double vy, double vz, double ang);
+
+	void rotateOnX2(double beta);
+
+	void genericRotation(double vx, double vy, double vz, double ang);
 
 	void printLigand(std::ofstream &out);
 
@@ -47,7 +53,6 @@ private:
 	bool calculateTridentate();
 
 	void printXyzLigandDirection(std::string inputName = "xyzTeste.xyz"); //debug purpose
-
 };
 
 #endif

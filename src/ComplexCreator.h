@@ -23,9 +23,16 @@ public:
 
 	void simulatedAnnealing();
 
+
+
+
 private:
 	const int maxChelation = 10;
 	const double stretchDistance = 3;
+	const double maxAlfaAngle = 3.14159265358979323846 / 90.0e0;
+	const double maxBetaAngle = 3.14159265358979323846 / 90.0e0;
+	const int saMaxIterations = 1000;
+	
 	//data
 	std::vector<Ligand> & allLigands;
 	std::string metalName;
@@ -49,10 +56,10 @@ private:
 
 	//optimizing
 	double calculateAllfit(std::vector<Ligand> & ligands);
-	
 
+	void perturbOperations(std::vector<Ligand> & ligands);
 
-	void printAllAtoms();
+	void printAllAtoms(std::vector<Ligand> & ligands);
 };
 
 

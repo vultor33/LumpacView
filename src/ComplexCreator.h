@@ -11,9 +11,11 @@ class ComplexCreator
 public:
 	ComplexCreator(
 		std::vector<Ligand> &allLigands,
-		std::string metalName_in,
-		std::string metalParams_in,
-		std::string projectName_in
+		int maxChelation_in,
+		double stretchDistance_in,
+		double maxAlfaAngle_in,
+		double maxBetaAngle_in,
+		int saMaxIterations_in
 		);
 	~ComplexCreator();
 
@@ -22,17 +24,12 @@ public:
 	std::vector<CoordXYZ> simulatedAnnealing();
 
 private:
-	const int maxChelation = 10;
-	const double stretchDistance = 3;
-	const double maxAlfaAngle = 3.14159265358979323846 / 90.0e0;
-	const double maxBetaAngle = 3.14159265358979323846 / 90.0e0;
-	const int saMaxIterations = 1000;
-	
-	//data
+	int maxChelation;
+	double stretchDistance;
+	double maxAlfaAngle;
+	double maxBetaAngle;
+	int saMaxIterations;
 	std::vector<Ligand> & allLigands;
-	std::string metalName;
-	std::string metalParams;
-	std::string projectName;
 
 	//start
 	int orderAllLigands(); //bigger teeth first

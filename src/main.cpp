@@ -6,7 +6,7 @@
 #include "ReadInput.h"
 #include "ComplexCreator.h"
 #include "ControlMopac.h"
-
+#include "AuxMath.h"
 
 using namespace std;
 
@@ -39,16 +39,19 @@ int main()
 	}
 	if (terminateExecution) return 1;
 
-	// objeto que vai gerar a estrutra - ele tem dois metodos
-	// um pela distancia e outro q n vou programar agora mas
-	// e atraves da repulsao das cargas.
-
+	AuxMath auxMath_;
+	int maxChelation = 10;
+	double stretchDistance = 3;
+	double maxAlfaAngle = auxMath_._pi / 90.0e0;
+	double maxBetaAngle = auxMath_._pi / 90.0e0;
+	int saMaxIterations = 1000;
 	ComplexCreator cpCreator(
 		readInp_.allLigands,
-		readInp_.getMetalName(),
-		readInp_.getMetalParams(),
-		readInp_.getProjectName()
-		);
+		maxChelation,
+		stretchDistance,
+		maxAlfaAngle,
+		maxBetaAngle,
+		saMaxIterations);
 
 	sucess = cpCreator.start();
 	if (sucess) cout << "ligantes iniciados com sucesso" << endl;

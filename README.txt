@@ -9,21 +9,27 @@ Funcionamento
 
 2. Usa a matemática do Simas para definir os pontos 
    X1 - centro da coordenacao.
-   X2 - direção da coordenacao -> pX1 -pX2.
+   X2 - direção da coordenacao.
 
 3. ComplexCreator.start
-   3.1. Ordena os ligantes assim: tridentados, bidentados e monodentados.
+   3.1. Ordena os ligantes: tridentados, bidentados e monodentados.
         !(seria necessario uma revisao em varios pontos para descrever polidentados)
-   3.2. Obtencao dos ponts na esfera.
+   3.2. Obtencao dos pontos na esfera.
    3.3. Esticamento dos pontos.
    3.4. Gera posicoes iniciais usando os pontos e roda para o centro.
 
 4. ComplexCreator.simulatedAnnealing
-   -> Algoritmo padrao - a unica diferenca e uma temperatura variavel q inventei.
-   -> calculateAllFit passa a bola para o que esta implementado em Ligand.calculateFit.
-   -> perturbOperations - gera um vetor no centro e roda ao redor dele
-                          e, roda no angulo em torno da molecula.
-   -> No fim da simulacao temos o allLigands, esse esta pronto para rodar no Mopac.
+   -> Algoritmo padrao - a unica diferenca e uma temperatura variavel que inventei.
+   -> calculateAllFit - passa a bola para o que esta implementado em Ligand.calculateFit.
+   -> perturbOperations - 1. gera um vetor no centro e roda ao redor dele
+                          2. roda em torno da molecula.
+   -> No fim da simulacao retorna vector<CoordXYZ> allAtoms.
+
+5. ControlMopac.optimize(AllAtoms)
+   -> roda uma otimizacao do mopac com todos os atomos.
+   -> se a otimizacao der certo, roda frequencia.
+
+FIM
 
 
 
@@ -50,12 +56,15 @@ label x y z  // coordendas no formato xyz
 ...
 ]
 !!! IMPORTANTE
-Monodentado - ligacao definida com o primeiro atomo e os outros
-              usados na direcao.
-Bidentado - ligacao definida com os dois primeiros e no
-            plano do terceiro.
-Tridentado - ligacao definida com os tres primeiros. Os outros
-             foram usados na direcao.
+Monodentado - X1 = primeiro atomo.
+              X2 = centro de geometrico -> X1.
+              
+Bidentado - X1 = (xyzAtomo1 + xyzAtomo2) / 2 
+            X2 = Usa o terceiro atomo, varias operacoes.
+
+Tridentado - X1 = baricentro dos 3 ligantes.
+             X2 = normal do triangula saindo da molecula.
+
 
 
 Rotinas:
@@ -64,14 +73,23 @@ AuxMath -> funções de álgebra linear.
 
 Coordstructs -> struct usados no programa.
 
+ControlMopac -> Controla a montagem dos inputs, execucao
+                e analise dos resultados do mopac.
+
+Fitness -> onde esta implementado a interacao entre os ligantes.
+
 Ligand -> Cada objeto é um ligante todo.
           Centro, vetor direcional e ângulo com o lantanídeo.
 
 MyExceptions -> Mensagens de erro.
 
+Points -> onde estao os pontos da esfera.
+
 ReadInput -> Le o LumpacViewInput.txt e gera os ligantes.
              Contem vector<Ligand> allLigands;
 
+ReadMopac -> objeto usado pelo controlmopac para ler
+             outputs do mopac.
 
 
 
@@ -84,5 +102,9 @@ WARNING
 - em ComplexCreator.h -> numeros const importantes, precisam ser revistos.
 
 
-INEFICIENCIA
+- em ComplexCreator.perturbOperations -> ele mexe em todos os ligantes de uma vez so
+                                         se ele mexe em um de cada vez poderia ser mais
+                                         eficiente.
+
+- em ControlMopac.buildMopacInput -> na frequencia parece que nao esta indo em precisao dupla.
 

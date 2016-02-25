@@ -14,15 +14,19 @@ using namespace std;
 
 ComplexCreator::ComplexCreator(
 	vector<Ligand> &allLigands_in,
-	string metalName_in,
-	string metalParams_in,
-	string projectName_in
+	int maxChelation_in,
+	double stretchDistance_in,
+	double maxAlfaAngle_in,
+	double maxBetaAngle_in,
+	int saMaxIterations_in
 	)
 	:allLigands(allLigands_in)
 {
-	metalName = metalName_in;
-	metalParams = metalName_in;
-	projectName = projectName_in;
+	maxChelation = maxChelation_in;
+	stretchDistance = stretchDistance_in;
+	maxAlfaAngle = maxAlfaAngle_in;
+	maxBetaAngle = maxBetaAngle_in;
+	saMaxIterations = saMaxIterations_in;
 }
 
 ComplexCreator::~ComplexCreator(){}
@@ -379,8 +383,8 @@ void ComplexCreator::printAllAtoms(vector<Ligand> & ligands)
 
 	ofstream xyzAll("xyzAll.xyz");
 	xyzAll << allAtoms + 1 << endl
-		<< projectName << endl;
-	xyzAll << metalName << "   0.00000    0.00000     0.00000" << endl;
+		<< "useful title" << endl;
+	xyzAll << "Eu  " << "   0.00000    0.00000     0.00000" << endl;
 	for (size_t i = 0; i < size; i++)
 		ligands[i].printLigand(xyzAll);
 

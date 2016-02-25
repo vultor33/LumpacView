@@ -7,23 +7,28 @@
 
 #include "Coordstructs.h"
 #include "ReadMopac.h"
-#include "Ligand.h"
 
 using namespace std;
 
-ControlMopac::ControlMopac(){}
+ControlMopac::ControlMopac(
+	string projectName_in,
+	string metalName_in,
+	string mopacHeader_in,
+	string mopacFreq_in,
+	string metalParams_in
+	)
+{
+	projectName = projectName_in;
+	metalName = metalName_in;
+	mopacHeader = mopacHeader_in;
+	mopacFreq = mopacFreq_in;
+	metalParams = metalParams_in;
+}
 
 ControlMopac::~ControlMopac(){}
 
-bool ControlMopac::optimize(vector<Ligand> & ligands)
+bool ControlMopac::optimize(vector<CoordXYZ> & allAtoms)
 {
-	vector<CoordXYZ> allAtoms;
-	for (size_t i = 0; i < ligands.size(); i++)
-	{
-		vector<CoordXYZ> atomsLigand = ligands[i].getAllAtoms();
-		allAtoms.insert(allAtoms.end(), atomsLigand.begin(), atomsLigand.end());
-	}
-
 	ReadMopac readmop_;
 
 	buildMopacInput(allAtoms, "opt");
@@ -49,12 +54,14 @@ double ControlMopac::forceCalculation(vector<CoordXYZ> & optimizedAtoms)
 	double centerY = optimizedAtoms[0].y;
 	double centerZ = optimizedAtoms[0].z;
 	vector<CoordXYZ> ligandAtoms(optimizedAtoms.size() - 1);
-	for (size_t i = 0; i < optimizedAtoms.size(); i++)
+	for (size_t i = 0; i < optimizedAtoms.size() - 1; i++)
 	{
 		ligandAtoms[i].x = optimizedAtoms[i + 1].x - centerX;
 		ligandAtoms[i].y = optimizedAtoms[i + 1].y - centerY;
 		ligandAtoms[i].z = optimizedAtoms[i + 1].z - centerZ;
 	}
+	for (size_t i = 0; i < optimizedAtoms.size()-1; i++)
+		ligandAtoms[i].atomlabel = optimizedAtoms[i+1].atomlabel;
 
 	buildMopacInput(ligandAtoms, "freq");
 

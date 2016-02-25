@@ -5,16 +5,21 @@
 #include <string>
 
 #include "Coordstructs.h"
-#include "Ligand.h"
 #include "ReadMopac.h"
 
 class ControlMopac
 {
 public:
-	ControlMopac();
+	ControlMopac(
+		std::string projectName_in,
+		std::string metalName_in,
+		std::string mopacHeader_in,
+		std::string mopacFreq_in,
+		std::string metalParams_in
+		);
 	~ControlMopac();
 
-	bool optimize(std::vector<Ligand> & ligands);
+	bool optimize(std::vector<CoordXYZ> & allAtoms);
 
 private:
 	std::string projectName;
@@ -28,13 +33,8 @@ private:
 
 	double forceCalculation(std::vector<CoordXYZ> &optimizedAtoms);
 	void buildMopacInput(std::vector<CoordXYZ> &allAtoms, std::string execOption);
-
 	
 };
 
 #endif
-
-
-
-
 

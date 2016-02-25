@@ -1,5 +1,5 @@
 Eu
-spk_Gd.inp
+spk_Eu
 4
 tta-tridentate-test
 h2o

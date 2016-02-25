@@ -5,6 +5,7 @@
 #include "Coordstructs.h"
 #include "ReadInput.h"
 #include "ComplexCreator.h"
+#include "ControlMopac.h"
 
 
 using namespace std;
@@ -48,14 +49,30 @@ int main()
 		readInp_.getMetalParams(),
 		readInp_.getProjectName()
 		);
-	sucess = true;
+
 	sucess = cpCreator.start();
 	if (sucess) cout << "ligantes iniciados com sucesso" << endl;
-	else cout << "um problema aconteceu nos ligantes" << endl;
+	else{
+		cout << "um problema aconteceu nos ligantes" << endl;
+		return 1;
+	}
 
-	cpCreator.simulatedAnnealing();
+	vector<CoordXYZ> allAtoms = cpCreator.simulatedAnnealing();
 
-	//montar o input do mopac, rodar e tal.
+	string mopacHeader = "RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string mopacFreq = "RM1 PRECISE NOINTER XYZ T=10D AUX THERMO FORCE + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	ControlMopac controlMop(
+		readInp_.getProjectName(),
+		readInp_.getMetalName(),
+		mopacHeader,
+		mopacFreq,
+		readInp_.getMetalParams()
+		);
+	sucess = controlMop.optimize(allAtoms);
+	if (sucess) cout << "a estrutura otimizou com sucesso - bom dia" << endl;
+	else {
+		cout << "ocorreu algum problema na otimizacao do mopac, tente outra vez" << endl;
+	}
 
 	return 0;
 }

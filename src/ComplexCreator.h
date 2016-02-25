@@ -19,7 +19,7 @@ public:
 
 	bool start();
 
-	void simulatedAnnealing();
+	std::vector<CoordXYZ> simulatedAnnealing();
 
 private:
 	const int maxChelation = 10;

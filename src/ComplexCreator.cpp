@@ -266,7 +266,7 @@ void ComplexCreator::stretchPoints(vector<double> &points)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-void ComplexCreator::simulatedAnnealing()
+vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 {
 	AuxMath auxMath_;
 	vector<Ligand> x0 = allLigands;
@@ -321,7 +321,14 @@ void ComplexCreator::simulatedAnnealing()
 			<< "  cTemp:  " << cTemp << endl;
 #endif
 	}
-	allLigands = xMin;
+
+	vector<CoordXYZ> allAtoms;
+	for (size_t i = 0; i < xMin.size(); i++)
+	{
+		vector<CoordXYZ> atomsLigand = xMin[i].getAllAtoms();
+		allAtoms.insert(allAtoms.end(), atomsLigand.begin(), atomsLigand.end());
+	}
+	return allAtoms;
 }
 
 

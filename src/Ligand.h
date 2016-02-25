@@ -29,6 +29,8 @@ public:
 
 	void printLigand(std::ofstream &out);
 
+	std::vector<CoordXYZ> getAllAtoms();
+
 	inline int getNatoms() { return (int)coord.size(); }
 
 private:

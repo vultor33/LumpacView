@@ -294,6 +294,10 @@ void Ligand::rotateOnX1(double vx, double vy, double vz, double ang)
 	translateLigand(oldX1.x, oldX1.y, oldX1.z);
 }
 
+vector<CoordXYZ> Ligand::getAllAtoms()
+{
+	return coord;
+}
 
 void Ligand::printLigand(ofstream &out)
 {

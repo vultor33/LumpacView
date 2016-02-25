@@ -8,6 +8,7 @@
 #include "Ligand.h"
 #include "Points.h"
 #include "AuxMath.h"
+#include "Fitness.h"
 
 using namespace std;
 
@@ -48,13 +49,11 @@ bool ComplexCreator::start()
 			<< points[i + nPoints] << "   "
 			<< points[i + 2 * nPoints] << endl;
 	points_.close();
-
 	printAllAtoms();
 #endif 
 
 	return true;
 }
-
 
 vector<double> ComplexCreator::getPoints(int totalChelation)
 {
@@ -74,22 +73,6 @@ vector<double> ComplexCreator::getPoints(int totalChelation)
 	}
 	return out;
 }
-
-vector<double> ComplexCreator::arrayToVector(
-	const double * array_in, 
-	size_t size)
-{
-	vector<double> out(3 * size);
-	for (size_t i = 0; i < size; i++)
-	{
-		out[i] = array_in[i];
-		out[i] = array_in[i + size];
-		out[i] = array_in[i + 2 * size];
-	}
-
-	return out;
-}
-
 
 int ComplexCreator::orderAllLigands()
 {
@@ -274,6 +257,90 @@ void ComplexCreator::stretchPoints(vector<double> &points)
 }
 
 
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+//////////////////  OPTIMIZING /////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+
+bool ComplexCreator::optimizeStructure()
+{
+
+
+	return true;
+}
+
+double ComplexCreator::calculateAllfit(vector<Ligand> & ligands)
+{
+	double allFit = 0.0e0;
+	Fitness fit_;
+	for (size_t i = 0; i < (allLigands.size() - 1); i++)
+	{
+		for (size_t j = 0; j < allLigands.size(); j++)
+		{
+			allFit += fit_.calculateFit(
+				ligands[i].getAllAtoms(),
+				ligands[j].getAllAtoms());
+		}
+	}
+	return allFit;
+
+	return true;
+}
+
+
+void ComplexCreator::simulatedAnnealing()
+{
+	AuxMath auxMath_;
+
+	int maxIterations = 100;
+	vector<Ligand> x0 = allLigands;
+	double f0 = calculateAllfit(x0);
+	double cTemp = f0; //Variable parameter is better
+
+	vector<Ligand> xMin = x0;
+	double fMin = f0;
+	vector<Ligand> x;
+	double f;
+	double prob;
+	for (int i = 0; i < maxIterations; i++)
+	{
+		//x = x0 + 1.0e0 - auxMath_.fRand(0.0e0, 2.0e0);
+		
+		f = calculateAllfit(x0);
+
+		if (f < f0)
+		{
+			x0 = x;
+			f0 = f;
+		}
+		else
+		{
+			prob = exp((fMin - f) / cTemp);
+			if (prob > auxMath_.fRand(0, 1.0e0))
+			{
+				x0 = x;
+				f0 = f;
+			}
+		}
+		if (f < fMin)
+		{
+			xMin = x;
+			fMin = f;
+		}
+	}
+}
+
+
+
+
+
+
+
 void ComplexCreator::printAllAtoms()
 {
 	int allAtoms = 0;
@@ -292,22 +359,50 @@ void ComplexCreator::printAllAtoms()
 
 
 
-/*
-int nPoints = size / 3;
-vector< vector<double> > distanceMatrix(nPoints);
-for (size_t l = 0; l < nPoints; l++)
-	distanceMatrix[l].resize(nPoints);
 
-for (size_t i = 0; i < (nPoints - 1); i++)
+
+
+/*
+TESTANDO SIMULATED ANNEALING
+AuxMath auxMath_;
+
+int maxIterations = 100;
+double x0 = 3;
+double f0 = x0 * x0;
+vector<Ligand> ligand0 = allLigands;
+double cTemp = f0; //Variable parameter is better
+
+double xMin = x0;
+double fMin = f0;
+double x;
+double f;
+double prob;
+for (int i = 0; i < maxIterations; i++)
 {
-	for (size_t j = i + 1; j < nPoints; j++)
-	{
-		distanceMatrix[i][j] = auxMath_.norm(
-			points[i] - points[j],
-			points[i + nPoints] - points[j + nPoints],
-			points[i + 2 * nPoints] - points[j + 2 * nPoints]
-			);
-		distanceMatrix[j][i] = distanceMatrix[j][i];
-	}
+x = x0 + 1.0e0 - auxMath_.fRand(0.0e0, 2.0e0);
+f = x * x;
+
+if (f < f0)
+{
+x0 = x;
+f0 = f;
 }
+else
+{
+prob = exp((fMin - f) / cTemp);
+if (prob > auxMath_.fRand(0, 1.0e0))
+{
+x0 = x;
+f0 = f;
+}
+}
+if (f < fMin)
+{
+xMin = x;
+fMin = f;
+}
+cout << "x0=  " << x0 << endl;
+}
+cout << "MIN=  " << xMin << endl;
 */
+

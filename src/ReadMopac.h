@@ -11,7 +11,7 @@ public:
 	ReadMopac();
 	~ReadMopac();
 
-	bool readOutput(std::string outName, Ligand &mol_);
+	std::vector<CoordXYZ> readOutput(std::string outName);
 
 	double readFrequency(std::string freqName);
 

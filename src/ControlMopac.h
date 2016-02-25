@@ -5,7 +5,7 @@
 #include <string>
 
 #include "Coordstructs.h"
-#include "ReadInput.h"
+#include "Ligand.h"
 #include "ReadMopac.h"
 
 class ControlMopac
@@ -14,26 +14,22 @@ public:
 	ControlMopac();
 	~ControlMopac();
 
-	bool findLigandsConfiguration(ReadInput &ri_);
+	bool optimize(std::vector<Ligand> & ligands);
 
-	
 private:
 	std::string projectName;
 	std::string metalName;
 	std::string mopacHeader;
 	std::string mopacFreq;
 	std::string metalParams;
+	std::string mopacExecPath = "M2009_Ln_Orbitals.exe  ";
 	std::vector< Ligand > ligands;
 	double frequency;
 
-	void optimization(ReadInput &ri_);
-	void forceCalculation(Ligand &optimizedMol_, ReadInput &ri_);
-	void buildMopacInput(vector<Ligand> &ligands, string execOption);
+	double forceCalculation(std::vector<CoordXYZ> &optimizedAtoms);
+	void buildMopacInput(std::vector<CoordXYZ> &allAtoms, std::string execOption);
 
-
-
-
-
+	
 };
 
 #endif

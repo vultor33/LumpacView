@@ -15,7 +15,7 @@ ReadMopac::ReadMopac(){}
 
 ReadMopac::~ReadMopac(){}
 
-bool ReadMopac::readOutput(string outName, Ligand &mol_)
+vector<CoordXYZ> ReadMopac::readOutput(string outName)
 {
 	string name = outName + ".out";
 	ifstream in_;
@@ -79,9 +79,7 @@ bool ReadMopac::readOutput(string outName, Ligand &mol_)
 	}
 	in_.close();
 
-	mol_.setNewCoordinates(newCoord);
-
-	return (newCoord.size() != 0);
+	return newCoord;
 }
 
 

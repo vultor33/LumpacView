@@ -296,13 +296,18 @@ void ComplexCreator::simulatedAnnealing()
 	AuxMath auxMath_;
 	vector<Ligand> x0 = allLigands;
 	double f0 = calculateAllfit(x0);
-	double cTemp = f0; //Variable temperature is better
+	
+	//Variable temperature - always 50/100
+	double cTemp = f0 / 500; 
+	int dices = 0;
+	int accep = 0;
 
 	vector<Ligand> xMin = x0;
 	double fMin = f0;
 	vector<Ligand> x;
 	double f;
 	double prob;
+	double rand;
 	for (int i = 0; i < saMaxIterations; i++)
 	{
 		x = x0;
@@ -315,12 +320,19 @@ void ComplexCreator::simulatedAnnealing()
 		}
 		else
 		{
-			prob = exp((fMin - f) / cTemp);
-			if (prob > auxMath_.fRand(0, 1.0e0))
+			dices++;
+			prob = exp((-f0 + f) / cTemp);
+			rand = auxMath_.fRand(0, 1.0e0);
+			if (prob > rand)
 			{
 				x0 = x;
 				f0 = f;
+				accep++;
 			}
+			if (((double)accep / (double)dices) > 0.5e0)
+				cTemp -= 0.5e0 * cTemp;
+			else
+				cTemp += 0.5e0 * cTemp;
 		}
 		if (f < fMin)
 		{
@@ -330,7 +342,8 @@ void ComplexCreator::simulatedAnnealing()
 
 #ifdef _DEBUG
 		//printAllAtoms(xMin);
-		cout << "i:  " << i << "  fMin:  " << fMin << endl;
+		cout << "i:  " << i << "  fMin:  " << fMin
+			<< "  cTemp:  " << cTemp << endl;
 #endif
 	}
 

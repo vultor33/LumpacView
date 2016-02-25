@@ -19,12 +19,7 @@ public:
 
 	bool start();
 
-	bool optimizeStructure();
-
 	void simulatedAnnealing();
-
-
-
 
 private:
 	const int maxChelation = 10;
@@ -55,7 +50,7 @@ private:
 	void stretchPoints(std::vector<double> &points);
 
 	//optimizing
-	double calculateAllfit(std::vector<Ligand> & ligands);
+	double calculateAllFit(std::vector<Ligand> & ligands);
 
 	void perturbOperations(std::vector<Ligand> & ligands);
 

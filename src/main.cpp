@@ -55,15 +55,10 @@ int main()
 
 	cpCreator.simulatedAnnealing();
 
-
-//	cin.get();
 	return 0;
 }
 
 
-
-// Estou usando o preprocessor _DEBUG pra testes,
-// só vendo se a parada funciona, qualquer e so dar um find e apagar
 
 /*
 ERROR HANDLING
@@ -71,6 +66,7 @@ ERROR HANDLING
 - Destructor of the class is not called if exception is thrown in its constructor.
 - Exception is automatically re-thrown if caught in construction initialization list catch block.
 */
+
 
 /*
 to string
@@ -81,6 +77,8 @@ std::ostringstream stm ;
 stm << n ;
 return stm.str() ;
 }
+
+
 
 
 

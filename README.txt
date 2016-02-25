@@ -11,12 +11,19 @@ Funcionamento
    X1 - centro da coordenacao.
    X2 - direção da coordenacao -> pX1 -pX2.
 
-3. ComplexCrator.start
+3. ComplexCreator.start
    3.1. Ordena os ligantes assim: tridentados, bidentados e monodentados.
         !(seria necessario uma revisao em varios pontos para descrever polidentados)
    3.2. Obtencao dos ponts na esfera.
    3.3. Esticamento dos pontos.
-   3.4. Gera posicoes iniciais usando os pontos e rodando para o centro.
+   3.4. Gera posicoes iniciais usando os pontos e roda para o centro.
+
+4. ComplexCreator.simulatedAnnealing
+   -> Algoritmo padrao - a unica diferenca e uma temperatura variavel q inventei.
+   -> calculateAllFit passa a bola para o que esta implementado em Ligand.calculateFit.
+   -> perturbOperations - gera um vetor no centro e roda ao redor dele
+                          e, roda no angulo em torno da molecula.
+   -> No fim da simulacao temos o allLigands, esse esta pronto para rodar no Mopac.
 
 
 
@@ -74,6 +81,7 @@ WARNING
                    bi  precisa de 3 atomos
                    tri precisa de 4
 
+- em ComplexCreator.h -> numeros const importantes, precisam ser revistos.
 
 
 INEFICIENCIA

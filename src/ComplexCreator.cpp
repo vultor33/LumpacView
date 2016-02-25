@@ -266,31 +266,6 @@ void ComplexCreator::stretchPoints(vector<double> &points)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-
-bool ComplexCreator::optimizeStructure()
-{
-
-
-	return true;
-}
-
-double ComplexCreator::calculateAllfit(vector<Ligand> & ligands)
-{
-	double allFit = 0.0e0;
-	Fitness fit_;
-	for (size_t i = 0; i < (allLigands.size() - 1); i++)
-	{
-		for (size_t j = 0; j < allLigands.size(); j++)
-		{
-			allFit += fit_.calculateFit(
-				ligands[i].getAllAtoms(),
-				ligands[j].getAllAtoms());
-		}
-	}
-	return allFit;
-}
-
-
 void ComplexCreator::simulatedAnnealing()
 {
 	AuxMath auxMath_;
@@ -346,12 +321,26 @@ void ComplexCreator::simulatedAnnealing()
 			<< "  cTemp:  " << cTemp << endl;
 #endif
 	}
-
+	allLigands = xMin;
 }
 
 
-// uma operacao roda em relacao ao x2.
-// outra roda sem centrar - lembra de atualizar o x1 e o x2.
+double ComplexCreator::calculateAllFit(vector<Ligand> & ligands)
+{
+	double allFit = 0.0e0;
+	Fitness fit_;
+	for (size_t i = 0; i < (allLigands.size() - 1); i++)
+	{
+		for (size_t j = 0; j < allLigands.size(); j++)
+		{
+			allFit += fit_.calculateFit(
+				ligands[i].getAllAtoms(),
+				ligands[j].getAllAtoms());
+		}
+	}
+	return allFit;
+}
+
 void ComplexCreator::perturbOperations(vector<Ligand> & ligands)
 {
 	AuxMath auxMath_;

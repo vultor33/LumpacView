@@ -1,8 +1,22 @@
+IDEIAS
+
+Opcao new ligand - voce me da as coordenadas e a denticao.
+                   eu monto um complexo cheio chelation = 8
+                   com aquele ligante. rodo e recupero ele
+                   deformado, que sera melhor para o uso
+                   no lumpacview.
+
+
+
+
+
 Lumpac View
 
 Programa que automatiza a construção de estruturas.
 
 Funcionamento
+
+INICIO
 
 1. Le o lumpacViewInput.txt e salva os dados no objeto readInput.
    - Procura os ligantes pelo nome, le as coordenadas e os salva para uso futuro.
@@ -63,7 +77,7 @@ Bidentado - X1 = (xyzAtomo1 + xyzAtomo2) / 2
             X2 = Usa o terceiro atomo, varias operacoes.
 
 Tridentado - X1 = baricentro dos 3 ligantes.
-             X2 = normal do triangula saindo da molecula.
+             X2 = normal do triangulo saindo da molecula.
 
 
 

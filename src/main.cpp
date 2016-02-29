@@ -7,11 +7,16 @@
 #include "ComplexCreator.h"
 #include "ControlMopac.h"
 #include "AuxMath.h"
+#include "PointAnalysis.h"
 
 using namespace std;
 
 int main()
 {
+#ifdef _DEBUG
+	PointAnalysis p;
+#endif
+
 	ReadInput readInp_;
 	try	{
 		readInp_.readLumpacViewInput();

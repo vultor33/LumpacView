@@ -1,13 +1,10 @@
 Eu
 spk_Eu
 4
-tta-tridentate-test
-h2o
-h2o
-h2o
-h2o
-h2o
-h2o
+tta
+h2o-bidentate
+tta
+tta
 
 
 ! a ordem importa

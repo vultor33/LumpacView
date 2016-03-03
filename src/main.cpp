@@ -47,16 +47,18 @@ int main()
 	AuxMath auxMath_;
 	int maxChelation = 10;
 	double stretchDistance = 3;
+	double saTemperatureUpdate = 0.1e0;
 	double maxAlfaAngle = auxMath_._pi / 90.0e0;
 	double maxBetaAngle = auxMath_._pi / 90.0e0;
-	int saMaxIterations = 1000;
+	int saMaxIterations = 50000;
 	ComplexCreator cpCreator(
 		readInp_.allLigands,
 		maxChelation,
 		stretchDistance,
 		maxAlfaAngle,
 		maxBetaAngle,
-		saMaxIterations);
+		saMaxIterations,
+		saTemperatureUpdate);
 
 	sucess = cpCreator.start();
 	if (sucess) cout << "ligantes iniciados com sucesso" << endl;
@@ -69,15 +71,17 @@ int main()
 
 	string mopacHeader = "RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
 	string mopacFreq = "RM1 PRECISE NOINTER XYZ T=10D AUX THERMO FORCE + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string mopacExecPath = "M2009_Ln_Orbitals.exe  ";
 	ControlMopac controlMop(
 		readInp_.getProjectName(),
 		readInp_.getMetalName(),
 		mopacHeader,
 		mopacFreq,
-		readInp_.getMetalParams()
+		readInp_.getMetalParams(),
+		mopacExecPath
 		);
 	sucess = controlMop.optimize(allAtoms);
-	if (sucess) cout << "a estrutura otimizou com sucesso - bom dia" << endl;
+	if (sucess) cout << "a estrutura otimizou com sucesso - tenha um bom dia" << endl;
 	else {
 		cout << "ocorreu algum problema na otimizacao do mopac, tente outra vez" << endl;
 	}

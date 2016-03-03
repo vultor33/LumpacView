@@ -15,7 +15,8 @@ public:
 		double stretchDistance_in,
 		double maxAlfaAngle_in,
 		double maxBetaAngle_in,
-		int saMaxIterations_in
+		int saMaxIterations_in,
+		double saTemperatureUpdate_in
 		);
 	~ComplexCreator();
 
@@ -28,7 +29,9 @@ private:
 	double stretchDistance;
 	double maxAlfaAngle;
 	double maxBetaAngle;
+	double saTemperatureUpdate;
 	int saMaxIterations;
+
 	std::vector<Ligand> & allLigands;
 
 	//start

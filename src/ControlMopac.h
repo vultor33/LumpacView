@@ -15,7 +15,8 @@ public:
 		std::string metalName_in,
 		std::string mopacHeader_in,
 		std::string mopacFreq_in,
-		std::string metalParams_in
+		std::string metalParams_in,
+		std::string mopacExecPath_in
 		);
 	~ControlMopac();
 
@@ -27,7 +28,7 @@ private:
 	std::string mopacHeader;
 	std::string mopacFreq;
 	std::string metalParams;
-	std::string mopacExecPath = "M2009_Ln_Orbitals.exe  ";
+	std::string mopacExecPath;
 	std::vector< Ligand > ligands;
 	double frequency;
 

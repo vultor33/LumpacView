@@ -15,7 +15,8 @@ ControlMopac::ControlMopac(
 	string metalName_in,
 	string mopacHeader_in,
 	string mopacFreq_in,
-	string metalParams_in
+	string metalParams_in,
+	string mopacExecPath_in
 	)
 {
 	projectName = projectName_in;
@@ -23,6 +24,7 @@ ControlMopac::ControlMopac(
 	mopacHeader = mopacHeader_in;
 	mopacFreq = mopacFreq_in;
 	metalParams = metalParams_in;
+	mopacExecPath = mopacExecPath_in;
 }
 
 ControlMopac::~ControlMopac(){}

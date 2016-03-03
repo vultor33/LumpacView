@@ -29,7 +29,6 @@ bool Ligand::initializeLigand()
 	if (!success1)
 		return false;
 
-	// do math
 	bool sucess2;
 	switch (chelation)
 	{
@@ -133,6 +132,7 @@ bool Ligand::calculateBidentate()
 	X1.y = 0.5e0 * (coord[0].y + coord[1].y);
 	X1.z = 0.5e0 * (coord[0].z + coord[1].z);
 
+	// rotate third atom point to 90 degrees
 	AuxMath auxMath_;
 	vector<double> normal = auxMath_.normalVectorFrom3Points(
 		coord[0].x, coord[0].y, coord[0].z,
@@ -145,25 +145,41 @@ bool Ligand::calculateBidentate()
 		coord[2].x, coord[2].y, coord[2].z
 		);
 
-	vector< vector<double> > rot = auxMath_.rotationMatrix(normal[0], normal[1], normal[2], -angle + auxMath_._pi/2.0e0);
+	// quando e menos e quando e mais.
+	double rotAngle = (-angle + auxMath_._pi / 2.0e0);
 
-	vector<double> X2Points = auxMath_.matrixXVector(rot, coord[2].x, coord[2].y, coord[2].z);
+	vector< vector<double> > rot = auxMath_.rotationMatrix(normal[0], normal[1], normal[2], rotAngle);
 
-	//vector x1 positivo pra ele q eu vou
-	vector<double> direction(3);
-	direction[0] = X1.x - X2Points[0];
-	direction[1] = X1.y - X2Points[1];
-	direction[2] = X1.z - X2Points[2];
+	vector<double> direction = auxMath_.matrixXVector(
+		rot, 
+		-X1.x + coord[2].x, 
+		-X1.y + coord[2].y,
+		-X1.z + coord[2].z);
+
+	double angleEnd = auxMath_.angleFrom3Points(
+		coord[0].x, coord[0].y, coord[0].z,
+		X1.x, X1.y, X1.z,
+		X1.x + direction[0], X1.y + direction[1], X1.z + direction[2]
+		);
+	if (angleEnd - (auxMath_._pi / 2.0e0) > 1.0e-4)
+	{
+		rotAngle *= -1.0e0; 
+		rot = auxMath_.rotationMatrix(normal[0], normal[1], normal[2], rotAngle);
+		direction = auxMath_.matrixXVector(
+			rot,
+			-X1.x + coord[2].x,
+			-X1.y + coord[2].y,
+			-X1.z + coord[2].z);
+	}
 
 	auxMath_.normalize(direction);
-	X2.x = direction[0];
-	X2.y = direction[1];
-	X2.z = direction[2];
+	X2.x = -direction[0];
+	X2.y = -direction[1];
+	X2.z = -direction[2];
 
 #ifdef _DEBUG
 	printXyzLigandDirection();
 #endif
-
 	return true;
 }
 

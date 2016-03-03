@@ -18,7 +18,8 @@ ComplexCreator::ComplexCreator(
 	double stretchDistance_in,
 	double maxAlfaAngle_in,
 	double maxBetaAngle_in,
-	int saMaxIterations_in
+	int saMaxIterations_in,
+	double saTemperatureUpdate_in
 	)
 	:allLigands(allLigands_in)
 {
@@ -27,6 +28,7 @@ ComplexCreator::ComplexCreator(
 	maxAlfaAngle = maxAlfaAngle_in;
 	maxBetaAngle = maxBetaAngle_in;
 	saMaxIterations = saMaxIterations_in;
+	saTemperatureUpdate = saTemperatureUpdate_in;
 }
 
 ComplexCreator::~ComplexCreator(){}
@@ -42,7 +44,7 @@ bool ComplexCreator::start()
 
 	stretchPoints(points);
 
-	setInitialPosition(points);
+	setInitialPosition(points); //view
 
 #ifdef _DEBUG
 	ofstream points_("points.xyz");
@@ -275,6 +277,10 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 	AuxMath auxMath_;
 	vector<Ligand> x0 = allLigands;
 	double f0 = calculateAllFit(x0);
+#ifdef _DEBUG
+	printAllAtoms(x0);
+	ofstream test_("teste.log");
+#endif
 	
 	//Variable temperature - always 50/100
 	double cTemp = f0 / 500; 
@@ -309,9 +315,9 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 				accep++;
 			}
 			if (((double)accep / (double)dices) > 0.5e0)
-				cTemp -= 0.5e0 * cTemp;
+				cTemp -= saTemperatureUpdate * cTemp;
 			else
-				cTemp += 0.5e0 * cTemp;
+				cTemp += saTemperatureUpdate * cTemp;
 		}
 		if (f < fMin)
 		{
@@ -321,10 +327,15 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 
 #ifdef _DEBUG
 		//printAllAtoms(xMin);
-		cout << "i:  " << i << "  fMin:  " << fMin
+		test_ << "i:  " << i << "  fMin:  " << fMin
 			<< "  cTemp:  " << cTemp << endl;
+		printAllAtoms(xMin);
 #endif
 	}
+
+#ifdef _DEBUG
+	test_.close();
+#endif
 
 	vector<CoordXYZ> allAtoms;
 	for (size_t i = 0; i < xMin.size(); i++)

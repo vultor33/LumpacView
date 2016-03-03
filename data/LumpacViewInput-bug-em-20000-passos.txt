@@ -1,0 +1,13 @@
+Eu
+spk_Eu
+4
+tta-tridentate-test
+h2o
+h2o
+h2o
+h2o
+h2o
+h2o
+
+
+! a ordem importa

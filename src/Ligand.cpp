@@ -161,7 +161,9 @@ bool Ligand::calculateBidentate()
 		X1.x, X1.y, X1.z,
 		X1.x + direction[0], X1.y + direction[1], X1.z + direction[2]
 		);
-	if (angleEnd - (auxMath_._pi / 2.0e0) > 1.0e-4)
+	
+	//angleEnd = auxMath_._pi / 2.0e0;
+	if (abs(angleEnd - (auxMath_._pi / 2.0e0)) > 1.0e-4)
 	{
 		rotAngle *= -1.0e0; 
 		rot = auxMath_.rotationMatrix(normal[0], normal[1], normal[2], rotAngle);
@@ -171,7 +173,7 @@ bool Ligand::calculateBidentate()
 			-X1.y + coord[2].y,
 			-X1.z + coord[2].z);
 	}
-
+	
 	auxMath_.normalize(direction);
 	X2.x = -direction[0];
 	X2.y = -direction[1];

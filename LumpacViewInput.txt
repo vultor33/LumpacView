@@ -1,10 +1,10 @@
 Eu
 spk_Eu
 4
+dbm
 tta
-h2o-bidentate
-tta
-tta
+tppo
+btfa
 
 
 ! a ordem importa

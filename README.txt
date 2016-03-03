@@ -122,3 +122,8 @@ WARNING
 
 - em ControlMopac.buildMopacInput -> na frequencia parece que nao esta indo em precisao dupla.
 
+
+- na contrucao do bidentado -> o terceiro atomo esta pra tras, isso pode nao
+                               ser verdade em alguns casos.
+
+

@@ -329,11 +329,11 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 		//printAllAtoms(xMin);
 		test_ << "i:  " << i << "  fMin:  " << fMin
 			<< "  cTemp:  " << cTemp << endl;
-		printAllAtoms(xMin);
 #endif
 	}
 
 #ifdef _DEBUG
+	printAllAtoms(xMin);
 	test_.close();
 #endif
 
@@ -353,7 +353,7 @@ double ComplexCreator::calculateAllFit(vector<Ligand> & ligands)
 	Fitness fit_;
 	for (size_t i = 0; i < (allLigands.size() - 1); i++)
 	{
-		for (size_t j = 0; j < allLigands.size(); j++)
+		for (size_t j = i + 1; j < allLigands.size(); j++)
 		{
 			allFit += fit_.calculateFit(
 				ligands[i].getAllAtoms(),

@@ -46,11 +46,11 @@ int main()
 
 	AuxMath auxMath_;
 	int maxChelation = 10;
-	double stretchDistance = 3;
+	double stretchDistance = 2.5e0;
 	double saTemperatureUpdate = 0.1e0;
 	double maxAlfaAngle = auxMath_._pi / 90.0e0;
 	double maxBetaAngle = auxMath_._pi / 90.0e0;
-	int saMaxIterations = 50000;
+	int saMaxIterations = 1000;
 	ComplexCreator cpCreator(
 		readInp_.allLigands,
 		maxChelation,

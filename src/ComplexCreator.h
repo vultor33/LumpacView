@@ -27,7 +27,8 @@ public:
 	std::vector<CoordXYZ> simulatedAnnealing();
 
 #ifdef _FITSA
-	double finalFit;
+	double finalFit = 466;
+	int finalI = 5000;
 #endif
 
 private:

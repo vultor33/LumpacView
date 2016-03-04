@@ -1,18 +1,8 @@
-IDEIAS
-
-Opcao new ligand - voce me da as coordenadas e a denticao.
-                   eu monto um complexo cheio chelation = 8
-                   com aquele ligante. rodo e recupero ele
-                   deformado, que sera melhor para o uso
-                   no lumpacview.
-
-
-
-
-
 Lumpac View
 
 Programa que automatiza a construção de estruturas.
+
+
 
 Funcionamento
 
@@ -113,9 +103,6 @@ WARNING
                    bi  precisa de 3 atomos
                    tri precisa de 4
 
-- em ComplexCreator.h -> numeros const importantes, precisam ser revistos.
-
-
 - em ComplexCreator.perturbOperations -> ele mexe em todos os ligantes de uma vez so
                                          se ele mexe em um de cada vez poderia ser mais
                                          eficiente.
@@ -125,5 +112,17 @@ WARNING
 
 - na contrucao do bidentado -> o terceiro atomo esta pra tras, isso pode nao
                                ser verdade em alguns casos.
+
+
+
+IDEIAS
+
+Opcao new ligand - voce me da as coordenadas e a denticao.
+                   eu monto um complexo cheio chelation = 8
+                   com aquele ligante. rodo e recupero ele
+                   deformado, que sera melhor para o uso
+                   no lumpacview.
+
+
 
 

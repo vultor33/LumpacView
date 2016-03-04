@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 
 #include "Ligand.h"
 #include "Points.h"
@@ -329,15 +330,23 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 			fMin = f;
 		}
 
+#ifdef _FITSA
+		if ((fMin < finalFit) &&
+			(finalI == 5000))
+			finalI = i;
+#endif
+
 #ifdef _DEBUG
 		//printAllAtoms(xMin);
-		test_ << "i:  " << i << "  fMin:  " << fMin
+		test_ << "i:  " << i << "  fMin:  " 
+			<< setprecision(16) 
+			<< fMin
 			<< "  cTemp:  " << cTemp << endl;
 #endif
 	}
 
 #ifdef _FITSA
-	finalFit = fMin;
+	//finalFit = fMin;
 #endif
 
 #ifdef _DEBUG

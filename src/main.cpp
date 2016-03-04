@@ -16,7 +16,12 @@ using namespace std;
 int main()
 {
 	// tinicial, saUpdate, maxAlfa, maxBeta,
-	AdjustSaParameters saParameters_(0.1e0, 2.0, 2.0, 500, 0.5);
+	AdjustSaParameters saParameters_(
+		0.13113111182697784,
+		1.8245257230764378,
+		2.0524859126887280,
+		503.81980808157266,
+		0.47976429810660104);
 
 #ifdef _FITSA
 	bool paramLimits = saParameters_.takeParametersFromFile();
@@ -24,7 +29,7 @@ int main()
 	{
 		remove("fitness.txt");
 		ofstream fit_("fitness.txt");
-		fit_ << 100000 << endl;
+		fit_ << 5000 << endl;
 		fit_.close();
 	}
 	else
@@ -65,7 +70,7 @@ int main()
 
 		int maxChelation = 10;
 		double stretchDistance = 2.5e0;
-		int saMaxIterations = 1000;
+		int saMaxIterations = 3000;
 		ComplexCreator cpCreator(
 			readInp_.allLigands,
 			maxChelation,
@@ -89,9 +94,7 @@ int main()
 #ifdef _FITSA
 		remove("fitness.txt");
 		ofstream fit_("fitness.txt");
-		fit_ <<
-			(cpCreator.finalFit - 463.954)*(cpCreator.finalFit - 463.954)
-			<< endl;
+		fit_ << cpCreator.finalI << endl;
 		fit_.close();
 	}
 	return 0;

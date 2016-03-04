@@ -26,6 +26,7 @@ AdjustSaParameters::~AdjustSaParameters(){}
 bool AdjustSaParameters::takeParametersFromFile()
 {
 	ifstream point_("point.txt");
+	AuxMath auxMath_;
 	int n;
 	point_ >> n;
 	point_ >> saTemperatureUpdate;
@@ -35,10 +36,12 @@ bool AdjustSaParameters::takeParametersFromFile()
 	point_ >> maxAlfaAngle;
 	if ((maxAlfaAngle < 0) || (maxAlfaAngle > 90))
 		return false;
+	maxAlfaAngle *= (auxMath_._pi / 180.0e0);
 
 	point_ >> maxBetaAngle;
 	if ((maxBetaAngle < 0) || (maxBetaAngle > 90))
 		return false;
+	maxBetaAngle *= (auxMath_._pi / 180.0e0);
 
 	point_ >> saInitialTemperature;
 	if ((saInitialTemperature < 0) || (saInitialTemperature > 1000000))

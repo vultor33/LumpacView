@@ -11,85 +11,91 @@
 #include "PointAnalysis.h"
 #include "AdjustSaParameters.h"
 
-
 using namespace std;
 
 int main()
 {
 	// tinicial, saUpdate, maxAlfa, maxBeta,
-	AdjustSaParameters saParameters_(
-		0.1e0,
-		2.0,
-		2.0,
-		500,
-		0.5);
-
+	AdjustSaParameters saParameters_(0.1e0, 2.0, 2.0, 500, 0.5);
 
 #ifdef _FITSA
-	if (!saParameters_.takeParametersFromFile())
+	bool paramLimits = saParameters_.takeParametersFromFile();
+	if (!paramLimits)
 	{
 		remove("fitness.txt");
 		ofstream fit_("fitness.txt");
-		fit_ << 10000 << endl;
+		fit_ << 100000 << endl;
 		fit_.close();
-		return 0;
 	}
+	else
+	{
 #endif
 
 #ifdef _DEBUG
-	PointAnalysis p;
+		PointAnalysis p;
 #endif
 
-	ReadInput readInp_;
-	try	{
-		readInp_.readLumpacViewInput();
-	} catch (MyExceptions& e)	{
-		cout << e.what() << endl;
-		return 1;
-	}
-	catch (...) {
-		cout << "unknown error on input - check it or contact developers" << endl;
-		return 1;
-	}
-
-#ifdef _DEBUG
-	readInp_.rePrintInput();
-#endif
-
-	bool sucess;
-	bool terminateExecution = false;
-	for (size_t i = 0; i < readInp_.allLigands.size(); i++)	{
-		sucess = readInp_.allLigands[i].initializeLigand();
-		if (!sucess) {
-			cout << "Can't build ligand:  " << i << " check input" << endl;
-			terminateExecution = true;
+		ReadInput readInp_;
+		try {
+			readInp_.readLumpacViewInput();
 		}
+		catch (MyExceptions& e) {
+			cout << e.what() << endl;
+			return 1;
+		}
+		catch (...) {
+			cout << "unknown error on input - check it or contact developers" << endl;
+			return 1;
+		}
+
+#ifdef _DEBUG
+		readInp_.rePrintInput();
+#endif
+
+		bool sucess;
+		bool terminateExecution = false;
+		for (size_t i = 0; i < readInp_.allLigands.size(); i++) {
+			sucess = readInp_.allLigands[i].initializeLigand();
+			if (!sucess) {
+				cout << "Can't build ligand:  " << i << " check input" << endl;
+				terminateExecution = true;
+			}
+		}
+		if (terminateExecution) return 1;
+
+		int maxChelation = 10;
+		double stretchDistance = 2.5e0;
+		int saMaxIterations = 1000;
+		ComplexCreator cpCreator(
+			readInp_.allLigands,
+			maxChelation,
+			stretchDistance,
+			saMaxIterations,
+			saParameters_.maxAlfaAngle,
+			saParameters_.maxBetaAngle,
+			saParameters_.saTemperatureUpdate,
+			saParameters_.saInitialTemperature,
+			saParameters_.saAcceptance);
+
+		sucess = cpCreator.start();
+		if (sucess) cout << "ligantes iniciados com sucesso" << endl;
+		else {
+			cout << "um problema aconteceu nos ligantes" << endl;
+			return 1;
+		}
+
+		vector<CoordXYZ> allAtoms = cpCreator.simulatedAnnealing();
+
+#ifdef _FITSA
+		remove("fitness.txt");
+		ofstream fit_("fitness.txt");
+		fit_ <<
+			(cpCreator.finalFit - 463.954)*(cpCreator.finalFit - 463.954)
+			<< endl;
+		fit_.close();
 	}
-	if (terminateExecution) return 1;
-
-	int maxChelation = 10;
-	double stretchDistance = 2.5e0;
-	int saMaxIterations = 1000;
-	ComplexCreator cpCreator(
-		readInp_.allLigands,
-		maxChelation,
-		stretchDistance,
-		saMaxIterations,
-		saParameters_.maxAlfaAngle,
-		saParameters_.maxBetaAngle,
-		saParameters_.saTemperatureUpdate,
-		saParameters_.saInitialTemperature,
-		saParameters_.saAcceptance);
-
-	sucess = cpCreator.start();
-	if (sucess) cout << "ligantes iniciados com sucesso" << endl;
-	else{
-		cout << "um problema aconteceu nos ligantes" << endl;
-		return 1;
-	}
-
-	vector<CoordXYZ> allAtoms = cpCreator.simulatedAnnealing();
-
+	return 0;
+#else
 	string mopacHeader = "RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
 	string mopacFreq = "RM1 PRECISE NOINTER XYZ T=10D AUX THERMO FORCE + \n NOLOG GEO-OK SCFCRT=1.D-10";
 	string mopacExecPath = "M2009_Ln_Orbitals.exe  ";
@@ -99,8 +105,7 @@ int main()
 		mopacHeader,
 		mopacFreq,
 		readInp_.getMetalParams(),
-		mopacExecPath
-		);
+		mopacExecPath);
 	sucess = controlMop.optimize(allAtoms);
 	if (sucess) cout << "a estrutura otimizou com sucesso - tenha um bom dia" << endl;
 	else {
@@ -108,6 +113,7 @@ int main()
 	}
 
 	return 0;
+#endif
 }
 
 

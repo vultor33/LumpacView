@@ -1,11 +1,9 @@
 Eu
 spk_Eu
-6
-teste-bi-o-n
-teste-mono-oh
-teste-no2
-teste-no2
-teste-no2
-teste-op-mono
+4
+tta
+tppo
+dbm
+btfa
 
 ! a ordem importa

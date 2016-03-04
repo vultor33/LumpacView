@@ -26,6 +26,10 @@ public:
 
 	std::vector<CoordXYZ> simulatedAnnealing();
 
+#ifdef _FITSA
+	double finalFit;
+#endif
+
 private:
 	int maxChelation;
 	double stretchDistance;

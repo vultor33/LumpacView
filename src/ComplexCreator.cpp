@@ -310,7 +310,7 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 		else
 		{
 			dices++;
-			prob = exp((-f0 + f) / cTemp);
+			prob = exp((f0 - f) / cTemp);
 			rand = auxMath_.fRand(0, 1.0e0);
 			if (prob > rand)
 			{
@@ -335,6 +335,10 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 			<< "  cTemp:  " << cTemp << endl;
 #endif
 	}
+
+#ifdef _FITSA
+	finalFit = fMin;
+#endif
 
 #ifdef _DEBUG
 	printAllAtoms(xMin);
@@ -374,9 +378,9 @@ void ComplexCreator::perturbOperations(vector<Ligand> & ligands)
 	double alfa, beta;
 	for (size_t i = 0; i < ligands.size(); i++)
 	{
-		randomRot[0] = auxMath_.fRand(0, 1.0e0);
-		randomRot[1] = auxMath_.fRand(0, 1.0e0);
-		randomRot[2] = auxMath_.fRand(0, 1.0e0);
+		randomRot[0] = auxMath_.fRand(0.001, 1.0e0);
+		randomRot[1] = auxMath_.fRand(0.001, 1.0e0);
+		randomRot[2] = auxMath_.fRand(0.001, 1.0e0);
 		auxMath_.normalize(randomRot);
 		alfa = auxMath_.fRand(0, maxAlfaAngle);
 

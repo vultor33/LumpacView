@@ -13,10 +13,12 @@ public:
 		std::vector<Ligand> &allLigands,
 		int maxChelation_in,
 		double stretchDistance_in,
+		int saMaxIterations_in,
 		double maxAlfaAngle_in,
 		double maxBetaAngle_in,
-		int saMaxIterations_in,
-		double saTemperatureUpdate_in
+		double saTemperatureUpdate_in,
+		double saInitialTemperature_in,
+		double saAcceptance
 		);
 	~ComplexCreator();
 
@@ -30,6 +32,8 @@ private:
 	double maxAlfaAngle;
 	double maxBetaAngle;
 	double saTemperatureUpdate;
+	double saInitialTemperature;
+	double saAcceptance;
 	int saMaxIterations;
 
 	std::vector<Ligand> & allLigands;

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 
 #include "MyExceptions.h"
 #include "Coordstructs.h"
@@ -8,11 +9,33 @@
 #include "ControlMopac.h"
 #include "AuxMath.h"
 #include "PointAnalysis.h"
+#include "AdjustSaParameters.h"
+
 
 using namespace std;
 
 int main()
 {
+	// tinicial, saUpdate, maxAlfa, maxBeta,
+	AdjustSaParameters saParameters_(
+		0.1e0,
+		2.0,
+		2.0,
+		500,
+		0.5);
+
+
+#ifdef _FITSA
+	if (!saParameters_.takeParametersFromFile())
+	{
+		remove("fitness.txt");
+		ofstream fit_("fitness.txt");
+		fit_ << 10000 << endl;
+		fit_.close();
+		return 0;
+	}
+#endif
+
 #ifdef _DEBUG
 	PointAnalysis p;
 #endif
@@ -44,21 +67,19 @@ int main()
 	}
 	if (terminateExecution) return 1;
 
-	AuxMath auxMath_;
 	int maxChelation = 10;
 	double stretchDistance = 2.5e0;
-	double saTemperatureUpdate = 0.1e0;
-	double maxAlfaAngle = auxMath_._pi / 90.0e0;
-	double maxBetaAngle = auxMath_._pi / 90.0e0;
 	int saMaxIterations = 1000;
 	ComplexCreator cpCreator(
 		readInp_.allLigands,
 		maxChelation,
 		stretchDistance,
-		maxAlfaAngle,
-		maxBetaAngle,
 		saMaxIterations,
-		saTemperatureUpdate);
+		saParameters_.maxAlfaAngle,
+		saParameters_.maxBetaAngle,
+		saParameters_.saTemperatureUpdate,
+		saParameters_.saInitialTemperature,
+		saParameters_.saAcceptance);
 
 	sucess = cpCreator.start();
 	if (sucess) cout << "ligantes iniciados com sucesso" << endl;

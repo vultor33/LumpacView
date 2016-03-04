@@ -16,10 +16,12 @@ ComplexCreator::ComplexCreator(
 	vector<Ligand> &allLigands_in,
 	int maxChelation_in,
 	double stretchDistance_in,
+	int saMaxIterations_in,
 	double maxAlfaAngle_in,
 	double maxBetaAngle_in,
-	int saMaxIterations_in,
-	double saTemperatureUpdate_in
+	double saTemperatureUpdate_in,
+	double saInitialTemperature_in,
+	double saAcceptance_in
 	)
 	:allLigands(allLigands_in)
 {
@@ -29,6 +31,8 @@ ComplexCreator::ComplexCreator(
 	maxBetaAngle = maxBetaAngle_in;
 	saMaxIterations = saMaxIterations_in;
 	saTemperatureUpdate = saTemperatureUpdate_in;
+	saInitialTemperature = saInitialTemperature_in;
+	saAcceptance = saAcceptance_in;
 }
 
 ComplexCreator::~ComplexCreator(){}
@@ -283,7 +287,7 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 #endif
 	
 	//Variable temperature - always 50/100
-	double cTemp = f0 / 500; 
+	double cTemp = f0 / saInitialTemperature; 
 	int dices = 0;
 	int accep = 0;
 
@@ -314,7 +318,7 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 				f0 = f;
 				accep++;
 			}
-			if (((double)accep / (double)dices) > 0.5e0)
+			if (((double)accep / (double)dices) > saAcceptance)
 				cTemp -= saTemperatureUpdate * cTemp;
 			else
 				cTemp += saTemperatureUpdate * cTemp;

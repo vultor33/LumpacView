@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iomanip>
 
 #include "AuxMath.h"
 
@@ -186,8 +187,25 @@ void RootMeanSquareDeviation::printXyz(string fName, const vector<double> &point
 	ofstream xyz_(fName.c_str());
 	xyz_ << nPoints << endl;
 	xyz_ << "t" << endl;
+	double x, y, z;
 	for (int i = 0; i < nPoints; i++)
-		xyz_ << "H  " << points[i] << "  "
-		<< points[i + nPoints] << "  "
-		<< points[i + 2 * nPoints] << "  " << endl;
+	{
+		x = points[i];
+		y = points[i + nPoints];
+		z = points[i + 2 * nPoints];
+		if (abs(x) < 1.0e-4)
+			x = 0.0e0;
+		if (abs(y) < 1.0e-4)
+			y = 0.0e0;
+		if (abs(z) < 1.0e-4)
+			z = 0.0e0;
+
+		xyz_ << "H  " 
+			<< setfill(' ')  << setw(8)	<< fixed << setprecision(6)  
+			<< x << "  "
+			<< setfill(' ') << setw(8) << fixed << setprecision(6)
+			<< y << "  "
+			<< setfill(' ') << setw(8) << fixed << setprecision(6)
+			<< z << "  " << endl;
+	}
 }

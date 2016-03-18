@@ -147,6 +147,7 @@ vector<double> RootMeanSquareDeviation::rotateToPlane(const vector<double> &poin
 		}
 	}
 
+	//point2Chosen = 1;
 	double x = point[point2Chosen];
 	double y = point[point2Chosen + nPoints];
 	double z = point[point2Chosen + 2 * nPoints];

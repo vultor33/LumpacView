@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <iomanip>
+#include <iostream>
 
 #include "AuxMath.h"
 
@@ -21,8 +22,8 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	set1 = rotateToPlane(set1);
 	set1 = mirrorY(set1);
 	vector<double> set2 = readPoint(file2);
-	set2 = rotateToZ0(set2);
-	set2 = rotateToPlane(set2);
+//	set2 = rotateToZ0(set2);
+//	set2 = rotateToPlane(set2);
 	set2 = mirrorY(set2);
 #ifdef _DEBUG
 	printXyz(file1 + ".xyz", set1);
@@ -125,12 +126,30 @@ vector<double> RootMeanSquareDeviation::rotateToZ0(const vector<double> &point)
 
 vector<double> RootMeanSquareDeviation::rotateToPlane(const vector<double> &point)
 {
-	int nPoints = point.size() / 3;
-	double x = point[1];
-	double y = point[1 + nPoints];
-	double z = point[1 + 2 * nPoints];
-
 	AuxMath auxMath_;
+	int nPoints = point.size() / 3;
+	int point2Chosen;
+	//ele precisa estar mais proximo do zero.
+	double rMin = 1.0e99;
+	double r;
+	for (size_t i = 1; i < nPoints; i++)
+	{
+		r = auxMath_.norm(
+			point[i] - point[0],
+			point[i + nPoints] - point[0 + nPoints],
+			point[i + 2 * nPoints] - point[0 + 2 * nPoints]
+			);
+		cout << setprecision(16) << r << endl;
+		if (r < rMin)
+		{
+			point2Chosen = i;
+			rMin = r;
+		}
+	}
+
+	double x = point[point2Chosen];
+	double y = point[point2Chosen + nPoints];
+	double z = point[point2Chosen + 2 * nPoints];
 
 	double angle = auxMath_.angleFrom3Points(
 		x, y, 0.0e0,
@@ -193,19 +212,19 @@ void RootMeanSquareDeviation::printXyz(string fName, const vector<double> &point
 		x = points[i];
 		y = points[i + nPoints];
 		z = points[i + 2 * nPoints];
-		if (abs(x) < 1.0e-4)
-			x = 0.0e0;
-		if (abs(y) < 1.0e-4)
-			y = 0.0e0;
-		if (abs(z) < 1.0e-4)
-			z = 0.0e0;
+		//if (abs(x) < 1.0e-4)
+			//x = 0.0e0;
+		//if (abs(y) < 1.0e-4)
+			//y = 0.0e0;
+		//if (abs(z) < 1.0e-4)
+			//z = 0.0e0;
 
 		xyz_ << "H  " 
-			<< setfill(' ')  << setw(8)	<< fixed << setprecision(6)  
+			<< setfill(' ')  << setw(20)	<< fixed << setprecision(16)  
 			<< x << "  "
-			<< setfill(' ') << setw(8) << fixed << setprecision(6)
+			<< setfill(' ') << setw(20) << fixed << setprecision(16)
 			<< y << "  "
-			<< setfill(' ') << setw(8) << fixed << setprecision(6)
+			<< setfill(' ') << setw(20) << fixed << setprecision(16)
 			<< z << "  " << endl;
 	}
 }

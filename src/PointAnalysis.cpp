@@ -14,7 +14,7 @@ PointAnalysis::PointAnalysis()
 	ofstream log_("log.txt");
 
 	log_ << "RMSD" << endl;
-	log_ << rmsd_.rmsd("repulsion6.txt", "hardin6.txt") << endl;
+	log_ << rmsd_.rmsd("hardin12.txt", "repulsion6.txt") << endl;
 //	log_ << rmsd_.rmsd("repulsion6.txt", "fred6.txt") << endl;
 //	log_ << rmsd_.rmsd("repulsion7.txt", "fred7.txt") << endl;
 //	log_ << rmsd_.rmsd("repulsion8.txt", "fred8.txt") << endl;

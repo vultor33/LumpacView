@@ -21,22 +21,40 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	set1 = rotateToZ0(set1);
 	set1 = rotateToPlane(set1);
 	set1 = mirrorY(set1);
-	vector<double> set2 = readPoint(file2);
+
+	//SORTING LIST
+	/*
+	int nAtoms = set1.size() / 3;
+	vector<double> teta(nAtoms);
+	vector<double> fi(nAtoms);
+	for (int i = 0; i < nAtoms; i++)
+	{
+	}
+	*/
+
+
+
+
+
+
+
+
+//	vector<double> set2 = readPoint(file2);
 //	set2 = rotateToZ0(set2);
 //	set2 = rotateToPlane(set2);
-	set2 = mirrorY(set2);
+//	set2 = mirrorY(set2);
 #ifdef _DEBUG
 	printXyz(file1 + ".xyz", set1);
-	printXyz(file2 + ".xyz", set2);
+//	printXyz(file2 + ".xyz", set2);
 #endif
 
 	double sum = 0.0e0;
-	for (size_t i = 0; i < set1.size(); i++)
-		sum += (set1[i] - set2[i])*(set1[i] - set2[i]);
+//	for (size_t i = 0; i < set1.size(); i++)
+//		sum += (set1[i] - set2[i])*(set1[i] - set2[i]);
 
-	sum /= (double)set1.size();
+//	sum /= (double)set1.size();
 
-	sum = sqrt(sum);
+//	sum = sqrt(sum);
 
 	return sum;
 }
@@ -77,15 +95,38 @@ os dois arquivos precisam estar alinhados. C1 = C1, Oxi1 = Oxi2 e etc.
 
 vector<double> RootMeanSquareDeviation::readPoint(string fName)
 {
+
 	ifstream fPoint_(fName.c_str());
 	int nPoints;
 	fPoint_ >> nPoints;
 	double aux;
-	vector<double> points;
-	for (int i = 0; i < nPoints; i++)
+	vector<double> points(nPoints);
+
+
+	int format = 1;
+
+
+	if (format == 0)
 	{
-		fPoint_ >> aux;
-		points.push_back(aux);
+		for (int i = 0; i < nPoints; i++)
+		{
+			fPoint_ >> aux;
+			points[i] = aux;
+		}
+	}
+	else
+	{
+		int natoms = nPoints / 3;
+		double aux2, aux3;
+		for (int i = 0; i < natoms; i++)
+		{
+			fPoint_ >> aux;
+			fPoint_ >> aux2;
+			fPoint_ >> aux3;
+			points[i] = aux;
+			points[i + natoms] = aux2;
+			points[i + 2 * natoms] = aux3;
+		}
 	}
 	fPoint_.close();
 	return points;
@@ -99,6 +140,9 @@ vector<double> RootMeanSquareDeviation::rotateToZ0(const vector<double> &point)
 	double z = point[0 + 2 * nPoints];
 
 	AuxMath auxMath_;
+
+	if ((abs(x) < 1.0e-12) && (abs(y) < 1.0e-12))
+		return point;
 
 	double angle = auxMath_.angleFrom3Points(
 		x, y, z,
@@ -132,22 +176,22 @@ vector<double> RootMeanSquareDeviation::rotateToPlane(const vector<double> &poin
 	//ele precisa estar mais proximo do zero.
 	double rMin = 1.0e99;
 	double r;
-	for (size_t i = 1; i < nPoints; i++)
+	for (size_t i = 1; (int)i < nPoints; i++)
 	{
 		r = auxMath_.norm(
 			point[i] - point[0],
 			point[i + nPoints] - point[0 + nPoints],
 			point[i + 2 * nPoints] - point[0 + 2 * nPoints]
 			);
-		cout << setprecision(16) << r << endl;
+		cout << "r:  " << setprecision(16) << r << endl;
 		if (r < rMin)
 		{
 			point2Chosen = i;
 			rMin = r;
 		}
 	}
+//	cin.get();
 
-	//point2Chosen = 1;
 	double x = point[point2Chosen];
 	double y = point[point2Chosen + nPoints];
 	double z = point[point2Chosen + 2 * nPoints];
@@ -176,18 +220,41 @@ vector<double> RootMeanSquareDeviation::rotateToPlane(const vector<double> &poin
 		newPoints[i + nPoints] = aux[1];
 		newPoints[i + 2 * nPoints] = aux[2];
 	}
-	return newPoints;
+	vector<double> pointsReordering = newPoints;
+	pointsReordering[1] = newPoints[point2Chosen];
+	pointsReordering[1 + nPoints] = newPoints[point2Chosen + nPoints];
+	pointsReordering[1 + 2 * nPoints] = newPoints[point2Chosen + 2 * nPoints];
+	pointsReordering[point2Chosen] = newPoints[1];
+	pointsReordering[point2Chosen + nPoints] = newPoints[1 + nPoints];
+	pointsReordering[point2Chosen + 2 * nPoints] = newPoints[1 + 2 * nPoints];
+
+	return pointsReordering;
 }
 
 
 
 vector<double> RootMeanSquareDeviation::mirrorY(const vector<double> &point)
 {
+	AuxMath auxMath_;
 	int nPoints = point.size() / 3;
-	vector<double> newPoints(3 * nPoints);
-
-	if (point[2 + nPoints] < 0.0e0)
+	int point3Chosen;
+	//maior Y
+	double yMax = -1.0e99;
+	double y;
+	for (size_t i = 2; (int)i < nPoints; i++)
 	{
+		y = point[i + nPoints];
+		if (y > yMax)
+		{
+			point3Chosen = i;
+			yMax = y;
+		}
+	}
+	
+	vector<double> newPoints = point;
+
+	if (point[point3Chosen + nPoints] < 0)
+	{		
 		for (int i = 0; i < nPoints; i++)
 		{
 			newPoints[i] = point[i];
@@ -195,10 +262,16 @@ vector<double> RootMeanSquareDeviation::mirrorY(const vector<double> &point)
 			newPoints[i + 2 * nPoints] = point[i + 2 * nPoints];
 		}
 	}
-	else
-		newPoints = point;
 
-	return newPoints;
+	vector<double> pointsReordering = newPoints;
+	pointsReordering[2] = newPoints[point3Chosen];
+	pointsReordering[2 + nPoints] = newPoints[point3Chosen + nPoints];
+	pointsReordering[2 + 2 * nPoints] = newPoints[point3Chosen + 2 * nPoints];
+	pointsReordering[point3Chosen] = newPoints[2];
+	pointsReordering[point3Chosen + nPoints] = newPoints[2 + nPoints];
+	pointsReordering[point3Chosen + 2 * nPoints] = newPoints[2 + 2 * nPoints];
+
+	return pointsReordering;
 }
 
 void RootMeanSquareDeviation::printXyz(string fName, const vector<double> &points)
@@ -221,11 +294,11 @@ void RootMeanSquareDeviation::printXyz(string fName, const vector<double> &point
 			//z = 0.0e0;
 
 		xyz_ << "H  " 
-			<< setfill(' ')  << setw(20)	<< fixed << setprecision(16)  
+			<< setfill(' ')  << setw(12)	<< fixed << setprecision(12)  
 			<< x << "  "
-			<< setfill(' ') << setw(20) << fixed << setprecision(16)
+			<< setfill(' ') << setw(12) << fixed << setprecision(12)
 			<< y << "  "
-			<< setfill(' ') << setw(20) << fixed << setprecision(16)
+			<< setfill(' ') << setw(12) << fixed << setprecision(12)
 			<< z << "  " << endl;
 	}
 }

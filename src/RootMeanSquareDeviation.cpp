@@ -29,7 +29,7 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	vector<double> teta(nAtoms);
 	vector<double> fi(nAtoms);
 	float x, y, z;
-	for (int i = 2; i < nAtoms; i++)
+	for (int i = 1; i < nAtoms; i++)
 	{
 		x = set1[i];
 		y = set1[i + nAtoms];
@@ -41,10 +41,9 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 		}
 		else
 		{
-			if (abs(x) < 1.0e-10)
-				fi[i] = auxMath_._pi / 2.0e0;
-			else
-				fi[i] = atan(y / x);
+			fi[i] = atan2(y , x);
+			if (fi[i] < 0)
+				fi[i] += 2.0e0 * auxMath_._pi;
 
 			teta[i] = acos(z / sqrt(x*x + y*y + z*z));
 		}
@@ -59,7 +58,7 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	double tetaMin = 1.0e99;
 	int jMin;
 	double fiMin = 1.0e99;
-	for (int i = 2; i < (nAtoms - 1); i++)
+	for (int i = 1; i < (nAtoms - 1); i++)
 	{
 		tetaMin = teta[i];
 		fiMin = fi[i];
@@ -102,30 +101,25 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 		auxPoints[i + 2 * nAtoms] = auxZ;
 	}
 
+	double sum = 0.0e0;
 
-
-
-
-
-
-
-
-//	vector<double> set2 = readPoint(file2);
-//	set2 = rotateToZ0(set2);
-//	set2 = rotateToPlane(set2);
-//	set2 = mirrorY(set2);
+/*
+SEGUNDA MOLECULA
+	vector<double> set2 = readPoint(file2);
+	set2 = rotateToZ0(set2);
+	set2 = rotateToPlane(set2);
+	set2 = mirrorY(set2);
+	for (size_t i = 0; i < set1.size(); i++)
+		sum += (set1[i] - set2[i])*(set1[i] - set2[i]);
+	sum /= (double)set1.size();
+	sum = sqrt(sum);
+*/
+	  
 #ifdef _DEBUG
 	printXyz(file1 + ".xyz", auxPoints);
 //	printXyz(file2 + ".xyz", set2);
 #endif
 
-	double sum = 0.0e0;
-//	for (size_t i = 0; i < set1.size(); i++)
-//		sum += (set1[i] - set2[i])*(set1[i] - set2[i]);
-
-//	sum /= (double)set1.size();
-
-//	sum = sqrt(sum);
 
 	return sum;
 }
@@ -158,7 +152,6 @@ z2
 z3
 ...
 ]
-
 os dois arquivos precisam estar alinhados. C1 = C1, Oxi1 = Oxi2 e etc.
 
 */
@@ -174,7 +167,7 @@ vector<double> RootMeanSquareDeviation::readPoint(string fName)
 	vector<double> points(nPoints);
 
 
-	int format = 1;
+	int format = 0;
 
 
 	if (format == 0)
@@ -365,11 +358,25 @@ void RootMeanSquareDeviation::printXyz(string fName, const vector<double> &point
 			//z = 0.0e0;
 
 		xyz_ << "H  " 
-			<< setfill(' ')  << setw(15)	<< fixed << setprecision(12)  
+			<< setfill(' ')  << setw(15)	<< fixed << setprecision(8)  
 			<< x << "  "
-			<< setfill(' ') << setw(15) << fixed << setprecision(12)
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
 			<< y << "  "
-			<< setfill(' ') << setw(15) << fixed << setprecision(12)
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
 			<< z << "  " << endl;
 	}
 }
+
+
+
+
+
+/*			if (abs(x) < 1.0e-10)
+{
+if(y > 0)
+fi[i] = auxMath_._pi / 2.0e0;
+else
+fi[i] = (3.0e0 * auxMath_._pi) / 2.0e0;
+}
+else
+*/

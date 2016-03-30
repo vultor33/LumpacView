@@ -23,14 +23,85 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	set1 = mirrorY(set1);
 
 	//SORTING LIST
-	/*
+	// calculating spherical teta and fi
+	AuxMath auxMath_;
 	int nAtoms = set1.size() / 3;
 	vector<double> teta(nAtoms);
 	vector<double> fi(nAtoms);
-	for (int i = 0; i < nAtoms; i++)
+	float x, y, z;
+	for (int i = 2; i < nAtoms; i++)
 	{
+		x = set1[i];
+		y = set1[i + nAtoms];
+		z = set1[i + 2 * nAtoms];
+		if ((abs(x) < 1.0e-10) && (abs(y) < 1.0e-10) && (z < 0))
+		{
+			teta[i] = 2 * auxMath_._pi;
+			fi[i] = 0.0e0;
+		}
+		else
+		{
+			if (abs(x) < 1.0e-10)
+				fi[i] = auxMath_._pi / 2.0e0;
+			else
+				fi[i] = atan(y / x);
+
+			teta[i] = acos(z / sqrt(x*x + y*y + z*z));
+		}
 	}
-	*/
+
+	// sorting
+	// fi crescente
+	// teta crescente
+	vector<double> auxPoints = set1;
+	double auxX, auxY, auxZ;
+	double aux;
+	double tetaMin = 1.0e99;
+	int jMin;
+	double fiMin = 1.0e99;
+	for (int i = 2; i < (nAtoms - 1); i++)
+	{
+		tetaMin = teta[i];
+		fiMin = fi[i];
+		jMin = i;
+		for (int j = i + 1; j < nAtoms; j++)
+		{
+			if (teta[j] == tetaMin)
+			{
+				if (fi[j] < fiMin)
+				{
+					tetaMin = teta[j];
+					fiMin = fi[j];
+					jMin = j;
+				}
+			}
+			else if(teta[j] < tetaMin)
+			{
+				tetaMin = teta[j];
+				fiMin = fi[j];
+				jMin = j;
+			}
+		}
+		// substitui i em j --- j em i.
+		aux = teta[jMin];
+		teta[jMin] = teta[i];
+		teta[i] = aux;
+
+		aux = fi[jMin];
+		fi[jMin] = fi[i];
+		fi[i] = aux;
+
+		auxX = auxPoints[jMin];
+		auxY = auxPoints[jMin + nAtoms];
+		auxZ = auxPoints[jMin + 2 * nAtoms];
+		auxPoints[jMin] = auxPoints[i];
+		auxPoints[jMin + nAtoms] = auxPoints[i + nAtoms];
+		auxPoints[jMin + 2 * nAtoms] = auxPoints[i + 2 * nAtoms];
+		auxPoints[i] = auxX;
+		auxPoints[i + nAtoms] = auxY;
+		auxPoints[i + 2 * nAtoms] = auxZ;
+	}
+
 
 
 
@@ -44,7 +115,7 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 //	set2 = rotateToPlane(set2);
 //	set2 = mirrorY(set2);
 #ifdef _DEBUG
-	printXyz(file1 + ".xyz", set1);
+	printXyz(file1 + ".xyz", auxPoints);
 //	printXyz(file2 + ".xyz", set2);
 #endif
 
@@ -294,11 +365,11 @@ void RootMeanSquareDeviation::printXyz(string fName, const vector<double> &point
 			//z = 0.0e0;
 
 		xyz_ << "H  " 
-			<< setfill(' ')  << setw(12)	<< fixed << setprecision(12)  
+			<< setfill(' ')  << setw(15)	<< fixed << setprecision(12)  
 			<< x << "  "
-			<< setfill(' ') << setw(12) << fixed << setprecision(12)
+			<< setfill(' ') << setw(15) << fixed << setprecision(12)
 			<< y << "  "
-			<< setfill(' ') << setw(12) << fixed << setprecision(12)
+			<< setfill(' ') << setw(15) << fixed << setprecision(12)
 			<< z << "  " << endl;
 	}
 }

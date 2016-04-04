@@ -45,7 +45,7 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 			if (fi[i] < 0)
 				fi[i] += 2.0e0 * auxMath_._pi;
 
-			teta[i] = acos(z / sqrt(x*x + y*y + z*z));
+			teta[i] = (float)acos(z / sqrt(x*x + y*y + z*z));
 		}
 	}
 
@@ -55,9 +55,8 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	vector<double> auxPoints = set1;
 	double auxX, auxY, auxZ;
 	double aux;
-	double tetaMin = 1.0e99;
+	double tetaMin, fiMin;
 	int jMin;
-	double fiMin = 1.0e99;
 	for (int i = 1; i < (nAtoms - 1); i++)
 	{
 		tetaMin = teta[i];
@@ -65,7 +64,7 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 		jMin = i;
 		for (int j = i + 1; j < nAtoms; j++)
 		{
-			if (teta[j] == tetaMin)
+			if (abs(teta[j] - tetaMin) < 1.0e-6)
 			{
 				if (fi[j] < fiMin)
 				{
@@ -120,7 +119,6 @@ SEGUNDA MOLECULA
 //	printXyz(file2 + ".xyz", set2);
 #endif
 
-
 	return sum;
 }
 
@@ -167,7 +165,7 @@ vector<double> RootMeanSquareDeviation::readPoint(string fName)
 	vector<double> points(nPoints);
 
 
-	int format = 0;
+	int format = 1;
 
 
 	if (format == 0)

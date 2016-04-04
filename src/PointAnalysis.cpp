@@ -14,14 +14,15 @@ PointAnalysis::PointAnalysis()
 	ofstream log_("log.txt");
 
 	log_ << "RMSD" << endl;
+	log_ << rmsd_.rmsd("hardin4.txt", "repulsion6.txt") << endl;
+	log_ << rmsd_.rmsd("hardin5.txt", "repulsion6.txt") << endl;
+	log_ << rmsd_.rmsd("hardin6.txt", "repulsion6.txt") << endl;
+	log_ << rmsd_.rmsd("hardin7.txt", "repulsion6.txt") << endl;
+	log_ << rmsd_.rmsd("hardin8.txt", "repulsion6.txt") << endl;
+	log_ << rmsd_.rmsd("hardin9.txt", "repulsion6.txt") << endl;
+	log_ << rmsd_.rmsd("hardin10.txt", "repulsion6.txt") << endl;
+	log_ << rmsd_.rmsd("hardin11.txt", "repulsion6.txt") << endl;
 	log_ << rmsd_.rmsd("hardin12.txt", "repulsion6.txt") << endl;
-//	log_ << rmsd_.rmsd("repulsion6.txt", "fred6.txt") << endl;
-//	log_ << rmsd_.rmsd("repulsion7.txt", "fred7.txt") << endl;
-//	log_ << rmsd_.rmsd("repulsion8.txt", "fred8.txt") << endl;
-//	log_ << rmsd_.rmsd("repulsion9.txt", "fred9.txt") << endl;
-//	log_ << rmsd_.rmsd("repulsion10.txt", "fred10.txt") << endl;
-//	log_ << rmsd_.rmsd("repulsion11.txt", "fred11.txt") << endl;
-//	log_ << rmsd_.rmsd("repulsion12.txt", "fred12.txt") << endl;
 	log_.close();
 }
 

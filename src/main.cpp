@@ -13,6 +13,13 @@
 
 using namespace std;
 
+// MAIN FUNCTIONS
+bool ReadLumpacViewInput(ReadInput & readInp_);
+bool buildLigands(ReadInput & readInp_); // set ligands directions X1 and X2.
+bool buildComplex(ReadInput & readInp_, const AdjustSaParameters & saParameters_, vector<CoordXYZ> &allAtoms); // place ligands on the sphere and optimize with simulated annealing.
+void runMopac(ReadInput & readInp_, vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
+
+
 int main()
 {
 	// tinicial, saUpdate, maxAlfa, maxBeta,
@@ -36,60 +43,24 @@ int main()
 	{
 #endif
 
-#ifdef _DEBUG
+#ifdef _CREATEPOINTS
 		PointAnalysis p;
 #endif
 
 		ReadInput readInp_;
-		try {
-			readInp_.readLumpacViewInput();
-		}
-		catch (MyExceptions& e) {
-			cout << e.what() << endl;
+		if (!ReadLumpacViewInput(readInp_))
 			return 1;
-		}
-		catch (...) {
-			cout << "unknown error on input - check it or contact developers" << endl;
-			return 1;
-		}
 
 #ifdef _DEBUG
 		readInp_.rePrintInput();
 #endif
 
-		bool sucess;
-		bool terminateExecution = false;
-		for (size_t i = 0; i < readInp_.allLigands.size(); i++) {
-			sucess = readInp_.allLigands[i].initializeLigand();
-			if (!sucess) {
-				cout << "Can't build ligand:  " << i << " check input" << endl;
-				terminateExecution = true;
-			}
-		}
-		if (terminateExecution) return 1;
+		bool terminate = buildLigands(readInp_);
+		if (terminate) return 1;
 
-		int maxChelation = 10;
-		double stretchDistance = 2.5e0;
-		int saMaxIterations = 3000;
-		ComplexCreator cpCreator(
-			readInp_.allLigands,
-			maxChelation,
-			stretchDistance,
-			saMaxIterations,
-			saParameters_.maxAlfaAngle,
-			saParameters_.maxBetaAngle,
-			saParameters_.saTemperatureUpdate,
-			saParameters_.saInitialTemperature,
-			saParameters_.saAcceptance);
-
-		sucess = cpCreator.start();
-		if (sucess) cout << "ligantes iniciados com sucesso" << endl;
-		else {
-			cout << "um problema aconteceu nos ligantes" << endl;
+		vector<CoordXYZ> allAtoms;
+		if (!buildComplex(readInp_, saParameters_, allAtoms))
 			return 1;
-		}
-
-		vector<CoordXYZ> allAtoms = cpCreator.simulatedAnnealing();
 
 #ifdef _FITSA
 		remove("fitness.txt");
@@ -99,6 +70,83 @@ int main()
 	}
 	return 0;
 #else
+
+		runMopac(readInp_, allAtoms);
+		return 0;
+
+#endif
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+///////////////   FUNCTIONS /////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+bool ReadLumpacViewInput(ReadInput & readInp_)
+{
+	try {
+		readInp_.readLumpacViewInput();
+	}
+	catch (MyExceptions& e) {
+		cout << e.what() << endl;
+		return false;
+	}
+	catch (...) {
+		cout << "unknown error on input - check it or contact developers" << endl;
+		return false;
+	}
+	return true;
+}
+
+bool buildLigands(ReadInput & readInp_)
+{
+	bool sucess;
+	bool terminateExecution = false;
+	for (size_t i = 0; i < readInp_.allLigands.size(); i++) {
+		sucess = readInp_.allLigands[i].initializeLigand();
+		if (!sucess) {
+			cout << "Can't build ligand:  " << i << " check input" << endl;
+			terminateExecution = true;
+		}
+	}
+	return terminateExecution;
+}
+
+
+bool buildComplex(ReadInput & readInp_, const AdjustSaParameters & saParameters_, vector<CoordXYZ> &allAtoms)
+{
+	int maxChelation = 10;
+	double stretchDistance = 2.5e0;
+	int saMaxIterations = 3000;
+	ComplexCreator cpCreator(
+		readInp_.allLigands,
+		maxChelation,
+		stretchDistance,
+		saMaxIterations,
+		saParameters_.maxAlfaAngle,
+		saParameters_.maxBetaAngle,
+		saParameters_.saTemperatureUpdate,
+		saParameters_.saInitialTemperature,
+		saParameters_.saAcceptance);
+
+	bool sucess = cpCreator.start();
+	if (sucess) cout << "complexo iniciado com sucesso" << endl;
+	else {
+		cout << "um problema aconteceu nos ligantes" << endl;
+		return sucess;
+	}
+
+	allAtoms = cpCreator.simulatedAnnealing();
+	
+	return sucess;
+}
+
+
+void runMopac(ReadInput & readInp_, vector<CoordXYZ> & allAtoms)
+{
 	string mopacHeader = "RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
 	string mopacFreq = "RM1 PRECISE NOINTER XYZ T=10D AUX THERMO FORCE + \n NOLOG GEO-OK SCFCRT=1.D-10";
 	string mopacExecPath = "M2009_Ln_Orbitals.exe  ";
@@ -109,18 +157,23 @@ int main()
 		mopacFreq,
 		readInp_.getMetalParams(),
 		mopacExecPath);
-	sucess = controlMop.optimize(allAtoms);
+	bool sucess = controlMop.optimize(allAtoms);
 	if (sucess) cout << "a estrutura otimizou com sucesso - tenha um bom dia" << endl;
 	else {
 		cout << "ocorreu algum problema na otimizacao do mopac, tente outra vez" << endl;
 	}
-
-	return 0;
-#endif
 }
 
 
 
+
+
+
+
+
+
+
+	
 /*
 ERROR HANDLING
 - Quando o destructor nao e chamado:

@@ -6,6 +6,16 @@ Programa que automatiza a construção de estruturas.
 
 Funcionamento
 
+3 módulos
+
+-> criacao de pontos.
+
+-> ajuste do SA.
+
+-> construcao dos complexos.
+
+
+
 INICIO
 
 1. Le o lumpacViewInput.txt e salva os dados no objeto readInput.

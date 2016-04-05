@@ -31,9 +31,9 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	float x, y, z;
 	for (int i = 1; i < nAtoms; i++)
 	{
-		x = set1[i];
-		y = set1[i + nAtoms];
-		z = set1[i + 2 * nAtoms];
+		x = (float)set1[i];
+		y = (float)set1[i + nAtoms];
+		z = (float)set1[i + 2 * nAtoms];
 		if ((abs(x) < 1.0e-10) && (abs(y) < 1.0e-10) && (z < 0))
 		{
 			teta[i] = 2 * auxMath_._pi;

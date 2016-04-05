@@ -45,6 +45,7 @@ int main()
 
 #ifdef _CREATEPOINTS
 		PointAnalysis p;
+		return 0;
 #endif
 
 		ReadInput readInp_;

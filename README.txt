@@ -80,6 +80,24 @@ Tridentado - X1 = baricentro dos 3 ligantes.
              X2 = normal do triangulo saindo da molecula.
 
 
+Para parametrizar o simulated annealing ele lê
+um ponto com esse formato:
+point.txt
+[
+5       - variaveis
+0.1e0   - temperature update
+2.0     - max alpha angle
+2.0     - max beta angle
+500     - initial temperature
+0.5     - acceptance probability
+]
+
+e entrega: 
+fitness.txt
+[
+0.4214   - erro.
+]
+
 
 Rotinas:
 

@@ -284,7 +284,7 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 	double f0 = calculateAllFit(x0);
 #ifdef _DEBUG
 	printAllAtoms(x0);
-	ofstream test_("teste.log");
+	ofstream test_("AnnealingInfo.log");
 #endif
 	
 	//Variable temperature - always 50/100

@@ -145,10 +145,20 @@ void ComplexCreator::setInitialPosition(
 
 	for (size_t i = 0; i < allLigands.size(); i++)
 	{
-		vector<double> translate = findGoodPoint(
+		vector<int> pointsOverLigand = findGoodPoint(
 			allLigands[i].getChelation(),
 			points,
 			pointsTaken);
+
+		allLigands[i].placeLigandOnPoints(
+			pointsOverLigand,
+			points);
+//			Ligand &ligand,
+//			std::vector<int> &pLig,
+//			const std::vector<double> & points);
+
+
+
 
 		allLigands[i].translateLigand(translate[0], translate[1], translate[2]);
 		
@@ -157,7 +167,7 @@ void ComplexCreator::setInitialPosition(
 }
 
 
-vector<double> ComplexCreator::findGoodPoint(
+vector<int> ComplexCreator::findGoodPoint(
 	int chelation,
 	const vector<double> &points,
 	vector<bool>& pointsTaken)
@@ -200,34 +210,7 @@ vector<double> ComplexCreator::findGoodPoint(
 		}
 	}
 
-	vector<double> ligandPoint(3);
-	ligandPoint[0] = points[pLig[0]];
-	ligandPoint[1] = points[pLig[0] + nPoints];
-	ligandPoint[2] = points[pLig[0] + 2 * nPoints];
-	// chelation 2: mean - chelation 3: barycenter
-	if (chelation == 2)
-	{
-		ligandPoint[0] = (ligandPoint[0] + points[pLig[1]]) / 2.0e0;
-		ligandPoint[1] = (ligandPoint[1] + points[pLig[1] + nPoints]) / 2.0e0;
-		ligandPoint[2] = (ligandPoint[2] + points[pLig[1] + 2 * nPoints]) / 2.0e0;
-	}
-	else if (chelation == 3)
-	{
-		ligandPoint[0] = (
-			ligandPoint[0] + 
-			points[pLig[1]] + 
-			points[pLig[2]]) / 3.0e0;
-		ligandPoint[1] = (
-			ligandPoint[1] + 
-			points[pLig[1] + nPoints] + 
-			points[pLig[2] + nPoints]) / 3.0e0;
-		ligandPoint[2] = (
-			ligandPoint[2] + 
-			points[pLig[1] + 2 * nPoints] + 
-			points[pLig[2] + 2 * nPoints]) / 3.0e0;
-	}
-
-	return ligandPoint;
+	return pLig;
 }
 
 

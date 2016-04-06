@@ -45,17 +45,27 @@ private:
 
 	//start
 	int orderAllLigands(); //bigger teeth first
+
 	std::vector<double> getPoints(int totalChelation);
+
 	void setInitialPosition(const std::vector<double> & points);
-	std::vector<double> findGoodPoint(
+
+	std::vector<int> findGoodPoint(
 		int chelation, 
 		const std::vector<double> & points,
 		std::vector<bool> & pointsTaken);
+
+	void placeLigandOnPoints(
+		Ligand &ligand, 
+		std::vector<int> &pLig,
+		const std::vector<double> & points);
+
 	int closestPoint(
 		double x, double y, double z,
 		const std::vector<double> &points,
 		std::vector<bool> &pointsTaken
 		);
+
 	void stretchPoints(std::vector<double> &points);
 
 	//optimizing

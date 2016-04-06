@@ -33,6 +33,9 @@ public:
 
 	void genericRotation(double vx, double vy, double vz, double ang);
 
+	void placeLigandOnPoins(std::vector<int> &pLig,
+		const std::vector<double> & points);
+
 	void printLigand(std::ofstream &out);
 
 	std::vector<CoordXYZ> getAllAtoms();

@@ -351,6 +351,15 @@ void Ligand::genericRotation(double vx, double vy, double vz, double ang)
 	X2.z = auxRot[2];
 }
 
+void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points)
+{
+	// chelation
+	// fazer um scrrening.
+
+
+
+}
+
 vector<CoordXYZ> Ligand::getAllAtoms()
 {
 	return coord;

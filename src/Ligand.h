@@ -29,7 +29,7 @@ public:
 
 	void rotateOnX1(double vx, double vy, double vz, double ang);
 
-	void rotateOnX2(double beta);
+	void rotateOnX2(double beta); //vector x1 x2
 
 	void genericRotation(double vx, double vy, double vz, double ang);
 

@@ -353,8 +353,128 @@ void Ligand::genericRotation(double vx, double vy, double vz, double ang)
 
 void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points)
 {
-	// chelation
-	// fazer um scrrening.
+	int nPoints = points.size() / 3;
+	vector<double> ligandPoint(3);
+
+	double x1, y1, z1;
+	double x2, y2, z2;
+	double x3, y3, z3;
+	x1 = points[pLig[0]];
+	y1 = points[pLig[0] + nPoints];
+	z1 = points[pLig[0] + 2 * nPoints];
+	ligandPoint[0] = x1;
+	ligandPoint[1] = y1;
+	ligandPoint[2] = z1;
+	// chelation 2: mean - chelation 3: barycenter
+	if (chelation == 2)
+	{
+		x2 = points[pLig[1]];
+		y2 = points[pLig[1] + nPoints];
+		z2 = points[pLig[1] + 2 * nPoints];
+		ligandPoint[0] = (ligandPoint[0] + x2) / 2.0e0;
+		ligandPoint[1] = (ligandPoint[1] + y2) / 2.0e0;
+		ligandPoint[2] = (ligandPoint[2] + z2) / 2.0e0;
+	}
+	else if (chelation == 3)
+	{
+		x2 = points[pLig[1]];
+		y2 = points[pLig[1] + nPoints];
+		z2 = points[pLig[1] + 2 * nPoints];
+		x3 = points[pLig[2]];
+		y3 = points[pLig[2] + nPoints];
+		z3 = points[pLig[2] + 2 * nPoints];
+		ligandPoint[0] = (
+			ligandPoint[0] +
+			points[pLig[1]] +
+			points[pLig[2]]) / 3.0e0;
+		ligandPoint[1] = (
+			ligandPoint[1] +
+			points[pLig[1] + nPoints] +
+			points[pLig[2] + nPoints]) / 3.0e0;
+		ligandPoint[2] = (
+			ligandPoint[2] +
+			points[pLig[1] + 2 * nPoints] +
+			points[pLig[2] + 2 * nPoints]) / 3.0e0;
+	}
+
+	translateLigand(ligandPoint[0], ligandPoint[1], ligandPoint[2]);
+
+	rotateToCenter();
+
+	if (chelation == 1)
+		return;
+
+	// rotating ligand to overlap points.
+#ifdef _DEBUG
+	ofstream placeLigand_("placeLigand0.xyz");
+	placeLigand_ << coord.size() + chelation << endl << "t " << endl;
+	printLigand(placeLigand_);
+	placeLigand_ << "Au  " << x1 << "  " << y1 << "  " << z1 << endl;
+	placeLigand_ << "Au  " << x2 << "  " << y2 << "  " << z2 << endl;
+	if(chelation == 3)
+		placeLigand_ << "Au  " << x3 << "  " << y3 << "  " << z3 << endl;
+
+	placeLigand_.close();
+#endif
+
+	AuxMath auxMath_;
+	int iDistanceMin = 0;
+	double distanceMin, distance;
+
+	distanceMin = auxMath_.norm(
+		coord[0].x - x1,
+		coord[0].y - y1,
+		coord[0].z - z1);
+	distanceMin += auxMath_.norm(
+		coord[1].x - x2,
+		coord[1].y - y2,
+		coord[1].z - z2);
+	if (chelation == 3)
+	{
+		distanceMin += auxMath_.norm(
+			coord[2].x - x3,
+			coord[2].y - y3,
+			coord[2].z - z3);
+	}
+	for (int i = 1; i < 63; i++)
+	{
+		rotateOnX2(0.1e0);
+
+		distance = auxMath_.norm(
+			coord[0].x - x1,
+			coord[0].y - y1,
+			coord[0].z - z1);
+		distance += auxMath_.norm(
+			coord[1].x - x2,
+			coord[1].y - y2,
+			coord[1].z - z2);
+		if (chelation == 3)
+		{
+			distance += auxMath_.norm(
+				coord[2].x - x3,
+				coord[2].y - y3,
+				coord[2].z - z3);
+		}
+		if (distance < distanceMin)
+		{
+			distanceMin = distance;
+			iDistanceMin = i;
+		}
+	}
+	
+	rotateOnX2(-(62-iDistanceMin) * 0.1);
+
+#ifdef _DEBUG
+	placeLigand_.open("placeLigandEND.xyz");
+	placeLigand_ << coord.size() + chelation << endl << "t " << endl;
+	printLigand(placeLigand_);
+	placeLigand_ << "Au  " << x1 << "  " << y1 << "  " << z1 << endl;
+	placeLigand_ << "Au  " << x2 << "  " << y2 << "  " << z2 << endl;
+	if (chelation == 3)
+		placeLigand_ << "Au  " << x3 << "  " << y3 << "  " << z3 << endl;
+
+	placeLigand_.close();
+#endif
 
 
 

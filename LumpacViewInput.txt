@@ -1,7 +1,7 @@
 Eu
 spk_Eu
 4
-tta
+tppo-tridentate
 tppo
 dbm
 btfa

@@ -150,19 +150,10 @@ void ComplexCreator::setInitialPosition(
 			points,
 			pointsTaken);
 
-		allLigands[i].placeLigandOnPoints(
+		allLigands[i].placeLigandOnPoins(
 			pointsOverLigand,
 			points);
-//			Ligand &ligand,
-//			std::vector<int> &pLig,
-//			const std::vector<double> & points);
 
-
-
-
-		allLigands[i].translateLigand(translate[0], translate[1], translate[2]);
-		
-		allLigands[i].rotateToCenter();
 	}
 }
 

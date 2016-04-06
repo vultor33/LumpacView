@@ -36,6 +36,8 @@ public:
 	void placeLigandOnPoins(std::vector<int> &pLig,
 		const std::vector<double> & points);
 
+	void rotateOverReferencePoints();
+
 	void printLigand(std::ofstream &out);
 
 	std::vector<CoordXYZ> getAllAtoms();
@@ -47,6 +49,7 @@ public:
 private:
 	//data
 	std::vector<CoordXYZ> coord;
+	std::vector<double> sphereReferencePoints; //xyz xyz xyz
 	std::string titleInfo;	
 	int chelation;
 	CoordXYZ X1; //coordination center

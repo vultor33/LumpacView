@@ -154,6 +154,8 @@ void ComplexCreator::setInitialPosition(
 			pointsOverLigand,
 			points);
 
+		allLigands[i].rotateOverReferencePoints();
+
 	}
 }
 

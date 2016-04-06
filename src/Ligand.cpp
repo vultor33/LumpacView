@@ -362,6 +362,9 @@ void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points)
 	x1 = points[pLig[0]];
 	y1 = points[pLig[0] + nPoints];
 	z1 = points[pLig[0] + 2 * nPoints];
+	sphereReferencePoints.push_back(x1);
+	sphereReferencePoints.push_back(y1);
+	sphereReferencePoints.push_back(z1);
 	ligandPoint[0] = x1;
 	ligandPoint[1] = y1;
 	ligandPoint[2] = z1;
@@ -371,6 +374,9 @@ void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points)
 		x2 = points[pLig[1]];
 		y2 = points[pLig[1] + nPoints];
 		z2 = points[pLig[1] + 2 * nPoints];
+		sphereReferencePoints.push_back(x2);
+		sphereReferencePoints.push_back(y2);
+		sphereReferencePoints.push_back(z2);
 		ligandPoint[0] = (ligandPoint[0] + x2) / 2.0e0;
 		ligandPoint[1] = (ligandPoint[1] + y2) / 2.0e0;
 		ligandPoint[2] = (ligandPoint[2] + z2) / 2.0e0;
@@ -383,6 +389,12 @@ void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points)
 		x3 = points[pLig[2]];
 		y3 = points[pLig[2] + nPoints];
 		z3 = points[pLig[2] + 2 * nPoints];
+		sphereReferencePoints.push_back(x2);
+		sphereReferencePoints.push_back(y2);
+		sphereReferencePoints.push_back(z2);
+		sphereReferencePoints.push_back(x3);
+		sphereReferencePoints.push_back(y3);
+		sphereReferencePoints.push_back(z3);
 		ligandPoint[0] = (
 			ligandPoint[0] +
 			points[pLig[1]] +
@@ -476,7 +488,77 @@ void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points)
 	placeLigand_.close();
 #endif
 
+}
 
+void Ligand::rotateOverReferencePoints()
+{
+	AuxMath auxMath_;
+	if (chelation == 2)
+	{
+		rotateOnX2(auxMath_._pi);
+	}
+	else
+	{
+		rotateOnX2(auxMath_._pi / 2);
+		double distance, distanceMin;
+		int iDistanceMin = 0;
+		distanceMin = auxMath_.norm(
+			coord[0].x - sphereReferencePoints[0],
+			coord[0].y - sphereReferencePoints[1],
+			coord[0].z - sphereReferencePoints[2]);
+		distanceMin += auxMath_.norm(
+			coord[1].x - sphereReferencePoints[3],
+			coord[1].y - sphereReferencePoints[4],
+			coord[1].z - sphereReferencePoints[5]);
+		distanceMin += auxMath_.norm(
+			coord[2].x - sphereReferencePoints[6],
+			coord[2].y - sphereReferencePoints[7],
+			coord[2].z - sphereReferencePoints[8]);
+
+		for (int i = 1; i < 10; i++)
+		{
+			rotateOnX2(0.1e0);
+			distance = auxMath_.norm(
+				coord[0].x - sphereReferencePoints[0],
+				coord[0].y - sphereReferencePoints[1],
+				coord[0].z - sphereReferencePoints[2]);
+			distance += auxMath_.norm(
+				coord[1].x - sphereReferencePoints[3],
+				coord[1].y - sphereReferencePoints[4],
+				coord[1].z - sphereReferencePoints[5]);
+			distance += auxMath_.norm(
+				coord[2].x - sphereReferencePoints[6],
+				coord[2].y - sphereReferencePoints[7],
+				coord[2].z - sphereReferencePoints[8]);
+
+			if (distance < distanceMin)
+			{
+				distanceMin = distance;
+				iDistanceMin = i;
+			}
+		}
+
+		rotateOnX2(-(10 - iDistanceMin) * 0.1);
+	}
+
+
+#ifdef _DEBUG
+	ofstream placeLigand_("placeLigand1.xyz");
+	placeLigand_ << coord.size() + chelation << endl << "t " << endl;
+	printLigand(placeLigand_);
+	placeLigand_ << "Au  " << sphereReferencePoints[0] 
+		<< "  " << sphereReferencePoints[1] 
+		<< "  " << sphereReferencePoints[2] << endl;
+	placeLigand_ << "Au  " << sphereReferencePoints[3] 
+		<< "  " << sphereReferencePoints[4] 
+		<< "  " << sphereReferencePoints[5] << endl;
+	if (chelation == 3)
+		placeLigand_ << "Au  " << sphereReferencePoints[6] 
+		<< "  " << sphereReferencePoints[7] 
+		<< "  " << sphereReferencePoints[8] << endl;
+
+	placeLigand_.close();
+#endif
 
 }
 

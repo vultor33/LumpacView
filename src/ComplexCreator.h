@@ -55,11 +55,6 @@ private:
 		const std::vector<double> & points,
 		std::vector<bool> & pointsTaken);
 
-	void placeLigandOnPoints(
-		Ligand &ligand, 
-		std::vector<int> &pLig,
-		const std::vector<double> & points);
-
 	int closestPoint(
 		double x, double y, double z,
 		const std::vector<double> &points,

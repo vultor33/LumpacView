@@ -36,7 +36,7 @@ public:
 	void placeLigandOnPoins(std::vector<int> &pLig,
 		const std::vector<double> & points);
 
-	void rotateOverReferencePoints();
+	void rotateOverReferencePoints(double angle = 0);
 
 	void printLigand(std::ofstream &out);
 

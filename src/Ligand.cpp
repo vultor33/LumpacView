@@ -490,10 +490,14 @@ void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points)
 
 }
 
-void Ligand::rotateOverReferencePoints()
+void Ligand::rotateOverReferencePoints(double angle)
 {
 	AuxMath auxMath_;
-	if (chelation == 2)
+	if (chelation == 1)
+	{
+		rotateOnX2(angle);
+	}
+	else if (chelation == 2)
 	{
 		rotateOnX2(auxMath_._pi);
 	}

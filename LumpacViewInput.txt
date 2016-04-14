@@ -1,9 +1,12 @@
 Eu
 spk_Eu
-4
-tppo-tridentate
+5
+tppo
 tppo
 dbm
-btfa
+dbm
+dbm
+
+
 
 ! a ordem importa

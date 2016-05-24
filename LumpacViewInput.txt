@@ -1,12 +1,11 @@
 Eu
 spk_Eu
 5
+h2o
 tppo
-tppo
 dbm
 dbm
-dbm
-
+tta
 
 
 ! a ordem importa

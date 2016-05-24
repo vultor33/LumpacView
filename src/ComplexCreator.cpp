@@ -313,7 +313,7 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 #endif
 
 #ifdef _DEBUG
-		//printAllAtoms(xMin);
+		printAllAtoms(xMin);
 		test_ << "i:  " << i << "  fMin:  " 
 			<< setprecision(16) 
 			<< fMin

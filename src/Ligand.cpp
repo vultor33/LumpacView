@@ -547,6 +547,7 @@ void Ligand::rotateOverReferencePoints(double angle)
 
 
 #ifdef _DEBUG
+	/*
 	ofstream placeLigand_("placeLigand1.xyz");
 	placeLigand_ << coord.size() + chelation << endl << "t " << endl;
 	printLigand(placeLigand_);
@@ -562,6 +563,7 @@ void Ligand::rotateOverReferencePoints(double angle)
 		<< "  " << sphereReferencePoints[8] << endl;
 
 	placeLigand_.close();
+	*/
 #endif
 
 }

@@ -64,7 +64,7 @@ tta
 Ligante.xyz
 [
 n            // numero de atomos
-dentity      // monodentate, bidentate ou tridentate
+dentity NOME // monodentate, bidentate ou tridentate
 label x y z  // coordendas no formato xyz
 ...
 ...

@@ -10,6 +10,7 @@
 #include "AuxMath.h"
 #include "PointAnalysis.h"
 #include "AdjustSaParameters.h"
+#include "RootMeanSquareDeviation.h"
 
 using namespace std;
 
@@ -22,6 +23,13 @@ void runMopac(ReadInput & readInp_, vector<CoordXYZ> & allAtoms); // run optimiz
 
 int main()
 {
+	RootMeanSquareDeviation rmsd_;
+
+	rmsd_.rmsOverlay("btfa.xyz", "btfa-rotated.xyz");
+
+
+
+
 	// tinicial, saUpdate, maxAlfa, maxBeta,
 	AdjustSaParameters saParameters_(
 		0.13113111182697784,

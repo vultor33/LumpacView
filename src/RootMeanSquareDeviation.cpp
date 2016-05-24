@@ -1,5 +1,6 @@
 #include "RootMeanSquareDeviation.h"
 
+#include <stdlib.h>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -7,6 +8,7 @@
 #include <iostream>
 
 #include "AuxMath.h"
+#include "Coordstructs.h"
 
 using namespace std;
 
@@ -101,72 +103,184 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	}
 
 	double sum = 0.0e0;
-
-/*
-SEGUNDA MOLECULA
-	vector<double> set2 = readPoint(file2);
-	set2 = rotateToZ0(set2);
-	set2 = rotateToPlane(set2);
-	set2 = mirrorY(set2);
-	for (size_t i = 0; i < set1.size(); i++)
-		sum += (set1[i] - set2[i])*(set1[i] - set2[i]);
-	sum /= (double)set1.size();
-	sum = sqrt(sum);
-*/
 	  
 #ifdef _DEBUG
 	printXyz(file1 + ".xyz", auxPoints);
-//	printXyz(file2 + ".xyz", set2);
 #endif
 
 	return sum;
 }
 
-/*
-operacoes no repulsion:
-roda tudo, levando o 1o ponto pro eixo z.
-coloca o vetor no eixo z e roda o 2o ponto para o plano xz com x>0.
-checa se o 3o ponto tem y positivo.
-se sim, termina.
-se nao, reflete os pontos no plano xz.
-*/
 
-
-/*
-formato dos arquivos:
-file
-[
-n pontos
-x1
-x2
-x3
-...
-y1
-y2
-y3
-...
-z1
-z2
-z3
-...
-]
-os dois arquivos precisam estar alinhados. C1 = C1, Oxi1 = Oxi2 e etc.
-
-*/
-
-
-vector<double> RootMeanSquareDeviation::readPoint(string fName)
+double RootMeanSquareDeviation::rmsOverlay(string molName1, string molName2)
 {
+	vector<CoordXYZ> mol1 = readCoord(molName1);
 
+	vector<CoordXYZ> mol2 = readCoord(molName2);
+
+	return rmsOverlay(mol1, mol2);
+}
+
+
+double RootMeanSquareDeviation::rmsOverlay(vector<CoordXYZ> & mol1, vector<CoordXYZ> & mol2)
+{
+	AuxMath auxMath_;
+	int nAtoms = mol1.size();
+	if (mol1.size() != mol2.size())
+	{
+		cout << "error on RootMeanSquareDeviation - different molecules" << endl;
+		exit(1);
+	}
+
+	//translate to center of mass
+	CoordXYZ cm1, cm2;
+	cm1.x = 0.0e0;
+	cm1.y = 0.0e0;
+	cm1.z = 0.0e0;
+	cm2.x = 0.0e0;
+	cm2.y = 0.0e0;
+	cm2.z = 0.0e0;
+	for (int i = 0; i < nAtoms; i++)
+	{
+		cm1.x += mol1[i].x;
+		cm1.y += mol1[i].y;
+		cm1.z += mol1[i].z;
+		cm2.x += mol2[i].x;
+		cm2.y += mol2[i].y;
+		cm2.z += mol2[i].z;
+	}
+	cm1.x /= (double)nAtoms;
+	cm1.y /= (double)nAtoms;
+	cm1.z /= (double)nAtoms;
+	cm2.x /= (double)nAtoms;
+	cm2.y /= (double)nAtoms;
+	cm2.z /= (double)nAtoms;
+	for (int i = 0; i < nAtoms; i++)
+	{
+		mol1[i].x -= cm1.x;
+		mol1[i].y -= cm1.y;
+		mol1[i].z -= cm1.z;
+	  	mol2[i].x -= cm2.x;
+		mol2[i].y -= cm2.y;
+		mol2[i].z -= cm2.z;
+	}
+
+#ifdef _DEBUG
+	printXyz("mol1-at-cm.xyz", mol1);
+	printXyz("mol2-at-cm.xyz", mol2);
+#endif
+
+	// agora eu quero rodar essas estruturas até que elas se superponham.
+	// posso varrer os angulos teta e fi. Isso me da vetores apontando
+	// para todas as direcoes.
+	// Pra cada um desses vetores eu posso girar a vontade um psi.
+	// outra alternativa é ajustar os primeiros atomos e deus salve a america.
+
+	// a ideia mais pratica e pegar alguns atomos, rodar ele pra la e fazer algumas
+	// so rodar pros 3 pontos e pronto.
+	
+	vector<double> normalMol1, normalMol2;
+	bool colinear = true;
+	int atom2 = 1;
+	while (colinear)
+	{
+		normalMol1 = auxMath_.normalVectorFrom3Points(
+			mol1[0].x, mol1[0].y, mol1[0].z,
+			0.0e0, 0.0e0, 0.0e0,
+			mol1[atom2].x, mol1[atom2].y, mol1[atom2].z);
+
+		normalMol2 = auxMath_.normalVectorFrom3Points(
+			mol2[0].x, mol2[0].y, mol2[0].z,
+			0.0e0, 0.0e0, 0.0e0,
+			mol2[atom2].x, mol2[atom2].y, mol2[atom2].z);
+
+		if (
+			((abs(normalMol1[0]) < 1.0e-12) &&
+				(abs(normalMol1[1]) < 1.0e-12) &&
+				(abs(normalMol1[2]) < 1.0e-12)) ||
+			((abs(normalMol2[0]) < 1.0e-12) &&
+				(abs(normalMol2[1]) < 1.0e-12) &&
+				(abs(normalMol2[2]) < 1.0e-12))
+			)
+		{
+			atom2++;
+			if (atom2 > (int)(mol1.size() - 1))
+			{
+				cout << "LINEAR MOLECULES ARE NOT IMPLEMENTED - CONTACT DEVELOPERS" << endl;
+				exit(1);
+			}
+		}
+		else
+			break;
+	}
+
+
+	double angle = auxMath_.angleFrom3Points(
+		normalMol1[0], normalMol1[1], normalMol1[2],
+		0.0e0, 0.0e0, 0.0e0,
+		normalMol2[0], normalMol2[1], normalMol2[2]);
+
+	vector<double> referenceRotation = auxMath_.normalVectorFrom3Points(
+		normalMol1[0], normalMol1[1], normalMol1[2],
+		0.0e0, 0.0e0, 0.0e0,
+		normalMol2[0], normalMol2[1], normalMol2[2]);
+
+	if (!
+		((abs(referenceRotation[0]) < 1.0e-12) &&
+		(abs(referenceRotation[1]) < 1.0e-12) &&
+		(abs(referenceRotation[2]) < 1.0e-12)))
+	{
+		rotateMol(mol2, referenceRotation[0], referenceRotation[1], referenceRotation[2], angle);
+
+#ifdef _DEBUG
+		printXyz("mol2-afterrotation-cm.xyz", mol2);
+#endif
+	}
+
+	double angleFi = auxMath_.angleFrom3Points(
+		mol1[0].x, mol1[0].y, mol1[0].z,
+		0.0e0, 0.0e0, 0.0e0,
+		mol2[0].x, mol2[0].y, mol2[0].z
+		);
+
+	rotateMol(mol2, normalMol1[0], normalMol1[1], normalMol1[2], angleFi);
+	double auxRms = rms(mol1, mol2);
+
+#ifdef _DEBUG
+	printXyz("mol2-ultimate-rotation-cm.xyz", mol2);
+#endif
+
+	return auxRms;
+}
+
+
+vector<CoordXYZ> RootMeanSquareDeviation::readCoord(string fName)
+{
+	vector<CoordXYZ> mol;
+	ifstream fCoord_(fName.c_str());
+	int nAtoms;
+	string dummy;
+	fCoord_ >> nAtoms;
+	fCoord_ >> dummy;
+	mol.resize(nAtoms);
+	for (int i = 0; i < nAtoms; i++)
+	{
+		fCoord_ >> mol[i].atomlabel
+			>> mol[i].x
+			>> mol[i].y
+			>> mol[i].z;
+	}
+	fCoord_.close();
+	return mol;
+}
+
+vector<double> RootMeanSquareDeviation::readPoint(string fName, int format)
+{
 	ifstream fPoint_(fName.c_str());
 	int nPoints;
 	fPoint_ >> nPoints;
 	double aux;
 	vector<double> points(nPoints);
-
-
-	int format = 1;
-
 
 	if (format == 0)
 	{
@@ -176,7 +290,7 @@ vector<double> RootMeanSquareDeviation::readPoint(string fName)
 			points[i] = aux;
 		}
 	}
-	else
+	else if(format == 1)
 	{
 		int natoms = nPoints / 3;
 		double aux2, aux3;
@@ -235,7 +349,6 @@ vector<double> RootMeanSquareDeviation::rotateToPlane(const vector<double> &poin
 	AuxMath auxMath_;
 	int nPoints = point.size() / 3;
 	int point2Chosen;
-	//ele precisa estar mais proximo do zero.
 	double rMin = 1.0e99;
 	double r;
 	for (size_t i = 1; (int)i < nPoints; i++)
@@ -252,7 +365,6 @@ vector<double> RootMeanSquareDeviation::rotateToPlane(const vector<double> &poin
 			rMin = r;
 		}
 	}
-//	cin.get();
 
 	double x = point[point2Chosen];
 	double y = point[point2Chosen + nPoints];
@@ -348,12 +460,6 @@ void RootMeanSquareDeviation::printXyz(string fName, const vector<double> &point
 		x = points[i];
 		y = points[i + nPoints];
 		z = points[i + 2 * nPoints];
-		//if (abs(x) < 1.0e-4)
-			//x = 0.0e0;
-		//if (abs(y) < 1.0e-4)
-			//y = 0.0e0;
-		//if (abs(z) < 1.0e-4)
-			//z = 0.0e0;
 
 		xyz_ << "H  " 
 			<< setfill(' ')  << setw(15)	<< fixed << setprecision(8)  
@@ -365,6 +471,64 @@ void RootMeanSquareDeviation::printXyz(string fName, const vector<double> &point
 	}
 }
 
+void RootMeanSquareDeviation::printXyz(string fName, vector<CoordXYZ> & mol)
+{
+	int nAtoms = mol.size();
+	ofstream xyz_(fName.c_str());
+	xyz_ << nAtoms << endl;
+	xyz_ << "t" << endl;
+	for (int i = 0; i < nAtoms; i++)
+	{
+		xyz_ << mol[i].atomlabel << "  "
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
+			<< mol[i].x << "  "
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
+			<< mol[i].y << "  "
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
+			<< mol[i].z << "  " << endl;
+	}
+}
+
+double RootMeanSquareDeviation::rms(vector<CoordXYZ>& mol1, vector<CoordXYZ>& mol2)
+{
+	double rms = 0.0e0;
+	int nAtoms = mol1.size();
+	for (int i = 0; i < nAtoms; i++)
+	{
+		rms += (mol1[i].x - mol2[i].x) * (mol1[i].x - mol2[i].x);
+		rms += (mol1[i].y - mol2[i].y) * (mol1[i].y - mol2[i].y);
+		rms += (mol1[i].z - mol2[i].z) * (mol1[i].z - mol2[i].z);
+	}
+	rms /= nAtoms;
+	rms = sqrt(rms);
+	return rms;
+}
+
+void RootMeanSquareDeviation::rotateMol(
+	vector<CoordXYZ> &mol,
+	double x,
+	double y,
+	double z,
+	double angle)
+{
+	AuxMath auxMath_;
+	vector< vector<double> > rotationMatrix = auxMath_.rotationMatrix(
+		x,
+		y,
+		z,
+		angle);
+	for (size_t i = 0; i < mol.size(); i++)
+	{
+		vector<double> atomRotated = auxMath_.matrixXVector(
+			rotationMatrix,
+			mol[i].x,
+			mol[i].y,
+			mol[i].z);
+		mol[i].x = atomRotated[0];
+		mol[i].y = atomRotated[1];
+		mol[i].z = atomRotated[2];
+	}
+}
 
 
 
@@ -378,3 +542,38 @@ fi[i] = (3.0e0 * auxMath_._pi) / 2.0e0;
 }
 else
 */
+
+
+/*
+operacoes no repulsion:
+roda tudo, levando o 1o ponto pro eixo z.
+coloca o vetor no eixo z e roda o 2o ponto para o plano xz com x>0.
+checa se o 3o ponto tem y positivo.
+se sim, termina.
+se nao, reflete os pontos no plano xz.
+*/
+
+
+/*
+formato dos arquivos:
+file
+[
+n pontos
+x1
+x2
+x3
+...
+y1
+y2
+y3
+...
+z1
+z2
+z3
+...
+]
+os dois arquivos precisam estar alinhados. C1 = C1, Oxi1 = Oxi2 e etc.
+
+*/
+
+

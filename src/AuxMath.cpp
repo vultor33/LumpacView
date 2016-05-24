@@ -78,6 +78,9 @@ std::vector<double> AuxMath::normalVectorFrom3Points(
 	v2z = z1 - z3;
 
 	vector<double> n = vectorProduct(v1x, v1y, v1z, v2x, v2y, v2z);
+	if ((abs(n[0]) < 1.0e-12) && (abs(n[1]) < 1.0e-12) && (abs(n[2]) < 1.0e-12))
+		return n;
+
 	normalize(n);
 	return n;
 }

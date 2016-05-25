@@ -499,8 +499,8 @@ double RootMeanSquareDeviation::rms(vector<CoordXYZ>& mol1, vector<CoordXYZ>& mo
 		rms += (mol1[i].y - mol2[i].y) * (mol1[i].y - mol2[i].y);
 		rms += (mol1[i].z - mol2[i].z) * (mol1[i].z - mol2[i].z);
 	}
-	rms /= nAtoms;
 	rms = sqrt(rms);
+	rms /= nAtoms;
 	return rms;
 }
 

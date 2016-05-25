@@ -304,13 +304,8 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 		{
 			xMin = x;
 			fMin = f;
-		}
-
-#ifdef _FITSA
-		if ((fMin < finalFit) &&
-			(finalI == 5000))
 			finalI = i;
-#endif
+		}
 
 #ifdef _DEBUG
 		printAllAtoms(xMin);
@@ -320,10 +315,6 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 			<< "  cTemp:  " << cTemp << endl;
 #endif
 	}
-
-#ifdef _FITSA
-	//finalFit = fMin;
-#endif
 
 #ifdef _DEBUG
 	printAllAtoms(xMin);

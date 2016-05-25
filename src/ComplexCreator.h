@@ -26,10 +26,7 @@ public:
 
 	std::vector<CoordXYZ> simulatedAnnealing();
 
-#ifdef _FITSA
-	double finalFit = 466;
-	int finalI = 5000;
-#endif
+	int getIterationOfLowestFit() { return finalI; }
 
 private:
 	int maxChelation;
@@ -40,6 +37,7 @@ private:
 	double saInitialTemperature;
 	double saAcceptance;
 	int saMaxIterations;
+	int finalI;
 
 	std::vector<Ligand> & allLigands;
 

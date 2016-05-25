@@ -11,6 +11,7 @@
 #include "PointAnalysis.h"
 #include "AdjustSaParameters.h"
 #include "RootMeanSquareDeviation.h"
+#include "BuildComplex.h"
 
 using namespace std;
 
@@ -21,13 +22,11 @@ bool buildComplex(ReadInput & readInp_, const AdjustSaParameters & saParameters_
 void runMopac(ReadInput & readInp_, vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
 
 
+
 int main()
 {
-	RootMeanSquareDeviation rmsd_;
-
-	rmsd_.rmsOverlay("btfa.xyz", "btfa-rotated.xyz");
-
-
+	BuildComplex bc_;
+	bc_.build();
 
 
 	// tinicial, saUpdate, maxAlfa, maxBeta,

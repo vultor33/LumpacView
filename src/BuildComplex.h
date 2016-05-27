@@ -15,7 +15,9 @@ public:
 
 	void build();
 
-	void build(std::string ligandName, int coord, int charge, std::vector<std::string> options);
+	void build(std::string ligandName, int coordination, int charge, std::vector<std::string> options);
+
+	void build(ReadInput & readInp_);
 
 	void checkIfIsSameIsomer(std::string xRayName);
 
@@ -28,6 +30,7 @@ private:
 	bool constructComplex(ReadInput & readInp_, const AdjustSaParameters & saParameters_, std::vector<CoordXYZ> &allAtoms); // place ligands on the sphere and optimize with simulated annealing.
 	void runMopac(ReadInput & readInp_, std::vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
 
+	void setClandH2oToCompleteCoordination(Ligand & Cl_, Ligand & H2o_);
 
 
 };

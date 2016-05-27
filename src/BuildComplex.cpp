@@ -20,6 +20,61 @@ BuildComplex::~BuildComplex(){}
 
 void BuildComplex::build()
 {
+		ReadInput readInp_;
+		if (!ReadLumpacViewInput(readInp_))
+			return;
+
+		build(readInp_);
+}
+
+void BuildComplex::build(string ligandName, int coordination, int charge, vector<string> options)
+{
+	Ligand mol;
+	mol.setLigandCoordinates(ligandName);
+
+	int nCl = 3 - charge;
+
+	int nH2o = coordination - mol.getChelation() - nCl;
+
+	vector<Ligand> allLigands(1 + nCl + nH2o);
+
+	Ligand Cl_, H2o_;
+	
+	setClandH2oToCompleteCoordination(Cl_, H2o_);
+
+	allLigands[0] = mol;
+	int k = 1;
+	for (int i = 0; i < nCl; i++)
+	{
+		allLigands[k] = Cl_;
+		k++;
+	}
+	for (int i = 0; i < nH2o; i++)
+	{
+		allLigands[k] = H2o_;
+		k++;
+	}
+
+	ReadInput readInp_;
+	
+	readInp_.allLigands = allLigands;
+
+	string projectName = options[0];
+	string metalName = options[1];
+	string metalParams = options[2];
+	readInp_.setProperties(projectName, metalName, metalParams);
+}
+
+void BuildComplex::build(ReadInput & readInp_)
+{
+
+#ifdef _DEBUG
+	readInp_.rePrintInput();
+#endif
+
+	bool terminate = buildLigands(readInp_);
+	if (terminate) return;
+
 	// tinicial, saUpdate, maxAlfa, maxBeta,
 	AdjustSaParameters saParameters_(
 		0.13113111182697784,
@@ -28,40 +83,11 @@ void BuildComplex::build()
 		503.81980808157266,
 		0.5000000000000000);
 
-		ReadInput readInp_;
-		if (!ReadLumpacViewInput(readInp_))
-			return;
-
-#ifdef _DEBUG
-		readInp_.rePrintInput();
-#endif
-
-		bool terminate = buildLigands(readInp_);
-		if (terminate) return;
-
-		vector<CoordXYZ> allAtoms;
-		if (!constructComplex(readInp_, saParameters_, allAtoms))
-			return;
-
-		//runMopac(readInp_, allAtoms);
+	vector<CoordXYZ> allAtoms;
+	if (!constructComplex(readInp_, saParameters_, allAtoms))
 		return;
-}
 
-void BuildComplex::build(string ligandName, int coord, int charge, vector<string> options)
-{
-	Ligand mol;
-	mol.setLigandCoordinates(ligandName);
-	
-	// monodentado com apenas um atomo
-
-	// construcao do cloreto e da agua padroes q serao usados para completar aqui
-
-	// int nClorets = 3 - charge
-	// vector<allLigands> 
-	//for int i=1 i< coord
-	// 
-
-
+	//runMopac(readInp_, allAtoms);
 
 }
 
@@ -227,6 +253,33 @@ void BuildComplex::runMopac(ReadInput & readInp_, vector<CoordXYZ>& allAtoms)
 	else {
 		cout << "ocorreu algum problema na otimizacao do mopac, tente outra vez" << endl;
 	}
+}
+
+void BuildComplex::setClandH2oToCompleteCoordination(Ligand & Cl_, Ligand & H2o_)
+{
+	vector<CoordXYZ> cl(1);
+	cl[0].atomlabel = "Cl";
+	cl[0].x = 0.0e0;
+	cl[0].y = 0.0e0;
+	cl[0].z = 0.0e0;
+	string titleInfoCl = "Cl monodentate 2";
+	Cl_.setLigandCoordinates(cl, titleInfoCl);
+
+	vector<CoordXYZ> h2o(3);
+	h2o[0].atomlabel = "O";
+	h2o[0].x = 0.0e0;
+	h2o[0].y = 0.0e0;
+	h2o[0].z = 0.0e0;
+	h2o[0].atomlabel = "H";
+	h2o[0].x = 0.757e0;
+	h2o[0].y = 0.586e0;
+	h2o[0].z = 0.0e0;
+	h2o[0].atomlabel = "H";
+	h2o[0].x = -0.757e0;
+	h2o[0].y = 0.586e0;
+	h2o[0].z = 0.0e0;
+	string titleInfoh2o = "H2O monodentate 2";
+	H2o_.setLigandCoordinates(h2o, titleInfoh2o);
 }
 
 

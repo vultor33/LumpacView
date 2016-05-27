@@ -51,18 +51,6 @@ bool ComplexCreator::start()
 
 	setInitialPosition(points); //view
 
-#ifdef _DEBUG
-	ofstream points_("points.xyz");
-	int nPoints = (int)points.size() / 3;
-	points_ << nPoints << endl << "t" << endl;
-	for (int i = 0; i < nPoints; i++)
-		points_ << "H  " << points[i] << "   "
-			<< points[i + nPoints] << "   "
-			<< points[i + 2 * nPoints] << endl;
-	points_.close();
-	printAllAtoms(allLigands);
-#endif 
-
 	return true;
 }
 
@@ -258,9 +246,10 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 	AuxMath auxMath_;
 	vector<Ligand> x0 = allLigands;
 	double f0 = calculateAllFit(x0);
+
 #ifdef _DEBUG
-	printAllAtoms(x0);
-	ofstream test_("AnnealingInfo.log");
+	printAllAtoms("initialComplexBeforeAnnealing.xyz", x0);
+	ofstream annealingInfo_("AnnealingInfo.log");
 #endif
 	
 	//Variable temperature - always 50/100
@@ -308,8 +297,7 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 		}
 
 #ifdef _DEBUG
-		printAllAtoms(xMin);
-		test_ << "i:  " << i << "  fMin:  " 
+		annealingInfo_ << "i:  " << i << "  fMin:  "
 			<< setprecision(16) 
 			<< fMin
 			<< "  cTemp:  " << cTemp << endl;
@@ -317,8 +305,8 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 	}
 
 #ifdef _DEBUG
-	printAllAtoms(xMin);
-	test_.close();
+	printAllAtoms("complexAfterAnnealing.xyz", xMin);
+	annealingInfo_.close();
 #endif
 
 	vector<CoordXYZ> allAtoms;
@@ -369,14 +357,14 @@ void ComplexCreator::perturbOperations(vector<Ligand> & ligands)
 
 
 
-void ComplexCreator::printAllAtoms(vector<Ligand> & ligands)
+void ComplexCreator::printAllAtoms(std::string xyzName, vector<Ligand> & ligands)
 {
 	int allAtoms = 0;
 	size_t size = ligands.size();
 	for (size_t k = 0; k < size; k++)
 		allAtoms += ligands[k].getNatoms();
 
-	ofstream xyzAll("xyzAll.xyz");
+	ofstream xyzAll(xyzName.c_str());
 	xyzAll << allAtoms + 1 << endl
 		<< "useful title" << endl;
 	xyzAll << "Eu  " << "   0.00000    0.00000     0.00000" << endl;

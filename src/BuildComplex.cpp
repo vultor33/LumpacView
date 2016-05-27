@@ -47,6 +47,24 @@ void BuildComplex::build()
 		return;
 }
 
+void BuildComplex::build(string ligandName, int coord, int charge, vector<string> options)
+{
+	Ligand mol;
+	mol.setLigandCoordinates(ligandName);
+	
+	// monodentado com apenas um atomo
+
+	// construcao do cloreto e da agua padroes q serao usados para completar aqui
+
+	// int nClorets = 3 - charge
+	// vector<allLigands> 
+	//for int i=1 i< coord
+	// 
+
+
+
+}
+
 void BuildComplex::checkIfIsSameIsomer(string xRayName)
 {
 
@@ -166,9 +184,9 @@ bool BuildComplex::buildLigands(ReadInput & readInp_)
 
 bool BuildComplex::constructComplex(ReadInput & readInp_, const AdjustSaParameters & saParameters_, vector<CoordXYZ>& allAtoms)
 {
-	int maxChelation = 10;
+	int maxChelation = 12;
 	double stretchDistance = 2.5e0;
-	int saMaxIterations = 3000;
+	int saMaxIterations = 1000;
 	ComplexCreator cpCreator(
 		readInp_.allLigands,
 		maxChelation,

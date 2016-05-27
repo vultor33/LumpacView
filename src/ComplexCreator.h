@@ -66,7 +66,7 @@ private:
 
 	void perturbOperations(std::vector<Ligand> & ligands);
 
-	void printAllAtoms(std::vector<Ligand> & ligands);
+	void printAllAtoms(std::string xyzName, std::vector<Ligand> & ligands);
 };
 
 

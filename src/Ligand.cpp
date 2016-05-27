@@ -23,6 +23,49 @@ void Ligand::setLigandCoordinates(
 	titleInfo = titleInfo_in;
 }
 
+
+void Ligand::setLigandCoordinates(string ligandFileName)
+{
+	ifstream mol_(ligandFileName.c_str());
+	if (!mol_.is_open())
+	{
+		cout << "ERRO ON Ligand::setLigandCoordinates - ligand file not found" << endl;
+		exit(1);
+	}
+	string auxline;
+	int nAtoms;
+	getline(mol_, auxline);
+	stringstream line0;
+	line0 << auxline;
+	line0 >> nAtoms;
+
+	vector<CoordXYZ> coord;
+	string titleInfo;
+	coord.resize(nAtoms);
+
+	int i = 0;
+	getline(mol_, auxline);
+	titleInfo = auxline;
+	while (getline(mol_, auxline))
+	{
+		if (auxline == "")
+			break;
+
+		stringstream line;
+		line << auxline;
+		line >> coord[i].atomlabel
+			>> coord[i].x
+			>> coord[i].y
+			>> coord[i].z;
+		i++;
+	}
+	mol_.close();
+
+	this->setLigandCoordinates(coord, titleInfo);
+}
+
+
+
 bool Ligand::initializeLigand()
 {
 	bool success1 = getInfoFromTitle();
@@ -66,7 +109,7 @@ bool Ligand::getInfoFromTitle()
 	stringstream line;
 	line << titleInfo;
 	string chelationLetter;
-	line >> chelationLetter;
+	line >> formalName >> chelationLetter >> metalDistance;
 	if (chelationLetter == "monodentate")
 		chelation = 1;
 	else if (chelationLetter == "bidentate")
@@ -75,7 +118,8 @@ bool Ligand::getInfoFromTitle()
 		chelation = 3;
 	else
 	{
-		cout << "chelation not found" << endl;
+		cout << "chelation not found - CHECK LIGAND FORMAT" << endl;
+		cin.get();
 		return false;
 	}	
 	return true;
@@ -87,6 +131,9 @@ bool Ligand::calculateMonodentate()
 		return false;
 
 	X1 = coord[0];
+
+	if (coord.size() == 1)
+		return true;
 
 	vector<double> centroid(3);
 	centroid[0] = 0.0e0;
@@ -263,6 +310,9 @@ void Ligand::translateLigand(double x, double y, double z)
 
 void Ligand::rotateToCenter()
 {
+	if (coord.size() == 1)
+		return;
+
 	// rotation about X1.
 	AuxMath auxMath_;
 	vector<double> normal = auxMath_.normalVectorFrom3Points(
@@ -492,6 +542,9 @@ void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points)
 
 void Ligand::rotateOverReferencePoints(double angle)
 {
+	if (coord.size() == 1)
+		return;
+
 	AuxMath auxMath_;
 	if (chelation == 1)
 	{

@@ -13,11 +13,11 @@ public:
 	Ligand();
 	~Ligand();
 
-	/*		*/
 	void setLigandCoordinates(
 		std::vector<CoordXYZ> &coord_in, 
 		std::string titleInfo_in);
 
+	void setLigandCoordinates(std::string ligandFileName);
 
 	bool initializeLigand();
 
@@ -50,8 +50,10 @@ private:
 	//data
 	std::vector<CoordXYZ> coord;
 	std::vector<double> sphereReferencePoints; //xyz xyz xyz
-	std::string titleInfo;	
+	std::string titleInfo;
+	double metalDistance;
 	int chelation;
+	std::string formalName;
 	CoordXYZ X1; //coordination center
 	CoordXYZ X2; //vector - leaving from X1
 

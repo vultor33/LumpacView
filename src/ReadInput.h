@@ -22,6 +22,13 @@ public:
 	inline std::string getMetalParams() { return metalParams; }
 	inline std::string getProjectName() { return projectName; }
 
+	inline void setProperties(std::string projectName_in, std::string metalName_in, std::string metalParams_in)
+	{
+		projectName = projectName_in;
+		metalName = metalName_in;
+		metalParams = metalParams_in;
+	}
+
 private:
 	const std::string inputName = "LumpacViewInput.txt";
 	//data

@@ -15,6 +15,8 @@ public:
 
 	void build();
 
+	void build(std::string ligandName, int coord, int charge, std::vector<std::string> options);
+
 	void checkIfIsSameIsomer(std::string xRayName);
 
 	void fitSA();

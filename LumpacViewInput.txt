@@ -1,15 +1,17 @@
 Eu
 Eu_spk
-9
-BUVXAR11-h2o-coord-9-carga-3
-BUVXAR11-h2o-coord-9-carga-3
-BUVXAR11-h2o-coord-9-carga-3
-BUVXAR11-h2o-coord-9-carga-3
-BUVXAR11-h2o-coord-9-carga-3
-BUVXAR11-h2o-coord-9-carga-3
-BUVXAR11-h2o-coord-9-carga-3
-BUVXAR11-h2o-coord-9-carga-3
-BUVXAR11-h2o-coord-9-carga-3
-
+12
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
+ROCTAF-cloro-coord-6-carga-0
 
 ! a ordem importa

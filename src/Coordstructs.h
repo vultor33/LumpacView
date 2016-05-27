@@ -10,6 +10,12 @@ struct CoordXYZ
 	double x, y, z;
 };
 
+struct MopacParams
+{
+	std::string paramName;
+	double paramValue;
+};
+
 /*
 struct Ligand
 {

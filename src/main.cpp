@@ -1,4 +1,7 @@
 #include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
 
 #include "BuildComplex.h"
 
@@ -18,9 +21,28 @@ int main()
 
 	*/
 
+	int charge = 3;
+	int coordination = 9;
+	string ligandName = "h2o-coord-9.xyz";
+
+	string mopacExecPath = "M2009_Ln_Orbitals.exe";
+	vector<string> options(5);
+	options[0] = "mopac2009";
+	options[1] = "h2o-teste-mop";
+	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n"; //freq = AUX THERMO FORCE
+	//adding charge
+	string chargeString;
+	stringstream convert;
+	convert << charge;
+	convert >> chargeString;
+	chargeString = " CHARGE=" + chargeString + " ";
+	// charge computed
+	options[2] += " NOLOG GEO-OK SCFCRT=1.D-10" + chargeString;
+	options[3] = "Eu_spk";
+	options[4] = "Eu";
 
 	BuildComplex bc_;
-	bc_.build();
+	bc_.build(ligandName, coordination, charge, options);
 
 	return 0;
 }

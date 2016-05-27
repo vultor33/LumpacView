@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <iostream>
+#include <string>
+#include <sstream>
 
 #include "AdjustSaParameters.h"
 #include "ReadInput.h"
@@ -11,6 +13,8 @@
 #include "ComplexCreator.h"
 #include "ControlMopac.h"
 #include "RootMeanSquareDeviation.h"
+#include "WriteQuantumInput.h"
+#include "ReadQuantumOutput.h"
 
 using namespace std;
 
@@ -56,21 +60,14 @@ void BuildComplex::build(string ligandName, int coordination, int charge, vector
 	}
 
 	ReadInput readInp_;
-	
 	readInp_.allLigands = allLigands;
+	readInp_.setProperties(options);
 
-	string projectName = options[0];
-	string metalName = options[1];
-	string metalParams = options[2];
-	readInp_.setProperties(projectName, metalName, metalParams);
+	build(readInp_);
 }
 
 void BuildComplex::build(ReadInput & readInp_)
 {
-
-#ifdef _DEBUG
-	readInp_.rePrintInput();
-#endif
 
 	bool terminate = buildLigands(readInp_);
 	if (terminate) return;
@@ -87,7 +84,7 @@ void BuildComplex::build(ReadInput & readInp_)
 	if (!constructComplex(readInp_, saParameters_, allAtoms))
 		return;
 
-	//runMopac(readInp_, allAtoms);
+	runMopac2(readInp_, allAtoms);
 
 }
 
@@ -103,6 +100,22 @@ void BuildComplex::checkIfIsSameIsomer(string xRayName)
 
 
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -238,9 +251,9 @@ bool BuildComplex::constructComplex(ReadInput & readInp_, const AdjustSaParamete
 
 void BuildComplex::runMopac(ReadInput & readInp_, vector<CoordXYZ>& allAtoms)
 {
+	string mopacExecPath = "M2009_Ln_Orbitals.exe";
 	string mopacHeader = "RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
 	string mopacFreq = "RM1 PRECISE NOINTER XYZ T=10D AUX THERMO FORCE + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string mopacExecPath = "M2009_Ln_Orbitals.exe  ";
 	ControlMopac controlMop(
 		readInp_.getProjectName(),
 		readInp_.getMetalName(),
@@ -254,6 +267,17 @@ void BuildComplex::runMopac(ReadInput & readInp_, vector<CoordXYZ>& allAtoms)
 		cout << "ocorreu algum problema na otimizacao do mopac, tente outra vez" << endl;
 	}
 }
+
+void BuildComplex::runMopac2(ReadInput & readInp_, vector<CoordXYZ>& allAtoms)
+{
+	vector<string> options = readInp_.getOptions();
+
+	string mopacExecPath = "M2009_Ln_Orbitals.exe";
+
+	optimize(mopacExecPath, allAtoms, options);
+
+}
+
 
 void BuildComplex::setClandH2oToCompleteCoordination(Ligand & Cl_, Ligand & H2o_)
 {
@@ -270,17 +294,71 @@ void BuildComplex::setClandH2oToCompleteCoordination(Ligand & Cl_, Ligand & H2o_
 	h2o[0].x = 0.0e0;
 	h2o[0].y = 0.0e0;
 	h2o[0].z = 0.0e0;
-	h2o[0].atomlabel = "H";
-	h2o[0].x = 0.757e0;
-	h2o[0].y = 0.586e0;
-	h2o[0].z = 0.0e0;
-	h2o[0].atomlabel = "H";
-	h2o[0].x = -0.757e0;
-	h2o[0].y = 0.586e0;
-	h2o[0].z = 0.0e0;
+	h2o[1].atomlabel = "H";
+	h2o[1].x = 0.757e0;
+	h2o[1].y = 0.586e0;
+	h2o[1].z = 0.0e0;
+	h2o[2].atomlabel = "H";
+	h2o[2].x = -0.757e0;
+	h2o[2].y = 0.586e0;
+	h2o[2].z = 0.0e0;
 	string titleInfoh2o = "H2O monodentate 2";
 	H2o_.setLigandCoordinates(h2o, titleInfoh2o);
 }
 
+bool BuildComplex::optimize(
+	string mopacExecPath,
+	vector<CoordXYZ> & allAtoms,
+	vector<string> & options)
+{
+	vector<MopacParams> dummyParams;
+
+	return optimize(mopacExecPath, allAtoms, options,dummyParams);
+}
+
+
+bool BuildComplex::optimize(
+	string mopacExecPath,
+	vector<CoordXYZ> & allAtoms,
+	vector<string> & options,
+	vector<MopacParams> & params)
+{
+
+	ReadQuantumOutput readmop_(options[0]);
+
+	WriteQuantumInput writeMop_(options);
+
+	string inputName = writeMop_.createInput(allAtoms);
+
+	createParamsFile(options[3], params);
+
+	system((mopacExecPath + " " + inputName).c_str());
+
+	ReadQuantumOutput readGamess_(options[0]);
+
+	readmop_.readOutput(inputName);
+
+	allAtoms = readmop_.getCoordinates();
+
+	if (allAtoms.size() == 0) return false;
+
+	return true;
+}
+
+void BuildComplex::createParamsFile(string paramsName, vector<MopacParams>& params)
+{
+	if (params.size() == 0)
+		return;
+
+	string name = paramsName + ".inp";
+	remove(name.c_str());
+	ofstream paramsFile_(name.c_str());
+
+	for (size_t i = 0; i < params.size(); i++)
+		paramsFile_ << params[i].paramName << "  " << params[i].paramValue << endl;
+
+	paramsFile_ << "  END     " << endl;
+	paramsFile_.close();
+}
 
 

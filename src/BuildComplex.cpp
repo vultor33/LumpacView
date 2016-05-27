@@ -10,6 +10,7 @@
 #include "MyExceptions.h"
 #include "ComplexCreator.h"
 #include "ControlMopac.h"
+#include "RootMeanSquareDeviation.h"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ void BuildComplex::build()
 		1.8245257230764378,
 		2.0524859126887280,
 		503.81980808157266,
-		0.47976429810660104);
+		0.5000000000000000);
 
 		ReadInput readInp_;
 		if (!ReadLumpacViewInput(readInp_))
@@ -42,9 +43,31 @@ void BuildComplex::build()
 		if (!constructComplex(readInp_, saParameters_, allAtoms))
 			return;
 
-		runMopac(readInp_, allAtoms);
+		//runMopac(readInp_, allAtoms);
 		return;
 }
+
+void BuildComplex::checkIfIsSameIsomer(string xRayName)
+{
+
+	// PASSO 2 COMPARAR OS COMPLEXOS MONTADOS NOS DOIS CASOS
+	RootMeanSquareDeviation rmsd_;
+	vector<CoordXYZ> molXRay = rmsd_.readCoord(xRayName);
+	for (size_t i = 0; i < molXRay.size(); i++)
+	{
+
+
+
+	}
+
+
+
+}
+
+
+
+
+
 
 void BuildComplex::fitSA()
 {
@@ -54,7 +77,7 @@ void BuildComplex::fitSA()
 		1.8245257230764378,
 		2.0524859126887280,
 		503.81980808157266,
-		0.47976429810660104);
+		0.5000000000000000);
 
 	bool paramLimits = saParameters_.takeParametersFromFile();
 	if (!paramLimits)

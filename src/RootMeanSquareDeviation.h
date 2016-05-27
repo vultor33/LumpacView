@@ -19,8 +19,9 @@ public:
 
 	double rmsOverlay(std::vector<CoordXYZ> & mol1, std::vector<CoordXYZ> & mol2);
 
-private:
 	std::vector<CoordXYZ> readCoord(std::string fName);
+
+private:
 	std::vector<double> readPoint(std::string fName, int format = 1);
 	std::vector<double> rotateToZ0(const std::vector<double> &point);
 	std::vector<double> rotateToPlane(const std::vector<double> &point);

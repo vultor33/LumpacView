@@ -15,6 +15,8 @@ public:
 
 	void build();
 
+	void checkIfIsSameIsomer(std::string xRayName);
+
 	void fitSA();
 
 

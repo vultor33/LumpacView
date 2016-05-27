@@ -1,11 +1,15 @@
 Eu
-spk_Eu
-5
-h2o
-tppo
-dbm
-dbm
-tta
+Eu_spk
+9
+BUVXAR11-h2o-coord-9-carga-3
+BUVXAR11-h2o-coord-9-carga-3
+BUVXAR11-h2o-coord-9-carga-3
+BUVXAR11-h2o-coord-9-carga-3
+BUVXAR11-h2o-coord-9-carga-3
+BUVXAR11-h2o-coord-9-carga-3
+BUVXAR11-h2o-coord-9-carga-3
+BUVXAR11-h2o-coord-9-carga-3
+BUVXAR11-h2o-coord-9-carga-3
 
 
 ! a ordem importa

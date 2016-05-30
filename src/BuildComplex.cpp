@@ -161,12 +161,10 @@ void BuildComplex::fitSA()
 		vector<CoordXYZ> allAtoms;
 
 		int maxChelation = 10;
-		double stretchDistance = 2.5e0;
 		int saMaxIterations = 3000;
 		ComplexCreator cpCreator(
 			readInp_.allLigands,
 			maxChelation,
-			stretchDistance,
 			saMaxIterations,
 			saParameters_.maxAlfaAngle,
 			saParameters_.maxBetaAngle,
@@ -225,12 +223,10 @@ bool BuildComplex::buildLigands(ReadInput & readInp_)
 bool BuildComplex::constructComplex(ReadInput & readInp_, const AdjustSaParameters & saParameters_, vector<CoordXYZ>& allAtoms)
 {
 	int maxChelation = 12;
-	double stretchDistance = 2.5e0;
 	int saMaxIterations = 1000;
 	ComplexCreator cpCreator(
 		readInp_.allLigands,
 		maxChelation,
-		stretchDistance,
 		saMaxIterations,
 		saParameters_.maxAlfaAngle,
 		saParameters_.maxBetaAngle,

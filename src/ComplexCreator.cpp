@@ -16,7 +16,6 @@ using namespace std;
 ComplexCreator::ComplexCreator(
 	vector<Ligand> &allLigands_in,
 	int maxChelation_in,
-	double stretchDistance_in,
 	int saMaxIterations_in,
 	double maxAlfaAngle_in,
 	double maxBetaAngle_in,
@@ -27,7 +26,6 @@ ComplexCreator::ComplexCreator(
 	:allLigands(allLigands_in)
 {
 	maxChelation = maxChelation_in;
-	stretchDistance = stretchDistance_in;
 	maxAlfaAngle = maxAlfaAngle_in;
 	maxBetaAngle = maxBetaAngle_in;
 	saMaxIterations = saMaxIterations_in;
@@ -46,8 +44,6 @@ bool ComplexCreator::start()
 		return false;
 
 	vector<double> points = getPoints(sumChelation);
-
-	//stretchPoints(points);
 
 	setInitialPosition(points); //view
 
@@ -222,16 +218,6 @@ int ComplexCreator::closestPoint(
 	pointsTaken[iClose] = true;
 	return iClose;
 }
-
-
-void ComplexCreator::stretchPoints(vector<double> &points)
-{
-	size_t size = points.size();
-	for (size_t i = 0; i < size; i++)
-		points[i] *= stretchDistance;
-}
-
-
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////

@@ -12,7 +12,6 @@ public:
 	ComplexCreator(
 		std::vector<Ligand> &allLigands,
 		int maxChelation_in,
-		double stretchDistance_in,
 		int saMaxIterations_in,
 		double maxAlfaAngle_in,
 		double maxBetaAngle_in,
@@ -30,7 +29,6 @@ public:
 
 private:
 	int maxChelation;
-	double stretchDistance;
 	double maxAlfaAngle;
 	double maxBetaAngle;
 	double saTemperatureUpdate;
@@ -58,8 +56,6 @@ private:
 		const std::vector<double> &points,
 		std::vector<bool> &pointsTaken
 		);
-
-	void stretchPoints(std::vector<double> &points);
 
 	//optimizing
 	double calculateAllFit(std::vector<Ligand> & ligands);

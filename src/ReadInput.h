@@ -18,27 +18,24 @@ public:
 
 	std::vector<Ligand> allLigands;
 
-	inline std::string getMetalName() { return metalName; }
-	inline std::string getMetalParams() { return metalParams; }
-	inline std::string getProjectName() { return projectName; }
-
-	inline void setProperties(std::vector<std::string> options_in)
+	inline void setProperties(std::vector<std::string> options_in, std::string mopacExecPath_in)
 	{
 		options = options_in;
+		mopacExecPath = mopacExecPath_in;
 	}
 
 	inline std::vector<std::string> getOptions() { return options; }
+
+	inline std::string getMopacExecPath() { return mopacExecPath; }
 
 private:
 	const std::string inputName = "LumpacViewInput.txt";
 	//data
 	std::vector<std::string> options;
-	std::string metalName;
-	std::string metalParams;
-	std::string projectName;
 	std::vector< std::string > ligandFileName;
+	std::string mopacExecPath;
 
-	void buildProjectName();
+	std::string buildProjectName(std::string metalName);
 	Ligand readConfigurations(std::string inputName);
 	void readAllLigands();
 	bool failed;

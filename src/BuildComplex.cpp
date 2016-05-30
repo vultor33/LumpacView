@@ -24,11 +24,17 @@ BuildComplex::~BuildComplex(){}
 
 void BuildComplex::build()
 {
-		ReadInput readInp_;
-		if (!ReadLumpacViewInput(readInp_))
-			return;
+	cout << "NESSE CAMINHO - FALTA DEFINIR options[0] (tipo de mopac) e options[2] (cabecalho) " << endl;
+	exit(1);
 
-		build(readInp_);
+	ReadInput readInp_;
+	if (!ReadLumpacViewInput(readInp_))
+		return;
+	
+	readInp_.setProperties(readInp_.getOptions(), "M2009_Ln_Orbitals.exe");
+	
+	build(readInp_);
+
 }
 
 void BuildComplex::build(string ligandName, int coordination, int charge, vector<string> options)
@@ -61,14 +67,13 @@ void BuildComplex::build(string ligandName, int coordination, int charge, vector
 
 	ReadInput readInp_;
 	readInp_.allLigands = allLigands;
-	readInp_.setProperties(options);
+	readInp_.setProperties(options, "M2009_Ln_Orbitals.exe");
 
 	build(readInp_);
 }
 
 void BuildComplex::build(ReadInput & readInp_)
 {
-
 	bool terminate = buildLigands(readInp_);
 	if (terminate) return;
 
@@ -84,7 +89,7 @@ void BuildComplex::build(ReadInput & readInp_)
 	if (!constructComplex(readInp_, saParameters_, allAtoms))
 		return;
 
-	runMopac2(readInp_, allAtoms);
+	runMopac(readInp_, allAtoms);
 
 }
 
@@ -120,10 +125,6 @@ void BuildComplex::checkIfIsSameIsomer(string xRayName)
 
 
 }
-
-
-
-
 
 
 void BuildComplex::fitSA()
@@ -251,28 +252,9 @@ bool BuildComplex::constructComplex(ReadInput & readInp_, const AdjustSaParamete
 
 void BuildComplex::runMopac(ReadInput & readInp_, vector<CoordXYZ>& allAtoms)
 {
-	string mopacExecPath = "M2009_Ln_Orbitals.exe";
-	string mopacHeader = "RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string mopacFreq = "RM1 PRECISE NOINTER XYZ T=10D AUX THERMO FORCE + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	ControlMopac controlMop(
-		readInp_.getProjectName(),
-		readInp_.getMetalName(),
-		mopacHeader,
-		mopacFreq,
-		readInp_.getMetalParams(),
-		mopacExecPath);
-	bool sucess = controlMop.optimize(allAtoms);
-	if (sucess) cout << "a estrutura otimizou com sucesso - tenha um bom dia" << endl;
-	else {
-		cout << "ocorreu algum problema na otimizacao do mopac, tente outra vez" << endl;
-	}
-}
-
-void BuildComplex::runMopac2(ReadInput & readInp_, vector<CoordXYZ>& allAtoms)
-{
 	vector<string> options = readInp_.getOptions();
 
-	string mopacExecPath = "M2009_Ln_Orbitals.exe";
+	string mopacExecPath = readInp_.getMopacExecPath();
 
 	optimize(mopacExecPath, allAtoms, options);
 

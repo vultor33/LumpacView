@@ -49,4 +49,11 @@ private:
 
 #endif
 
-
+/*
+mopac OPTIONS
+0 -> mopac ou mopac2009
+1 -> nome do projeto
+2 -> cabecalho
+3 -> parametros externos
+4 -> metal central
+*/

@@ -25,6 +25,7 @@ void ReadInput::readLumpacViewInput()
 		throw mexept_;
 	}
 	int nLigands;
+	string metalName, metalParams;
 	input_ >> metalName;
 	input_ >> metalParams;
 	input_ >> nLigands;
@@ -35,17 +36,24 @@ void ReadInput::readLumpacViewInput()
 	}
 	input_.close();
 
-	buildProjectName();
+	options.resize(5);
+	options[0] = "";
+	options[1] = buildProjectName(metalName);
+	options[2] = "";
+	options[3] = metalParams;
+	options[4] = metalName;
+
 	readAllLigands();
 }
 
-void ReadInput::buildProjectName()
+string ReadInput::buildProjectName(string metalName)
 {
-	projectName = metalName;
+	string projName = metalName;
 	for (int i = 0; i < (int)ligandFileName.size(); i++)
 	{
-		projectName += "-" + ligandFileName[i];
+		projName += "-" + ligandFileName[i];
 	}
+	return projName;
 }
 
 Ligand ReadInput::readConfigurations(string inputName)
@@ -108,8 +116,8 @@ void ReadInput::readAllLigands()
 void ReadInput::rePrintInput()
 {
 	cout << "LUMPAC VIEW INPUT" << endl
-		<< "metal name:     " << metalName << endl
-		<< "metal params:   " << metalParams << endl
+		<< "metal name:     " << options[4] << endl
+		<< "metal params:   " << options[5] << endl
 		<< "ligand files" << endl;
 	for (int i = 0; i < (int)ligandFileName.size(); i++)
 	{

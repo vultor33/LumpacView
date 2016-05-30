@@ -22,22 +22,28 @@ BuildComplex::BuildComplex(){}
 
 BuildComplex::~BuildComplex(){}
 
-void BuildComplex::build()
+vector<CoordXYZ> BuildComplex::build()
 {
 	cout << "NESSE CAMINHO - FALTA DEFINIR options[0] (tipo de mopac) e options[2] (cabecalho) " << endl;
 	exit(1);
 
 	ReadInput readInp_;
 	if (!ReadLumpacViewInput(readInp_))
-		return;
+		return vector<CoordXYZ>();
 	
 	readInp_.setProperties(readInp_.getOptions(), "M2009_Ln_Orbitals.exe");
 	
-	build(readInp_);
+	return build(readInp_);
 
 }
 
-void BuildComplex::build(string ligandName, int coordination, int charge, vector<string> options)
+vector<CoordXYZ> BuildComplex::build(
+	string ligandName, 
+	int coordination, 
+	int charge, 
+	vector<string> options, 
+	string mopacExecPath,
+	int & nLigandAtoms)
 {
 	Ligand mol;
 	mol.setLigandCoordinates(ligandName);
@@ -67,15 +73,17 @@ void BuildComplex::build(string ligandName, int coordination, int charge, vector
 
 	ReadInput readInp_;
 	readInp_.allLigands = allLigands;
-	readInp_.setProperties(options, "M2009_Ln_Orbitals.exe");
+	readInp_.setProperties(options, mopacExecPath);
 
-	build(readInp_);
+	nLigandAtoms = mol.getNatoms();
+
+	return build(readInp_);
 }
 
-void BuildComplex::build(ReadInput & readInp_)
+vector<CoordXYZ> BuildComplex::build(ReadInput & readInp_)
 {
 	bool terminate = buildLigands(readInp_);
-	if (terminate) return;
+	if (terminate) return vector<CoordXYZ>();
 
 	// tinicial, saUpdate, maxAlfa, maxBeta,
 	AdjustSaParameters saParameters_(
@@ -87,15 +95,52 @@ void BuildComplex::build(ReadInput & readInp_)
 
 	vector<CoordXYZ> allAtoms;
 	if (!constructComplex(readInp_, saParameters_, allAtoms))
-		return;
+		return allAtoms;
 
-	runMopac(readInp_, allAtoms);
+	runMopac(readInp_, allAtoms); //allAtoms modified - Metal always on origin
 
+	return allAtoms;
+}
+
+void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordination, int charge, vector<string> options, string mopacExecPath)
+{
+	int nAtoms;
+	vector<CoordXYZ> allAtoms = build(ligandName, coordination, charge, options, mopacExecPath, nAtoms);
+	vector<CoordXYZ> ligandCreated(nAtoms);
+	for (int i = 0; i < nAtoms; i++)
+		ligandCreated[i] = allAtoms[i + 1];
+
+	Ligand newLigand_;
+	newLigand_.setLigandCoordinates(ligandName);
+	newLigand_.setNewCoordinates(ligandCreated);
+	double metalLigandDistance = newLigand_.distanceX1ToPoint(allAtoms[0].x, allAtoms[0].y, allAtoms[0].z);
+	newLigand_.initializeLigand();
+
+
+
+	string newLigandName = "Lumpac-View-Ligand-" + ligandName;
+
+	ofstream newLigFile_(newLigandName.c_str());
+	newLigFile_ << newLigand_.getNatoms() << endl;
+	int chelation = newLigand_.getChelation();
+	string chelationName;
+	if (chelation == 1)
+		chelationName = "monodentate";
+	else if (chelation == 2)
+		chelationName = "bidentate";
+	else
+		chelationName = "tridentate";
+	
+	newLigFile_ << newLigand_.getFormalName() << " "
+		<< chelationName << " "
+		<< metalLigandDistance << endl;
+
+	newLigand_.printLigand(newLigFile_);
+	newLigFile_.close();
 }
 
 void BuildComplex::checkIfIsSameIsomer(string xRayName)
 {
-
 	// PASSO 2 COMPARAR OS COMPLEXOS MONTADOS NOS DOIS CASOS
 	RootMeanSquareDeviation rmsd_;
 	vector<CoordXYZ> molXRay = rmsd_.readCoord(xRayName);

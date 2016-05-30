@@ -14,11 +14,13 @@ public:
 	BuildComplex();
 	~BuildComplex();
 
-	void build();
+	std::vector<CoordXYZ> build();
 
-	void build(std::string ligandName, int coordination, int charge, std::vector<std::string> options);
+	std::vector<CoordXYZ> build(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath, int & nLigandAtoms);
 
-	void build(ReadInput & readInp_);
+	std::vector<CoordXYZ> build(ReadInput & readInp_);
+
+	void makeComplexOptimizingInMopac(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath);
 
 	void checkIfIsSameIsomer(std::string xRayName);
 

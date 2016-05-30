@@ -38,13 +38,17 @@ public:
 
 	void rotateOverReferencePoints(double angle = 0);
 
-	void printLigand(std::ofstream &out);
+	double distanceX1ToPoint(double x, double y, double z);
 
-	std::vector<CoordXYZ> getAllAtoms();
+	void printLigand(std::ofstream &out);
 
 	void setNewCoordinates(std::vector<CoordXYZ> &newCoord);
 
+	std::vector<CoordXYZ> getAllAtoms();
+
 	inline int getNatoms() { return (int)coord.size(); }
+
+	inline std::string getFormalName() { return formalName; }
 
 private:
 	//data

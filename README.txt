@@ -3,6 +3,12 @@ Lumpac View
 Programa que automatiza a construção de estruturas.
 
 
+MODIFICACOES PROPOSTAS
+
+--> A leitura do ligante acontece em uma etapa e sua inicializacao (x1 e x2)
+    acontece em outra. Isso foi criado para facilitar o error handling.
+    seria melhor fazer de uma vez só.
+
 
 Funcionamento
 

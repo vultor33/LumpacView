@@ -625,6 +625,14 @@ void Ligand::rotateOverReferencePoints(double angle)
 
 }
 
+double Ligand::distanceX1ToPoint(double x, double y, double z)
+{
+	return sqrt(
+		(x - X1.x) * (x - X1.x)
+		+ (y - X1.y) * (y - X1.y)
+		+ (z - X1.z) * (z - X1.z));
+}
+
 vector<CoordXYZ> Ligand::getAllAtoms()
 {
 	return coord;
@@ -633,6 +641,21 @@ vector<CoordXYZ> Ligand::getAllAtoms()
 void Ligand::setNewCoordinates(vector<CoordXYZ>& newCoord)
 {
 	coord = newCoord;
+	getInfoFromTitle();
+	switch (chelation)
+	{
+	case 1:
+		calculateMonodentate();
+		break;
+
+	case 2:
+		calculateBidentate();
+		break;
+
+	case 3:
+		calculateTridentate();
+		break;
+	}
 }
 
 void Ligand::printLigand(ofstream &out)

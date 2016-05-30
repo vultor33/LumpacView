@@ -47,7 +47,7 @@ bool ComplexCreator::start()
 
 	vector<double> points = getPoints(sumChelation);
 
-	stretchPoints(points);
+	//stretchPoints(points);
 
 	setInitialPosition(points); //view
 

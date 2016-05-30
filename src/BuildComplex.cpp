@@ -305,7 +305,6 @@ bool BuildComplex::optimize(
 	vector<string> & options,
 	vector<MopacParams> & params)
 {
-
 	ReadQuantumOutput readmop_(options[0]);
 
 	WriteQuantumInput writeMop_(options);

@@ -401,10 +401,14 @@ void Ligand::genericRotation(double vx, double vy, double vz, double ang)
 	X2.z = auxRot[2];
 }
 
-void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points)
+void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points_in)
 {
-	int nPoints = points.size() / 3;
+	vector<double> points = points_in;
 	vector<double> ligandPoint(3);
+	int nPoints = points.size() / 3;	
+
+	for (size_t i = 0; i < points.size(); i++)
+		points[i] *= metalDistance;
 
 	double x1, y1, z1;
 	double x2, y2, z2;

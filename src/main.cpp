@@ -4,13 +4,23 @@
 #include <sstream>
 
 #include "BuildComplex.h"
+#include "RootMeanSquareDeviation.h"
 
 using namespace std;
 
 int main()
 {
 	/*
-	PASSO 1 - construir todos os ligantes no formato que está aqui.
+
+	Pegar o ligante original sem otimizar.
+	Pegar o complexo de partida, la vai ter varios ligantes,
+	  provavelmente diferentes - 1,2,3,4.
+	Eu vou construir uma geometria no input do lumpacviewinput
+	  que se assemelha a que está lá.
+	
+	estejam
+	superpostas aos 
+
 
 
 	PASSO 2 - Colocar o metal no meio, preencher com agua e ou cloretos. 
@@ -18,6 +28,9 @@ int main()
 			    recombinar o raio X até ter o menor rmsd possivel com o meu
 				sobre os pontos na superficie.
 	*/
+
+	RootMeanSquareDeviation rmsd_;
+	rmsd_.rmsOverlay("btfa.xyz", "btfa-altered.xyz");
 
 	int charge = 3;
 	int coordination = 9;

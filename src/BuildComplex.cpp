@@ -116,8 +116,6 @@ void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordinat
 	double metalLigandDistance = newLigand_.distanceX1ToPoint(allAtoms[0].x, allAtoms[0].y, allAtoms[0].z);
 	newLigand_.initializeLigand();
 
-
-
 	string newLigandName = "Lumpac-View-Ligand-" + ligandName;
 
 	ofstream newLigFile_(newLigandName.c_str());
@@ -137,38 +135,6 @@ void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordinat
 
 	newLigand_.printLigand(newLigFile_);
 	newLigFile_.close();
-}
-
-void BuildComplex::checkIfIsSameIsomer(string xRayName)
-{
-	// PASSO 2 COMPARAR OS COMPLEXOS MONTADOS NOS DOIS CASOS
-	RootMeanSquareDeviation rmsd_;
-	vector<CoordXYZ> molXRay = rmsd_.readCoord(xRayName);
-	for (size_t i = 0; i < molXRay.size(); i++)
-	{
-
-
-
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

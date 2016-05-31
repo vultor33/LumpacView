@@ -28,6 +28,7 @@ private:
 	std::vector<double> mirrorY(const std::vector<double> &point);
 	void printXyz(std::string fName, const std::vector<double> &points);
 	void printXyz(std::string fName, std::vector<CoordXYZ> &mol);
+	void printXyzSuperpositions(std::string fName, std::vector<CoordXYZ> &mol1, std::vector<CoordXYZ> &mol2);
 	double rms(std::vector<CoordXYZ> &mol1, std::vector<CoordXYZ> &mol2);
 	void rotateMol(std::vector<CoordXYZ> &mol, double x, double y, double z, double angle);
 };

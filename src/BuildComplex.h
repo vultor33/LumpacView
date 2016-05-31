@@ -22,8 +22,6 @@ public:
 
 	void makeComplexOptimizingInMopac(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath);
 
-	void checkIfIsSameIsomer(std::string xRayName);
-
 	void fitSA();
 
 

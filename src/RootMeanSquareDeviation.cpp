@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 
 #include "AuxMath.h"
 #include "Coordstructs.h"
@@ -247,7 +248,7 @@ double RootMeanSquareDeviation::rmsOverlay(vector<CoordXYZ> & mol1, vector<Coord
 	double auxRms = rms(mol1, mol2);
 
 #ifdef _DEBUG
-	printXyz("mol2-ultimate-rotation-cm.xyz", mol2);
+	printXyzSuperpositions("mol1-mol2-superposition.xyz", mol1, mol2);
 #endif
 
 	return auxRms;
@@ -256,16 +257,21 @@ double RootMeanSquareDeviation::rmsOverlay(vector<CoordXYZ> & mol1, vector<Coord
 
 vector<CoordXYZ> RootMeanSquareDeviation::readCoord(string fName)
 {
-	vector<CoordXYZ> mol;
 	ifstream fCoord_(fName.c_str());
 	int nAtoms;
-	string dummy;
-	fCoord_ >> nAtoms;
-	fCoord_ >> dummy;
-	mol.resize(nAtoms);
+	string auxline;
+	getline(fCoord_, auxline);
+	stringstream convert;
+	convert << auxline;
+	convert >> nAtoms;
+	vector<CoordXYZ> mol(nAtoms);
+	getline(fCoord_, auxline);
 	for (int i = 0; i < nAtoms; i++)
 	{
-		fCoord_ >> mol[i].atomlabel
+		getline(fCoord_, auxline);
+		stringstream convert2;
+		convert2 << auxline;
+		convert2 >> mol[i].atomlabel
 			>> mol[i].x
 			>> mol[i].y
 			>> mol[i].z;
@@ -486,6 +492,35 @@ void RootMeanSquareDeviation::printXyz(string fName, vector<CoordXYZ> & mol)
 			<< mol[i].y << "  "
 			<< setfill(' ') << setw(15) << fixed << setprecision(8)
 			<< mol[i].z << "  " << endl;
+	}
+}
+
+void RootMeanSquareDeviation::printXyzSuperpositions(std::string fName, std::vector<CoordXYZ>& mol1, std::vector<CoordXYZ>& mol2)
+{
+	int nAtoms1 = mol1.size();
+	int nAtoms2 = mol2.size();
+	ofstream xyz_(fName.c_str());
+	xyz_ << nAtoms1 + nAtoms2 << endl;
+	xyz_ << "t" << endl;
+	for (int i = 0; i < nAtoms1; i++)
+	{
+		xyz_ << mol1[i].atomlabel << "  "
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
+			<< mol1[i].x << "  "
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
+			<< mol1[i].y << "  "
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
+			<< mol1[i].z << "  " << endl;
+	}
+	for (int i = 0; i < nAtoms2; i++)
+	{
+		xyz_ << mol2[i].atomlabel << "  "
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
+			<< mol2[i].x << "  "
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
+			<< mol2[i].y << "  "
+			<< setfill(' ') << setw(15) << fixed << setprecision(8)
+			<< mol2[i].z << "  " << endl;
 	}
 }
 

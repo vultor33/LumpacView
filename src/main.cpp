@@ -15,8 +15,15 @@ int main()
 	Pegar o ligante original sem otimizar.
 	Pegar o complexo de partida, la vai ter varios ligantes,
 	  provavelmente diferentes - 1,2,3,4.
+	Pegar o ligante que eu tenho interesse e criar um
+	  ligante-lumpac-view dele.
 	Eu vou construir uma geometria no input do lumpacviewinput
-	  que se assemelha a que está lá.
+	  que se assemelha a que está lá - visualmente. Antes do
+	  annealing.
+
+	ATENÇÃO - A AGUA QUE EU COLOCAR PODE ESTAR COM HIDROGENIOS INVERTIDOS
+
+ 
 	
 	estejam
 	superpostas aos 
@@ -29,12 +36,14 @@ int main()
 				sobre os pontos na superficie.
 	*/
 
+
+	
 	RootMeanSquareDeviation rmsd_;
 	rmsd_.rmsOverlay("btfa.xyz", "btfa-altered.xyz");
 
 	int charge = 3;
 	int coordination = 9;
-	string ligandName = "h2o-coord-9.xyz";
+	string ligandName = "BUVXAR11-h2o-coord-9-carga-3.xyz";
 	string mopacExecPath = "M2009_Ln_Orbitals.exe";
 	vector<string> options(5);
 	options[0] = "mopac2009";

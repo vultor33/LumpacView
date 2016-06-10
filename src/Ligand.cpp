@@ -1,6 +1,7 @@
 #include "Ligand.h"
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -663,9 +664,9 @@ void Ligand::printLigand(ofstream &out)
 	for (size_t i = 0; i < coord.size(); i++)
 	{
 		out << coord[i].atomlabel << "   "
-			<< coord[i].x << "   "
-			<< coord[i].y << "   "
-			<< coord[i].z << endl;
+			<< setiosflags(ios::fixed) << setprecision(8) << coord[i].x << "   "
+			<< setiosflags(ios::fixed) << setprecision(8) << coord[i].y << "   "
+			<< setiosflags(ios::fixed) << setprecision(8) << coord[i].z << endl;
 	}
 }
 

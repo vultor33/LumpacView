@@ -15,8 +15,6 @@ int main()
 	--> TESTAR SE O RMS OVERLAY DA O MESMO RESULTADO DO AVOGADRO
 	--> E TOCAR Ne
 
-
-
 	Pegar o ligante original sem otimizar.
 	Pegar o complexo de partida, la vai ter varios ligantes,
 	  provavelmente diferentes - 1,2,3,4.
@@ -41,18 +39,17 @@ int main()
 				sobre os pontos na superficie.
 	*/
 
-
 	
-	RootMeanSquareDeviation rmsd_;
-	rmsd_.rmsOverlay("btfa.xyz", "btfa-altered.xyz");
+//	RootMeanSquareDeviation rmsd_;
+//	rmsd_.rmsOverlay("btfa.xyz", "btfa-altered.xyz");
 
 	int charge = 3;
 	int coordination = 9;
-	string ligandName = "BUVXAR11-h2o-coord-9-carga-3.xyz";
+	string ligandName = "BUVXAR11.xyz";
 	string mopacExecPath = "M2009_Ln_Orbitals.exe";
 	vector<string> options(5);
 	options[0] = "mopac2009";
-	options[1] = "h2o-teste-mop";
+	options[1] = "buvxar11";
 	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n"; //freq = AUX THERMO FORCE
 	//adding charge
 	string chargeString;

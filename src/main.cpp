@@ -12,6 +12,11 @@ int main()
 {
 	/*
 
+	--> TESTAR SE O RMS OVERLAY DA O MESMO RESULTADO DO AVOGADRO
+	--> E TOCAR Ne
+
+
+
 	Pegar o ligante original sem otimizar.
 	Pegar o complexo de partida, la vai ter varios ligantes,
 	  provavelmente diferentes - 1,2,3,4.

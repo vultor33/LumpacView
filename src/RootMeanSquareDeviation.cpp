@@ -10,6 +10,7 @@
 
 #include "AuxMath.h"
 #include "Coordstructs.h"
+#include "KabschRmsd.h"
 
 using namespace std;
 
@@ -115,11 +116,15 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 
 double RootMeanSquareDeviation::rmsOverlay(string molName1, string molName2)
 {
+	KabschRmsd krmsd_;
+
 	vector<CoordXYZ> mol1 = readCoord(molName1);
 
 	vector<CoordXYZ> mol2 = readCoord(molName2);
 
-	return rmsOverlay(mol1, mol2);
+	return krmsd_.rmsOverlay(mol1, mol2);
+	
+	//return rmsOverlay(mol1, mol2);
 }
 
 

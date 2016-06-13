@@ -234,7 +234,7 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 	double f0 = calculateAllFit(x0);
 
 #ifdef _DEBUG
-	printAllAtoms("initialComplexBeforeAnnealing.xyz", x0);
+	printAllAtoms("zinitialComplexBeforeAnnealing.xyz", x0);
 	ofstream annealingInfo_("AnnealingInfo.log");
 #endif
 	
@@ -291,7 +291,7 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 	}
 
 #ifdef _DEBUG
-	printAllAtoms("complexAfterAnnealing.xyz", xMin);
+	printAllAtoms("zcomplexAfterAnnealing.xyz", xMin);
 	annealingInfo_.close();
 #endif
 

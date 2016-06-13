@@ -66,7 +66,7 @@ private:
 	bool calculateBidentate();
 	bool calculateTridentate();
 
-	void printXyzLigandDirection(std::string inputName = "xyzTeste.xyz"); //debug purpose
+	void printXyzLigandDirection(std::string inputName = "zxyzTeste.xyz"); //debug purpose
 };
 
 #endif

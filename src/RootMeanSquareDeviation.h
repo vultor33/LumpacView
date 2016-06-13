@@ -13,8 +13,6 @@ public:
 	
 	~RootMeanSquareDeviation();
 
-	double rmsd(std::string file1, std::string file2);
-
 	double rmsOverlay(std::string molName1, std::string molName2);
 
 	double rmsOverlay(std::vector<CoordXYZ> & mol1, std::vector<CoordXYZ> & mol2);
@@ -31,6 +29,10 @@ private:
 	void printXyzSuperpositions(std::string fName, std::vector<CoordXYZ> &mol1, std::vector<CoordXYZ> &mol2);
 	double rms(std::vector<CoordXYZ> &mol1, std::vector<CoordXYZ> &mol2);
 	void rotateMol(std::vector<CoordXYZ> &mol, double x, double y, double z, double angle);
+
+	double oldRmsdToAddressPoints(std::string file1, std::string file2);
+	double rmsOverlayThrouhgThreePoints(std::vector<CoordXYZ> & mol1, std::vector<CoordXYZ> & mol2);
+
 };
 
 

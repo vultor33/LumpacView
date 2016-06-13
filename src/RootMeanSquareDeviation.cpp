@@ -18,13 +18,31 @@ RootMeanSquareDeviation::RootMeanSquareDeviation(){}
 
 RootMeanSquareDeviation::~RootMeanSquareDeviation(){}
 
-/// LEMBRAR DE CORRIGIR OS ZEROS DO LUMPACVIEW
-double RootMeanSquareDeviation::rmsd(string file1, string file2)
+
+double RootMeanSquareDeviation::rmsOverlay(string molName1, string molName2)
 {
+	KabschRmsd krmsd_;
+
+	return krmsd_.rmsOverlay(molName1, molName2);
+}
+
+double RootMeanSquareDeviation::rmsOverlay(vector<CoordXYZ> & mol1, vector<CoordXYZ> & mol2)
+{
+	KabschRmsd krmsd_;
+
+	return krmsd_.rmsOverlay(mol1, mol1);
+}
+
+/// LEMBRAR DE CORRIGIR OS ZEROS DO LUMPACVIEW
+double RootMeanSquareDeviation::oldRmsdToAddressPoints(string file1, string file2)
+{
+	// It was better to change this to kabsch lagorithm
+	////////////////////////////////////////////////////
 	vector<double> set1 = readPoint(file1);
 	set1 = rotateToZ0(set1);
 	set1 = rotateToPlane(set1);
 	set1 = mirrorY(set1);
+	////////////////////////////////////////////////////
 
 	//SORTING LIST
 	// calculating spherical teta and fi
@@ -45,7 +63,7 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 		}
 		else
 		{
-			fi[i] = atan2(y , x);
+			fi[i] = atan2(y, x);
 			if (fi[i] < 0)
 				fi[i] += 2.0e0 * auxMath_._pi;
 
@@ -77,7 +95,7 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 					jMin = j;
 				}
 			}
-			else if(teta[j] < tetaMin)
+			else if (teta[j] < tetaMin)
 			{
 				tetaMin = teta[j];
 				fiMin = fi[j];
@@ -105,7 +123,7 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	}
 
 	double sum = 0.0e0;
-	  
+
 #ifdef _DEBUG
 	printXyz(file1 + ".xyz", auxPoints);
 #endif
@@ -113,22 +131,7 @@ double RootMeanSquareDeviation::rmsd(string file1, string file2)
 	return sum;
 }
 
-
-double RootMeanSquareDeviation::rmsOverlay(string molName1, string molName2)
-{
-	KabschRmsd krmsd_;
-
-	vector<CoordXYZ> mol1 = readCoord(molName1);
-
-	vector<CoordXYZ> mol2 = readCoord(molName2);
-
-	return krmsd_.rmsOverlay(mol1, mol2);
-	
-	//return rmsOverlay(mol1, mol2);
-}
-
-
-double RootMeanSquareDeviation::rmsOverlay(vector<CoordXYZ> & mol1, vector<CoordXYZ> & mol2)
+double RootMeanSquareDeviation::rmsOverlayThrouhgThreePoints(vector<CoordXYZ> & mol1, vector<CoordXYZ> & mol2)
 {
 	AuxMath auxMath_;
 	int nAtoms = mol1.size();

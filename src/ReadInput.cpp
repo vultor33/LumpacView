@@ -26,6 +26,7 @@ void ReadInput::readLumpacViewInput()
 	}
 	int nLigands;
 	string metalName, metalParams;
+
 	input_ >> metalName;
 	input_ >> metalParams;
 	input_ >> nLigands;

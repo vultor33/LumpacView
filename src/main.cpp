@@ -8,45 +8,46 @@
 
 using namespace std;
 
+void printCoordXYZ(vector<CoordXYZ> & allAtoms)
+{
+	ofstream pr_("assembleLigands.xyz");
+	pr_ << allAtoms.size() << endl << "useless" << endl;
+	for (size_t i = 0; i < allAtoms.size(); i++)
+	{
+		pr_ << allAtoms[i].atomlabel << "  "
+			<< allAtoms[i].x << "  "
+			<< allAtoms[i].y << "  "
+			<< allAtoms[i].z << endl;
+	}
+
+	pr_.close();
+}
+
+
 int main()
 {
 	/*
-	--> TESTAR SE O RMS OVERLAY DA O MESMO RESULTADO DO AVOGADRO
-	--> E TOCAR Ne
-
-	Pegar o ligante original sem otimizar.
-	Pegar o complexo de partida, la vai ter varios ligantes,
-	  provavelmente diferentes - 1,2,3,4.
-	Pegar o ligante que eu tenho interesse e criar um
-	  ligante-lumpac-view dele.
-	Eu vou construir uma geometria no input do lumpacviewinput
-	  que se assemelha a que está lá - visualmente. Antes do
-	  annealing.
-
-
-	PASSO 2 - Colocar o metal no meio, preencher com agua e ou cloretos. 
-	          - encontrar o posicionamento certo, entao vou precisar
-			    recombinar o raio X até ter o menor rmsd possivel com o meu
-				sobre os pontos na superficie.
+	ATENCAO ---> A NORMAL DEVIA ESTAR CENTRADA NO SEGUNDO
+	             PONTO E NAO NO PRIMEIRO.
 	*/
 
-	
+	/*
 	RootMeanSquareDeviation rmsd_;
-	double rms = rmsd_.rmsOverlay("trip-antes-1.xyz", "trip-antes-2.xyz");
+	double rms = rmsd_.rmsOverlay("zBUVXAR11.xyz", "zagua-rm1.xyz");
 	cout << rms << endl;
 	cin.get();
-	// 0.053526610988479453
-	
-	/*
-	int charge = 3;
-	int coordination = 9;
-	string ligandName = "DUCNAQ-ligand.xyz";
+	*/
+
+	/* MAKING COMPLEX
+	int charge = 1;
+	int coordination = 8;
+	string ligandName = "DUCNAQ-OONO.xyz";
 	string mopacExecPath = "M2009_Ln_Orbitals.exe";
 	vector<string> options(5);
 	options[0] = "mopac2009";
-	options[1] = "DUCNAQ-ligand";
+	options[1] = "DUCNAQ-OONO";
 	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n"; //freq = AUX THERMO FORCE
-	//adding charge
+																		//adding charge
 	string chargeString;
 	stringstream convert;
 	convert << charge;
@@ -56,9 +57,29 @@ int main()
 	options[2] += " NOLOG GEO-OK SCFCRT=1.D-10" + chargeString;
 	options[3] = "Eu_spk";
 	options[4] = "Eu";
-
 	BuildComplex bc_;
 	bc_.makeComplexOptimizingInMopac(ligandName, coordination, charge, options, mopacExecPath);
+	*/
+
+	/* RUNNING THROUGH LUMPAC VIEW INPUT
+	BuildComplex bc_;
+	vector<CoordXYZ> vec = bc_.build();
+	*/
+
+	// partindo do lumpac view input temos aqui o primeiro assemble
+	BuildComplex bc_;
+	vector<CoordXYZ> allAtoms = bc_.assembleComplexWithoutSA();
+	printCoordXYZ(allAtoms);
+
+	RootMeanSquareDeviation rmsd_;
+	double rms = rmsd_.rmsOverlay("zBUVXAR11.xyz", "zagua-rm1.xyz");
+	cout << rms << endl;
+	cin.get();
+
+
+	/*
+	- na verdade eu preciso dos ligantes nesse ponto aqui.
+	- vou ordena-los de varias formas e comparar com o kabsch algorithm
 	*/
 
 	return 0;
@@ -88,14 +109,31 @@ options[4] = "Eu";
 BuildComplex bc_;
 bc_.makeComplexOptimizingInMopac(ligandName, coordination, charge, options, mopacExecPath);
 
+DUCNAQ
+int charge = 1;
+int coordination = 8;
+string ligandName = "DUCNAQ-ligand.xyz";
+string mopacExecPath = "M2009_Ln_Orbitals.exe";
+vector<string> options(5);
+options[0] = "mopac2009";
+options[1] = "DUCNAQ-ligand";
+options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n"; //freq = AUX THERMO FORCE
+//adding charge
+string chargeString;
+stringstream convert;
+convert << charge;
+convert >> chargeString;
+chargeString = " CHARGE=" + chargeString + " ";
+// charge computed
+options[2] += " NOLOG GEO-OK SCFCRT=1.D-10" + chargeString;
+options[3] = "Eu_spk";
+options[4] = "Eu";
 
-
-
-
-
-
-
-
+TESTE DO KABSCH RMSD
+RootMeanSquareDeviation rmsd_;
+double rms = rmsd_.rmsOverlay("trip-antes-1.xyz", "trip-antes-2.xyz");
+cout << rms << endl;
+cin.get();
 */
 
 

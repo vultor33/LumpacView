@@ -9,6 +9,9 @@ MODIFICACOES PROPOSTAS
     acontece em outra. Isso foi criado para facilitar o error handling.
     seria melhor fazer de uma vez só.
 
+--> Quando ele não acha o arquivo no rmsd ele dá pau.
+    precisa de um error handling.
+
 
 Funcionamento
 
@@ -156,6 +159,35 @@ Opcao new ligand - voce me da as coordenadas e a denticao.
                    com aquele ligante. rodo e recupero ele
                    deformado, que sera melhor para o uso
                    no lumpacview.
+
+
+
+TRECHOS DE CODIGOS
+:criacao de inputs
+	/*
+	int charge = 1;
+	int coordination = 8;
+	string ligandName = "DUCNAQ-OONO.xyz";
+	string mopacExecPath = "M2009_Ln_Orbitals.exe";
+	vector<string> options(5);
+	options[0] = "mopac2009";
+	options[1] = "DUCNAQ-OONO";
+	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n"; //freq = AUX THERMO FORCE
+																		//adding charge
+	string chargeString;
+	stringstream convert;
+	convert << charge;
+	convert >> chargeString;
+	chargeString = " CHARGE=" + chargeString + " ";
+	// charge computed
+	options[2] += " NOLOG GEO-OK SCFCRT=1.D-10" + chargeString;
+	options[3] = "Eu_spk";
+	options[4] = "Eu";
+	BuildComplex bc_;
+	bc_.makeComplexOptimizingInMopac(ligandName, coordination, charge, options, mopacExecPath);
+	*/
+
+
 
 
 

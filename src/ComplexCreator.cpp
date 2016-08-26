@@ -304,6 +304,11 @@ vector<CoordXYZ> ComplexCreator::simulatedAnnealing()
 	return allAtoms;
 }
 
+std::vector<Ligand> ComplexCreator::getLigandsCreated() const
+{
+	return allLigands;
+}
+
 
 double ComplexCreator::calculateAllFit(vector<Ligand> & ligands)
 {

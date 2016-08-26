@@ -14,6 +14,7 @@ public:
 	~ReadInput();
 
 	void readLumpacViewInput();
+
 	void rePrintInput();
 
 	std::vector<Ligand> allLigands;

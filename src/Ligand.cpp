@@ -49,7 +49,7 @@ void Ligand::setLigandCoordinates(string ligandFileName)
 	titleInfo = auxline;
 	while (getline(mol_, auxline))
 	{
-		if (auxline == "")
+		if (i == nAtoms)
 			break;
 
 		stringstream line;

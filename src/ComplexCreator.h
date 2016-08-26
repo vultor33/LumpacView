@@ -27,6 +27,8 @@ public:
 
 	int getIterationOfLowestFit() { return finalI; }
 
+	std::vector<Ligand> getLigandsCreated() const;
+
 private:
 	int maxChelation;
 	double maxAlfaAngle;

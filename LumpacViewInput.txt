@@ -1,17 +1,10 @@
 Eu
 Eu_spk
-12
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
-ROCTAF-cloro-coord-6-carga-0
+4
+Lumpac-View-Ligand-DUCNAQ-OONO
+Lumpac-View-Ligand-BUVXAR11
+Lumpac-View-Ligand-DUCNAQ-OONO
+Lumpac-View-Ligand-BUVXAR11
+
 
 ! a ordem importa

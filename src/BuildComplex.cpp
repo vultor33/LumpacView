@@ -24,17 +24,7 @@ BuildComplex::~BuildComplex(){}
 
 vector<CoordXYZ> BuildComplex::build()
 {
-	cout << "NESSE CAMINHO - FALTA DEFINIR options[0] (tipo de mopac) e options[2] (cabecalho) " << endl;
-	exit(1);
-
-	ReadInput readInp_;
-	if (!ReadLumpacViewInput(readInp_))
-		return vector<CoordXYZ>();
-	
-	readInp_.setProperties(readInp_.getOptions(), "M2009_Ln_Orbitals.exe");
-	
-	return build(readInp_);
-
+	return build(activateReadInput());
 }
 
 vector<CoordXYZ> BuildComplex::build(
@@ -135,6 +125,69 @@ void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordinat
 
 	newLigand_.printLigand(newLigFile_);
 	newLigFile_.close();
+}
+
+vector<CoordXYZ> BuildComplex::assembleComplexWithoutSA()
+{
+	ReadInput readInp_ = activateReadInput();
+	bool terminate = buildLigands(readInp_);
+
+	if (terminate) return vector<CoordXYZ>();
+
+	// tinicial, saUpdate, maxAlfa, maxBeta,
+	AdjustSaParameters saParameters_(
+		0.13113111182697784,
+		1.8245257230764378,
+		2.0524859126887280,
+		503.81980808157266,
+		0.5000000000000000);
+
+	vector<CoordXYZ> allAtoms;
+
+	int maxChelation = 12;
+	int saMaxIterations = 1000;
+	ComplexCreator cpCreator(
+		readInp_.allLigands,
+		maxChelation,
+		saMaxIterations,
+		saParameters_.maxAlfaAngle,
+		saParameters_.maxBetaAngle,
+		saParameters_.saTemperatureUpdate,
+		saParameters_.saInitialTemperature,
+		saParameters_.saAcceptance);
+	bool sucess = cpCreator.start();
+	if (sucess) cout << "complexo iniciado com sucesso" << endl;
+	else cout << "erro na criacao do complexo" << endl;
+
+	vector<Ligand> allLigands = cpCreator.getLigandsCreated();
+
+	vector<CoordXYZ> newAllAtoms;
+	for (size_t i = 0; i < allLigands.size(); i++)
+	{
+		vector<CoordXYZ> ligandAdd = allLigands[i].getAllAtoms();
+		newAllAtoms.insert(
+			newAllAtoms.end(), 
+			ligandAdd.begin(),
+			ligandAdd.end());
+	}
+	return newAllAtoms;
+}
+
+
+ReadInput BuildComplex::activateReadInput()
+{
+	ReadInput readInp_;
+	if (!ReadLumpacViewInput(readInp_))
+	{
+		cout << "error on input" << endl;
+		exit(1);
+	}
+	vector<string> options = readInp_.getOptions();
+	options[0] = "mopac2009";
+	options[2] = " CHARGE=1 NOLOG GEO-OK SCFCRT=1.D-10";
+	readInp_.setProperties(options, readInp_.getMopacExecPath());
+	readInp_.setProperties(readInp_.getOptions(), "M2009_Ln_Orbitals.exe");
+	return readInp_;
 }
 
 

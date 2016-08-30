@@ -2,6 +2,8 @@
 
 #include <vector>
 
+/* fredoldnormal - normalVectorFrom3Points - v1x = x1 - x2;	v1y = y1 - y2;	v1z = z1 - z2;	v2x = x1 - x3;	v2y = y1 - y3;	v2z = z1 - z3; e no rotateOnX1 o angle era + */
+
 using namespace std;
 
 vector<double> AuxMath::matrixXVector(vector< vector<double> > &M, double x, double y, double z)
@@ -70,12 +72,12 @@ std::vector<double> AuxMath::normalVectorFrom3Points(
 	double x3, double y3, double z3)
 {
 	double v1x, v1y, v1z, v2x, v2y, v2z;
-	v1x = x1 - x2;
-	v1y = y1 - y2;
-	v1z = z1 - z2;
-	v2x = x1 - x3;
-	v2y = y1 - y3;
-	v2z = z1 - z3;
+	v1x = -x2 + x1;
+	v1y = -y2 + y1;
+	v1z = -z2 + z1;
+	v2x = -x2 + x3;
+	v2y = -y2 + y3;
+	v2z = -z2 + z3;
 
 	vector<double> n = vectorProduct(v1x, v1y, v1z, v2x, v2y, v2z);
 	if ((abs(n[0]) < 1.0e-12) && (abs(n[1]) < 1.0e-12) && (abs(n[2]) < 1.0e-12))

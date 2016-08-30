@@ -27,8 +27,9 @@ void printCoordXYZ(vector<CoordXYZ> & allAtoms)
 int main()
 {
 	/*
-	ATENCAO ---> A NORMAL DEVIA ESTAR CENTRADA NO SEGUNDO
-	             PONTO E NAO NO PRIMEIRO.
+
+	SUGESTAO ---> A OTIMIZACAO DEVERIA SER FEITA COM BFGS	             
+
 	*/
 
 	/*

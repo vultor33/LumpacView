@@ -326,7 +326,7 @@ void Ligand::rotateToCenter()
 		0.0e0, 0.0e0, 0.0e0,
 		X2.x, X2.y, X2.z);
 
-	rotateOnX1(normal[0], normal[1], normal[2], angle);
+	rotateOnX1(normal[0], normal[1], normal[2], -angle);
 }
 
 void Ligand::rotateOnX1(double vx, double vy, double vz, double ang)

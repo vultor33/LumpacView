@@ -6,6 +6,8 @@
 
 #include "BuildComplex.h"
 #include "RootMeanSquareDeviation.h"
+#include "BestPermutation.h"
+
 
 using namespace std;
 
@@ -57,7 +59,7 @@ vector< vector<int> > allFactorialPermutations(const int nMax)
 	int * myints;
 	myints = new int[nMax];
 	for (int i = 0; i < nMax; i++)
-		myints[i] = i+1;
+		myints[i] = i;
 
 	std::sort(myints, myints + nMax);
 
@@ -72,13 +74,11 @@ vector< vector<int> > allFactorialPermutations(const int nMax)
 		for (int i = 0; i < nMax; i++)
 		{
 			permutations[k][i] = myints[i];
-			cout << myints[i] << "  ";
+			//cout << myints[i] << "  ";
 		}
-		cout << endl;
+		//cout << endl;
 		k++;
 	} while (std::next_permutation(myints, myints + nMax));
-
-//	std::cout << "After loop: " << myints[0] << ' ' << myints[1] << ' ' << myints[2] << ' ' << myints[3] << '\n';
 
 	delete[] myints;
 
@@ -145,6 +145,7 @@ int main()
 	vector<CoordXYZ> vec = bc_.build();
 	*/
 
+	/* BEST PERMUTATION
 	// partindo do lumpac view input temos aqui o primeiro assemble
 	RootMeanSquareDeviation rmsd_;
 	vector<CoordXYZ> molCrystal = rmsd_.readCoord("DUCNAQ.xyz");
@@ -160,12 +161,31 @@ int main()
 
 	double rms = rmsd_.rmsOverlay(molCrystal,mol2);
 
-	molCrystal.insert(molCrystal.end(), mol2.begin(), mol2.end());
+	//molCrystal.insert(molCrystal.end(), mol2.begin(), mol2.end());
 
-	printCoordXYZ(molCrystal, "znormal-depois-super.xyz");
+	//printCoordXYZ(molCrystal, "znormal-depois-super.xyz");
 
 
-	vector< vector<int> > allPerm = allFactorialPermutations(4);
+	vector< vector<int> > allPerm = allFactorialPermutations(allAtoms.size());
+
+	for (size_t i = 0; i < allPerm.size(); i++)
+	{
+		vector<Ligand> ligandConformI(allAtoms.size());
+		for (size_t k = 0; k < allPerm[0].size(); k++)
+			ligandConformI[k] = allAtoms[allPerm[i][k]];
+
+		vector<CoordXYZ> molTempI = ligandToCoordXYZ(ligandConformI);
+
+		double rmsI = rmsd_.rmsOverlay(molCrystal, molTempI);
+
+		cout << "rms:  " << rmsI << endl;
+
+	}
+	*/
+
+	BestPermutation bp_;
+	bp_.findBestPermutation();
+
 
 
 

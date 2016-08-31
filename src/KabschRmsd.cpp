@@ -94,6 +94,16 @@ double KabschRmsd::rmsOverlay(vector<CoordXYZ> & mol1, vector<CoordXYZ> & mol2)
 			rmsd = 1.0e10;
 	}
 
+	for (int i = 0; i < nlist; i++)
+	{
+		mol1[i].x = mol1Array[i][0];
+		mol1[i].y = mol1Array[i][1];
+		mol1[i].z = mol1Array[i][2];
+		mol2[i].x = mol2Array[i][0];
+		mol2[i].y = mol2Array[i][1];
+		mol2[i].z = mol2Array[i][2];
+	}
+
 	delete [] mol1Array;
 	delete [] mol2Array;
 	delete [] saveMol1Array;

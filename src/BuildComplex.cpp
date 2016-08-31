@@ -127,12 +127,12 @@ void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordinat
 	newLigFile_.close();
 }
 
-vector<CoordXYZ> BuildComplex::assembleComplexWithoutSA()
+vector<Ligand> BuildComplex::assembleComplexWithoutSA()
 {
 	ReadInput readInp_ = activateReadInput();
 	bool terminate = buildLigands(readInp_);
 
-	if (terminate) return vector<CoordXYZ>();
+	if (terminate) return vector<Ligand>();
 
 	// tinicial, saUpdate, maxAlfa, maxBeta,
 	AdjustSaParameters saParameters_(
@@ -161,6 +161,9 @@ vector<CoordXYZ> BuildComplex::assembleComplexWithoutSA()
 
 	vector<Ligand> allLigands = cpCreator.getLigandsCreated();
 
+	return allLigands;
+
+/* APAGAR SEM MEDO
 	vector<CoordXYZ> newAllAtoms;
 	for (size_t i = 0; i < allLigands.size(); i++)
 	{
@@ -171,6 +174,8 @@ vector<CoordXYZ> BuildComplex::assembleComplexWithoutSA()
 			ligandAdd.end());
 	}
 	return newAllAtoms;
+*/
+
 }
 
 

@@ -30,7 +30,7 @@ double RootMeanSquareDeviation::rmsOverlay(vector<CoordXYZ> & mol1, vector<Coord
 {
 	KabschRmsd krmsd_;
 
-	return krmsd_.rmsOverlay(mol1, mol1);
+	return krmsd_.rmsOverlay(mol1, mol2);
 }
 
 /// LEMBRAR DE CORRIGIR OS ZEROS DO LUMPACVIEW

@@ -2,15 +2,16 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 #include "BuildComplex.h"
 #include "RootMeanSquareDeviation.h"
 
 using namespace std;
 
-void printCoordXYZ(vector<CoordXYZ> & allAtoms)
+void printCoordXYZ(vector<CoordXYZ> & allAtoms, string fName)
 {
-	ofstream pr_("assembleLigands.xyz");
+	ofstream pr_(fName.c_str());
 	pr_ << allAtoms.size() << endl << "useless" << endl;
 	for (size_t i = 0; i < allAtoms.size(); i++)
 	{
@@ -22,6 +23,83 @@ void printCoordXYZ(vector<CoordXYZ> & allAtoms)
 
 	pr_.close();
 }
+
+
+vector<CoordXYZ> ligandToCoordXYZ(vector<Ligand> & allLigands)
+{
+	vector<CoordXYZ> newAllAtoms(1);
+	newAllAtoms[0].atomlabel = "Eu";
+	newAllAtoms[0].x = 0.0e0;
+	newAllAtoms[0].y = 0.0e0;
+	newAllAtoms[0].z = 0.0e0;
+	for (size_t i = 0; i < allLigands.size(); i++)
+	{
+		vector<CoordXYZ> ligandAdd = allLigands[i].getAllAtoms();
+		newAllAtoms.insert(
+			newAllAtoms.end(),
+			ligandAdd.begin(),
+			ligandAdd.end());
+	}
+	return newAllAtoms;
+}
+
+
+
+unsigned int factorial(unsigned int n)
+{
+	if (n == 0)
+		return 1;
+	return n * factorial(n - 1);
+}
+
+vector< vector<int> > allFactorialPermutations(const int nMax)
+{
+	int * myints;
+	myints = new int[nMax];
+	for (int i = 0; i < nMax; i++)
+		myints[i] = i+1;
+
+	std::sort(myints, myints + nMax);
+
+	vector< vector<int> > permutations(factorial(nMax));
+	for (int i = 0; i < permutations.size(); i++)
+		permutations[i].resize(nMax);
+
+	int k = 0;
+	do
+	{		
+		permutations[k].resize(nMax);
+		for (int i = 0; i < nMax; i++)
+		{
+			permutations[k][i] = myints[i];
+			cout << myints[i] << "  ";
+		}
+		cout << endl;
+		k++;
+	} while (std::next_permutation(myints, myints + nMax));
+
+//	std::cout << "After loop: " << myints[0] << ' ' << myints[1] << ' ' << myints[2] << ' ' << myints[3] << '\n';
+
+	delete[] myints;
+
+	return permutations;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 int main()
@@ -68,13 +146,29 @@ int main()
 	*/
 
 	// partindo do lumpac view input temos aqui o primeiro assemble
-	BuildComplex bc_;
-	vector<CoordXYZ> allAtoms = bc_.assembleComplexWithoutSA();
-	printCoordXYZ(allAtoms);
-
 	RootMeanSquareDeviation rmsd_;
-	double rms = rmsd_.rmsOverlay("zBUVXAR11.xyz", "zagua-rm1.xyz");
-	cout << rms << endl;
+	vector<CoordXYZ> molCrystal = rmsd_.readCoord("DUCNAQ.xyz");
+
+	BuildComplex bc_;
+	vector<Ligand> allAtoms = bc_.assembleComplexWithoutSA();
+
+	printCoordXYZ(ligandToCoordXYZ(allAtoms),"assembleLigands.xyz");
+
+	printCoordXYZ(molCrystal, "znormal-antes-cristal.xyz");
+
+	vector<CoordXYZ> mol2 = ligandToCoordXYZ(allAtoms);
+
+	double rms = rmsd_.rmsOverlay(molCrystal,mol2);
+
+	molCrystal.insert(molCrystal.end(), mol2.begin(), mol2.end());
+
+	printCoordXYZ(molCrystal, "znormal-depois-super.xyz");
+
+
+	vector< vector<int> > allPerm = allFactorialPermutations(4);
+
+
+
 	cin.get();
 
 

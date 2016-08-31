@@ -7,6 +7,7 @@
 #include "AdjustSaParameters.h"
 #include "ReadInput.h"
 #include "Coordstructs.h"
+#include "Ligand.h"
 
 class BuildComplex
 {
@@ -22,7 +23,7 @@ public:
 
 	void makeComplexOptimizingInMopac(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath);
 
-	std::vector<CoordXYZ> BuildComplex::assembleComplexWithoutSA();
+	std::vector<Ligand> BuildComplex::assembleComplexWithoutSA();
 
 	void fitSA();
 

@@ -1,6 +1,7 @@
 Eu
 Eu_spk
-4
+5
+Lumpac-View-Ligand-DUCNAQ-ligand
 Lumpac-View-Ligand-DUCNAQ-OONO
 Lumpac-View-Ligand-BUVXAR11
 Lumpac-View-Ligand-DUCNAQ-OONO

@@ -49,6 +49,17 @@ void BestPermutation::findBestPermutation()
 
 		vector<CoordXYZ> molTempI = ligandToCoordXYZ(ligandConformI);
 
+		/*
+		a montagem precisa ser a partir do assembleComplex, isso significa
+		que preciso configurar para ele n precisar ler o input, ir pelos
+		nomes direto.
+
+		depois de embaralhar a montagem eu preciso colocar na mesma ordem
+		que esta o molCrystal -> isso seria em ligandToCoordXYZ
+
+		
+		*/
+
 		double rmsI = rmsd_.rmsOverlay(molCrystal, molTempI);
 
 		cout << "rms:  " << rmsI << endl;

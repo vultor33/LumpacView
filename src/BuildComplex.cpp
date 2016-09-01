@@ -24,7 +24,7 @@ BuildComplex::~BuildComplex(){}
 
 vector<CoordXYZ> BuildComplex::build()
 {
-	return build(activateReadInput());
+	return build(activateReadInputWithFile());
 }
 
 vector<CoordXYZ> BuildComplex::build(
@@ -127,9 +127,9 @@ void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordinat
 	newLigFile_.close();
 }
 
-vector<Ligand> BuildComplex::assembleComplexWithoutSA()
+vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<string> & ligandNames)
 {
-	ReadInput readInp_ = activateReadInput();
+	ReadInput readInp_ = activateReadInputWithNames(ligandNames);
 	bool terminate = buildLigands(readInp_);
 
 	if (terminate) return vector<Ligand>();
@@ -156,30 +156,13 @@ vector<Ligand> BuildComplex::assembleComplexWithoutSA()
 		saParameters_.saInitialTemperature,
 		saParameters_.saAcceptance);
 	bool sucess = cpCreator.start();
-	if (sucess) cout << "complexo iniciado com sucesso" << endl;
-	else cout << "erro na criacao do complexo" << endl;
-
 	vector<Ligand> allLigands = cpCreator.getLigandsCreated();
 
 	return allLigands;
-
-/* APAGAR SEM MEDO
-	vector<CoordXYZ> newAllAtoms;
-	for (size_t i = 0; i < allLigands.size(); i++)
-	{
-		vector<CoordXYZ> ligandAdd = allLigands[i].getAllAtoms();
-		newAllAtoms.insert(
-			newAllAtoms.end(), 
-			ligandAdd.begin(),
-			ligandAdd.end());
-	}
-	return newAllAtoms;
-*/
-
 }
 
 
-ReadInput BuildComplex::activateReadInput()
+ReadInput BuildComplex::activateReadInputWithFile()
 {
 	ReadInput readInp_;
 	if (!ReadLumpacViewInput(readInp_))
@@ -195,6 +178,20 @@ ReadInput BuildComplex::activateReadInput()
 	return readInp_;
 }
 
+ReadInput BuildComplex::activateReadInputWithNames(vector<string> & ligandNames)
+{
+	//falta o metal name e arquivo e tal.
+	ReadInput readInp_;
+	readInp_.buildLumpacViewFromNames(ligandNames);
+	/* OPCOES DESATIVADA
+	vector<string> options = readInp_.getOptions();
+	options[0] = "mopac2009";
+	options[2] = " CHARGE=1 NOLOG GEO-OK SCFCRT=1.D-10";
+	readInp_.setProperties(options, readInp_.getMopacExecPath());
+	readInp_.setProperties(readInp_.getOptions(), "M2009_Ln_Orbitals.exe");
+	*/
+	return readInp_;
+}
 
 void BuildComplex::fitSA()
 {

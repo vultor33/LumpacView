@@ -47,6 +47,13 @@ void ReadInput::readLumpacViewInput()
 	readAllLigands();
 }
 
+void ReadInput::buildLumpacViewFromNames(std::vector< std::string > & fileNames)
+{
+	ligandFileName = fileNames;
+	readAllLigands();
+}
+
+
 string ReadInput::buildProjectName(string metalName)
 {
 	string projName = metalName;

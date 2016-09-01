@@ -10,12 +10,15 @@
 class BestPermutation
 {
 public:
-	BestPermutation();
+	BestPermutation(std::vector< std::string > originalPermutation_in, std::string referenceFile);
+
 	~BestPermutation();
 
 	void findBestPermutation();
 
 private:
+	std::vector< std::string > setThisPermutation(std::vector<int> permutation);
+
 	void printCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::string fName);
 
 	std::vector<CoordXYZ> ligandToCoordXYZ(std::vector<Ligand> & allLigands);
@@ -24,6 +27,9 @@ private:
 
 	std::vector< std::vector<int> > allFactorialPermutations(const int nMax);
 
+	std::vector< std::string > originalPermutation;
+
+	std::string referenceFile;
 };
 
 #endif

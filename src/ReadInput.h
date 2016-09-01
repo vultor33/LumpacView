@@ -17,6 +17,8 @@ public:
 
 	void rePrintInput();
 
+	void buildLumpacViewFromNames(std::vector< std::string > & fileNames);
+
 	std::vector<Ligand> allLigands;
 
 	inline void setProperties(std::vector<std::string> options_in, std::string mopacExecPath_in)

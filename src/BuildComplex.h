@@ -23,12 +23,14 @@ public:
 
 	void makeComplexOptimizingInMopac(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath);
 
-	std::vector<Ligand> BuildComplex::assembleComplexWithoutSA();
+	std::vector<Ligand> BuildComplex::assembleComplexWithoutSA(std::vector< std::string> & ligandNames);
 
 	void fitSA();
 
 private:
-	ReadInput BuildComplex::activateReadInput();
+	ReadInput BuildComplex::activateReadInputWithFile();
+
+	ReadInput BuildComplex::activateReadInputWithNames(std::vector< std::string > & ligandNames);
 
 	bool ReadLumpacViewInput(ReadInput & readInp_);
 

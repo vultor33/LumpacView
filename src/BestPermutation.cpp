@@ -12,24 +12,30 @@
 
 using namespace std;
 
-BestPermutation::BestPermutation(){}
+BestPermutation::BestPermutation(vector<string> originalPermutation_in, std::string referenceFile_in)
+{
+	originalPermutation = originalPermutation_in;
+	referenceFile = referenceFile_in;
+}
 
 BestPermutation::~BestPermutation(){}
 
 void BestPermutation::findBestPermutation()
 {
+	// eficiencia eu posso ler o arquivo so um vez e guardar as informacoes na memoria.
+
 	// partindo do lumpac view input temos aqui o primeiro assemble
 	RootMeanSquareDeviation rmsd_;
 	
-	vector<CoordXYZ> molCrystal = rmsd_.readCoord("DUCNAQ.xyz");
+	vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
 
 	BuildComplex bc_;
 	
-	vector<Ligand> allAtoms = bc_.assembleComplexWithoutSA();
+	vector<Ligand> allAtoms = bc_.assembleComplexWithoutSA(originalPermutation);
 
-	printCoordXYZ(ligandToCoordXYZ(allAtoms), "assembleLigands.xyz");
+//	printCoordXYZ(ligandToCoordXYZ(allAtoms), "assembleLigands.xyz");
 
-	printCoordXYZ(molCrystal, "znormal-antes-cristal.xyz");
+//	printCoordXYZ(molCrystal, "znormal-antes-cristal.xyz");
 
 	vector<CoordXYZ> mol2 = ligandToCoordXYZ(allAtoms);
 
@@ -41,34 +47,54 @@ void BestPermutation::findBestPermutation()
 
 	vector< vector<int> > allPerm = allFactorialPermutations(allAtoms.size());
 
+
+	double lowestRmsd = 1.0e99;
+	int lowestPosition = -1;
 	for (size_t i = 0; i < allPerm.size(); i++)
 	{
-		vector<Ligand> ligandConformI(allAtoms.size());
-		for (size_t k = 0; k < allPerm[0].size(); k++)
-			ligandConformI[k] = allAtoms[allPerm[i][k]];
+		BuildComplex bc_;
 
-		vector<CoordXYZ> molTempI = ligandToCoordXYZ(ligandConformI);
+		vector<string> actualPermutation = setThisPermutation(allPerm[i]);
 
-		/*
-		a montagem precisa ser a partir do assembleComplex, isso significa
-		que preciso configurar para ele n precisar ler o input, ir pelos
-		nomes direto.
+		vector<Ligand> allAtoms = bc_.assembleComplexWithoutSA(actualPermutation);
 
-		depois de embaralhar a montagem eu preciso colocar na mesma ordem
-		que esta o molCrystal -> isso seria em ligandToCoordXYZ
-
-		
-		*/
+		vector<CoordXYZ> molTempI = ligandToCoordXYZ(allAtoms);
 
 		double rmsI = rmsd_.rmsOverlay(molCrystal, molTempI);
 
-		cout << "rms:  " << rmsI << endl;
+		if (rmsI < lowestRmsd)
+		{
+			lowestPosition = i;
+			lowestRmsd = rmsI;
+		}
 
+		//cout << "rms:  " << rmsI << endl;
+
+		/*
+		talvez eu pudesse mudar direto nos allLigands
+
+		mas por enaquanto fica assim.
+
+		vector<Ligand> ligandConformI(allAtoms.size());
+		for (size_t k = 0; k < allPerm[0].size(); k++)
+		ligandConformI[k] = allAtoms[allPerm[i][k]];
+
+		vector<CoordXYZ> molTempI = ligandToCoordXYZ(ligandConformI);
+		*/
 	}
+
+	cout << "lowest " << lowestRmsd << endl;
 
 }
 
 
+vector< string > BestPermutation::setThisPermutation(vector<int> permutation)
+{
+	vector<string> filePermutation(originalPermutation.size());
+	for (size_t k = 0; k < permutation.size(); k++)
+		filePermutation[k] = originalPermutation[permutation[k]];
+	return filePermutation;
+}
 
 
 void BestPermutation::printCoordXYZ(vector<CoordXYZ> & allAtoms, string fName)
@@ -124,7 +150,7 @@ vector< vector<int> > BestPermutation::allFactorialPermutations(const int nMax)
 	std::sort(myints, myints + nMax);
 
 	vector< vector<int> > permutations(factorial(nMax));
-	for (int i = 0; i < permutations.size(); i++)
+	for (size_t i = 0; i < permutations.size(); i++)
 		permutations[i].resize(nMax);
 
 	int k = 0;

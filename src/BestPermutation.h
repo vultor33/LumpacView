@@ -18,6 +18,8 @@ public:
 
 private:
 	std::vector< std::string > setThisPermutation(std::vector<int> permutation);
+	
+	std::vector< Ligand > setThisPermutationLig(std::vector<int> permutation, std::vector<Ligand> & ligOriginal);
 
 	void printCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::string fName);
 

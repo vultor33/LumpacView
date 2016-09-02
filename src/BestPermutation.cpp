@@ -23,42 +23,33 @@ BestPermutation::~BestPermutation(){}
 void BestPermutation::findBestPermutation()
 {
 	// eficiencia eu posso ler o arquivo so um vez e guardar as informacoes na memoria.
+	/*
+	talvez eu pudesse mudar direto nos allLigands
+	*/
 
 	// partindo do lumpac view input temos aqui o primeiro assemble
 	RootMeanSquareDeviation rmsd_;
-	
+
 	vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
 
-	BuildComplex bc_;
-	
-	vector<Ligand> allAtoms = bc_.assembleComplexWithoutSA(originalPermutation);
-
-//	printCoordXYZ(ligandToCoordXYZ(allAtoms), "assembleLigands.xyz");
-
-//	printCoordXYZ(molCrystal, "znormal-antes-cristal.xyz");
-
-	vector<CoordXYZ> mol2 = ligandToCoordXYZ(allAtoms);
-
-	double rms = rmsd_.rmsOverlay(molCrystal, mol2);
-
-	//molCrystal.insert(molCrystal.end(), mol2.begin(), mol2.end());
-
-	//printCoordXYZ(molCrystal, "znormal-depois-super.xyz");
-
-	vector< vector<int> > allPerm = allFactorialPermutations(allAtoms.size());
-
+	vector< vector<int> > allPerm = allFactorialPermutations(originalPermutation.size());
 
 	double lowestRmsd = 1.0e99;
 	int lowestPosition = -1;
+	ofstream printPermutations_("permutations-" + referenceFile + ".txt");
 	for (size_t i = 0; i < allPerm.size(); i++)
 	{
 		BuildComplex bc_;
 
 		vector<string> actualPermutation = setThisPermutation(allPerm[i]);
 
-		vector<Ligand> allAtoms = bc_.assembleComplexWithoutSA(actualPermutation);
+		vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(actualPermutation);
+
+		vector<Ligand> allAtoms = setThisPermutationLig(allPerm[i], allAtomsOriginal);
 
 		vector<CoordXYZ> molTempI = ligandToCoordXYZ(allAtoms);
+
+		//printCoordXYZ(molTempI, "teste-per.xyz");
 
 		double rmsI = rmsd_.rmsOverlay(molCrystal, molTempI);
 
@@ -67,23 +58,36 @@ void BestPermutation::findBestPermutation()
 			lowestPosition = i;
 			lowestRmsd = rmsI;
 		}
+		
+		printPermutations_ << "iteration:" << i << " rms:" << rmsI << " --> ";
+		for (size_t j = 0; j < allPerm[i].size(); j++)
+			printPermutations_ << allPerm[i][j] << "  ";
 
-		//cout << "rms:  " << rmsI << endl;
+		printPermutations_ << endl;
 
-		/*
-		talvez eu pudesse mudar direto nos allLigands
+		vector<CoordXYZ> superpositionAll = molCrystal;
 
-		mas por enaquanto fica assim.
+		superpositionAll.insert(
+			superpositionAll.end(), 
+			molTempI.begin(), 
+			molTempI.end());
 
-		vector<Ligand> ligandConformI(allAtoms.size());
-		for (size_t k = 0; k < allPerm[0].size(); k++)
-		ligandConformI[k] = allAtoms[allPerm[i][k]];
-
-		vector<CoordXYZ> molTempI = ligandToCoordXYZ(ligandConformI);
-		*/
+		printCoordXYZ(superpositionAll, "znormal-depois-super.xyz");
 	}
 
-	cout << "lowest " << lowestRmsd << endl;
+	printPermutations_ << endl << endl << endl;
+	printPermutations_ << "lowest position " << lowestPosition << " : " << lowestRmsd << endl;
+
+
+	printPermutations_.close();
+
+	/*
+	SAO DOIS PROBLEMAS - UM E A ORDEM DOS LIGANTES NO COMPLEXO
+	ESSA DEVE SER A MESMA DO CRISTALOGRAFICO
+
+	OUTRO E A FORMA QUE O COMPLEXO FOI MONTADO ORIGINALMENTE
+	ISSO E RELEVANTE APENAS QUANDO OS LIGANTES SAO DIFERENTES	
+	*/
 
 }
 
@@ -94,6 +98,14 @@ vector< string > BestPermutation::setThisPermutation(vector<int> permutation)
 	for (size_t k = 0; k < permutation.size(); k++)
 		filePermutation[k] = originalPermutation[permutation[k]];
 	return filePermutation;
+}
+
+vector< Ligand > BestPermutation::setThisPermutationLig(vector<int> permutation, vector<Ligand> & ligOriginal)
+{
+	vector<Ligand> LigPermutation(originalPermutation.size());
+	for (size_t k = 0; k < permutation.size(); k++)
+		LigPermutation[k] = ligOriginal[permutation[k]];
+	return LigPermutation;
 }
 
 

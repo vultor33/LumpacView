@@ -55,19 +55,18 @@ int main()
 	vector<CoordXYZ> vec = bc_.build();
 	*/
 
-	vector<string> ligandNames(5);
-	ligandNames[0] = "Lumpac-View-Ligand-DUCNAQ-ligand";
-	ligandNames[1] = "Lumpac-View-Ligand-DUCNAQ-OONO";
+	vector<string> ligandNames(9);
+	ligandNames[0] = "Lumpac-View-Ligand-BUVXAR11";
+	ligandNames[1] = "Lumpac-View-Ligand-BUVXAR11";
 	ligandNames[2] = "Lumpac-View-Ligand-BUVXAR11";
-	ligandNames[3] = "Lumpac-View-Ligand-DUCNAQ-OONO";
+	ligandNames[3] = "Lumpac-View-Ligand-BUVXAR11";
 	ligandNames[4] = "Lumpac-View-Ligand-BUVXAR11";
-	BestPermutation bp_(ligandNames, "DUCNAQ.xyz");
+	ligandNames[5] = "Lumpac-View-Ligand-BUVXAR11";
+	ligandNames[6] = "Lumpac-View-Ligand-BUVXAR11";
+	ligandNames[7] = "Lumpac-View-Ligand-BUVXAR11";
+	ligandNames[8] = "Lumpac-View-Ligand-BUVXAR11";
+	BestPermutation bp_(ligandNames, "BUVXAR11.xyz");
 	bp_.findBestPermutation();
-
-
-
-
-	cin.get();
 
 
 	/*

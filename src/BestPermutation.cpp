@@ -24,32 +24,86 @@ void BestPermutation::findBestPermutation()
 {
 	// eficiencia eu posso ler o arquivo so um vez e guardar as informacoes na memoria.
 	/*
-	talvez eu pudesse mudar direto nos allLigands
-	*/
+	SAO DOIS PROBLEMAS - UM E A ORDEM DOS LIGANTES NO COMPLEXO
+	ESSA DEVE SER A MESMA DO CRISTALOGRAFICO
 
-	// partindo do lumpac view input temos aqui o primeiro assemble
+	OUTRO E A FORMA QUE O COMPLEXO FOI MONTADO ORIGINALMENTE
+	ISSO E RELEVANTE APENAS QUANDO OS LIGANTES SAO DIFERENTES
+	*/
+	vector< vector<int> > allPerm = allFactorialPermutations(originalPermutation.size());
+	RootMeanSquareDeviation rmsd_;
+	vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
+	double lowestRmsd = 1.0e99;
+	int lowestFilePosition = -1;
+	int lowestPermutationPosition = -1;
+	ofstream printPermutations_("permutations-" + referenceFile + ".txt");
+	for (size_t i = 0; i < 1; i++)//allPerm.size()
+	{
+		double bestRms;
+		int rmsI;
+		findMapToReferencePermutation(i, allPerm, rmsI, bestRms);
+		if (bestRms < lowestRmsd)
+		{
+			lowestRmsd = bestRms;
+			lowestFilePosition = i;
+			lowestPermutationPosition = rmsI;
+		}
+		printPermutations_ << "iteration:" << i << " rms:" << bestRms << " --> ";
+		for (size_t j = 0; j < allPerm[i].size(); j++)
+			printPermutations_ << allPerm[i][j] << "  ";
+		printPermutations_ << endl;
+	}
+	printPermutations_.close();
+	printSupersition(lowestFilePosition, lowestPermutationPosition, allPerm);
+}
+
+
+void BestPermutation::printSupersition(int lowestFilePosition, int lowestPermutationPosition, vector< vector<int> > & allPerm)
+{
 	RootMeanSquareDeviation rmsd_;
 
 	vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
 
-	vector< vector<int> > allPerm = allFactorialPermutations(originalPermutation.size());
+	vector<CoordXYZ> superpositionAll = molCrystal;
 
+	vector<string> actualPermutation = setThisPermutation(allPerm[lowestFilePosition]);
+
+	BuildComplex bc_;
+
+	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(actualPermutation);
+
+	vector<Ligand> allAtoms = setThisPermutationLig(allPerm[lowestPermutationPosition], allAtomsOriginal);
+
+	vector<CoordXYZ> molTempI = ligandToCoordXYZ(allAtoms);
+
+	double rmsI = rmsd_.rmsOverlay(molCrystal, molTempI);
+
+	superpositionAll.insert(
+		superpositionAll.end(),
+		molTempI.begin(),
+		molTempI.end());
+
+	printCoordXYZ(superpositionAll, "znormal-depois-super.xyz");
+}
+
+
+void BestPermutation::findMapToReferencePermutation(int filePermutation, vector< vector<int> > & allPerm, int & mapToReferenceI, double & mapToReferenceRms)
+{
+	RootMeanSquareDeviation rmsd_;
+	vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
+	vector<string> actualPermutation = setThisPermutation(allPerm[filePermutation]);
 	double lowestRmsd = 1.0e99;
 	int lowestPosition = -1;
-	ofstream printPermutations_("permutations-" + referenceFile + ".txt");
+	//ofstream printPermutations_("permutations-internal" + referenceFile + ".txt");
 	for (size_t i = 0; i < allPerm.size(); i++)
 	{
 		BuildComplex bc_;
-
-		vector<string> actualPermutation = setThisPermutation(allPerm[i]);
 
 		vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(actualPermutation);
 
 		vector<Ligand> allAtoms = setThisPermutationLig(allPerm[i], allAtomsOriginal);
 
 		vector<CoordXYZ> molTempI = ligandToCoordXYZ(allAtoms);
-
-		//printCoordXYZ(molTempI, "teste-per.xyz");
 
 		double rmsI = rmsd_.rmsOverlay(molCrystal, molTempI);
 
@@ -58,37 +112,17 @@ void BestPermutation::findBestPermutation()
 			lowestPosition = i;
 			lowestRmsd = rmsI;
 		}
-		
+
+		/*
 		printPermutations_ << "iteration:" << i << " rms:" << rmsI << " --> ";
 		for (size_t j = 0; j < allPerm[i].size(); j++)
 			printPermutations_ << allPerm[i][j] << "  ";
-
 		printPermutations_ << endl;
-
-		vector<CoordXYZ> superpositionAll = molCrystal;
-
-		superpositionAll.insert(
-			superpositionAll.end(), 
-			molTempI.begin(), 
-			molTempI.end());
-
-		printCoordXYZ(superpositionAll, "znormal-depois-super.xyz");
+		*/
 	}
-
-	printPermutations_ << endl << endl << endl;
-	printPermutations_ << "lowest position " << lowestPosition << " : " << lowestRmsd << endl;
-
-
-	printPermutations_.close();
-
-	/*
-	SAO DOIS PROBLEMAS - UM E A ORDEM DOS LIGANTES NO COMPLEXO
-	ESSA DEVE SER A MESMA DO CRISTALOGRAFICO
-
-	OUTRO E A FORMA QUE O COMPLEXO FOI MONTADO ORIGINALMENTE
-	ISSO E RELEVANTE APENAS QUANDO OS LIGANTES SAO DIFERENTES	
-	*/
-
+	mapToReferenceI = lowestPosition;
+	mapToReferenceRms = lowestRmsd;
+	//printPermutations_.close();
 }
 
 

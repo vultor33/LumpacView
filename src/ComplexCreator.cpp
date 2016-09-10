@@ -36,7 +36,7 @@ ComplexCreator::ComplexCreator(
 
 ComplexCreator::~ComplexCreator(){}
 
-bool ComplexCreator::start()
+bool ComplexCreator::start(vector<int> & ligandsPermutation)
 {
 	int sumChelation = orderAllLigands();
 
@@ -45,10 +45,11 @@ bool ComplexCreator::start()
 
 	vector<double> points = getPoints(sumChelation);
 
-	setInitialPosition(points); //view
+	setInitialPosition(points, ligandsPermutation); //view fredmudar
 
 	return true;
 }
+
 
 vector<double> ComplexCreator::getPoints(int totalChelation)
 {
@@ -120,26 +121,49 @@ int ComplexCreator::orderAllLigands()
 
 
 void ComplexCreator::setInitialPosition(
-	const vector<double> &points)
+	const vector<double> &points,
+	vector<int> & ligandsPermutation)
 {
 	size_t nPoints = points.size() / 3;
 	vector<bool> pointsTaken(nPoints);
 	for (size_t k = 0; k < nPoints; k++)
 		pointsTaken[k] = false;
 
-	for (size_t i = 0; i < allLigands.size(); i++)
+	if (ligandsPermutation.size() == 0)
 	{
-		vector<int> pointsOverLigand = findGoodPoint(
-			allLigands[i].getChelation(),
-			points,
-			pointsTaken);
+		for (size_t i = 0; i < allLigands.size(); i++)
+		{
+			vector<int> pointsOverLigand = findGoodPoint(
+				allLigands[i].getChelation(),
+				points,
+				pointsTaken);
 
-		allLigands[i].placeLigandOnPoins(
-			pointsOverLigand,
-			points);
+			allLigands[i].placeLigandOnPoins(
+				pointsOverLigand,
+				points);
 
-		allLigands[i].rotateOverReferencePoints();
+			allLigands[i].rotateOverReferencePoints();
+		}
+	}
+	else
+	{
+		int k = 0;
+		for (size_t i = 0; i < allLigands.size(); i++)
+		{
+			vector<int> pointsOverLigand(allLigands[i].getChelation());
 
+			for (size_t j = 0; j < allLigands[i].getChelation(); j++)
+			{
+				pointsOverLigand[j] = ligandsPermutation[k];
+				k++;
+			}
+
+			allLigands[i].placeLigandOnPoins(
+				pointsOverLigand,
+				points);
+
+			allLigands[i].rotateOverReferencePoints();
+		}
 	}
 }
 

@@ -127,9 +127,26 @@ void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordinat
 	newLigFile_.close();
 }
 
-vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<string> & ligandNames)
+vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermutation)
 {
-	ReadInput readInp_ = activateReadInputWithNames(ligandNames);
+	ReadInput readInp_ = activateReadInputWithFile();
+
+	if (ligandsPermutation.size() == 0)
+	{
+		int allChelation = 0;
+		for (size_t i = 0; i < readInp_.allLigands.size(); i++)
+		{
+			allChelation += readInp_.allLigands[i].getChelation();
+		}
+		actualLigandPermutation.resize(allChelation);
+		for (size_t i = 0; i < allChelation; i++)
+		{
+			actualLigandPermutation[i] = i;
+		}
+	}
+	else
+		actualLigandPermutation = ligandsPermutation;
+
 	bool terminate = buildLigands(readInp_);
 
 	if (terminate) return vector<Ligand>();
@@ -155,10 +172,16 @@ vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<string> & ligandNam
 		saParameters_.saTemperatureUpdate,
 		saParameters_.saInitialTemperature,
 		saParameters_.saAcceptance);
-	bool sucess = cpCreator.start();
+	bool sucess = cpCreator.start(actualLigandPermutation);
 	vector<Ligand> allLigands = cpCreator.getLigandsCreated();
 
 	return allLigands;
+}
+
+int BuildComplex::getLigandsNumber()
+{
+	ReadInput readInp_ = activateReadInputWithFile();
+	return readInp_.allLigands.size();
 }
 
 

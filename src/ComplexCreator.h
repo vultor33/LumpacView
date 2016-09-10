@@ -21,7 +21,9 @@ public:
 		);
 	~ComplexCreator();
 
-	bool start();
+//	bool start();
+
+	bool start(std::vector<int> & ligandsPermutation = std::vector<int>());
 
 	std::vector<CoordXYZ> simulatedAnnealing();
 
@@ -46,7 +48,7 @@ private:
 
 	std::vector<double> getPoints(int totalChelation);
 
-	void setInitialPosition(const std::vector<double> & points);
+	void setInitialPosition(const std::vector<double> & points, std::vector<int> & ligandsPermutation);
 
 	std::vector<int> findGoodPoint(
 		int chelation, 

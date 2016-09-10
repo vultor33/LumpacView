@@ -30,18 +30,28 @@ void BestPermutation::findBestPermutation()
 	OUTRO E A FORMA QUE O COMPLEXO FOI MONTADO ORIGINALMENTE
 	ISSO E RELEVANTE APENAS QUANDO OS LIGANTES SAO DIFERENTES
 	*/
-	vector< vector<int> > allPerm = allFactorialPermutations(originalPermutation.size());
+
+	BuildComplex bc_;
+
+	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA();
+
+	int permutationsNumber = bc_.getLigandsPermutation().size();
+
+	vector< vector<int> > allPerm = allFactorialPermutations(permutationsNumber);
+
+	vector< vector<int> > internalPerm = allFactorialPermutations(bc_.getLigandsNumber());
+
 	RootMeanSquareDeviation rmsd_;
 	vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
 	double lowestRmsd = 1.0e99;
 	int lowestFilePosition = -1;
 	int lowestPermutationPosition = -1;
 	ofstream printPermutations_("permutations-" + referenceFile + ".txt");
-	for (size_t i = 0; i < 1; i++)//allPerm.size()
+	for (size_t i = 0; i < allPerm.size(); i++)//allPerm.size()
 	{
 		double bestRms;
 		int rmsI;
-		findMapToReferencePermutation(i, allPerm, rmsI, bestRms);
+		findMapToReferencePermutation(i, allPerm, internalPerm, rmsI, bestRms);
 		if (bestRms < lowestRmsd)
 		{
 			lowestRmsd = bestRms;
@@ -54,11 +64,15 @@ void BestPermutation::findBestPermutation()
 		printPermutations_ << endl;
 	}
 	printPermutations_.close();
-	printSupersition(lowestFilePosition, lowestPermutationPosition, allPerm);
+	printSupersition(lowestFilePosition, lowestPermutationPosition, allPerm, internalPerm);
 }
 
 
-void BestPermutation::printSupersition(int lowestFilePosition, int lowestPermutationPosition, vector< vector<int> > & allPerm)
+void BestPermutation::printSupersition(
+	int lowestFilePosition, 
+	int lowestPermutationPosition, 
+	vector< vector<int> > & allPerm, 
+	vector< vector<int> > & internalPerm)
 {
 	RootMeanSquareDeviation rmsd_;
 
@@ -66,13 +80,11 @@ void BestPermutation::printSupersition(int lowestFilePosition, int lowestPermuta
 
 	vector<CoordXYZ> superpositionAll = molCrystal;
 
-	vector<string> actualPermutation = setThisPermutation(allPerm[lowestFilePosition]);
-
 	BuildComplex bc_;
 
-	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(actualPermutation);
+	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(allPerm[lowestFilePosition]);
 
-	vector<Ligand> allAtoms = setThisPermutationLig(allPerm[lowestPermutationPosition], allAtomsOriginal);
+	vector<Ligand> allAtoms = setThisPermutationLig(internalPerm[lowestPermutationPosition], allAtomsOriginal);
 
 	vector<CoordXYZ> molTempI = ligandToCoordXYZ(allAtoms);
 
@@ -86,12 +98,41 @@ void BestPermutation::printSupersition(int lowestFilePosition, int lowestPermuta
 	printCoordXYZ(superpositionAll, "znormal-depois-super.xyz");
 }
 
-
-void BestPermutation::findMapToReferencePermutation(int filePermutation, vector< vector<int> > & allPerm, int & mapToReferenceI, double & mapToReferenceRms)
+void BestPermutation::findMapToReferencePermutation(
+	int filePermutation, 
+	vector< vector<int> > & allPerm, 
+	vector< vector<int> > & internalPerm, 
+	int & mapToReferenceI, 
+	double & mapToReferenceRms)
 {
+	//encontrar a configuracao que mapeia a origem
+	BuildComplex bcInternal_;
+	vector<Ligand> allAtomsOriginal = bcInternal_.assembleComplexWithoutSA(allPerm[filePermutation]);
 	RootMeanSquareDeviation rmsd_;
 	vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
-	vector<string> actualPermutation = setThisPermutation(allPerm[filePermutation]);
+	double lowestInternalRmsd = 1.0e99;
+	int lowestInernalPosition = -1;
+	//ofstream printPermutations_("permutations-internal" + referenceFile + ".txt");
+	for (size_t i = 0; i < internalPerm.size(); i++)
+	{
+		vector<Ligand> allAtoms = setThisPermutationLig(internalPerm[i], allAtomsOriginal);
+
+		vector<CoordXYZ> molTempI = ligandToCoordXYZ(allAtoms);
+
+		double rmsI = rmsd_.rmsOverlay(molCrystal, molTempI);
+
+		if (rmsI < lowestInternalRmsd)
+		{
+			lowestInernalPosition = i;
+			lowestInternalRmsd = rmsI;
+		}
+	}
+	mapToReferenceI = lowestInernalPosition;
+	mapToReferenceRms = lowestInternalRmsd;
+
+/*                           APAGAR SEM MEDO
+	RootMeanSquareDeviation rmsd_;
+	vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
 	double lowestRmsd = 1.0e99;
 	int lowestPosition = -1;
 	//ofstream printPermutations_("permutations-internal" + referenceFile + ".txt");
@@ -99,7 +140,7 @@ void BestPermutation::findMapToReferencePermutation(int filePermutation, vector<
 	{
 		BuildComplex bc_;
 
-		vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(actualPermutation);
+		vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(allPerm[filePermutation]);
 
 		vector<Ligand> allAtoms = setThisPermutationLig(allPerm[i], allAtomsOriginal);
 
@@ -113,16 +154,15 @@ void BestPermutation::findMapToReferencePermutation(int filePermutation, vector<
 			lowestRmsd = rmsI;
 		}
 
-		/*
 		printPermutations_ << "iteration:" << i << " rms:" << rmsI << " --> ";
 		for (size_t j = 0; j < allPerm[i].size(); j++)
 			printPermutations_ << allPerm[i][j] << "  ";
 		printPermutations_ << endl;
-		*/
 	}
 	mapToReferenceI = lowestPosition;
 	mapToReferenceRms = lowestRmsd;
 	//printPermutations_.close();
+	*/
 }
 
 

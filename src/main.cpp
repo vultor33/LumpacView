@@ -50,10 +50,10 @@ int main()
 	bc_.makeComplexOptimizingInMopac(ligandName, coordination, charge, options, mopacExecPath);
 	*/
 
-	/* RUNNING THROUGH LUMPAC VIEW INPUT
-	BuildComplex bc_;
-	vector<CoordXYZ> vec = bc_.build();
-	*/
+	// RUNNING THROUGH LUMPAC VIEW INPUT
+	//BuildComplex bc_;
+	//vector<CoordXYZ> vec = bc_.build();
+	
 
 	/*
 	vector<string> ligandNames(9);
@@ -69,16 +69,18 @@ int main()
 	BestPermutation bp_(ligandNames, "BUVXAR11.xyz");
 	*/
 
+	
+	
 	vector<string> ligandNames(5);
-	ligandNames[0] = "Lumpac-View-Ligand-DUCNAQ-ligand";
+	ligandNames[0] = "Lumpac-View-Ligand-DUCNAQ-ligand-FALTA-OTIMIZAR";
 	ligandNames[1] = "Lumpac-View-Ligand-DUCNAQ-OONO";
 	ligandNames[2] = "Lumpac-View-Ligand-BUVXAR11";
 	ligandNames[3] = "Lumpac-View-Ligand-DUCNAQ-OONO";
 	ligandNames[4] = "Lumpac-View-Ligand-BUVXAR11";
 	BestPermutation bp_(ligandNames, "DUCNAQ.xyz");
-
 	bp_.findBestPermutation();
-
+	
+	
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

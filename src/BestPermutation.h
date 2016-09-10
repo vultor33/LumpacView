@@ -17,9 +17,9 @@ public:
 	void findBestPermutation();
 
 private:
-	void findMapToReferencePermutation(int filePermutation, std::vector< std::vector<int> > & allPerm, int & mapToReferenceI, double & mapToReferenceRms);
+	void findMapToReferencePermutation(int filePermutation, std::vector< std::vector<int> > & allPerm, std::vector< std::vector<int> > &internalPerm, int & mapToReferenceI, double & mapToReferenceRms);
 
-	void printSupersition(int lowestFilePosition, int lowestPermutationPosition, std::vector< std::vector<int> > & allPerm);
+	void printSupersition(int lowestFilePosition, int lowestPermutationPosition, std::vector< std::vector<int> > & allPerm, std::vector< std::vector<int> > & internalPerm);
 
 	std::vector< std::string > setThisPermutation(std::vector<int> permutation);
 	

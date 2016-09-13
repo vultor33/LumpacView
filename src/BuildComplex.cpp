@@ -131,6 +131,8 @@ vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermu
 {
 	ReadInput readInp_ = activateReadInputWithFile();
 
+	buildLigands(readInp_);
+
 	if (ligandsPermutation.size() == 0)
 	{
 		int allChelation = 0;

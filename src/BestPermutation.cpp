@@ -47,7 +47,7 @@ void BestPermutation::findBestPermutation()
 	int lowestFilePosition = -1;
 	int lowestPermutationPosition = -1;
 	ofstream printPermutations_("permutations-" + referenceFile + ".txt");
-	for (size_t i = 0; i < allPerm.size(); i++)//allPerm.size()
+	for (size_t i = 0; i < allPerm.size(); i++)
 	{
 		double bestRms;
 		int rmsI;
@@ -63,7 +63,9 @@ void BestPermutation::findBestPermutation()
 			printPermutations_ << allPerm[i][j] << "  ";
 		printPermutations_ << endl;
 	}
+	printPermutations_ << endl << endl << "best=>  " << lowestFilePosition << " : " << lowestRmsd << endl;
 	printPermutations_.close();
+
 	printSupersition(lowestFilePosition, lowestPermutationPosition, allPerm, internalPerm);
 }
 
@@ -112,6 +114,26 @@ void BestPermutation::findMapToReferencePermutation(
 	vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
 	double lowestInternalRmsd = 1.0e99;
 	int lowestInernalPosition = -1;
+
+
+
+	/* PRINTING GEOMETRIC COMBINATIONS*/
+	vector<CoordXYZ> molCombinations = ligandToCoordXYZ(allAtomsOriginal);
+	ofstream pr_;
+	pr_.open("point-permutations.xyz", ofstream::app);
+	pr_ << molCombinations.size() << endl << "useless" << endl;
+	for (size_t i = 0; i < molCombinations.size(); i++)
+	{
+		pr_ << molCombinations[i].atomlabel << "  "
+			<< molCombinations[i].x << "  "
+			<< molCombinations[i].y << "  "
+			<< molCombinations[i].z << endl;
+	}
+	pr_.close();
+	/* END OF PRINTING*/
+
+
+
 	//ofstream printPermutations_("permutations-internal" + referenceFile + ".txt");
 	for (size_t i = 0; i < internalPerm.size(); i++)
 	{

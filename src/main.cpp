@@ -14,6 +14,7 @@ using namespace std;
 
 int main()
 {
+	
 	/*
 
 	SUGESTAO ---> A OTIMIZACAO DEVERIA SER FEITA COM BFGS	             
@@ -55,7 +56,7 @@ int main()
 	//vector<CoordXYZ> vec = bc_.build();
 	
 
-	/*
+	/* BUXVAR11
 	vector<string> ligandNames(9);
 	ligandNames[0] = "Lumpac-View-Ligand-BUVXAR11";
 	ligandNames[1] = "Lumpac-View-Ligand-BUVXAR11";
@@ -70,7 +71,7 @@ int main()
 	*/
 
 	
-	
+	/* DUCNAQ WORKING
 	vector<string> ligandNames(5);
 	ligandNames[0] = "Lumpac-View-Ligand-DUCNAQ-ligand-FALTA-OTIMIZAR";
 	ligandNames[1] = "Lumpac-View-Ligand-DUCNAQ-OONO";
@@ -79,8 +80,63 @@ int main()
 	ligandNames[4] = "Lumpac-View-Ligand-BUVXAR11";
 	BestPermutation bp_(ligandNames, "DUCNAQ.xyz");
 	bp_.findBestPermutation();
+	*/
+
+	/* VIGPAC - WORKING
+	vector<string> ligandNames(7);
+	ligandNames[0] = "ROCTAF-CL";
+	ligandNames[1] = "ROCTAF-CL";
+	ligandNames[2] = "ROCTAF-CL";
+	ligandNames[3] = "ROCTAF-ring";
+	ligandNames[4] = "ROCTAF-ring";
+	ligandNames[5] = "ROCTAF-ring";
+	ligandNames[6] = "ROCTAF-ring";
+	BestPermutation bp_(ligandNames, "VIGPAC-teste.xyz");
+	bp_.findBestPermutation();
+	*/
+
+	/* ROCTAF
+	vector<string> ligandNames(5);
+	ligandNames[0] = "ROCTAF-alif";
+	ligandNames[1] = "ROCTAF-ring";
+	ligandNames[2] = "ROCTAF-CL";
+	ligandNames[3] = "ROCTAF-CL";
+	ligandNames[4] = "ROCTAF-CL";
+	BestPermutation bp_(ligandNames, "roctaf-complex.xyz");
+	bp_.findBestPermutation();
+	*/
+
+
+	/* SERHED  */
+	vector<string> ligandNames(3);
+	ligandNames[0] = "SERHED-ligand-ciclo-5";
+	ligandNames[1] = "SERHED-ligand-ciclo-5";
+	ligandNames[2] = "SERHED-mono";
+	BestPermutation bp_(ligandNames, "serhed-complex.xyz");
+	bp_.findBestPermutation();
 	
-	
+
+	/* SOPFUY 
+	vector<string> ligandNames(3);
+	ligandNames[0] = "SOPFUY-ligand";
+	ligandNames[1] = "SOPFUY-ligand";
+	ligandNames[2] = "SOPFUY-ligand";
+	BestPermutation bp_(ligandNames, "sopfuy-complex.xyz");
+	bp_.findBestPermutation();
+	*/
+
+	/* SUXXIS 
+	vector<string> ligandNames(6);
+	ligandNames[0] = "SUXXIS-ligand";
+	ligandNames[1] = "SUXXIS-ligand";
+	ligandNames[2] = "SUXXIS-ligand";
+	ligandNames[3] = "SUXXIS-ligand";
+	ligandNames[4] = "SUXXIS-ligand";
+	ligandNames[5] = "SUXXIS-ligand";
+	BestPermutation bp_(ligandNames, "suxxis-complex.xyz");
+	bp_.findBestPermutation();  */
+
+
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

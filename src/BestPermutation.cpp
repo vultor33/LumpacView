@@ -248,6 +248,7 @@ unsigned int BestPermutation::factorial(unsigned int n)
 	return n * factorial(n - 1);
 }
 
+
 vector< vector<int> > BestPermutation::allFactorialPermutations(const int nMax)
 {
 	int * myints;
@@ -257,7 +258,9 @@ vector< vector<int> > BestPermutation::allFactorialPermutations(const int nMax)
 
 	std::sort(myints, myints + nMax);
 
-	vector< vector<int> > permutations(factorial(nMax));
+	long int size = factorial(nMax);
+
+	vector< vector<int> > permutations(size);
 	for (size_t i = 0; i < permutations.size(); i++)
 		permutations[i].resize(nMax);
 
@@ -268,6 +271,9 @@ vector< vector<int> > BestPermutation::allFactorialPermutations(const int nMax)
 		for (int i = 0; i < nMax; i++)
 		{
 			permutations[k][i] = myints[i];
+
+			// bla bla bla
+
 			//cout << myints[i] << "  ";
 		}
 		//cout << endl;

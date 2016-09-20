@@ -17,34 +17,24 @@ public:
 	void findBestPermutation();
 
 private:
-	void findMapToReferencePermutation(int filePermutation, std::vector< std::vector<int> > & allPerm, std::vector< std::vector<int> > &internalPerm, int & mapToReferenceI, double & mapToReferenceRms);
-
-	void printSupersition(int lowestFilePosition, int lowestPermutationPosition, std::vector< std::vector<int> > & allPerm, std::vector< std::vector<int> > & internalPerm);
-
-	std::vector< std::string > setThisPermutation(std::vector<int> permutation);
+	//data
+	std::vector< Ligand > bestLigand;
+	double bestRmsd;
+	std::string referenceFile;
 	
 	std::vector< Ligand > setThisPermutationLig(std::vector<int> permutation, std::vector<Ligand> & ligOriginal);
 
 	void printCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::string fName, std::string title = "useless");
 
 	std::vector<CoordXYZ> ligandToCoordXYZ(std::vector<Ligand> & allLigands);
-
-	unsigned int factorial(unsigned int n);
 	
-	//nova estrutura
 	void ligandPointPositionPermutaion(int nMax);
+
 	void ligandFilePositionPermutation(std::vector<int> & permutation);
-	std::vector< Ligand > bestLigand;
-	double bestRmsd;
-	/////////////////
-
-
 
 	std::vector< std::vector<int> > allFactorialPermutations(const int nMax);
 
-	std::vector< std::string > originalPermutation;
-
-	std::string referenceFile;
+	unsigned int factorial(unsigned int n);
 };
 
 #endif

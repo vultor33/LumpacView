@@ -10,7 +10,7 @@
 class BestPermutation
 {
 public:
-	BestPermutation(std::vector< std::string > originalPermutation_in, std::string referenceFile);
+	BestPermutation(std::string referenceFile);
 
 	~BestPermutation();
 
@@ -25,11 +25,20 @@ private:
 	
 	std::vector< Ligand > setThisPermutationLig(std::vector<int> permutation, std::vector<Ligand> & ligOriginal);
 
-	void printCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::string fName);
+	void printCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::string fName, std::string title = "useless");
 
 	std::vector<CoordXYZ> ligandToCoordXYZ(std::vector<Ligand> & allLigands);
 
 	unsigned int factorial(unsigned int n);
+	
+	//nova estrutura
+	void ligandPointPositionPermutaion(int nMax);
+	void ligandFilePositionPermutation(std::vector<int> & permutation);
+	std::vector< Ligand > bestLigand;
+	double bestRmsd;
+	/////////////////
+
+
 
 	std::vector< std::vector<int> > allFactorialPermutations(const int nMax);
 

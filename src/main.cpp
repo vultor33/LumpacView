@@ -107,12 +107,13 @@ int main()
 	*/
 
 
-	/* SERHED  */
+	/* SERHED  
 	vector<string> ligandNames(3);
 	ligandNames[0] = "SERHED-ligand-ciclo-5";
 	ligandNames[1] = "SERHED-ligand-ciclo-5";
 	ligandNames[2] = "SERHED-mono";
-	BestPermutation bp_(ligandNames, "serhed-complex.xyz");
+	*/
+	BestPermutation bp_("serhed-complex.xyz");
 	bp_.findBestPermutation();
 	
 

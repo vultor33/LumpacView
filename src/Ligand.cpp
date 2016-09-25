@@ -170,27 +170,61 @@ bool Ligand::calculateMonodentate()
 
 bool Ligand::calculateBidentate()
 {
-	if (coord.size() < 3)
+	if (coord.size() < 2)
 	{
-		cout << "Need at least three atoms" << endl;
+		cout << "Need at least two atoms" << endl;
 		return false;
 	}
 
+	AuxMath auxMath_;
+	CoordXYZ thirdReferenceAtom;
 	X1.x = 0.5e0 * (coord[0].x + coord[1].x);
 	X1.y = 0.5e0 * (coord[0].y + coord[1].y);
 	X1.z = 0.5e0 * (coord[0].z + coord[1].z);
+	if (coord.size() == 2)
+	{
+		thirdReferenceAtom.x = 0.0e0;
+		thirdReferenceAtom.y = 0.0e0;
+		thirdReferenceAtom.z = 1.0e0;
+		bool notLi;
+		int kLi = 0;
+		do
+		{
+			kLi++;
+			if (kLi > 1000000)
+			{
+				cout << "Infinity loop at Ligand::calculateBidentate - contact developers" << endl;
+				return false;
+			}
+			thirdReferenceAtom.x += auxMath_.fRand(0.0, 0.5e0);
+			thirdReferenceAtom.y += auxMath_.fRand(0.0, 0.5e0);
+			thirdReferenceAtom.z += auxMath_.fRand(0.0, 0.5e0);
+			double linearDependence1 = auxMath_.escalarProduct(
+				-X1.x + coord[0].x,
+				-X1.y + coord[0].y,
+				-X1.z + coord[0].z,
+				-X1.x + thirdReferenceAtom.x,
+				-X1.y + thirdReferenceAtom.y,
+				-X1.z + thirdReferenceAtom.z
+				);
+			notLi = (abs(linearDependence1) < 1.0e-6);
+		} while (notLi);
+	}
+	else
+	{
+		thirdReferenceAtom = coord[2];
+	}
 
 	// rotate third atom point to 90 degrees
-	AuxMath auxMath_;
 	vector<double> normal = auxMath_.normalVectorFrom3Points(
 		coord[0].x, coord[0].y, coord[0].z,
 		X1.x, X1.y, X1.z,
-		coord[2].x, coord[2].y, coord[2].z
+		thirdReferenceAtom.x, thirdReferenceAtom.y, thirdReferenceAtom.z
 		);
 	double angle = auxMath_.angleFrom3Points(
 		coord[0].x, coord[0].y, coord[0].z,
 		X1.x, X1.y, X1.z,
-		coord[2].x, coord[2].y, coord[2].z
+		thirdReferenceAtom.x, thirdReferenceAtom.y, thirdReferenceAtom.z
 		);
 
 	// quando e menos e quando e mais.
@@ -200,9 +234,9 @@ bool Ligand::calculateBidentate()
 
 	vector<double> direction = auxMath_.matrixXVector(
 		rot, 
-		-X1.x + coord[2].x, 
-		-X1.y + coord[2].y,
-		-X1.z + coord[2].z);
+		-X1.x + thirdReferenceAtom.x,
+		-X1.y + thirdReferenceAtom.y,
+		-X1.z + thirdReferenceAtom.z);
 
 	double angleEnd = auxMath_.angleFrom3Points(
 		coord[0].x, coord[0].y, coord[0].z,
@@ -217,9 +251,9 @@ bool Ligand::calculateBidentate()
 		rot = auxMath_.rotationMatrix(normal[0], normal[1], normal[2], rotAngle);
 		direction = auxMath_.matrixXVector(
 			rot,
-			-X1.x + coord[2].x,
-			-X1.y + coord[2].y,
-			-X1.z + coord[2].z);
+			-X1.x + thirdReferenceAtom.x,
+			-X1.y + thirdReferenceAtom.y,
+			-X1.z + thirdReferenceAtom.z);
 	}
 	
 	auxMath_.normalize(direction);
@@ -235,9 +269,9 @@ bool Ligand::calculateBidentate()
 
 bool Ligand::calculateTridentate()
 {
-	if (coord.size() < 4)
+	if (coord.size() < 3)
 	{
-		cout << "Need at least four atoms" << endl;
+		cout << "Need at least three atoms" << endl;
 		return false;
 	}
 
@@ -250,21 +284,6 @@ bool Ligand::calculateTridentate()
 	X1.x = geometricCenter[0];
 	X1.y = geometricCenter[1];
 	X1.z = geometricCenter[2];
-
-	vector<double> centroid(3);
-	centroid[0] = 0.0e0;
-	centroid[1] = 0.0e0;
-	centroid[2] = 0.0e0;
-	for (size_t i = 0; i < coord.size(); i++)
-	{
-		centroid[0] += coord[i].x;
-		centroid[1] += coord[i].y;
-		centroid[2] += coord[i].z;
-	}
-	centroid[0] /= coord.size();
-	centroid[1] /= coord.size();
-	centroid[2] /= coord.size();
-
 	vector<double> normal = auxMath_.normalVectorFrom3Points(
 		coord[0].x, coord[0].y, coord[0].z,
 		coord[1].x, coord[1].y, coord[1].z,
@@ -274,18 +293,33 @@ bool Ligand::calculateTridentate()
 	X2.y = normal[1];
 	X2.z = normal[2];
 
-	// if it points to centroid, change direction
-	double angle = auxMath_.angleFrom3Points(
-		X2.x + X1.x, X2.y + X1.y, X2.z + X1.z,
-		X1.x, X1.y, X1.z,
-		centroid[0], centroid[1], centroid[2]
-		);		
-
-	if (angle < auxMath_._pi/2.0e0)
+	if (coord.size() > 3)
 	{
-		X2.x *= -1.0e0;
-		X2.y *= -1.0e0;
-		X2.z *= -1.0e0;
+		vector<double> centroid(3);
+		centroid[0] = 0.0e0;
+		centroid[1] = 0.0e0;
+		centroid[2] = 0.0e0;
+		for (size_t i = 0; i < coord.size(); i++)
+		{
+			centroid[0] += coord[i].x;
+			centroid[1] += coord[i].y;
+			centroid[2] += coord[i].z;
+		}
+		centroid[0] /= coord.size();
+		centroid[1] /= coord.size();
+		centroid[2] /= coord.size();
+		// if it points to centroid, change direction
+		double angle = auxMath_.angleFrom3Points(
+			X2.x + X1.x, X2.y + X1.y, X2.z + X1.z,
+			X1.x, X1.y, X1.z,
+			centroid[0], centroid[1], centroid[2]
+			);
+		if (angle < auxMath_._pi / 2.0e0)
+		{
+			X2.x *= -1.0e0;
+			X2.y *= -1.0e0;
+			X2.z *= -1.0e0;
+		}
 	}
 
 #ifdef _DEBUG

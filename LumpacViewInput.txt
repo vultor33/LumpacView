@@ -1,9 +1,8 @@
 Eu
 Eu_spk
 3
-SERHED-ligand-ciclo-5
-SERHED-ligand-ciclo-5
-SERHED-mono
-
+Lumpac-View-Dummy-Ligand-Tridentate
+Lumpac-View-Dummy-Ligand-Tridentate
+Lumpac-View-Dummy-Ligand-Tridentate
 
 ! a ordem importa

@@ -7,6 +7,7 @@
 #include "BuildComplex.h"
 #include "RootMeanSquareDeviation.h"
 #include "BestPermutation.h"
+#include "FindIsomers.h"
 
 
 using namespace std;
@@ -52,9 +53,8 @@ int main()
 	*/
 
 	// RUNNING THROUGH LUMPAC VIEW INPUT
-	BuildComplex bc_;
-	vector<CoordXYZ> vec = bc_.build();
-	
+	//BuildComplex bc_;
+	//vector<CoordXYZ> vec = bc_.build();
 
 	/* BUXVAR11
 	vector<string> ligandNames(9);
@@ -138,6 +138,9 @@ int main()
 	ligandNames[5] = "SUXXIS-ligand";
 	BestPermutation bp_(ligandNames, "suxxis-complex.xyz");
 	bp_.findBestPermutation();  */
+
+
+	FindIsomers findIso_;
 
 
 

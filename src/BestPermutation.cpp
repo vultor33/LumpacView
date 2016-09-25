@@ -36,7 +36,7 @@ void BestPermutation::findBestPermutation()
 	convert >> bestRmsdTitle;
 	bestRmsdTitle = "final rmsd:  " + bestRmsdTitle;
 	printCoordXYZ(allAtoms, "finalConformation", bestRmsdTitle);
-	////////////////////////	
+	///////////////////////
 }
 
 void BestPermutation::ligandPointPositionPermutaion(int nMax)

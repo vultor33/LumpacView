@@ -52,8 +52,8 @@ int main()
 	*/
 
 	// RUNNING THROUGH LUMPAC VIEW INPUT
-	//BuildComplex bc_;
-	//vector<CoordXYZ> vec = bc_.build();
+	BuildComplex bc_;
+	vector<CoordXYZ> vec = bc_.build();
 	
 
 	/* BUXVAR11
@@ -113,8 +113,10 @@ int main()
 	ligandNames[1] = "SERHED-ligand-ciclo-5";
 	ligandNames[2] = "SERHED-mono";
 	*/
-	BestPermutation bp_("serhed-complex.xyz");
-	bp_.findBestPermutation();
+	
+	
+	//BestPermutation bp_("serhed-complex.xyz");
+	//bp_.findBestPermutation();
 	
 
 	/* SOPFUY 

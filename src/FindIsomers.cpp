@@ -15,6 +15,8 @@ FindIsomers::FindIsomers()
 	// H, B and C are different atoms
 
 	BuildComplex bc_;
+	// e so alimentar o assembleComplex com: vector<string> 
+	// que nao precisa do input.
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA();
 	int permutationsNumber = bc_.getLigandsPermutation().size();
 

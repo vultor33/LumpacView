@@ -15,6 +15,8 @@ public:
 
 	void readLumpacViewInput();
 
+	void setLumpacViewInputWithoutFile(std::vector< std::string > & inputInformations);
+
 	void rePrintInput();
 
 	void buildLumpacViewFromNames(std::vector< std::string > & fileNames);

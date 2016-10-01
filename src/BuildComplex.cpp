@@ -24,7 +24,7 @@ BuildComplex::~BuildComplex(){}
 
 vector<CoordXYZ> BuildComplex::build()
 {
-	return build(activateReadInputWithFile());
+	return build(activateReadInput());
 }
 
 vector<CoordXYZ> BuildComplex::build(
@@ -127,11 +127,11 @@ void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordinat
 	newLigFile_.close();
 }
 
-vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermutation)
+vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermutation, vector<string> & inputInformations)
 {
-	ReadInput readInp_ = activateReadInputWithFile();
+	ReadInput readInp_ = activateReadInput(inputInformations);
 
-	buildLigands(readInp_);
+	bool terminate = buildLigands(readInp_);
 
 	if (ligandsPermutation.size() == 0)
 	{
@@ -141,15 +141,13 @@ vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermu
 			allChelation += readInp_.allLigands[i].getChelation();
 		}
 		actualLigandPermutation.resize(allChelation);
-		for (size_t i = 0; i < allChelation; i++)
+		for (int i = 0; i < allChelation; i++)
 		{
 			actualLigandPermutation[i] = i;
 		}
 	}
 	else
 		actualLigandPermutation = ligandsPermutation;
-
-	bool terminate = buildLigands(readInp_);
 
 	if (terminate) return vector<Ligand>();
 
@@ -182,19 +180,25 @@ vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermu
 
 int BuildComplex::getLigandsNumber()
 {
-	ReadInput readInp_ = activateReadInputWithFile();
+	ReadInput readInp_ = activateReadInput();
 	return readInp_.allLigands.size();
 }
 
 
-ReadInput BuildComplex::activateReadInputWithFile()
+ReadInput BuildComplex::activateReadInput(vector< string > & inputInformations)
 {
 	ReadInput readInp_;
-	if (!ReadLumpacViewInput(readInp_))
+	if (inputInformations.size() == 0)
 	{
-		cout << "error on input" << endl;
-		exit(1);
+		if (!ReadLumpacViewInput(readInp_))
+		{
+			cout << "error on input" << endl;
+			exit(1);
+		}
 	}
+	else
+		readInp_.setLumpacViewInputWithoutFile(inputInformations);
+
 	vector<string> options = readInp_.getOptions();
 	options[0] = "mopac2009";
 	options[2] = " CHARGE=1 NOLOG GEO-OK SCFCRT=1.D-10";
@@ -203,20 +207,6 @@ ReadInput BuildComplex::activateReadInputWithFile()
 	return readInp_;
 }
 
-ReadInput BuildComplex::activateReadInputWithNames(vector<string> & ligandNames)
-{
-	//falta o metal name e arquivo e tal.
-	ReadInput readInp_;
-	readInp_.buildLumpacViewFromNames(ligandNames);
-	/* OPCOES DESATIVADA
-	vector<string> options = readInp_.getOptions();
-	options[0] = "mopac2009";
-	options[2] = " CHARGE=1 NOLOG GEO-OK SCFCRT=1.D-10";
-	readInp_.setProperties(options, readInp_.getMopacExecPath());
-	readInp_.setProperties(readInp_.getOptions(), "M2009_Ln_Orbitals.exe");
-	*/
-	return readInp_;
-}
 
 void BuildComplex::fitSA()
 {

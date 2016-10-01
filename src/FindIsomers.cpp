@@ -12,8 +12,7 @@ FindIsomers::~FindIsomers(){}
 
 FindIsomers::FindIsomers()
 {
-	// B e C are different atoms
-	// limpar os arquivos dos ligantes e fazer as permutacoes necessarias
+	// H, B and C are different atoms
 
 	BuildComplex bc_;
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA();

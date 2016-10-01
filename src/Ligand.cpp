@@ -566,15 +566,15 @@ void Ligand::placeLigandOnPoins(vector<int>& pLig, const vector<double>& points_
 	rotateOnX2(-(62-iDistanceMin) * 0.1);
 
 #ifdef _DEBUG
-	placeLigand_.open("placeLigandEND.xyz");
-	placeLigand_ << coord.size() + chelation << endl << "t " << endl;
-	printLigand(placeLigand_);
-	placeLigand_ << "Au  " << x1 << "  " << y1 << "  " << z1 << endl;
-	placeLigand_ << "Au  " << x2 << "  " << y2 << "  " << z2 << endl;
+	ofstream placeLigand2_;
+	placeLigand2_.open("placeLigandEND.xyz");
+	placeLigand2_ << coord.size() + chelation << endl << "t " << endl;
+	printLigand(placeLigand2_);
+	placeLigand2_ << "Au  " << x1 << "  " << y1 << "  " << z1 << endl;
+	placeLigand2_ << "Au  " << x2 << "  " << y2 << "  " << z2 << endl;
 	if (chelation == 3)
-		placeLigand_ << "Au  " << x3 << "  " << y3 << "  " << z3 << endl;
-
-	placeLigand_.close();
+		placeLigand2_ << "Au  " << x3 << "  " << y3 << "  " << z3 << endl;
+	placeLigand2_.close();
 #endif
 
 }

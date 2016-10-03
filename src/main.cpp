@@ -141,6 +141,7 @@ int main()
 
 
 	FindIsomers findIso_;
+	findIso_.start();
 
 
 

@@ -63,3 +63,19 @@ private:
 };
 
 #endif
+
+
+/*
+EXEMPLOS DE USOS
+=======================================================================================================================================
+std::vector<Ligand> BuildComplex::assembleComplexWithoutSA(std::vector<int> & ligandsPermutation = std::vector<int>(), std::vector< std::string > & inputInformations = std::vector< std::string >());
+->
+vector< string > inputInformations(size);
+inputInformations[0] = "metalName";
+inputInformations[1] = "metalParams";
+inputInformations[2] = "agua";
+inputInformations[3] = "agua";
+inputInformations[4] = "agua";
+=======================================================================================================================================
+
+*/

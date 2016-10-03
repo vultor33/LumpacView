@@ -60,6 +60,8 @@ void ReadInput::setLumpacViewInputWithoutFile(vector< string > & inputInformatio
 	options[2] = "";
 	options[3] = metalParams;
 	options[4] = metalName;
+
+	readAllLigands();
 }
 
 

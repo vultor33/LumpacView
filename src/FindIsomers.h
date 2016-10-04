@@ -19,6 +19,10 @@ public:
 	void start();
 
 private:
+	std::vector< std::string > inputInformations;
+
+	double identicalStructuresLimit;
+
 	void permutation(int nMax);
 
 	void ligandFilePositionPermutation(std::vector<int> & permutation);
@@ -27,7 +31,13 @@ private:
 
 	std::vector< Ligand > setThisPermutationLig(std::vector<int> permutation, std::vector<Ligand> & ligOriginal);
 
+	std::vector< CoordXYZ > setThisPermutationAtoms(std::vector<int> permutation, std::vector<CoordXYZ> &  originAtoms);
+
 	std::vector<CoordXYZ> ligandToCoordXYZ(std::vector<Ligand> & allLigands);
+
+	std::vector<CoordXYZ> readMidXyz(std::ifstream & openStream);
+
+	bool doOverlayWithPreviousConfigurations(std::vector<CoordXYZ> & atomsPointPermutation);
 
 	void appendPrintCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::string fName, std::string title);
 

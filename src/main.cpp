@@ -17,9 +17,7 @@ int main()
 {
 	
 	/*
-
 	SUGESTAO ---> A OTIMIZACAO DEVERIA SER FEITA COM BFGS	             
-
 	*/
 
 	/*
@@ -139,11 +137,8 @@ int main()
 	BestPermutation bp_(ligandNames, "suxxis-complex.xyz");
 	bp_.findBestPermutation();  */
 
-
 	FindIsomers findIso_;
 	findIso_.start();
-
-
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

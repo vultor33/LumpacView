@@ -82,14 +82,13 @@ double KabschRmsd::rmsOverlay(vector<CoordXYZ> & mol1, vector<CoordXYZ> & mol2)
 
 	if (isnan(rmsd))
 	{
-		saveMol1Array[0][0] -= 0.0000001;
-		saveMol2Array[0][0] += 0.0000001;
-		saveMol1Array[0][1] += 0.0000001;
-		saveMol2Array[0][1] += 0.0000001;
-		saveMol1Array[0][2] -= 0.0000001;
-		saveMol2Array[0][2] -= 0.0000001;
+		saveMol1Array[0][0] -= 0.05;
+		saveMol2Array[0][0] += 0.05;
+		saveMol1Array[0][1] += 0.05;
+		saveMol2Array[0][1] += 0.05;
+		saveMol1Array[0][2] -= 0.05;
 		rmsd = 0.0e0;
-		fast_rmsd(mol1Array, mol2Array, nlist, &rmsd);
+		fast_rmsd(saveMol1Array, saveMol2Array, nlist, &rmsd);
 		if (isnan(rmsd))
 			rmsd = 1.0e10;
 	}

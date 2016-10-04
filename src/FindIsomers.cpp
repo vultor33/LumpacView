@@ -4,6 +4,8 @@
 #include <string>
 #include <algorithm>
 #include <stdio.h>
+#include <iostream>
+#include <sstream>
 
 #include "BuildComplex.h"
 #include "Coordstructs.h"
@@ -11,11 +13,12 @@
 
 using namespace std;
 
-FindIsomers::~FindIsomers()
+FindIsomers::FindIsomers()
 {
+	identicalStructuresLimit = 0.1;
 }
 
-FindIsomers::FindIsomers(){}
+FindIsomers::~FindIsomers(){}
 
 void FindIsomers::start()
 {
@@ -33,24 +36,20 @@ void FindIsomers::start()
 	// minimizar a combinacao dela com os atomos
 	// e guardar.
 	BuildComplex bc_;
-	vector< string > inputInformations(6);
+	inputInformations.resize(6);
 	inputInformations[0] = "Eu";
 	inputInformations[1] = "Eu_spk";
 	inputInformations[2] = "Lumpac-View-Dummy-Ligand-Monodentate";
 	inputInformations[3] = "Lumpac-View-Dummy-Ligand-Monodentate";
 	inputInformations[4] = "Lumpac-View-Dummy-Ligand-Monodentate";
 	inputInformations[5] = "Lumpac-View-Dummy-Ligand-Monodentate";
-
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);// permutation
-	int permutationsNumber = bc_.getLigandsPermutation().size();
-
 	streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
-
 	appendPrintCoordXYZ(allAtomsOriginal, fileAllIsomers, "initial configuration");
 	streamAllIsomers_.close();
+	int permutationsNumber = bc_.getLigandsPermutation().size();
+	permutation(permutationsNumber);
 }
-
-
 
 void FindIsomers::permutation(int nMax)
 {
@@ -60,13 +59,13 @@ void FindIsomers::permutation(int nMax)
 		myints[i] = i;
 	std::sort(myints, myints + nMax);
 	long int size = factorial(nMax);
-	vector<int> permutation(nMax);
+	vector<int> permutationV(nMax);
 	do
 	{
 		for (int i = 0; i < nMax; i++)
-			permutation[i] = myints[i];
+			permutationV[i] = myints[i];
 
-		// aplicar o vector<int> permutation
+		ligandFilePositionPermutation(permutationV);
 
 	} while (std::next_permutation(myints, myints + nMax));
 
@@ -80,39 +79,95 @@ void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 
 	// aplicar permutation ao sistema
 	BuildComplex bc_;
-	vector<Ligand> allLigands = bc_.assembleComplexWithoutSA(permutation);
+	vector<Ligand> allLigands = bc_.assembleComplexWithoutSA(permutation,inputInformations);
+	vector<CoordXYZ> atomsPointPermutation = ligandToCoordXYZ(allLigands);
 	int nMax = allLigands.size();
 	/////////////////////////////////
 
-	int * myints;
-	myints = new int[nMax];
-	for (int i = 0; i < nMax; i++)
-		myints[i] = i;
-	std::sort(myints, myints + nMax);
-	long int size = factorial(nMax);
-	vector<int> internalPermutation(nMax);
-	do
+	bool isDifferent = doOverlayWithPreviousConfigurations(atomsPointPermutation);
+	if (isDifferent)
 	{
-		for (int i = 0; i < nMax; i++)
-			internalPermutation[i] = myints[i];
-
-		vector< Ligand > localFilePermutation = setThisPermutationLig(internalPermutation, allLigands);
-
-		vector<CoordXYZ> molTempI = ligandToCoordXYZ(localFilePermutation);
-		/*
-		double rmsI = rmsd_.rmsOverlay(molCrystal, molTempI);
-
-		if (rmsI < bestRmsd)
-		{
-			bestRmsd = rmsI;
-			bestLigand = localFilePermutation;
-		}
-		*/
-	} while (std::next_permutation(myints, myints + nMax));
-
-	delete[] myints;
+		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
+		appendPrintCoordXYZ(atomsPointPermutation, fileAllIsomers, "title");
+		streamAllIsomers_.close();
+	}
 }
 
+bool FindIsomers::doOverlayWithPreviousConfigurations(vector<CoordXYZ> & atomsPointPermutation)
+{
+	ifstream streamAllIsomersRead_;
+	streamAllIsomersRead_.open(fileAllIsomers);
+	RootMeanSquareDeviation rmsd_;
+	vector<CoordXYZ> atomsConfigurationsOnFile;
+	//LOOP ON FILE
+	do
+	{
+		 atomsConfigurationsOnFile = readMidXyz(streamAllIsomersRead_);
+		 if (atomsConfigurationsOnFile.size() == 0)
+			 break;
+
+		 int nMax = atomsConfigurationsOnFile.size();
+		 int * myints;
+		 myints = new int[nMax];
+		 for (int i = 0; i < nMax; i++)
+			 myints[i] = i;
+		 std::sort(myints, myints + nMax);
+		 long int size = factorial(nMax);
+		 vector<int> internalPermutationV(nMax);
+		 // LOOP ON ATOMS
+		 do
+		 {
+			 for (int i = 0; i < nMax; i++)
+				 internalPermutationV[i] = myints[i];
+			 vector<CoordXYZ> atomsInternalPermutations = setThisPermutationAtoms(internalPermutationV, atomsConfigurationsOnFile);
+			 // H <-> C is not possible -> quit.
+			 for (size_t i = 0; i < atomsConfigurationsOnFile.size(); i++)
+				 if (atomsInternalPermutations[i].atomlabel != atomsPointPermutation[i].atomlabel)
+					 continue;
+
+			 double rmsd = rmsd_.rmsOverlay(atomsPointPermutation, atomsInternalPermutations);
+			 if (rmsd < identicalStructuresLimit)
+				 return false;
+		 } while (std::next_permutation(myints, myints + nMax));
+
+		 delete[] myints;
+
+	} while (atomsConfigurationsOnFile.size() != 0);
+
+	return true;
+}
+
+vector<CoordXYZ> FindIsomers::readMidXyz(ifstream & openStream_)
+{
+	string auxline;
+	getline(openStream_, auxline);
+	if (auxline == "")
+		return vector<CoordXYZ>();
+
+	int natoms;
+	stringstream line1;
+	line1 << auxline;
+	line1 >> natoms;
+	vector<CoordXYZ> atomsRead(natoms);
+	getline(openStream_, auxline);
+	for (int i = 0; i < natoms; i++)
+	{
+		stringstream linei;
+		getline(openStream_, auxline);
+		linei << auxline;
+		linei >> atomsRead[i].atomlabel
+			>> atomsRead[i].x
+			>> atomsRead[i].y
+			>> atomsRead[i].z;
+	}
+	if (atomsRead.size() == 0)
+	{
+		cout << "error on FindIsomers::readMidXyz" << endl;
+		exit(1);
+	}
+	else
+		return atomsRead;
+}
 
 vector< Ligand > FindIsomers::setThisPermutationLig(vector<int> permutation, vector<Ligand> & ligOriginal)
 {
@@ -121,6 +176,15 @@ vector< Ligand > FindIsomers::setThisPermutationLig(vector<int> permutation, vec
 		LigPermutation[k] = ligOriginal[permutation[k]];
 	return LigPermutation;
 }
+
+std::vector< CoordXYZ > FindIsomers::setThisPermutationAtoms(std::vector<int> permutation, std::vector<CoordXYZ> &  originAtoms)
+{
+	vector<CoordXYZ> permutAtoms(permutation.size());
+	for (size_t k = 0; k < permutation.size(); k++)
+		permutAtoms[k] = originAtoms[permutation[k]];
+	return permutAtoms;
+}
+
 
 unsigned int FindIsomers::factorial(unsigned int n)
 {
@@ -166,4 +230,6 @@ void FindIsomers::appendPrintCoordXYZ(vector<CoordXYZ> & allAtoms, string fName,
 	}
 	pr_.close();
 }
+
+
 

@@ -36,13 +36,14 @@ void FindIsomers::start()
 	// minimizar a combinacao dela com os atomos
 	// e guardar.
 	BuildComplex bc_;
-	inputInformations.resize(6);
+	inputInformations.resize(7);
 	inputInformations[0] = "Eu";
 	inputInformations[1] = "Eu_spk";
 	inputInformations[2] = "Lumpac-View-Dummy-Ligand-Monodentate";
 	inputInformations[3] = "Lumpac-View-Dummy-Ligand-Monodentate1";
 	inputInformations[4] = "Lumpac-View-Dummy-Ligand-Monodentate2";
 	inputInformations[5] = "Lumpac-View-Dummy-Ligand-Monodentate3";
+	inputInformations[6] = "Lumpac-View-Dummy-Ligand-Bidentate";
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);// permutation
 	streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
 	appendPrintCoordXYZ(allAtomsOriginal, fileAllIsomers, "initial configuration");

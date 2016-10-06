@@ -43,7 +43,7 @@ void FindIsomers::start()
 	inputInformations[3] = "Lumpac-View-Dummy-Ligand-Monodentate1";
 	inputInformations[4] = "Lumpac-View-Dummy-Ligand-Monodentate2";
 	inputInformations[5] = "Lumpac-View-Dummy-Ligand-Monodentate3";
-	inputInformations[6] = "Lumpac-View-Dummy-Ligand-Bidentate";
+	inputInformations[6] = "Lumpac-View-Dummy-Ligand-Monodentate3";
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);// permutation
 	streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
 	appendPrintCoordXYZ(allAtomsOriginal, fileAllIsomers, "initial configuration");
@@ -107,37 +107,9 @@ bool FindIsomers::doOverlayWithPreviousConfigurations(vector<CoordXYZ> & atomsPo
 		 if (atomsConfigurationsOnFile.size() == 0)
 			 break;
 
-		 int nMax = atomsConfigurationsOnFile.size();
-		 int * myints;
-		 myints = new int[nMax];
-		 for (int i = 0; i < nMax; i++)
-			 myints[i] = i;
-		 std::sort(myints, myints + nMax);
-		 long int size = factorial(nMax);
-		 vector<int> internalPermutationV(nMax);
-		 bool differentAtomCombination;
-		 // LOOP ON ATOMS
-		 do
-		 {
-			 for (int i = 0; i < nMax; i++)
-				 internalPermutationV[i] = myints[i];
-			 vector<CoordXYZ> atomsInternalPermutations = setThisPermutationAtoms(internalPermutationV, atomsConfigurationsOnFile);
-			 // H <-> C is not possible -> quit.
-			 for (size_t i = 0; i < atomsConfigurationsOnFile.size(); i++)
-			 {
-				 differentAtomCombination = atomsInternalPermutations[i].atomlabel != atomsPointPermutation[i].atomlabel;
-				 if (differentAtomCombination)
-					 break;
-			 }
-
-			 if (differentAtomCombination)
-				 continue;
-
-			 double rmsd = rmsd_.rmsOverlay(atomsPointPermutation, atomsInternalPermutations);
-			 if (rmsd < identicalStructuresLimit)
-				 return false;
-		 } while (std::next_permutation(myints, myints + nMax));
-		 delete[] myints;
+		 double rmsd = rmsd_.hardRmsOverlay(atomsPointPermutation, atomsConfigurationsOnFile);
+		 if (rmsd < identicalStructuresLimit)
+			 return false;
 
 	} while (atomsConfigurationsOnFile.size() != 0);
 

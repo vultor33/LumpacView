@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 #include "AuxMath.h"
 #include "Coordstructs.h"
@@ -32,6 +33,66 @@ double RootMeanSquareDeviation::rmsOverlay(vector<CoordXYZ> & mol1, vector<Coord
 
 	return krmsd_.rmsOverlay(mol1, mol2);
 }
+
+double RootMeanSquareDeviation::hardRmsOverlay(vector<CoordXYZ> & mol1, vector<CoordXYZ> & mol2)
+{
+	KabschRmsd krmsd_;
+
+	int nMax = mol2.size();
+	int * myints;
+	myints = new int[nMax];
+	for (int i = 0; i < nMax; i++)
+		myints[i] = i;
+	std::sort(myints, myints + nMax);
+	long int size = factorial(nMax);
+	vector<int> internalPermutationV(nMax);
+	bool differentAtomCombination;
+	// LOOP ON ATOMS
+	double rmsI = 1.0e99;
+	do
+	{
+		for (int i = 0; i < nMax; i++)
+			internalPermutationV[i] = myints[i];
+		vector<CoordXYZ> atomsInternalPermutations = setThisPermutationAtoms(internalPermutationV, mol2);
+		// H <-> C is not possible -> quit.
+		for (size_t i = 0; i < mol2.size(); i++)
+		{
+			differentAtomCombination = atomsInternalPermutations[i].atomlabel != mol1[i].atomlabel;
+			if (differentAtomCombination)
+				break;
+		}
+		if (differentAtomCombination)
+			continue;
+
+		double rmsd = krmsd_.rmsOverlay(mol1, atomsInternalPermutations);
+		if (rmsd < rmsI)
+			rmsI = rmsd;
+	
+	} while (std::next_permutation(myints, myints + nMax));
+	
+	delete[] myints;
+
+	return rmsI;
+}
+
+
+
+unsigned int RootMeanSquareDeviation::factorial(unsigned int n)
+{
+	if (n == 0)
+		return 1;
+	return n * factorial(n - 1);
+}
+
+std::vector< CoordXYZ > RootMeanSquareDeviation::setThisPermutationAtoms(std::vector<int> permutation, std::vector<CoordXYZ> &  originAtoms)
+{
+	vector<CoordXYZ> permutAtoms(permutation.size());
+	for (size_t k = 0; k < permutation.size(); k++)
+		permutAtoms[k] = originAtoms[permutation[k]];
+	return permutAtoms;
+}
+
+
 
 /// LEMBRAR DE CORRIGIR OS ZEROS DO LUMPACVIEW
 double RootMeanSquareDeviation::oldRmsdToAddressPoints(string file1, string file2)

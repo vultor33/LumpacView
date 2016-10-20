@@ -18,6 +18,8 @@ public:
 
 	void start();
 
+	void printSelectedIsomer(std::vector<int> permutation, std::vector<std::string > inputInformations, std::string outputName);
+
 private:
 	int counter;
 	int allCounter;
@@ -45,8 +47,6 @@ private:
 
 	std::vector< CoordXYZ > setThisPermutationAtoms(std::vector<int> permutation, std::vector<CoordXYZ> &  originAtoms);
 
-	std::vector<CoordXYZ> ligandToCoordXYZ(std::vector<Ligand> & allLigands);
-
 	std::vector<CoordXYZ> readMidXyz(std::ifstream & openStream);
 
 	bool doOverlayWithPreviousConfigurations(std::vector<CoordXYZ> & atomsPointPermutation);
@@ -66,6 +66,8 @@ private:
 	std::string fileAllIsomers;
 
 	std::ofstream streamAllIsomers_;
+
+	std::vector<CoordXYZ> ligandToCoordXYZ(std::vector<Ligand> & allLigands);
 
 
 

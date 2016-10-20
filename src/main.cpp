@@ -139,16 +139,35 @@ int main()
 	BestPermutation bp_(ligandNames, "suxxis-complex.xyz");
 	bp_.findBestPermutation();  */
 
-	//  Start Timers
-	//double wall0 = clock();
+	/* 
+	-> FIND ISOMERS - WORKING
+	*/
 
 	FindIsomers findIso_;
 	findIso_.start();
 
-	//  Stop timers
-	//double wall1 = clock();
+/*
+	vector<string> inputInformations(7);
+	inputInformations[0] = "Eu";
+	inputInformations[1] = "Eu_spk";
+	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
+	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
+	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
+	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Bidentate";
+	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Bidentate";
+	vector<int> permutation(7);
+	permutation[0] = 0;
+	permutation[1] = 1;
+	permutation[2] = 3;
+	permutation[3] = 6;
+	permutation[4] = 2;
+	permutation[5] = 4;
+	permutation[6] = 5;
+	FindIsomers fd_;
+	fd_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
+*/
 
-	//cout << "Wall Time = " << wall1 - wall0 << endl;
+
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

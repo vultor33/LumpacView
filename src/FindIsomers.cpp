@@ -77,6 +77,20 @@ void FindIsomers::start()
 	cout << "number of configurations  = " << counter << endl;
 }
 
+void FindIsomers::printSelectedIsomer(
+	vector<int> permutation, 
+	vector<std::string> inputInformations,
+	string outputName)
+{
+	if (exists_test0(outputName))
+		remove(outputName.c_str());
+
+	BuildComplex bc_;
+	vector<Ligand> allLigands = bc_.assembleComplexWithoutSA(permutation, inputInformations);
+	vector<CoordXYZ> atomsPointPermutation = ligandToCoordXYZ(allLigands);
+	appendPrintCoordXYZ(atomsPointPermutation, outputName, permutationToString(permutation));
+}
+
 void FindIsomers::permutation(int nMax)
 {
 	int * myints;

@@ -54,6 +54,7 @@ double RootMeanSquareDeviation::hardRmsOverlay(vector<CoordXYZ> & mol1, vector<C
 		for (int i = 0; i < nMax; i++)
 			internalPermutationV[i] = myints[i];
 		vector<CoordXYZ> atomsInternalPermutations = setThisPermutationAtoms(internalPermutationV, mol2);
+		vector<CoordXYZ> mol1Temp = mol1;//fredmudar
 		// H <-> C is not possible -> quit.
 		for (size_t i = 0; i < mol2.size(); i++)
 		{
@@ -64,7 +65,7 @@ double RootMeanSquareDeviation::hardRmsOverlay(vector<CoordXYZ> & mol1, vector<C
 		if (differentAtomCombination)
 			continue;
 
-		double rmsd = krmsd_.rmsOverlay(mol1, atomsInternalPermutations);
+		double rmsd = krmsd_.rmsOverlay(mol1Temp, atomsInternalPermutations);
 		if (rmsd < rmsI)
 			rmsI = rmsd;
 	

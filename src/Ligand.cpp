@@ -258,13 +258,13 @@ bool Ligand::calculateBidentate()
 	
 	auxMath_.normalize(direction);
 	X2.x = -direction[0];
-	X2.y = -direction[1];
-	X2.z = -direction[2];
+X2.y = -direction[1];
+X2.z = -direction[2];
 
 #ifdef _DEBUG
-	printXyzLigandDirection();
+printXyzLigandDirection();
 #endif
-	return true;
+return true;
 }
 
 bool Ligand::calculateTridentate()
@@ -277,7 +277,7 @@ bool Ligand::calculateTridentate()
 
 	AuxMath auxMath_;
 	vector<double> geometricCenter = auxMath_.triangleCentroid(
-		coord[0].x, coord[0].y, coord[0].z,	
+		coord[0].x, coord[0].y, coord[0].z,
 		coord[1].x, coord[1].y, coord[1].z,
 		coord[2].x, coord[2].y, coord[2].z
 		);
@@ -325,7 +325,7 @@ bool Ligand::calculateTridentate()
 #ifdef _DEBUG
 	printXyzLigandDirection();
 #endif
-	
+
 	return true;
 }
 
@@ -354,6 +354,11 @@ void Ligand::rotateToCenter()
 		-X1.x, -X1.y, -X1.z,
 		0.0e0, 0.0e0, 0.0e0,
 		X2.x, X2.y, X2.z);
+
+	if ((abs(normal[0]) < 1.0e-6) &&
+		(abs(normal[1]) < 1.0e-6) &&
+		(abs(normal[2]) < 1.0e-6))
+		return;
 
 	double angle = auxMath_.angleFrom3Points(
 		-X1.x, -X1.y, -X1.z,

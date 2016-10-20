@@ -19,6 +19,8 @@ public:
 	void start();
 
 private:
+	int counter;
+
 	std::vector< std::string > inputInformations;
 
 	double identicalStructuresLimit;
@@ -38,6 +40,8 @@ private:
 	std::vector<CoordXYZ> readMidXyz(std::ifstream & openStream);
 
 	bool doOverlayWithPreviousConfigurations(std::vector<CoordXYZ> & atomsPointPermutation);
+
+	std::string permutationToString(std::vector<int> & permutation);
 
 	void appendPrintCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::string fName, std::string title);
 

@@ -22,7 +22,7 @@ FindIsomers::~FindIsomers(){}
 
 void FindIsomers::start()
 {
-	fileAllIsomers = "Lumpac-allIsomers.txt";
+	fileAllIsomers = "Lumpac-allIsomers.xyz";
 	if (exists_test0(fileAllIsomers))
 		remove(fileAllIsomers.c_str());
 
@@ -35,21 +35,28 @@ void FindIsomers::start()
 	// eu tenho q aplicar a permutacao
 	// minimizar a combinacao dela com os atomos
 	// e guardar.
+
+	//consertar o bidentado no 5
+	//colocar a permutacao no titulo
+	//criar uma funcao que remonte so com a permutacao.
+
 	BuildComplex bc_;
-	inputInformations.resize(7);
+	inputInformations.resize(6);
 	inputInformations[0] = "Eu";
 	inputInformations[1] = "Eu_spk";
-	inputInformations[2] = "Lumpac-View-Dummy-Ligand-Monodentate";
-	inputInformations[3] = "Lumpac-View-Dummy-Ligand-Monodentate1";
-	inputInformations[4] = "Lumpac-View-Dummy-Ligand-Monodentate2";
-	inputInformations[5] = "Lumpac-View-Dummy-Ligand-Monodentate3";
-	inputInformations[6] = "Lumpac-View-Dummy-Ligand-Monodentate3";
+	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
+	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate2";
+	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3";
+	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Bidentate";
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);// permutation
 	streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
 	appendPrintCoordXYZ(allAtomsOriginal, fileAllIsomers, "initial configuration");
+	counter = 1;
 	streamAllIsomers_.close();
 	int permutationsNumber = bc_.getLigandsPermutation().size();
 	permutation(permutationsNumber);
+
+	cout << "number of configurations  = " << counter << endl;
 }
 
 void FindIsomers::permutation(int nMax)
@@ -77,7 +84,6 @@ void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 {
 	RootMeanSquareDeviation rmsd_;
 	//vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
-
 	// aplicar permutation ao sistema
 	BuildComplex bc_;
 	vector<Ligand> allLigands = bc_.assembleComplexWithoutSA(permutation,inputInformations);
@@ -89,8 +95,9 @@ void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 	if (isDifferent)
 	{
 		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
-		appendPrintCoordXYZ(atomsPointPermutation, fileAllIsomers, "title");
+		appendPrintCoordXYZ(atomsPointPermutation, fileAllIsomers, permutationToString(permutation));
 		streamAllIsomers_.close();
+		counter++;
 	}
 }
 
@@ -114,6 +121,17 @@ bool FindIsomers::doOverlayWithPreviousConfigurations(vector<CoordXYZ> & atomsPo
 	} while (atomsConfigurationsOnFile.size() != 0);
 
 	return true;
+}
+
+string FindIsomers::permutationToString(vector<int>& permutation)
+{
+	stringstream line;
+	for (size_t i = 0; i < permutation.size(); i++)
+		line << permutation[i] << " ";
+
+	string permToString;
+	getline(line, permToString);
+	return permToString;
 }
 
 vector<CoordXYZ> FindIsomers::readMidXyz(ifstream & openStream_)

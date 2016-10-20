@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <sstream>
+#include <time.h>
 
 #include "BuildComplex.h"
 #include "Coordstructs.h"
@@ -16,6 +17,8 @@ using namespace std;
 FindIsomers::FindIsomers()
 {
 	identicalStructuresLimit = 0.1;
+	useFile = true;
+	wall0 = clock();
 }
 
 FindIsomers::~FindIsomers(){}
@@ -41,19 +44,34 @@ void FindIsomers::start()
 	//criar uma funcao que remonte so com a permutacao.
 
 	BuildComplex bc_;
-	inputInformations.resize(6);
+	inputInformations.resize(7);
 	inputInformations[0] = "Eu";
 	inputInformations[1] = "Eu_spk";
 	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
-	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate2";
-	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3";
+	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
+	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
 	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Bidentate";
-	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);// permutation
-	streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
-	appendPrintCoordXYZ(allAtomsOriginal, fileAllIsomers, "initial configuration");
-	counter = 1;
-	streamAllIsomers_.close();
+	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Bidentate";
+	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);
 	int permutationsNumber = bc_.getLigandsPermutation().size();
+	if (useFile)
+	{
+		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
+		appendPrintCoordXYZ(allAtomsOriginal, fileAllIsomers, "initial configuration");
+		streamAllIsomers_.close();
+	}
+	else
+	{
+		vector<int> firstPermutation(permutationsNumber);
+		for (int i = 0; i < permutationsNumber; i++)
+			firstPermutation[i] = i;
+		allConfigurations.push_back(ligandToCoordXYZ(allAtomsOriginal));
+		allConfigurationPermutation.push_back(firstPermutation);
+	}
+
+	counter = 1;
+	allCounter = 1;
+	maxCounter = factorial(permutationsNumber);
 	permutation(permutationsNumber);
 
 	cout << "number of configurations  = " << counter << endl;
@@ -94,31 +112,71 @@ void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 	bool isDifferent = doOverlayWithPreviousConfigurations(atomsPointPermutation);
 	if (isDifferent)
 	{
-		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
-		appendPrintCoordXYZ(atomsPointPermutation, fileAllIsomers, permutationToString(permutation));
-		streamAllIsomers_.close();
+		if (useFile)
+		{
+			streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
+			appendPrintCoordXYZ(atomsPointPermutation, fileAllIsomers, permutationToString(permutation));
+			streamAllIsomers_.close();
+		}
+		else
+		{
+			allConfigurations.push_back(atomsPointPermutation);
+			allConfigurationPermutation.push_back(permutation);
+		}
 		counter++;
 	}
+	allCounter++;
+	if (allCounter % 100 == 0)
+	{
+		wall1 = clock();
+		cout << "Progress:  " << (int)(((float)allCounter / (float)maxCounter) * 100)
+			<< "   elapsed time:  " << wall1 - wall0 << endl;
+		wall0 = wall1;
+	}
+
 }
 
 bool FindIsomers::doOverlayWithPreviousConfigurations(vector<CoordXYZ> & atomsPointPermutation)
 {
-	ifstream streamAllIsomersRead_;
-	streamAllIsomersRead_.open(fileAllIsomers);
-	RootMeanSquareDeviation rmsd_;
-	vector<CoordXYZ> atomsConfigurationsOnFile;
-	//LOOP ON FILE
-	do
+	if (useFile)
 	{
-		 atomsConfigurationsOnFile = readMidXyz(streamAllIsomersRead_);
-		 if (atomsConfigurationsOnFile.size() == 0)
-			 break;
+		ifstream streamAllIsomersRead_;
+		streamAllIsomersRead_.open(fileAllIsomers);
+		RootMeanSquareDeviation rmsd_;
+		vector<CoordXYZ> atomsConfigurationsOnFile;
+		//LOOP ON FILE
+		do
+		{
+			atomsConfigurationsOnFile = readMidXyz(streamAllIsomersRead_);
+			if (atomsConfigurationsOnFile.size() == 0)
+				break;
 
-		 double rmsd = rmsd_.hardRmsOverlay(atomsPointPermutation, atomsConfigurationsOnFile);
-		 if (rmsd < identicalStructuresLimit)
-			 return false;
+			double rmsd = rmsd_.hardRmsOverlay(atomsPointPermutation, atomsConfigurationsOnFile);
+			if (rmsd < identicalStructuresLimit)
+				return false;
 
-	} while (atomsConfigurationsOnFile.size() != 0);
+		} while (atomsConfigurationsOnFile.size() != 0);
+	}
+	else
+	{
+		RootMeanSquareDeviation rmsd_;
+		vector<CoordXYZ> atomsConfigurationsOnFile;
+		//LOOP ON FILE
+		size_t k = 0;
+		do
+		{
+			if (k == allConfigurations.size())
+				break;
+
+			atomsConfigurationsOnFile = allConfigurations[k];
+			double rmsd = rmsd_.hardRmsOverlay(atomsPointPermutation, atomsConfigurationsOnFile);
+			if (rmsd < identicalStructuresLimit)
+				return false;
+			else
+				k++;
+
+		} while (atomsConfigurationsOnFile.size() != 0);
+	}
 
 	return true;
 }

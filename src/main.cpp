@@ -3,6 +3,8 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
+#include <time.h>
+#include <math.h>
 
 #include "BuildComplex.h"
 #include "RootMeanSquareDeviation.h"
@@ -137,8 +139,16 @@ int main()
 	BestPermutation bp_(ligandNames, "suxxis-complex.xyz");
 	bp_.findBestPermutation();  */
 
+	//  Start Timers
+	//double wall0 = clock();
+
 	FindIsomers findIso_;
 	findIso_.start();
+
+	//  Stop timers
+	//double wall1 = clock();
+
+	//cout << "Wall Time = " << wall1 - wall0 << endl;
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

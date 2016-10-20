@@ -20,6 +20,16 @@ public:
 
 private:
 	int counter;
+	int allCounter;
+	int maxCounter;
+	double wall0;
+	double wall1;
+
+	std::vector< std::vector<CoordXYZ> > allConfigurations;
+
+	std::vector< std::vector<int> >  allConfigurationPermutation;
+
+	bool useFile;
 
 	std::vector< std::string > inputInformations;
 

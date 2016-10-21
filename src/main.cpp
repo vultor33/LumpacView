@@ -17,7 +17,6 @@ using namespace std;
 
 int main()
 {
-	
 	/*
 	SUGESTAO ---> A OTIMIZACAO DEVERIA SER FEITA COM BFGS	             
 	*/
@@ -146,7 +145,8 @@ int main()
 	FindIsomers findIso_;
 	findIso_.start();
 
-/*
+
+	/*
 	vector<string> inputInformations(7);
 	inputInformations[0] = "Eu";
 	inputInformations[1] = "Eu_spk";
@@ -158,15 +158,25 @@ int main()
 	vector<int> permutation(7);
 	permutation[0] = 0;
 	permutation[1] = 1;
-	permutation[2] = 3;
+	permutation[2] = 5;
 	permutation[3] = 6;
 	permutation[4] = 2;
-	permutation[5] = 4;
-	permutation[6] = 5;
+	permutation[5] = 3;
+	permutation[6] = 4;
 	FindIsomers fd_;
+	FindIsomers fd1_;
+	FindIsomers fd2_;
+	FindIsomers fd3_;
+	FindIsomers fd4_;
+	FindIsomers fd5_;
+	remove("permutation-teste.xyz");
 	fd_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
-*/
-
+	fd1_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
+	fd2_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
+	fd3_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
+	fd4_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
+	fd5_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
+	*/
 
 
 	/*

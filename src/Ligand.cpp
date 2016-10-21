@@ -170,6 +170,7 @@ bool Ligand::calculateMonodentate()
 
 bool Ligand::calculateBidentate()
 {
+	srand(3);
 	if (coord.size() < 2)
 	{
 		cout << "Need at least two atoms" << endl;
@@ -258,8 +259,8 @@ bool Ligand::calculateBidentate()
 	
 	auxMath_.normalize(direction);
 	X2.x = -direction[0];
-X2.y = -direction[1];
-X2.z = -direction[2];
+	X2.y = -direction[1];
+	X2.z = -direction[2];
 
 #ifdef _DEBUG
 printXyzLigandDirection();

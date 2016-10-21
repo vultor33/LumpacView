@@ -82,8 +82,8 @@ void FindIsomers::printSelectedIsomer(
 	vector<std::string> inputInformations,
 	string outputName)
 {
-	if (exists_test0(outputName))
-		remove(outputName.c_str());
+//	if (exists_test0(outputName))
+//		remove(outputName.c_str());
 
 	BuildComplex bc_;
 	vector<Ligand> allLigands = bc_.assembleComplexWithoutSA(permutation, inputInformations);

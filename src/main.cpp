@@ -10,6 +10,9 @@
 #include "RootMeanSquareDeviation.h"
 #include "BestPermutation.h"
 #include "FindIsomers.h"
+#include "ComplexCreator.h"
+#include "AuxMath.h"
+
 
 
 using namespace std;
@@ -17,6 +20,16 @@ using namespace std;
 
 int main()
 {
+
+	/*
+	Definir o tridentado como um caso particular do monodentado.
+	Definir adjacências a partir dos ângulos.
+	
+	*/
+
+	// ATENCAO - GUARDAR E FAZER COM TODOS
+	// ATENCAO - CADASTRAR OS PONTOS HARDIN COM 12 CASAS
+
 	/*
 	SUGESTAO ---> A OTIMIZACAO DEVERIA SER FEITA COM BFGS	             
 	*/
@@ -142,8 +155,11 @@ int main()
 	-> FIND ISOMERS - WORKING
 	*/
 
-	FindIsomers findIso_;
-	findIso_.start();
+//	FindIsomers findIso_;
+//	findIso_.start();
+
+
+
 
 
 	/*

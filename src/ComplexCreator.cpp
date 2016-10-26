@@ -13,6 +13,11 @@
 
 using namespace std;
 
+ComplexCreator::ComplexCreator(vector<Ligand> &allLigands_in)
+	:allLigands(allLigands_in)
+{
+}
+
 ComplexCreator::ComplexCreator(
 	vector<Ligand> &allLigands_in,
 	int maxChelation_in,
@@ -35,6 +40,31 @@ ComplexCreator::ComplexCreator(
 }
 
 ComplexCreator::~ComplexCreator(){}
+
+void ComplexCreator::calculateAllAngles(int nPoints)
+{
+	AuxMath auxMath_;
+	vector<double> points = getPoints(nPoints);
+	double xi, yi, zi, xj, yj, zj;
+	ofstream of_("todosangulos.csv");
+	for (int i = 0; i < nPoints - 1; i++)
+	{
+		for (int j = i + 1; j < nPoints; j++)
+		{
+			xi = points[i];
+			yi = points[i + nPoints];
+			zi = points[i + 2 * nPoints];
+
+			xj = points[j];
+			yj = points[j + nPoints];
+			zj = points[j + 2 * nPoints];
+
+			double angle = auxMath_.angleFrom3Points(xi, yi, zi, 0.0e0, 0.0e0, 0.0e0, xj, yj, zj);
+			of_ << "i: " << i << " j: " << j << " angle:     ;  " << angle*(180/auxMath_._pi) << endl;
+		}
+	}
+	of_.close();
+}
 
 bool ComplexCreator::start(vector<int> & ligandsPermutation)
 {

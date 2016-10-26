@@ -44,14 +44,17 @@ void FindIsomers::start()
 	//criar uma funcao que remonte so com a permutacao.
 
 	BuildComplex bc_;
-	inputInformations.resize(7);
+	inputInformations.resize(10);
 	inputInformations[0] = "Eu";
 	inputInformations[1] = "Eu_spk";
 	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
-	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
-	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
-	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Bidentate";
-	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Bidentate";
+	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate2";
+	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3";
+	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3";
+	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate4";
+	inputInformations[7] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate4";
+	inputInformations[8] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate5";
+	inputInformations[9] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate5";
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);
 	int permutationsNumber = bc_.getLigandsPermutation().size();
 	if (useFile)

@@ -9,6 +9,8 @@
 class ComplexCreator
 {
 public:
+	ComplexCreator(std::vector<Ligand> &allLigands_in);
+
 	ComplexCreator(
 		std::vector<Ligand> &allLigands,
 		int maxChelation_in,
@@ -19,9 +21,10 @@ public:
 		double saInitialTemperature_in,
 		double saAcceptance
 		);
+
 	~ComplexCreator();
 
-//	bool start();
+	void calculateAllAngles(int nPoints);
 
 	bool start(std::vector<int> & ligandsPermutation = std::vector<int>());
 
@@ -71,3 +74,5 @@ private:
 
 
 #endif
+
+

@@ -82,6 +82,14 @@ double KabschRmsd::rmsOverlay(vector<CoordXYZ> & mol1, vector<CoordXYZ> & mol2)
 
 	if (isnan(rmsd))
 	{
+		/*
+		delete[] mol1Array;
+		delete[] mol2Array;
+		delete[] saveMol1Array;
+		delete[] saveMol2Array;
+		return 0.0e0;
+		*/
+
 		saveMol1Array[0][0] -= 0.05;
 		saveMol2Array[0][0] += 0.05;
 		saveMol1Array[0][1] += 0.05;

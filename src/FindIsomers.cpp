@@ -11,6 +11,7 @@
 #include "BuildComplex.h"
 #include "Coordstructs.h"
 #include "RootMeanSquareDeviation.h"
+#include "AuxMath.h"
 
 using namespace std;
 
@@ -44,34 +45,45 @@ void FindIsomers::start()
 	//criar uma funcao que remonte so com a permutacao.
 
 	BuildComplex bc_;
-	inputInformations.resize(10);
+	inputInformations.resize(8);
 	inputInformations[0] = "Eu";
 	inputInformations[1] = "Eu_spk";
 	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
 	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate2";
 	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3";
-	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3";
-	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate4";
-	inputInformations[7] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate4";
-	inputInformations[8] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate5";
-	inputInformations[9] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate5";
+	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate6";
+	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate6";
+	inputInformations[7] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate6";
+	bidentateAngleCut = 100;
+	/*
+	bidentateAtoms.resize(4);
+	bidentateAtomsCombination.resize(4);
+	bidentateAtoms[0] = 2;
+	bidentateAtoms[1] = 3;
+	bidentateAtoms[2] = 4;
+	bidentateAtoms[3] = 5;
+	*/
+	//tenho que aplyPermutationBidentate no zero
+	// ATENCAO --- O PROPRIO ZERO PODE SER CORTADO AI FERRA TUDO
+
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);
 	int permutationsNumber = bc_.getLigandsPermutation().size();
+	vector<CoordXYZ> atomsOriginal = ligandToCoordXYZ(allAtomsOriginal);
+	vector<int> firstPermutation(permutationsNumber);
+	for (int i = 0; i < permutationsNumber; i++)
+		firstPermutation[i] = i;
+	aplyPermutationBidentate(firstPermutation, atomsOriginal);
 	if (useFile)
 	{
 		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
-		appendPrintCoordXYZ(allAtomsOriginal, fileAllIsomers, "initial configuration");
+		appendPrintCoordXYZ(atomsOriginal, fileAllIsomers, permutationToString(firstPermutation));
 		streamAllIsomers_.close();
 	}
 	else
 	{
-		vector<int> firstPermutation(permutationsNumber);
-		for (int i = 0; i < permutationsNumber; i++)
-			firstPermutation[i] = i;
 		allConfigurations.push_back(ligandToCoordXYZ(allAtomsOriginal));
 		allConfigurationPermutation.push_back(firstPermutation);
 	}
-
 	counter = 1;
 	allCounter = 1;
 	maxCounter = factorial(permutationsNumber);
@@ -117,12 +129,18 @@ void FindIsomers::permutation(int nMax)
 
 void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 {
+	allCounter++;
 	RootMeanSquareDeviation rmsd_;
 	//vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
 	// aplicar permutation ao sistema
 	BuildComplex bc_;
 	vector<Ligand> allLigands = bc_.assembleComplexWithoutSA(permutation,inputInformations);
 	vector<CoordXYZ> atomsPointPermutation = ligandToCoordXYZ(allLigands);
+
+	//fredmudar
+	aplyPermutationBidentate(permutation, atomsPointPermutation);
+	if (atomsPointPermutation.size() == 0)
+		return;
 	int nMax = allLigands.size();
 	/////////////////////////////////
 
@@ -142,7 +160,6 @@ void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 		}
 		counter++;
 	}
-	allCounter++;
 	if (allCounter % 100 == 0)
 	{
 		wall1 = clock();
@@ -150,7 +167,6 @@ void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 			<< "   elapsed time:  " << wall1 - wall0 << endl;
 		wall0 = wall1;
 	}
-
 }
 
 bool FindIsomers::doOverlayWithPreviousConfigurations(vector<CoordXYZ> & atomsPointPermutation)
@@ -257,6 +273,46 @@ std::vector< CoordXYZ > FindIsomers::setThisPermutationAtoms(std::vector<int> pe
 	return permutAtoms;
 }
 
+void FindIsomers::aplyPermutationBidentate(vector<int> permutation, vector<CoordXYZ>& atomsPointPermutation)
+{
+	//fredmudar
+	// aplicar a permutacao nos bidentados
+	// verificar se o angulo do bidentado nao ta cortado
+	// se o angulo do bidentado nao for obedecido - return
+	if (bidentateAtoms.size() == 0)
+		return;
+
+	for (size_t i = 0; i < bidentateAtoms.size(); i++)
+		bidentateAtomsCombination[i] = permutation[bidentateAtoms[i]];
+
+	int iBi1, iBi2;
+	CoordXYZ meanI;
+	double angle;
+	AuxMath auxMath_;
+	for (size_t i = 0; i < bidentateAtoms.size(); i+=2)
+	{
+		iBi1 = bidentateAtomsCombination[i];
+		iBi2 = bidentateAtomsCombination[i + 1];
+		angle = auxMath_.angleFrom3Points(
+			atomsPointPermutation[iBi1].x, atomsPointPermutation[iBi1].y, atomsPointPermutation[iBi1].z,
+			0.0e0, 0.0e0, 0.0e0,
+			atomsPointPermutation[iBi2].x, atomsPointPermutation[iBi2].y, atomsPointPermutation[iBi2].z);
+
+		if (angle > bidentateAngleCut)
+		{
+			vector<CoordXYZ> dummy;
+			atomsPointPermutation = dummy;
+			return;
+		}
+
+		meanI.x = 0.5e0*(atomsPointPermutation[iBi1].x + atomsPointPermutation[iBi2].x);
+		meanI.y = 0.5e0*(atomsPointPermutation[iBi1].y + atomsPointPermutation[iBi2].y);
+		meanI.z = 0.5e0*(atomsPointPermutation[iBi1].z + atomsPointPermutation[iBi2].z);
+		meanI.atomlabel = "He";
+		atomsPointPermutation.push_back(meanI);
+	}
+}
+
 
 unsigned int FindIsomers::factorial(unsigned int n)
 {
@@ -267,11 +323,15 @@ unsigned int FindIsomers::factorial(unsigned int n)
 
 std::vector<CoordXYZ> FindIsomers::ligandToCoordXYZ(std::vector<Ligand> & allLigands)
 {
-	vector<CoordXYZ> newAllAtoms(1);
+	
+	vector<CoordXYZ> newAllAtoms;
+	/*
+	(1);
 	newAllAtoms[0].atomlabel = "Eu";
 	newAllAtoms[0].x = 0.0e0;
 	newAllAtoms[0].y = 0.0e0;
 	newAllAtoms[0].z = 0.0e0;
+	*/
 	for (size_t i = 0; i < allLigands.size(); i++)
 	{
 		vector<CoordXYZ> ligandAdd = allLigands[i].getAllAtoms();

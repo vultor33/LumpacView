@@ -151,6 +151,9 @@ WARNING
                                ser verdade em alguns casos.
 
 
+- No kabsch algortithm -> Se der nan e pq foi atribuido zero.
+
+
 
 IDEIAS
 

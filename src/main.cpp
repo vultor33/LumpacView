@@ -13,13 +13,14 @@
 #include "ComplexCreator.h"
 #include "AuxMath.h"
 
-
-
 using namespace std;
-
 
 int main()
 {
+	// nos bidentados - ver se e proximo
+	//                  se for, colocar o ponto no meio
+
+
 
 	/*
 	Definir o tridentado como um caso particular do monodentado.
@@ -155,8 +156,8 @@ int main()
 	-> FIND ISOMERS - WORKING
 	*/
 
-//	FindIsomers findIso_;
-//	findIso_.start();
+	FindIsomers findIso_;
+	findIso_.start();
 
 
 

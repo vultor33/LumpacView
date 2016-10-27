@@ -19,9 +19,12 @@ public:
 private:
 	//data
 	std::vector< Ligand > bestLigand;
+
 	double bestRmsd;
+
 	std::string referenceFile;
-	
+
+	//functions
 	std::vector< Ligand > setThisPermutationLig(std::vector<int> permutation, std::vector<Ligand> & ligOriginal);
 
 	void printCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::string fName, std::string title = "useless");

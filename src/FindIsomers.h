@@ -21,12 +21,17 @@ public:
 	void printSelectedIsomer(std::vector<int> permutation, std::vector<std::string > inputInformations, std::string outputName);
 
 private:
+	//data
 	int counter;
 	int allCounter;
 	int maxCounter;
 	double wall0;
 	double wall1;
+	std::vector<int> bidentateAtoms;
+	std::vector<int> bidentateAtomsCombination;
+	double bidentateAngleCut;
 
+	//functions
 	std::vector< std::vector<CoordXYZ> > allConfigurations;
 
 	std::vector< std::vector<int> >  allConfigurationPermutation;
@@ -46,6 +51,8 @@ private:
 	std::vector< Ligand > setThisPermutationLig(std::vector<int> permutation, std::vector<Ligand> & ligOriginal);
 
 	std::vector< CoordXYZ > setThisPermutationAtoms(std::vector<int> permutation, std::vector<CoordXYZ> &  originAtoms);
+
+	void aplyPermutationBidentate(std::vector<int> permutation, std::vector<CoordXYZ> & atomsPointPermutation);
 
 	std::vector<CoordXYZ> readMidXyz(std::ifstream & openStream);
 
@@ -74,3 +81,13 @@ private:
 };
 
 #endif
+
+
+/*
+VOU PRECISAR DE UM FLAG FALANDO QUAL COMBINACAO E O BIDENTADO
+
+
+
+
+
+*/

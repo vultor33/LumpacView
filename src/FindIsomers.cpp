@@ -18,7 +18,7 @@ using namespace std;
 FindIsomers::FindIsomers()
 {
 	identicalStructuresLimit = 0.1;
-	useFile = true;
+	useFile = false;
 	wall0 = clock();
 }
 
@@ -51,8 +51,8 @@ void FindIsomers::start()
 	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
 	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate2";
 	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3";
-	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate6";
-	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate6";
+	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate4";
+	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate5";
 	inputInformations[7] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate6";
 	bidentateAngleCut = 100;
 	/*
@@ -90,6 +90,16 @@ void FindIsomers::start()
 	permutation(permutationsNumber);
 
 	cout << "number of configurations  = " << counter << endl;
+
+	if (!useFile)
+	{
+		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
+		for (size_t i = 0; i < allConfigurations.size(); i++)
+			appendPrintCoordXYZ(allConfigurations[i], streamAllIsomers_, permutationToString(allConfigurationPermutation[i]));
+
+		streamAllIsomers_.close();
+	}
+
 }
 
 void FindIsomers::printSelectedIsomer(
@@ -363,5 +373,16 @@ void FindIsomers::appendPrintCoordXYZ(vector<CoordXYZ> & allAtoms, string fName,
 	pr_.close();
 }
 
+void FindIsomers::appendPrintCoordXYZ(vector<CoordXYZ> & allAtoms, ofstream & fName_, string title)
+{
+	fName_ << allAtoms.size() << endl << title << endl;
+	for (size_t i = 0; i < allAtoms.size(); i++)
+	{
+		fName_ << allAtoms[i].atomlabel << "  "
+			<< allAtoms[i].x << "  "
+			<< allAtoms[i].y << "  "
+			<< allAtoms[i].z << endl;
+	}
+}
 
 

@@ -31,11 +31,11 @@ private:
 	std::vector<int> bidentateAtomsCombination;
 	double bidentateAngleCut;
 
-	//functions
 	std::vector< std::vector<CoordXYZ> > allConfigurations;
 
 	std::vector< std::vector<int> >  allConfigurationPermutation;
 
+	//functions
 	bool useFile;
 
 	std::vector< std::string > inputInformations;
@@ -61,6 +61,8 @@ private:
 	std::string permutationToString(std::vector<int> & permutation);
 
 	void appendPrintCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::string fName, std::string title);
+
+	void appendPrintCoordXYZ(std::vector<CoordXYZ> & allAtoms, std::ofstream & fName_, std::string title);
 
 	void appendPrintCoordXYZ(std::vector<Ligand> & allAtoms, std::string fName, std::string title);
 

@@ -151,7 +151,8 @@ WARNING
                                ser verdade em alguns casos.
 
 
-- No kabsch algortithm -> Se der nan e pq foi atribuido zero.
+- No kabsch algortithm -> ATENCAO - algoritmo completamente ineficiente.
+                                    e necessario corrigir isso.
 
 
 

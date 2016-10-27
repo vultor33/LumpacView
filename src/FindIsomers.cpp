@@ -26,46 +26,14 @@ FindIsomers::~FindIsomers(){}
 
 void FindIsomers::start()
 {
-	fileAllIsomers = "Lumpac-allIsomers.xyz";
+	readInput();
+
+//	fileAllIsomers = "Lumpac-allIsomers.xyz";
 	if (exists_test0(fileAllIsomers))
 		remove(fileAllIsomers.c_str());
 
-	// H, B and C are different atoms
-	// mas tambem tenho q alimentalo com a permutacao zero - mas pode ser vazio.
-	// e so alimentar o assembleComplex com: vector<string> 
-	// que nao precisa do input.
-	// rms overlay - se o flag dos atomos for diferentes eu tenho q retornar
-	// com um numero bem grande.
-	// eu tenho q aplicar a permutacao
-	// minimizar a combinacao dela com os atomos
-	// e guardar.
-
-	//consertar o bidentado no 5
-	//colocar a permutacao no titulo
-	//criar uma funcao que remonte so com a permutacao.
 
 	BuildComplex bc_;
-	inputInformations.resize(8);
-	inputInformations[0] = "Eu";
-	inputInformations[1] = "Eu_spk";
-	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
-	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate2";
-	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3";
-	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate4";
-	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate5";
-	inputInformations[7] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate6";
-	bidentateAngleCut = 100;
-	/*
-	bidentateAtoms.resize(4);
-	bidentateAtomsCombination.resize(4);
-	bidentateAtoms[0] = 2;
-	bidentateAtoms[1] = 3;
-	bidentateAtoms[2] = 4;
-	bidentateAtoms[3] = 5;
-	*/
-	//tenho que aplyPermutationBidentate no zero
-	// ATENCAO --- O PROPRIO ZERO PODE SER CORTADO AI FERRA TUDO
-
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);
 	int permutationsNumber = bc_.getLigandsPermutation().size();
 	vector<CoordXYZ> atomsOriginal = ligandToCoordXYZ(allAtomsOriginal);
@@ -76,12 +44,12 @@ void FindIsomers::start()
 	if (useFile)
 	{
 		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
-		appendPrintCoordXYZ(atomsOriginal, fileAllIsomers, permutationToString(firstPermutation));
+		appendPrintCoordXYZ(atomsOriginal, streamAllIsomers_, permutationToString(firstPermutation));
 		streamAllIsomers_.close();
 	}
 	else
 	{
-		allConfigurations.push_back(ligandToCoordXYZ(allAtomsOriginal));
+		allConfigurations.push_back(atomsOriginal);
 		allConfigurationPermutation.push_back(firstPermutation);
 	}
 	counter = 1;
@@ -89,17 +57,15 @@ void FindIsomers::start()
 	maxCounter = factorial(permutationsNumber);
 	permutation(permutationsNumber);
 
-	cout << "number of configurations  = " << counter << endl;
-
 	if (!useFile)
 	{
 		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
 		for (size_t i = 0; i < allConfigurations.size(); i++)
 			appendPrintCoordXYZ(allConfigurations[i], streamAllIsomers_, permutationToString(allConfigurationPermutation[i]));
 
+		streamAllIsomers_ << endl << endl << "number of configurations = " << counter << endl;
 		streamAllIsomers_.close();
 	}
-
 }
 
 void FindIsomers::printSelectedIsomer(
@@ -141,13 +107,10 @@ void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 {
 	allCounter++;
 	RootMeanSquareDeviation rmsd_;
-	//vector<CoordXYZ> molCrystal = rmsd_.readCoord(referenceFile.c_str());
-	// aplicar permutation ao sistema
 	BuildComplex bc_;
 	vector<Ligand> allLigands = bc_.assembleComplexWithoutSA(permutation,inputInformations);
 	vector<CoordXYZ> atomsPointPermutation = ligandToCoordXYZ(allLigands);
 
-	//fredmudar
 	aplyPermutationBidentate(permutation, atomsPointPermutation);
 	if (atomsPointPermutation.size() == 0)
 		return;
@@ -160,7 +123,7 @@ void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 		if (useFile)
 		{
 			streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
-			appendPrintCoordXYZ(atomsPointPermutation, fileAllIsomers, permutationToString(permutation));
+			appendPrintCoordXYZ(atomsPointPermutation, streamAllIsomers_, permutationToString(permutation));
 			streamAllIsomers_.close();
 		}
 		else
@@ -285,15 +248,8 @@ std::vector< CoordXYZ > FindIsomers::setThisPermutationAtoms(std::vector<int> pe
 
 void FindIsomers::aplyPermutationBidentate(vector<int> permutation, vector<CoordXYZ>& atomsPointPermutation)
 {
-	//fredmudar
-	// aplicar a permutacao nos bidentados
-	// verificar se o angulo do bidentado nao ta cortado
-	// se o angulo do bidentado nao for obedecido - return
 	if (bidentateAtoms.size() == 0)
 		return;
-
-	for (size_t i = 0; i < bidentateAtoms.size(); i++)
-		bidentateAtomsCombination[i] = permutation[bidentateAtoms[i]];
 
 	int iBi1, iBi2;
 	CoordXYZ meanI;
@@ -301,8 +257,8 @@ void FindIsomers::aplyPermutationBidentate(vector<int> permutation, vector<Coord
 	AuxMath auxMath_;
 	for (size_t i = 0; i < bidentateAtoms.size(); i+=2)
 	{
-		iBi1 = bidentateAtomsCombination[i];
-		iBi2 = bidentateAtomsCombination[i + 1];
+		iBi1 = bidentateAtoms[i];
+		iBi2 = bidentateAtoms[i + 1];
 		angle = auxMath_.angleFrom3Points(
 			atomsPointPermutation[iBi1].x, atomsPointPermutation[iBi1].y, atomsPointPermutation[iBi1].z,
 			0.0e0, 0.0e0, 0.0e0,
@@ -385,4 +341,72 @@ void FindIsomers::appendPrintCoordXYZ(vector<CoordXYZ> & allAtoms, ofstream & fN
 	}
 }
 
-
+void FindIsomers::readInput()
+{
+	ifstream input_("LumpacViewInput.txt");
+	string atomLabel, atomParams, auxline;
+	stringstream line0, line1, line2, line3, line4, line5;
+	int nAtoms, nBidentates;
+	getline(input_, auxline);
+	line0 << auxline;
+	line0 >> fileAllIsomers;
+	getline(input_, auxline);
+	line1 << auxline;
+	line1 >> atomLabel;
+	getline(input_, auxline);
+	line2 << auxline;
+	line2 >> atomParams;
+	getline(input_, auxline);
+	line3 << auxline;
+	line3 >> nAtoms;
+	inputInformations.resize(nAtoms + 2);
+	inputInformations[0] = atomLabel;
+	inputInformations[1] = atomParams;
+	for (int i = 0; i < nAtoms; i++)
+	{
+		stringstream linei;
+		string auxRead;
+		getline(input_, auxline);
+		linei << auxline;
+		linei >> auxRead;
+		inputInformations[i + 2] = auxRead;
+	}
+	getline(input_, auxline);
+	line4 << auxline;
+	line4 >> bidentateAngleCut;
+	getline(input_, auxline);
+	line5 << auxline;
+	line5 >> nBidentates;
+	if (nBidentates > 0)
+	{
+		bidentateAtoms.resize(nBidentates);
+		bidentateAtomsCombination.resize(nBidentates);
+		for (int i = 0; i < nBidentates; i++)
+		{
+			stringstream linej;
+			int auxReadj;
+			getline(input_, auxline);
+			linej << auxline;
+			linej >> auxReadj;
+			bidentateAtoms[i] = auxReadj;
+		}
+	}
+	input_.close();
+	/*
+	inputInformations[0] = "Eu";
+	inputInformations[1] = "Eu_spk";
+	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
+	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate2";
+	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3";
+	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate4";
+	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate5";
+	inputInformations[7] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate6";
+	bidentateAngleCut = 100;
+	bidentateAtoms.resize(4);
+	bidentateAtomsCombination.resize(4);
+	bidentateAtoms[0] = 2;
+	bidentateAtoms[1] = 3;
+	bidentateAtoms[2] = 4;
+	bidentateAtoms[3] = 5;
+	*/
+}

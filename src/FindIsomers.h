@@ -35,13 +35,17 @@ private:
 
 	std::vector< std::vector<int> >  allConfigurationPermutation;
 
-	//functions
 	bool useFile;
 
 	std::vector< std::string > inputInformations;
 
 	double identicalStructuresLimit;
 
+	std::string fileAllIsomers;
+
+	std::ofstream streamAllIsomers_;
+
+	//functions
 	void permutation(int nMax);
 
 	void ligandFilePositionPermutation(std::vector<int> & permutation);
@@ -72,13 +76,9 @@ private:
 		return f.good();
 	}
 
-	std::string fileAllIsomers;
-
-	std::ofstream streamAllIsomers_;
-
 	std::vector<CoordXYZ> ligandToCoordXYZ(std::vector<Ligand> & allLigands);
 
-
+	void readInput();
 
 };
 

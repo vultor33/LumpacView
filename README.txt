@@ -154,6 +154,9 @@ WARNING
 - No kabsch algortithm -> ATENCAO - algoritmo completamente ineficiente.
                                     e necessario corrigir isso.
 
+- useFile - nao esta funcionando direito e lembrar que existe um limite
+            no permutation.
+
 
 
 IDEIAS

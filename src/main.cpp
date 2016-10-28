@@ -140,48 +140,12 @@ int main()
 	-> FIND ISOMERS - WORKING
 	*/
 
-//	FindIsomers findIso_;	
-//	findIso_.start();
+	FindIsomers findIso_;	
+	findIso_.start();
 
-	/*
-	vector<string> inputInformations(5);
-	inputInformations[0] = "Eu";
-	inputInformations[1] = "Eu_spk";
-	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-M1";
-	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-M1";
-	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-M1";
-	*/
-
-/*
-	vector<string> inputInformations(5);
-	inputInformations[0] = "Eu";
-	inputInformations[1] = "Eu_spk";
-	inputInformations[2] = "Lumpac-View-Ligand-BUVXAR11";
-	inputInformations[3] = "Lumpac-View-Ligand-BUVXAR11";
-	inputInformations[4] = "Lumpac-View-Ligand-DUCNAQ-OONO";	
-	vector<int> permutation(4);
-	permutation[0] = 0;
-	permutation[1] = 1;
-	permutation[2] = 2;
-	permutation[3] = 3;
-	FindIsomers fd_;
-	remove("permutation-teste.xyz");
-//	fd_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
-	vector<CoordXYZ> allAtoms = fd_.generateSelectedIsomer(permutation, inputInformations);
-
-	BuildComplex bc_;
-	vector<string> options(5);
-	options[0] = "mopac2009";
-	options[1] = "teste-mopac";
-	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10"; 
-	options[3] = inputInformations[1];
-	options[4] = inputInformations[0];
-	string execpah = "M2009_Ln_Orbitals.exe";
-	bc_.runMopac(options, execpah, allAtoms);
-	*/
-
-	FindIsomers fd_;
-	fd_.buildComplexWithSelectedIsomer();
+//  COMPLEX WITH SELECTED ISOMER
+//	FindIsomers fd_;
+//	fd_.buildComplexWithSelectedIsomer();
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

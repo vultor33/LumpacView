@@ -32,7 +32,6 @@ void FindIsomers::start()
 	if (exists_test0(fileAllIsomers))
 		remove(fileAllIsomers.c_str());
 
-
 	BuildComplex bc_;
 	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);
 	int permutationsNumber = bc_.getLigandsPermutation().size();

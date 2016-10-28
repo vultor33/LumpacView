@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <iomanip>
 
 #include "AdjustSaParameters.h"
 #include "ReadInput.h"
@@ -383,7 +384,7 @@ void BuildComplex::runMopacAndPrint(vector<string> options, string mopacExecPath
 	
 	ofstream pr_;
 	pr_.open(fName.c_str(), std::ofstream::out | std::ofstream::app);
-	pr_ << allAtoms.size() << endl << "E:  " << readmop_.getEnergy() << endl;
+	pr_ << allAtoms.size() << endl << "E:  " << setprecision(16) << readmop_.getEnergy() << endl;
 	for (size_t i = 0; i < allAtoms.size(); i++)
 	{
 		pr_ << allAtoms[i].atomlabel << "  "

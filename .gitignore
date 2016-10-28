@@ -41,7 +41,9 @@ permutations*
 data/melhor*
 *.xyz
 *vcxproj*
-
+*.out
+*.arc
+*.mop
 
 
 

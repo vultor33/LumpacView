@@ -17,23 +17,7 @@ using namespace std;
 
 int main()
 {
-	// nos bidentados - ver se e proximo
-	//                  se for, colocar o ponto no meio
-
-
-
-	/*
-	Definir o tridentado como um caso particular do monodentado.
-	Definir adjacências a partir dos ângulos.
-	
-	*/
-
-	// ATENCAO - GUARDAR E FAZER COM TODOS
 	// ATENCAO - CADASTRAR OS PONTOS HARDIN COM 12 CASAS
-
-	/*
-	SUGESTAO ---> A OTIMIZACAO DEVERIA SER FEITA COM BFGS	             
-	*/
 
 	/*
 	RootMeanSquareDeviation rmsd_;
@@ -156,45 +140,48 @@ int main()
 	-> FIND ISOMERS - WORKING
 	*/
 
-	FindIsomers findIso_;
-	findIso_.start();
-
-
-
-
+//	FindIsomers findIso_;	
+//	findIso_.start();
 
 	/*
-	vector<string> inputInformations(7);
+	vector<string> inputInformations(5);
 	inputInformations[0] = "Eu";
 	inputInformations[1] = "Eu_spk";
-	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
-	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
-	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1";
-	inputInformations[5] = "auxLigands/Lumpac-View-Dummy-Ligand-Bidentate";
-	inputInformations[6] = "auxLigands/Lumpac-View-Dummy-Ligand-Bidentate";
-	vector<int> permutation(7);
-	permutation[0] = 0;
-	permutation[1] = 1;
-	permutation[2] = 5;
-	permutation[3] = 6;
-	permutation[4] = 2;
-	permutation[5] = 3;
-	permutation[6] = 4;
-	FindIsomers fd_;
-	FindIsomers fd1_;
-	FindIsomers fd2_;
-	FindIsomers fd3_;
-	FindIsomers fd4_;
-	FindIsomers fd5_;
-	remove("permutation-teste.xyz");
-	fd_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
-	fd1_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
-	fd2_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
-	fd3_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
-	fd4_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
-	fd5_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
+	inputInformations[2] = "auxLigands/Lumpac-View-Dummy-Ligand-M1";
+	inputInformations[3] = "auxLigands/Lumpac-View-Dummy-Ligand-M1";
+	inputInformations[4] = "auxLigands/Lumpac-View-Dummy-Ligand-M1";
 	*/
 
+/*
+	vector<string> inputInformations(5);
+	inputInformations[0] = "Eu";
+	inputInformations[1] = "Eu_spk";
+	inputInformations[2] = "Lumpac-View-Ligand-BUVXAR11";
+	inputInformations[3] = "Lumpac-View-Ligand-BUVXAR11";
+	inputInformations[4] = "Lumpac-View-Ligand-DUCNAQ-OONO";	
+	vector<int> permutation(4);
+	permutation[0] = 0;
+	permutation[1] = 1;
+	permutation[2] = 2;
+	permutation[3] = 3;
+	FindIsomers fd_;
+	remove("permutation-teste.xyz");
+//	fd_.printSelectedIsomer(permutation, inputInformations, "permutation-teste.xyz");
+	vector<CoordXYZ> allAtoms = fd_.generateSelectedIsomer(permutation, inputInformations);
+
+	BuildComplex bc_;
+	vector<string> options(5);
+	options[0] = "mopac2009";
+	options[1] = "teste-mopac";
+	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10"; 
+	options[3] = inputInformations[1];
+	options[4] = inputInformations[0];
+	string execpah = "M2009_Ln_Orbitals.exe";
+	bc_.runMopac(options, execpah, allAtoms);
+	*/
+
+	FindIsomers fd_;
+	fd_.buildComplexWithSelectedIsomer();
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

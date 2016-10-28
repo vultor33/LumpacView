@@ -18,7 +18,11 @@ public:
 
 	void start();
 
+	std::vector<CoordXYZ> generateSelectedIsomer(std::vector<int> permutation, std::vector<std::string > inputInformations);
+
 	void printSelectedIsomer(std::vector<int> permutation, std::vector<std::string > inputInformations, std::string outputName);
+	
+	void buildComplexWithSelectedIsomer();
 
 private:
 	//data

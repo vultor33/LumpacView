@@ -13,15 +13,18 @@ class BuildComplex
 {
 public:
 	BuildComplex();
+
 	~BuildComplex();
 
 	std::vector<CoordXYZ> build();
 
-	std::vector<CoordXYZ> build(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath, int & nLigandAtoms);
-
 	std::vector<CoordXYZ> build(ReadInput & readInp_);
 
+	std::vector<CoordXYZ> buildCompletingWithWater(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath, int & nLigandAtoms);
+
 	void makeComplexOptimizingInMopac(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath);
+
+	void runMopac(std::vector< std::string > options, std::string mopacExecPath, std::vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
 
 	std::vector<Ligand> BuildComplex::assembleComplexWithoutSA(std::vector<int> & ligandsPermutation = std::vector<int>(), std::vector< std::string > & inputInformations = std::vector< std::string >());
 
@@ -77,5 +80,4 @@ inputInformations[2] = "agua";
 inputInformations[3] = "agua";
 inputInformations[4] = "agua";
 =======================================================================================================================================
-
 */

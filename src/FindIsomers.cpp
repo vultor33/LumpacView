@@ -76,11 +76,105 @@ void FindIsomers::printSelectedIsomer(
 //	if (exists_test0(outputName))
 //		remove(outputName.c_str());
 
+	appendPrintCoordXYZ(generateSelectedIsomer(permutation, inputInformations), outputName, permutationToString(permutation));
+}
+
+vector<CoordXYZ> FindIsomers::generateSelectedIsomer(vector<int> permutation, vector<string > inputInformations)
+{
 	BuildComplex bc_;
 	vector<Ligand> allLigands = bc_.assembleComplexWithoutSA(permutation, inputInformations);
-	vector<CoordXYZ> atomsPointPermutation = ligandToCoordXYZ(allLigands);
-	appendPrintCoordXYZ(atomsPointPermutation, outputName, permutationToString(permutation));
+	return ligandToCoordXYZ(allLigands);
 }
+
+void FindIsomers::buildComplexWithSelectedIsomer()
+{
+	ifstream input_("LumpacView-inputPermutation.txt");
+	int nLigands;
+	string auxline;
+	stringstream line1;
+	getline(input_, auxline);
+	line1 << auxline;
+	line1 >> nLigands;
+	vector<string> inputInformations(nLigands + 2);
+	stringstream line2;
+	getline(input_, auxline);
+	line2 << auxline;
+	line2 >> inputInformations[0];
+	stringstream line3;
+	getline(input_, auxline);
+	line3 << auxline;
+	line3 >> inputInformations[1];
+	for (size_t i = 0; i < nLigands; i++)
+	{
+		stringstream linei;
+		getline(input_, auxline);
+		linei << auxline;
+		linei >> inputInformations[i + 2];
+	}
+	int nPermutations;
+	stringstream line4;
+	getline(input_, auxline);
+	line4 << auxline;
+	line4 >> nPermutations;
+	vector<int> permutation(nPermutations);
+	for (size_t i = 0; i < nPermutations; i++)
+	{
+		stringstream linei;
+		getline(input_, auxline);
+		linei << auxline;
+		linei >> permutation[i];
+	}
+	string execpah;
+	stringstream line5;
+	getline(input_, auxline);
+	line5 << auxline;
+	line5 >> execpah;
+	string projectName;
+	stringstream line6;
+	getline(input_, auxline);
+	line6 << auxline;
+	line6 >> projectName;
+
+	vector<string> options(5);
+	options[0] = "mopac2009";
+	options[1] = projectName;
+	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	options[3] = inputInformations[1];
+	options[4] = inputInformations[0];
+
+	FindIsomers fd_;
+	remove("permutation-teste.xyz");
+	vector<CoordXYZ> allAtoms = fd_.generateSelectedIsomer(permutation, inputInformations);
+	BuildComplex bc_;
+	bc_.runMopac(options, execpah, allAtoms);
+
+	/* EXEMPLO
+	inputInformations[0] = "Eu";
+	inputInformations[1] = "Eu_spk";
+	inputInformations[2] = "Lumpac-View-Ligand-BUVXAR11";
+	inputInformations[3] = "Lumpac-View-Ligand-BUVXAR11";
+	inputInformations[4] = "Lumpac-View-Ligand-DUCNAQ-OONO";
+	vector<int> permutation(4);
+	permutation[0] = 0;
+	permutation[1] = 1;
+	permutation[2] = 2;
+	permutation[3] = 3;
+	vector<string> options(5);
+	options[0] = "mopac2009";
+	options[1] = "teste-mopac";
+	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	options[3] = inputInformations[1];
+	options[4] = inputInformations[0];
+	string execpah = "M2009_Ln_Orbitals.exe";
+	*/
+
+
+
+
+
+}
+
+
 
 void FindIsomers::permutation(int nMax)
 {

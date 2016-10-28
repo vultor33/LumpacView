@@ -27,7 +27,7 @@ vector<CoordXYZ> BuildComplex::build()
 	return build(activateReadInput());
 }
 
-vector<CoordXYZ> BuildComplex::build(
+vector<CoordXYZ> BuildComplex::buildCompletingWithWater(
 	string ligandName, 
 	int coordination, 
 	int charge, 
@@ -95,7 +95,7 @@ vector<CoordXYZ> BuildComplex::build(ReadInput & readInp_)
 void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordination, int charge, vector<string> options, string mopacExecPath)
 {
 	int nAtoms;
-	vector<CoordXYZ> allAtoms = build(ligandName, coordination, charge, options, mopacExecPath, nAtoms);
+	vector<CoordXYZ> allAtoms = buildCompletingWithWater(ligandName, coordination, charge, options, mopacExecPath, nAtoms);
 	vector<CoordXYZ> ligandCreated(nAtoms);
 	for (int i = 0; i < nAtoms; i++)
 		ligandCreated[i] = allAtoms[i + 1];
@@ -335,6 +335,11 @@ void BuildComplex::runMopac(ReadInput & readInp_, vector<CoordXYZ>& allAtoms)
 
 	optimize(mopacExecPath, allAtoms, options);
 
+}
+
+void BuildComplex::runMopac(vector<string> options, string mopacExecPath, vector<CoordXYZ>& allAtoms)
+{
+	optimize(mopacExecPath, allAtoms, options);
 }
 
 

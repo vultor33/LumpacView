@@ -1,21 +1,15 @@
 mmm-teste.xyz
 Eu
 Eu_spk
-6
+4
+auxLigands/Lumpac-View-Dummy-Ligand-M1
+auxLigands/Lumpac-View-Dummy-Ligand-M1
 auxLigands/Lumpac-View-Dummy-Ligand-B11
 auxLigands/Lumpac-View-Dummy-Ligand-B12
-auxLigands/Lumpac-View-Dummy-Ligand-B11
-auxLigands/Lumpac-View-Dummy-Ligand-B12
-auxLigands/Lumpac-View-Dummy-Ligand-B11
-auxLigands/Lumpac-View-Dummy-Ligand-B12
-95
-6
-0
-1
+120
+2
 2
 3
-4
-5
 
 
 

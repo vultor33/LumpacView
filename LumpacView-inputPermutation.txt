@@ -1,0 +1,29 @@
+3                                 
+Eu                                
+Eu_spk                            
+Lumpac-View-Ligand-BUVXAR11       
+Lumpac-View-Ligand-BUVXAR11       
+Lumpac-View-Ligand-DUCNAQ-OONO    
+4                                 
+0                                 
+1                                 
+2                                 
+3                                 
+M2009_Ln_Orbitals.exe
+teste
+
+
+3                                  !numero de ligantes
+Eu                                 !atomo central
+Eu_spk                             !nome do arquivo de parametros
+Lumpac-View-Ligand-BUVXAR11        !lig 1
+Lumpac-View-Ligand-BUVXAR11        !lig 2
+Lumpac-View-Ligand-DUCNAQ-OONO     !lig 3
+4                                  !numero de coordenacao
+0                                  !permutacao[0]
+1                                  !permutacao[1]
+2                                  !permutacao[2]
+3                                  !permutacao[3]
+M2009_Ln_Orbitals.exe              !caminho do mopac
+teste                              !nome do projeto
+

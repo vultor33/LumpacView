@@ -392,6 +392,10 @@ void FindIsomers::readInput()
 		}
 	}
 	input_.close();
+
+	AuxMath auxMath_;
+	bidentateAngleCut *= (auxMath_._pi / 180);
+
 	/*
 	inputInformations[0] = "Eu";
 	inputInformations[1] = "Eu_spk";

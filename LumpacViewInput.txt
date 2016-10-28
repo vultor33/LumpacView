@@ -1,17 +1,25 @@
 mmm-teste.xyz
 Eu
 Eu_spk
-4
-auxLigands/Lumpac-View-Dummy-Ligand-C21
-auxLigands/Lumpac-View-Dummy-Ligand-C22
-auxLigands/Lumpac-View-Dummy-Ligand-C11
-auxLigands/Lumpac-View-Dummy-Ligand-C12
-120
-4
-2
-3
+6
+auxLigands/Lumpac-View-Dummy-Ligand-B11
+auxLigands/Lumpac-View-Dummy-Ligand-B12
+auxLigands/Lumpac-View-Dummy-Ligand-B11
+auxLigands/Lumpac-View-Dummy-Ligand-B12
+auxLigands/Lumpac-View-Dummy-Ligand-B11
+auxLigands/Lumpac-View-Dummy-Ligand-B12
+95
+6
 0
 1
+2
+3
+4
+5
+
+
+
+
 
 
 ! EXEMPLO DE INPUT DO FIND ISOMERS

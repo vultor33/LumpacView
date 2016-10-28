@@ -1,15 +1,16 @@
 teste.xyz
 Eu
 Eu_spk
-4
+5
 auxLigands/Lumpac-View-Dummy-Ligand-M1
 auxLigands/Lumpac-View-Dummy-Ligand-M1
+auxLigands/Lumpac-View-Dummy-Ligand-M2
 auxLigands/Lumpac-View-Dummy-Ligand-B11
 auxLigands/Lumpac-View-Dummy-Ligand-B12
 120
 2
-2
 3
+4
 
 
 

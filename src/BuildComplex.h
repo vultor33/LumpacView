@@ -23,8 +23,12 @@ public:
 	std::vector<CoordXYZ> buildCompletingWithWater(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath, int & nLigandAtoms);
 
 	void makeComplexOptimizingInMopac(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath);
+	
+	std::vector<Ligand> assembleComplexWithoutSA();
+	
+	std::vector<Ligand> assembleComplexWithoutSA(std::vector<int> & ligandsPermutation);
 
-	std::vector<Ligand> BuildComplex::assembleComplexWithoutSA(std::vector<int> & ligandsPermutation = std::vector<int>(), std::vector< std::string > & inputInformations = std::vector< std::string >());
+	std::vector<Ligand> assembleComplexWithoutSA(std::vector<int> & ligandsPermutation, std::vector< std::string > & inputInformations);
 
 	void runMopacAndPrint(std::vector< std::string > options, std::string mopacExecPath, std::vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
 
@@ -35,7 +39,9 @@ public:
 	int getLigandsNumber();
 
 private:
-	ReadInput BuildComplex::activateReadInput(std::vector< std::string > & inputInformations = std::vector< std::string >());
+	ReadInput activateReadInput();
+
+	ReadInput activateReadInput(std::vector< std::string > & inputInformations);
 
 	std::vector<int> actualLigandPermutation;
 
@@ -55,7 +61,7 @@ private:
 		std::string mopacExePath,
 		std::vector<CoordXYZ> & allAtoms,
 		std::vector<std::string> & options,
-		std::vector<MopacParams> & params = std::vector<MopacParams>());
+		std::vector<MopacParams> params = std::vector<MopacParams>());
 
 	void createParamsFile(
 		std::string paramsName, 

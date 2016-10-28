@@ -33,7 +33,8 @@ void FindIsomers::start()
 		remove(fileAllIsomers.c_str());
 
 	BuildComplex bc_;
-	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(vector<int>(),inputInformations);
+	vector<int> dummyVecI;
+	vector<Ligand> allAtomsOriginal = bc_.assembleComplexWithoutSA(dummyVecI,inputInformations);
 	int permutationsNumber = bc_.getLigandsPermutation().size();
 	vector<CoordXYZ> atomsOriginal = ligandToCoordXYZ(allAtomsOriginal);
 	vector<int> firstPermutation(permutationsNumber);
@@ -75,7 +76,8 @@ void FindIsomers::printSelectedIsomer(
 //	if (exists_test0(outputName))
 //		remove(outputName.c_str());
 
-	appendPrintCoordXYZ(generateSelectedIsomer(permutation, inputInformations), outputName, permutationToString(permutation));
+	vector<CoordXYZ> printAtoms = generateSelectedIsomer(permutation, inputInformations);
+	appendPrintCoordXYZ(printAtoms, outputName, permutationToString(permutation));
 }
 
 vector<CoordXYZ> FindIsomers::generateSelectedIsomer(vector<int> permutation, vector<string > inputInformations)
@@ -401,7 +403,8 @@ std::vector<CoordXYZ> FindIsomers::ligandToCoordXYZ(std::vector<Ligand> & allLig
 
 void FindIsomers::appendPrintCoordXYZ(vector<Ligand> & allAtoms, string fName, string title)
 {
-	appendPrintCoordXYZ(ligandToCoordXYZ(allAtoms), fName, title);
+	vector<CoordXYZ> printAtoms = ligandToCoordXYZ(allAtoms);
+	appendPrintCoordXYZ(printAtoms, fName, title);
 }
 
 void FindIsomers::appendPrintCoordXYZ(vector<CoordXYZ> & allAtoms, string fName, string title)

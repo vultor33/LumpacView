@@ -25,7 +25,8 @@ BuildComplex::~BuildComplex(){}
 
 vector<CoordXYZ> BuildComplex::build()
 {
-	return build(activateReadInput());
+	ReadInput readInp_ = activateReadInput();
+	return build(readInp_);
 }
 
 vector<CoordXYZ> BuildComplex::buildCompletingWithWater(
@@ -128,6 +129,20 @@ void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordinat
 	newLigFile_.close();
 }
 
+vector<Ligand> BuildComplex::assembleComplexWithoutSA()
+{
+
+	vector<int> ligandsPermutation; 
+	vector<string>  inputInformations;
+	return assembleComplexWithoutSA(ligandsPermutation,inputInformations);
+}
+
+vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermutation)
+{
+	vector<string>  inputInformations;
+	return assembleComplexWithoutSA(ligandsPermutation,inputInformations);
+}
+
 vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermutation, vector<string> & inputInformations)
 {
 	ReadInput readInp_ = activateReadInput(inputInformations);
@@ -185,6 +200,12 @@ int BuildComplex::getLigandsNumber()
 	return readInp_.allLigands.size();
 }
 
+
+ReadInput BuildComplex::activateReadInput()
+{
+	vector<string> inputInformations;
+	activateReadInput(inputInformations);
+}
 
 ReadInput BuildComplex::activateReadInput(vector< string > & inputInformations)
 {
@@ -400,7 +421,7 @@ bool BuildComplex::optimize(
 	string mopacExecPath,
 	vector<CoordXYZ> & allAtoms,
 	vector<string> & options,
-	vector<MopacParams> & params)
+	vector<MopacParams> params)
 {
 	WriteQuantumInput writeMop_(options);
 

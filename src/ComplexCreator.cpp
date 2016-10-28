@@ -5,6 +5,7 @@
 #include <sstream>
 #include <fstream>
 #include <iomanip>
+#include <cmath>
 
 #include "Ligand.h"
 #include "Points.h"
@@ -64,6 +65,12 @@ void ComplexCreator::calculateAllAngles(int nPoints)
 		}
 	}
 	of_.close();
+}
+
+bool ComplexCreator::start()
+{
+	vector<int> ligandsPermutation;
+	return start(ligandsPermutation);
 }
 
 bool ComplexCreator::start(vector<int> & ligandsPermutation)
@@ -370,11 +377,11 @@ double ComplexCreator::calculateAllFit(vector<Ligand> & ligands)
 	Fitness fit_;
 	for (size_t i = 0; i < (allLigands.size() - 1); i++)
 	{
-		for (size_t j = i + 1; j < allLigands.size(); j++)
+		for (size_t j = i + 1; j < allLigands.size(); j++	)
 		{
-			allFit += fit_.calculateFit(
-				ligands[i].getAllAtoms(),
-				ligands[j].getAllAtoms());
+			vector<CoordXYZ> atomsI = ligands[i].getAllAtoms();
+			vector<CoordXYZ> atomsJ = ligands[j].getAllAtoms();
+			allFit += fit_.calculateFit(atomsI,atomsJ);
 		}
 	}
 	return allFit;

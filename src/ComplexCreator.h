@@ -26,7 +26,9 @@ public:
 
 	void calculateAllAngles(int nPoints);
 
-	bool start(std::vector<int> & ligandsPermutation = std::vector<int>());
+	bool start();
+
+	bool start(std::vector<int> & ligandsPermutation);
 
 	std::vector<CoordXYZ> simulatedAnnealing();
 

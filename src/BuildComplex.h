@@ -24,9 +24,9 @@ public:
 
 	void makeComplexOptimizingInMopac(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath);
 
-	void runMopac(std::vector< std::string > options, std::string mopacExecPath, std::vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
-
 	std::vector<Ligand> BuildComplex::assembleComplexWithoutSA(std::vector<int> & ligandsPermutation = std::vector<int>(), std::vector< std::string > & inputInformations = std::vector< std::string >());
+
+	void runMopacAndPrint(std::vector< std::string > options, std::string mopacExecPath, std::vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
 
 	void fitSA();
 
@@ -47,18 +47,15 @@ private:
 	
 	void runMopac(ReadInput & readInp_, std::vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
 
+	void runMopac(std::vector< std::string > options, std::string mopacExecPath, std::vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
+
 	void setClandH2oToCompleteCoordination(Ligand & Cl_, Ligand & H2o_);
 
 	bool optimize(
 		std::string mopacExePath,
 		std::vector<CoordXYZ> & allAtoms,
-		std::vector<std::string> & options);
-
-	bool optimize(
-		std::string mopacExePath,
-		std::vector<CoordXYZ> & allAtoms,
 		std::vector<std::string> & options,
-		std::vector<MopacParams> & params);
+		std::vector<MopacParams> & params = std::vector<MopacParams>());
 
 	void createParamsFile(
 		std::string paramsName, 

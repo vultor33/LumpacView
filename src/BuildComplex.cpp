@@ -337,12 +337,6 @@ void BuildComplex::runMopac(ReadInput & readInp_, vector<CoordXYZ>& allAtoms)
 
 }
 
-void BuildComplex::runMopac(vector<string> options, string mopacExecPath, vector<CoordXYZ>& allAtoms)
-{
-	optimize(mopacExecPath, allAtoms, options);
-}
-
-
 void BuildComplex::setClandH2oToCompleteCoordination(Ligand & Cl_, Ligand & H2o_)
 {
 	vector<CoordXYZ> cl(1);
@@ -370,15 +364,35 @@ void BuildComplex::setClandH2oToCompleteCoordination(Ligand & Cl_, Ligand & H2o_
 	H2o_.setLigandCoordinates(h2o, titleInfoh2o);
 }
 
-bool BuildComplex::optimize(
-	string mopacExecPath,
-	vector<CoordXYZ> & allAtoms,
-	vector<string> & options)
+void BuildComplex::runMopac(vector<string> options, string mopacExecPath, vector<CoordXYZ>& allAtoms)
 {
-	vector<MopacParams> dummyParams;
+	optimize(mopacExecPath, allAtoms, options);
+};
 
-	return optimize(mopacExecPath, allAtoms, options,dummyParams);
-}
+void BuildComplex::runMopacAndPrint(vector<string> options, string mopacExecPath, vector<CoordXYZ>& allAtoms)
+{
+	runMopac(options, mopacExecPath, allAtoms);
+
+	ReadQuantumOutput readmop_(options[0]);
+
+	readmop_.readOutput(options[1]);
+
+	allAtoms = readmop_.getCoordinates();
+
+	string fName = options[1] + ".xyz";
+	
+	ofstream pr_;
+	pr_.open(fName.c_str(), std::ofstream::out | std::ofstream::app);
+	pr_ << allAtoms.size() << endl << "E:  " << readmop_.getEnergy() << endl;
+	for (size_t i = 0; i < allAtoms.size(); i++)
+	{
+		pr_ << allAtoms[i].atomlabel << "  "
+			<< allAtoms[i].x << "  "
+			<< allAtoms[i].y << "  "
+			<< allAtoms[i].z << endl;
+	}
+	pr_.close();
+};
 
 
 bool BuildComplex::optimize(
@@ -387,8 +401,6 @@ bool BuildComplex::optimize(
 	vector<string> & options,
 	vector<MopacParams> & params)
 {
-	ReadQuantumOutput readmop_(options[0]);
-
 	WriteQuantumInput writeMop_(options);
 
 	string inputName = writeMop_.createInput(allAtoms);
@@ -397,16 +409,9 @@ bool BuildComplex::optimize(
 
 	system((mopacExecPath + " " + inputName).c_str());
 
-	ReadQuantumOutput readGamess_(options[0]);
-
-	readmop_.readOutput(inputName);
-
-	allAtoms = readmop_.getCoordinates();
-
-	if (allAtoms.size() == 0) return false;
-
 	return true;
-}
+};
+
 
 void BuildComplex::createParamsFile(string paramsName, vector<MopacParams>& params)
 {

@@ -146,7 +146,9 @@ void FindIsomers::buildComplexWithSelectedIsomer()
 	remove("permutation-teste.xyz");
 	vector<CoordXYZ> allAtoms = fd_.generateSelectedIsomer(permutation, inputInformations);
 	BuildComplex bc_;
-	bc_.runMopac(options, execpah, allAtoms);
+	bc_.runMopacAndPrint(options, execpah, allAtoms);
+
+
 
 	/* EXEMPLO
 	inputInformations[0] = "Eu";
@@ -167,11 +169,6 @@ void FindIsomers::buildComplexWithSelectedIsomer()
 	options[4] = inputInformations[0];
 	string execpah = "M2009_Ln_Orbitals.exe";
 	*/
-
-
-
-
-
 }
 
 

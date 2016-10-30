@@ -408,7 +408,7 @@ void BuildComplex::runMopacAndPrint(vector<string> options, string mopacExecPath
 	string fName = options[1] + ".xyz";
 	
 	ofstream pr_;
-	pr_.open(fName.c_str(), std::ofstream::out | std::ofstream::app);
+	pr_.open(fName.c_str());
 	pr_ << allAtoms.size() << endl << "E:  " << setprecision(16) << readmop_.getEnergy() << endl;
 	for (size_t i = 0; i < allAtoms.size(); i++)
 	{

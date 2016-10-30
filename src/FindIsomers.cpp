@@ -139,7 +139,7 @@ void FindIsomers::buildComplexWithSelectedIsomer()
 	vector<string> options(5);
 	options[0] = "mopac2009";
 	options[1] = projectName;
-	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	options[2] = " PM7 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
 	options[3] = inputInformations[1];
 	options[4] = inputInformations[0];
 

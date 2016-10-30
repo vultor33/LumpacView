@@ -26,7 +26,7 @@ int main()
 	cin.get();
 	*/
 
-	/* MAKING COMPLEX */
+	/* MAKING COMPLEX
 	int charge = 0;
 	int coordination = 7;
 	string ligandName = "JALNIU.xyz";
@@ -47,6 +47,7 @@ int main()
 	options[4] = "Eu";
 	BuildComplex bc_;
 	bc_.makeComplexOptimizingInMopac(ligandName, coordination, charge, options, mopacExecPath);
+	*/
 
 	// RUNNING THROUGH LUMPAC VIEW INPUT
 	//BuildComplex bc_;
@@ -143,8 +144,8 @@ int main()
 //	findIso_.start();
 
 //  COMPLEX WITH SELECTED ISOMER
-//	FindIsomers fd_;
-//	fd_.buildComplexWithSelectedIsomer();
+	FindIsomers fd_;
+	fd_.buildComplexWithSelectedIsomer();
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

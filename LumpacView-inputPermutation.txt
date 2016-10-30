@@ -1,16 +1,22 @@
-3                                 
+5                                 
 Eu                                
 Eu_spk                            
-Lumpac-View-Ligand-BUVXAR11       
-Lumpac-View-Ligand-BUVXAR11       
-Lumpac-View-Ligand-DUCNAQ-OONO    
-4                                 
-0                                 
-1                                 
-2                                 
-3                                 
+Lumpac-View-Ligand-JALNIU
+Lumpac-View-Ligand-JALNIU
+Lumpac-View-Ligand-JALNIU-Br
+Lumpac-View-Ligand-JALNIU-Br
+Lumpac-View-Ligand-JALNIU-Br
+7                                 
+0 
+1 
+3 
+6 
+2 
+4 
+5 
 M2009_Ln_Orbitals.exe
-teste
+jalniu
+
 
 
 3                                  !numero de ligantes

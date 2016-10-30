@@ -26,14 +26,14 @@ int main()
 	cin.get();
 	*/
 
-	/* MAKING COMPLEX
-	int charge = 1;
-	int coordination = 8;
-	string ligandName = "DUCNAQ-OONO.xyz";
+	/* MAKING COMPLEX */
+	int charge = 0;
+	int coordination = 7;
+	string ligandName = "JALNIU.xyz";
 	string mopacExecPath = "M2009_Ln_Orbitals.exe";
 	vector<string> options(5);
 	options[0] = "mopac2009";
-	options[1] = "DUCNAQ-OONO";
+	options[1] = "JALNIU";
 	options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n"; //freq = AUX THERMO FORCE
 																		//adding charge
 	string chargeString;
@@ -47,7 +47,6 @@ int main()
 	options[4] = "Eu";
 	BuildComplex bc_;
 	bc_.makeComplexOptimizingInMopac(ligandName, coordination, charge, options, mopacExecPath);
-	*/
 
 	// RUNNING THROUGH LUMPAC VIEW INPUT
 	//BuildComplex bc_;
@@ -140,8 +139,8 @@ int main()
 	-> FIND ISOMERS - WORKING
 	*/
 
-	FindIsomers findIso_;	
-	findIso_.start();
+//	FindIsomers findIso_;	
+//	findIso_.start();
 
 //  COMPLEX WITH SELECTED ISOMER
 //	FindIsomers fd_;

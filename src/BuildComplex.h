@@ -55,6 +55,8 @@ private:
 
 	void runMopac(std::vector< std::string > options, std::string mopacExecPath, std::vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
 
+	void runMopacAndGetCoordinates(std::vector< std::string > options, std::string mopacExecPath, std::vector<CoordXYZ> & allAtoms); 
+
 	void setClandH2oToCompleteCoordination(Ligand & Cl_, Ligand & H2o_);
 
 	bool optimize(
@@ -83,4 +85,31 @@ inputInformations[2] = "agua";
 inputInformations[3] = "agua";
 inputInformations[4] = "agua";
 =======================================================================================================================================
+*/
+
+
+/* MAKING COMPLEX
+
+-> FICAR ATENTO A CAPTACAO DO NOVO LIGANTE
+
+int charge = 1;
+int coordination = 8;
+string ligandName = "DUCNAQ-OONO.xyz";
+string mopacExecPath = "M2009_Ln_Orbitals.exe";
+vector<string> options(5);
+options[0] = "mopac2009";
+options[1] = "DUCNAQ-OONO";
+options[2] = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n"; //freq = AUX THERMO FORCE
+//adding charge
+string chargeString;
+stringstream convert;
+convert << charge;
+convert >> chargeString;
+chargeString = " CHARGE=" + chargeString + " ";
+// charge computed
+options[2] += " NOLOG GEO-OK SCFCRT=1.D-10" + chargeString;
+options[3] = "Eu_spk";
+options[4] = "Eu";
+BuildComplex bc_;
+bc_.makeComplexOptimizingInMopac(ligandName, coordination, charge, options, mopacExecPath);
 */

@@ -89,7 +89,10 @@ vector<CoordXYZ> BuildComplex::build(ReadInput & readInp_)
 	if (!constructComplex(readInp_, saParameters_, allAtoms))
 		return allAtoms;
 
-	runMopac(readInp_, allAtoms); //allAtoms modified - Metal always on origin
+	runMopacAndGetCoordinates(
+		readInp_.getOptions(),
+		readInp_.getMopacExecPath(),
+		allAtoms);
 
 	return allAtoms;
 }
@@ -100,7 +103,7 @@ void BuildComplex::makeComplexOptimizingInMopac(string ligandName, int coordinat
 	vector<CoordXYZ> allAtoms = buildCompletingWithWater(ligandName, coordination, charge, options, mopacExecPath, nAtoms);
 	vector<CoordXYZ> ligandCreated(nAtoms);
 	for (int i = 0; i < nAtoms; i++)
-		ligandCreated[i] = allAtoms[i + 1];
+		ligandCreated[i] = allAtoms[i+1];
 
 	Ligand newLigand_;
 	newLigand_.setLigandCoordinates(ligandName);
@@ -204,7 +207,8 @@ int BuildComplex::getLigandsNumber()
 ReadInput BuildComplex::activateReadInput()
 {
 	vector<string> inputInformations;
-	activateReadInput(inputInformations);
+	ReadInput readInp_ = activateReadInput(inputInformations);
+	return readInp_;
 }
 
 ReadInput BuildComplex::activateReadInput(vector< string > & inputInformations)
@@ -414,6 +418,18 @@ void BuildComplex::runMopacAndPrint(vector<string> options, string mopacExecPath
 			<< allAtoms[i].z << endl;
 	}
 	pr_.close();
+};
+
+void BuildComplex::runMopacAndGetCoordinates(vector<string> options, string mopacExecPath, vector<CoordXYZ>& allAtoms)
+{
+	runMopac(options, mopacExecPath, allAtoms);
+
+	ReadQuantumOutput readmop_(options[0]);
+
+	readmop_.readOutput(options[1]);
+
+	allAtoms = readmop_.getCoordinates();
+
 };
 
 

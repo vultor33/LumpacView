@@ -15,6 +15,30 @@
 
 using namespace std;
 
+void buildComplexWithALotOfIsomersAndDoWater(
+	std::vector<int> permutation,
+	std::string methodOptimize,
+	std::string methodCosmo,
+	std::string projectName
+	)
+{
+	FindIsomers fd_;
+	vector<string> options;
+	string mopacExecPath;
+	vector<CoordXYZ> allAtoms = fd_.buildComplexWithSelectedIsomer(
+		permutation,
+		projectName,
+		methodOptimize,
+		options,
+		mopacExecPath);
+	BuildComplex bc_;
+	options[1] = projectName + "-water";
+	options[2] = methodCosmo;
+	options[3] = "";
+	options[4] = "";
+	bc_.runMopacAndPrint(options, mopacExecPath, allAtoms);
+}
+
 int main()
 {
 	// ATENCAO - CADASTRAR OS PONTOS HARDIN COM 12 CASAS
@@ -143,9 +167,45 @@ int main()
 //	FindIsomers findIso_;	
 //	findIso_.start();
 
+
+	vector<int> permutation(7);
+	string projectName = "jalniu4";
+	string methodOptimize = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string methodCosmo = " EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	permutation[0] = 0;	permutation[1] = 1;	permutation[2] = 2;	permutation[3] = 3;	permutation[4] = 4;	permutation[5] = 5;	permutation[6] = 6;
+	buildComplexWithALotOfIsomersAndDoWater(permutation, methodOptimize, methodCosmo, projectName);
 //  COMPLEX WITH SELECTED ISOMER
+
+	/*
 	FindIsomers fd_;
-	fd_.buildComplexWithSelectedIsomer();
+	vector<string> options;
+	vector<int> permutation(7);
+	string projectName;
+	string method;
+	string mopacExecPath;
+	permutation[0] = 0;
+	permutation[1] = 1;
+	permutation[2] = 2;
+	permutation[3] = 3;
+	permutation[4] = 4;
+	permutation[5] = 5;
+	permutation[6] = 6;
+	projectName = "jalniu3";
+	method = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	vector<CoordXYZ> res1 = fd_.buildComplexWithSelectedIsomer(
+		permutation,
+		projectName,
+		method,
+		options,
+		mopacExecPath);
+	BuildComplex bc_;
+	options[1] = projectName + "-water";
+	options[2] = " EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	options[3] = "";
+	options[4] = "";
+	bc_.runMopacAndPrint(options, mopacExecPath, res1);
+	*/
+
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

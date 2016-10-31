@@ -87,69 +87,41 @@ vector<CoordXYZ> FindIsomers::generateSelectedIsomer(vector<int> permutation, ve
 	return ligandToCoordXYZ(allLigands);
 }
 
+//method = " PM7 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+vector<CoordXYZ> FindIsomers::buildComplexWithSelectedIsomer(
+	vector<int> & permutation,
+	string projectName,
+	string method,
+	vector<string> & options,
+	string & mopacExecPath)
+{
+	vector<string> inputPermutations;
+	vector<int> zeroPermutation;
+	//vector<string> options;
+	//string execpath;
+	readInputpermutation(inputPermutations, zeroPermutation, options, mopacExecPath);
+	options[1] = projectName;
+	options[2] = method;
+	FindIsomers fd_;
+	vector<CoordXYZ> allAtoms = fd_.generateSelectedIsomer(permutation, inputInformations);
+	BuildComplex bc_;
+	bc_.runMopacAndPrint(options, mopacExecPath, allAtoms);
+	return allAtoms;
+}
+
 void FindIsomers::buildComplexWithSelectedIsomer()
 {
-	ifstream input_("LumpacView-inputPermutation.txt");
-	int nLigands;
-	string auxline;
-	stringstream line1;
-	getline(input_, auxline);
-	line1 << auxline;
-	line1 >> nLigands;
-	vector<string> inputInformations(nLigands + 2);
-	stringstream line2;
-	getline(input_, auxline);
-	line2 << auxline;
-	line2 >> inputInformations[0];
-	stringstream line3;
-	getline(input_, auxline);
-	line3 << auxline;
-	line3 >> inputInformations[1];
-	for (size_t i = 0; i < nLigands; i++)
-	{
-		stringstream linei;
-		getline(input_, auxline);
-		linei << auxline;
-		linei >> inputInformations[i + 2];
-	}
-	int nPermutations;
-	stringstream line4;
-	getline(input_, auxline);
-	line4 << auxline;
-	line4 >> nPermutations;
-	vector<int> permutation(nPermutations);
-	for (size_t i = 0; i < nPermutations; i++)
-	{
-		stringstream linei;
-		getline(input_, auxline);
-		linei << auxline;
-		linei >> permutation[i];
-	}
-	string execpah;
-	stringstream line5;
-	getline(input_, auxline);
-	line5 << auxline;
-	line5 >> execpah;
-	string projectName;
-	stringstream line6;
-	getline(input_, auxline);
-	line6 << auxline;
-	line6 >> projectName;
-
-	vector<string> options(5);
-	options[0] = "mopac2009";
-	options[1] = projectName;
-	options[2] = " PM7 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	options[3] = inputInformations[1];
-	options[4] = inputInformations[0];
+	vector<string> inputPermutations;
+	vector<int> permutation;
+	vector<string> options;
+	string execpath;
+	readInputpermutation(inputPermutations, permutation, options, execpath);
 
 	FindIsomers fd_;
 	remove("permutation-teste.xyz");
 	vector<CoordXYZ> allAtoms = fd_.generateSelectedIsomer(permutation, inputInformations);
 	BuildComplex bc_;
-	bc_.runMopacAndPrint(options, execpah, allAtoms);
-
-
+	bc_.runMopacAndPrint(options, execpath, allAtoms);
 
 	/* EXEMPLO
 	inputInformations[0] = "Eu";
@@ -506,4 +478,66 @@ void FindIsomers::readInput()
 	bidentateAtoms[2] = 4;
 	bidentateAtoms[3] = 5;
 	*/
+}
+
+
+void FindIsomers::readInputpermutation(
+	vector<string> & inputPermutations,
+	vector<int> & permutation,
+	vector<string> & options,
+	string & execpath
+	)
+{
+	ifstream input_("LumpacView-inputPermutation.txt");
+	int nLigands;
+	string auxline;
+	stringstream line1;
+	getline(input_, auxline);
+	line1 << auxline;
+	line1 >> nLigands;
+	inputInformations.resize(nLigands + 2);
+	stringstream line2;
+	getline(input_, auxline);
+	line2 << auxline;
+	line2 >> inputInformations[0];
+	stringstream line3;
+	getline(input_, auxline);
+	line3 << auxline;
+	line3 >> inputInformations[1];
+	for (size_t i = 0; i < nLigands; i++)
+	{
+		stringstream linei;
+		getline(input_, auxline);
+		linei << auxline;
+		linei >> inputInformations[i + 2];
+	}
+	int nPermutations;
+	stringstream line4;
+	getline(input_, auxline);
+	line4 << auxline;
+	line4 >> nPermutations;
+	permutation.resize(nPermutations);
+	for (size_t i = 0; i < nPermutations; i++)
+	{
+		stringstream linei;
+		getline(input_, auxline);
+		linei << auxline;
+		linei >> permutation[i];
+	}
+	stringstream line5;
+	getline(input_, auxline);
+	line5 << auxline;
+	line5 >> execpath;
+	string projectName;
+	stringstream line6;
+	getline(input_, auxline);
+	line6 << auxline;
+	line6 >> projectName;
+
+	options.resize(5);
+	options[0] = "mopac2009";
+	options[1] = projectName;
+	options[2] = " PM7 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	options[3] = inputInformations[1];
+	options[4] = inputInformations[0];
 }

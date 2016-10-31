@@ -409,7 +409,8 @@ void BuildComplex::runMopacAndPrint(vector<string> options, string mopacExecPath
 	
 	ofstream pr_;
 	pr_.open(fName.c_str());
-	pr_ << allAtoms.size() << endl << "E:  " << setprecision(16) << readmop_.getEnergy() << endl;
+	double energy = readmop_.getEnergy();
+	pr_ << allAtoms.size() << endl << "E:  " << setprecision(16) << energy << endl;
 	for (size_t i = 0; i < allAtoms.size(); i++)
 	{
 		pr_ << allAtoms[i].atomlabel << "  "

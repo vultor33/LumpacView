@@ -21,7 +21,14 @@ public:
 	std::vector<CoordXYZ> generateSelectedIsomer(std::vector<int> permutation, std::vector<std::string > inputInformations);
 
 	void printSelectedIsomer(std::vector<int> permutation, std::vector<std::string > inputInformations, std::string outputName);
-	
+
+	std::vector<CoordXYZ> buildComplexWithSelectedIsomer(
+		std::vector<int> & permutation, 
+		std::string projectName, 
+		std::string method, 
+		std::vector< std::string > & options, 
+		std::string & mopacExecPath);
+
 	void buildComplexWithSelectedIsomer();
 
 private:
@@ -83,6 +90,13 @@ private:
 	std::vector<CoordXYZ> ligandToCoordXYZ(std::vector<Ligand> & allLigands);
 
 	void readInput();
+
+	void readInputpermutation(
+		std::vector< std::string > & inputPermutations, 
+		std::vector<int> & permutation,
+		std::vector< std::string > & options,
+		std::string & execpath
+		);
 
 };
 

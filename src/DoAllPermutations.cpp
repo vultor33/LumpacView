@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #include "Coordstructs.h"
 #include "FindIsomers.h"
@@ -14,11 +15,26 @@ DoAllPermutations::DoAllPermutations() {}
 
 DoAllPermutations::~DoAllPermutations(){}
 
-void DoAllPermutations::calculateAll(string methodOptimize, string methodCosmo, string projectName)
+void DoAllPermutations::calculateAll(
+	string methodOptimize, 
+	string methodCosmo, 
+	string projectName,
+	string filePermutations,
+	int nPermutations)
 {
+	getAllPermutations(filePermutations, nPermutations);
+	for (size_t i = 0; i < permutations.size(); i++)
+	{
+		vector<int> permutationI = permutations[i];
+		string projectNameI = projectName + "-" + permutationToString(permutationI);
 
+		buildComplexWithAPermutation(
+			permutations[i],
+			methodOptimize,
+			methodCosmo,
+			projectNameI);
 
-
+	}
 }
 
 void DoAllPermutations::buildComplexWithAPermutation(
@@ -45,23 +61,43 @@ void DoAllPermutations::buildComplexWithAPermutation(
 	bc_.runMopacAndPrint(options, mopacExecPath, allAtoms);
 }
 
-void DoAllPermutations::setAllPermutationsManually(int nComplex)
+void DoAllPermutations::getAllPermutations(string filePermutations, int nPermutations)
 {
+	ifstream allPermFile_(filePermutations.c_str());
 
-	if (nComplex == 0)
+	string auxline;
+	getline(allPermFile_, auxline);
+	while (auxline != "")
 	{
-		permutations.resize(12);
-		for (size_t i = 0; i < 12; i++)
-			permutations[i].resize(7);
+		vector<int> permutationI(nPermutations);
+		stringstream line1, line2;
+		line1 << auxline;
+		int nAtoms;
+		line1 >> nAtoms;
+		getline(allPermFile_, auxline);
+		line2 << auxline;
+		for (int i = 0; i < nPermutations; i++)
+			line2 >> permutationI[i];
 
-		permutations[0][0] = 0;
+		permutations.push_back(permutationI);
 
+		for (int i = 0; i < nAtoms; i++)
+			getline(allPermFile_, auxline);
 
+		getline(allPermFile_, auxline);
 	}
-	else
-		exit(1);
 }
 
+string DoAllPermutations::permutationToString(vector<int>& permutation)
+{
+	stringstream line;
+	for (size_t i = 0; i < permutation.size(); i++)
+		line << permutation[i] << "-";
+
+	string permToString;
+	getline(line, permToString);
+	return permToString;
+}
 
 
 

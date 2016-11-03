@@ -18,6 +18,8 @@ public:
 		std::string filePermutations,
 		int nPermutations);
 
+	void analysis(std::string crystalFile, std::string isomerFile);
+
 private:
 	std::vector< std::vector<int> > permutations;
 

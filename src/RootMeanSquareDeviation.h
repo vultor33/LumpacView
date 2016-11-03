@@ -19,6 +19,8 @@ public:
 
 	double hardRmsOverlay(std::vector<CoordXYZ> & mol1, std::vector<CoordXYZ> & mol2);
 
+	double inertiaTensorComparisson(std::vector<CoordXYZ> & mol1, std::vector<CoordXYZ> & mol2);
+
 	std::vector<CoordXYZ> readCoord(std::string fName);
 
 private:
@@ -35,6 +37,11 @@ private:
 	double oldRmsdToAddressPoints(std::string file1, std::string file2);
 	double rmsOverlayThrouhgThreePoints(std::vector<CoordXYZ> & mol1, std::vector<CoordXYZ> & mol2);
 	std::vector< CoordXYZ > setThisPermutationAtoms(std::vector<int> permutation, std::vector<CoordXYZ> &  originAtoms);
+
+	//inertia tensor
+	std::vector< std::vector<double> > calculateInertiaTensor(std::vector<CoordXYZ> & mol);
+	void crescentOrdering(double & n1, double & n2, double & n3);
+	double getAtomMass(std::string atomlabel);
 
 };
 

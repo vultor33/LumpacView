@@ -8,6 +8,7 @@
 #include "Coordstructs.h"
 #include "FindIsomers.h"
 #include "BuildComplex.h"
+#include "RootMeanSquareDeviation.h"
 
 using namespace std;
 
@@ -35,6 +36,32 @@ void DoAllPermutations::calculateAll(
 			projectNameI);
 
 	}
+}
+
+void DoAllPermutations::analysis(string crystalFile, string isomerFile)
+{
+	ifstream readEnergy_(isomerFile.c_str());
+	string auxline, dummy;
+	double energy;
+	stringstream line;
+	getline(readEnergy_, auxline);
+	getline(readEnergy_, auxline);
+	line << auxline;
+	line >> dummy >> energy;
+	readEnergy_.close();
+
+	RootMeanSquareDeviation rmsd_;
+
+	vector<CoordXYZ> crystal = rmsd_.readCoord(crystalFile);
+	vector<CoordXYZ> isomer = rmsd_.readCoord(isomerFile);
+
+	double rmsd = rmsd_.inertiaTensorComparisson(crystal, isomer);
+
+	ofstream csv_;
+	csv_.open("allEnergies", std::ofstream::out | std::ofstream::app);
+	csv_ << isomerFile << " ; " << energy << " ; " << endl;
+	csv_.close();
+
 }
 
 void DoAllPermutations::buildComplexWithAPermutation(

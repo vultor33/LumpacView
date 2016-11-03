@@ -168,6 +168,7 @@ int main()
 //	FindIsomers findIso_;	
 //	findIso_.start();
 
+/*
 	DoAllPermutations doall_;
 	string methodOptimize = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
 	string methodCosmo = " RM1 EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
@@ -180,63 +181,7 @@ int main()
 		projectName,
 		filePermutations,
 		nPermutations);
-
-	DoAllPermutations doall2_;
-	string methodOptimize2 = " PM3 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string methodCosmo2 = " PM3 EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string projectName2 = "jalniu-PM3";
-	doall_.calculateAll(
-		methodOptimize2,
-		methodCosmo2,
-		projectName2,
-		filePermutations,
-		nPermutations);
-
-	DoAllPermutations doall3_;
-	string methodOptimize3 = " PM6 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string methodCosmo3 = " PM6 EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string projectName3 = "jalniu-PM6";
-	doall_.calculateAll(
-		methodOptimize3,
-		methodCosmo3,
-		projectName3,
-		filePermutations,
-		nPermutations);
-
-	DoAllPermutations doall4_;
-	string methodOptimize4 = " PM6-D3H4 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string methodCosmo4 = " PM6-D3H4 EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string projectName4 = "jalniu-PM6-D3H4";
-	doall_.calculateAll(
-		methodOptimize4,
-		methodCosmo4,
-		projectName4,
-		filePermutations,
-		nPermutations);
-
-	DoAllPermutations doall5_;
-	string methodOptimize5 = " PM7 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string methodCosmo5 = " PM7 EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string projectName5 = "jalniu-PM7";
-	doall_.calculateAll(
-		methodOptimize5,
-		methodCosmo5,
-		projectName5,
-		filePermutations,
-		nPermutations);
-
-	DoAllPermutations doall6_;
-	string methodOptimize6 = " AM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string methodCosmo6 = " AM1 EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string projectName6 = "jalniu-AM1";
-	doall_.calculateAll(
-		methodOptimize6,
-		methodCosmo6,
-		projectName6,
-		filePermutations,
-		nPermutations);
-
-
+*/
 
 
 
@@ -284,6 +229,27 @@ int main()
 	options[4] = "";
 	bc_.runMopacAndPrint(options, mopacExecPath, res1);
 	*/
+
+/*
+	string name = "jalniu-AM1-0-2-3-6-1-4-5-.xyz";
+	ifstream if_(name.c_str());
+	string auxline, dummy;
+	double energy;
+	stringstream line;
+	getline(if_, auxline);
+	getline(if_, auxline);
+	line << auxline;
+	line >> dummy >> energy;
+	*/
+
+	DoAllPermutations doall;
+	doall.analysis("!JALNIU-CRISTAL.xyz", "jalniu-AM1-0-2-3-6-1-4-5-.xyz");
+
+	cout << "ola";
+
+
+//	RootMeanSquareDeviation rmsd_;
+
 
 
 	/*

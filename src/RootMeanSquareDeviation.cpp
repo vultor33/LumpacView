@@ -8,10 +8,12 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <cmath>
 
 #include "AuxMath.h"
 #include "Coordstructs.h"
 #include "KabschRmsd.h"
+#include "DiagonalizeDlib.h"
 
 using namespace std;
 
@@ -74,6 +76,110 @@ double RootMeanSquareDeviation::hardRmsOverlay(vector<CoordXYZ> & mol1, vector<C
 	delete[] myints;
 
 	return rmsI;
+}
+
+#define useDlib
+double RootMeanSquareDeviation::inertiaTensorComparisson(
+	vector<CoordXYZ> & mol1,
+	vector<CoordXYZ> & mol2)
+{
+#ifdef useDlib
+	vector< vector<double> > inertia1 = calculateInertiaTensor(mol1);
+	vector< vector<double> > inertia2 = calculateInertiaTensor(mol2);
+	DiagonalizeDlib dlib1_(inertia1);
+	DiagonalizeDlib dlib2_(inertia2);
+
+	sort(dlib1_.eigenvaluesDlib.begin(), dlib1_.eigenvaluesDlib.end());
+	sort(dlib2_.eigenvaluesDlib.begin(), dlib2_.eigenvaluesDlib.end());
+
+	double difference = sqrt(
+		(dlib1_.eigenvaluesDlib[0] - dlib2_.eigenvaluesDlib[0])*(dlib1_.eigenvaluesDlib[0] - dlib2_.eigenvaluesDlib[0])
+		+ (dlib1_.eigenvaluesDlib[1] - dlib2_.eigenvaluesDlib[1])*(dlib1_.eigenvaluesDlib[1] - dlib2_.eigenvaluesDlib[1])
+		+ (dlib1_.eigenvaluesDlib[2] - dlib2_.eigenvaluesDlib[2])*(dlib1_.eigenvaluesDlib[2] - dlib2_.eigenvaluesDlib[2])
+		);
+
+	return difference;
+#else
+	cout << "error on RootMeanSquareDeviation::inertiaTensorComparisson"
+		<< endl
+		<< "dlib library not found"
+		<< endl;
+	exit(1);
+#endif
+}
+
+void RootMeanSquareDeviation::crescentOrdering(double & n1, double & n2, double & n3)
+{
+	double aux1, aux2;
+	if (n1 > n2)
+	{
+		if (n2 > n3)
+			return;
+		else
+		{
+			aux1 = n2;
+			n2 = n3;
+			n3 = aux1;
+		}
+
+	}
+
+
+}
+
+vector< vector<double> > RootMeanSquareDeviation::calculateInertiaTensor(vector<CoordXYZ> & mol)
+{
+	vector< vector<double> > inertia(3);
+	for (int i = 0; i < 3; i++)
+	{
+		inertia[i].resize(3);
+		inertia[i][0] = 0.0e0;
+		inertia[i][1] = 0.0e0;
+		inertia[i][2] = 0.0e0;
+	}
+
+	for (size_t i = 0; i < mol.size(); i++)
+	{
+		double mk = getAtomMass(mol[i].atomlabel);
+		inertia[0][0] += mk * (mol[i].y * mol[i].y + mol[i].z * mol[i].z);
+		inertia[1][1] += mk * (mol[i].x * mol[i].x + mol[i].z * mol[i].z);
+		inertia[2][2] += mk * (mol[i].x * mol[i].x + mol[i].y * mol[i].y);
+		inertia[0][1] -= mk * mol[i].x * mol[i].y;
+		inertia[0][2] -= mk * mol[i].x * mol[i].z;
+		inertia[1][2] -= mk * mol[i].y * mol[i].z;
+	}
+
+	inertia[1][0] = inertia[0][1];
+	inertia[2][0] = inertia[0][2];
+	inertia[2][1] = inertia[1][2];
+
+
+
+	return inertia;
+
+}
+
+double RootMeanSquareDeviation::getAtomMass(string atomlabel)
+{
+	if (atomlabel == "H")
+		return 1.01e0;
+	else if (atomlabel == "C")
+		return 12.01e0;
+	else if (atomlabel == "O")
+		return 16.0e0;
+	else if (atomlabel == "Br")
+		return 79.90e0;
+	else if (atomlabel == "Eu")
+		return 151.96e0;
+	else
+	{
+		cout << "error on -> RootMeanSquareDeviation::getAtomMass "
+			<< endl
+			<< "atom not found" << endl;
+		exit(1);
+	}
+
+	return 0;
 }
 
 

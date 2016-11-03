@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 
 #include "Coordstructs.h"
 #include "FindIsomers.h"
@@ -59,7 +60,7 @@ void DoAllPermutations::analysis(string crystalFile, string isomerFile)
 
 	ofstream csv_;
 	csv_.open("allEnergies", std::ofstream::out | std::ofstream::app);
-	csv_ << isomerFile << " ; " << energy << " ; " << endl;
+	csv_ << isomerFile << " ; " << setprecision(16) << energy << " ; " << setprecision(16) << rmsd << endl;
 	csv_.close();
 
 }
@@ -83,8 +84,10 @@ void DoAllPermutations::buildComplexWithAPermutation(
 	BuildComplex bc_;
 	options[1] = projectName + "-water";
 	options[2] = methodCosmo;
-	options[3] = "";
 	options[4] = "";
+
+/* 3->parametros externos 4->metal central */
+
 	bc_.runMopacAndPrint(options, mopacExecPath, allAtoms);
 }
 

@@ -168,27 +168,6 @@ int main()
 //	FindIsomers findIso_;	
 //	findIso_.start();
 
-/*
-	DoAllPermutations doall_;
-	string methodOptimize = " RM1 BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	string methodCosmo = " RM1 EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
-	int nPermutations = 7;
-	string projectName = "jalniu-RM1";
-	string filePermutations = "BBm1m1m1.xyz";
-	doall_.calculateAll(
-		methodOptimize,
-		methodCosmo,
-		projectName,
-		filePermutations,
-		nPermutations);
-*/
-
-
-
-
-
-
-
 	/* CALCULANDO O COMPLEXO A PARTIR DOS CODIGOS
 	VERIFICAR - DOALLPERMUTATIONS
 	vector<int> permutation(7);
@@ -230,27 +209,95 @@ int main()
 	bc_.runMopacAndPrint(options, mopacExecPath, res1);
 	*/
 
+
 /*
-	string name = "jalniu-AM1-0-2-3-6-1-4-5-.xyz";
-	ifstream if_(name.c_str());
-	string auxline, dummy;
-	double energy;
-	stringstream line;
-	getline(if_, auxline);
-	getline(if_, auxline);
-	line << auxline;
-	line >> dummy >> energy;
-	*/
-
-	DoAllPermutations doall;
-	doall.analysis("!JALNIU-CRISTAL.xyz", "jalniu-AM1-0-2-3-6-1-4-5-.xyz");
-
-	cout << "ola";
-
-
+	ifstream all_("nomes.txt");
+	string auxline;
+	while (getline(all_, auxline))
+	{
+		string name;
+		stringstream line;
+		line << auxline;
+		line >> name;
+		if (name == "end")
+			break;
+		else
+		{
+			DoAllPermutations doall;
+			doall.analysis("!JALNIU-CRISTAL.xyz", name.c_str());
+		}
+	}
+*/
 //	RootMeanSquareDeviation rmsd_;
 
 
+	DoAllPermutations doall_;
+	string methodOptimize = " AM1 SPARKLE BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string methodCosmo = " AM1 SPARKLE EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	int nPermutations = 7;
+	string projectName = "jalniu-AM1";
+	string filePermutations = "BBm1m1m1.xyz";
+	doall_.calculateAll(
+	methodOptimize,
+	methodCosmo,
+	projectName,
+	filePermutations,
+	nPermutations);
+
+	DoAllPermutations doall2_;
+	string methodOptimize2 = " RM1 SPARKLE BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string methodCosmo2 = " RM1 SPARKLE EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string projectName2 = "jalniu-RM1";
+	doall2_.calculateAll(
+		methodOptimize2,
+		methodCosmo2,
+		projectName2,
+		filePermutations,
+		nPermutations);
+
+	DoAllPermutations doall3_;
+	string methodOptimize3 = " PM3 SPARKLE BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string methodCosmo3 = " PM3 SPARKLE EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string projectName3 = "jalniu-PM3";
+	doall3_.calculateAll(
+		methodOptimize3,
+		methodCosmo3,
+		projectName3,
+		filePermutations,
+		nPermutations);
+
+	DoAllPermutations doall4_;
+	string methodOptimize4 = " PM7 SPARKLE BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string methodCosmo4 = " PM7 SPARKLE EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string projectName4 = "jalniu-PM7";
+	doall_.calculateAll(
+		methodOptimize4,
+		methodCosmo4,
+		projectName4,
+		filePermutations,
+		nPermutations);
+
+	DoAllPermutations doall5_;
+	string methodOptimize5 = " PM6 SPARKLE BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string methodCosmo5 = " PM6 SPARKLE EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string projectName5 = "jalniu-PM6";
+	doall_.calculateAll(
+		methodOptimize5,
+		methodCosmo5,
+		projectName5,
+		filePermutations,
+		nPermutations);
+
+	DoAllPermutations doall6_;
+	string methodOptimize6 = " PM6-D3H4 SPARKLE BFGS PRECISE NOINTER XYZ T=10D GNORM=0.25 + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string methodCosmo6 = " PM6-D3H4 SPARKLE EPS=78.4 1SCF PRECISE NOINTER XYZ T=10D + \n NOLOG GEO-OK SCFCRT=1.D-10";
+	string projectName6 = "jalniu-PM6-D3H4";
+	doall_.calculateAll(
+		methodOptimize6,
+		methodCosmo6,
+		projectName6,
+		filePermutations,
+		nPermutations);
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

@@ -1,6 +1,6 @@
 5                                 
-Eu                                
-Eu_spk                            
+Eu
+
 Lumpac-View-Ligand-JALNIU
 Lumpac-View-Ligand-JALNIU
 Lumpac-View-Ligand-JALNIU-Br

@@ -102,7 +102,6 @@ vector<CoordXYZ> FindIsomers::buildComplexWithSelectedIsomer(
 	readInputpermutation(inputPermutations, zeroPermutation, options, mopacExecPath);
 	options[1] = projectName;
 	options[2] = method;
-	options[3] = "";
 
 	FindIsomers fd_;
 	vector<CoordXYZ> allAtoms = fd_.generateSelectedIsomer(permutation, inputInformations);

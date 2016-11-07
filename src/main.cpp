@@ -263,7 +263,10 @@ int main()
 	Combinations comb_;
 
 	//comb_.doAllCombinations();
-	comb_.stringToNumber("m01m02B01B01m06m06C01C01C03C03");
+	//comb_.stringToNumber("m01m02B01B01m06m06C01C01C03C03");
+
+	comb_.doAllCombinations(6);
+	comb_.clearEqualCombinations("combinations6.txt");
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

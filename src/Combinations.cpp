@@ -5,139 +5,131 @@
 #include <fstream>
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
-Combinations::Combinations(){}
-
-Combinations::~Combinations(){}
-
-void Combinations::doAllCombinations()
+Combinations::Combinations()
 {
-
-	vector<string> elem(12);
+	elem.resize(24);
 	elem[0] = "m01";
 	elem[1] = "m02";
 	elem[2] = "m03";
 	elem[3] = "m04";
 	elem[4] = "m05";
 	elem[5] = "m06";
-	elem[6] = "B01";
-	elem[7] = "B02";
-	elem[8] = "B03";
-	elem[9] = "C01";
-	elem[10] = "C02";
-	elem[11] = "C03";
-	vector<int> coord(12);
+	elem[6] = "m07";
+	elem[7] = "m08";
+	elem[8] = "m09";
+	elem[9] = "m10";
+	elem[10] = "m11";
+	elem[11] = "m12";
+	elem[12] = "B01";
+	elem[13] = "B02";
+	elem[14] = "B03";
+	elem[15] = "B04";
+	elem[16] = "B05";
+	elem[17] = "B06";
+	elem[18] = "C01";
+	elem[19] = "C02";
+	elem[20] = "C03";
+	elem[21] = "C04";
+	elem[22] = "C05";
+	elem[23] = "C06";
+	coord.resize(24);
 	coord[0] = 1;
 	coord[1] = 1;
 	coord[2] = 1;
 	coord[3] = 1;
 	coord[4] = 1;
 	coord[5] = 1;
-	coord[6] = 2;
-	coord[7] = 2;
-	coord[8] = 2;
-	coord[9] = 2;
-	coord[10] = 2;
-	coord[11] = 2;
-	int size = 12;
-	vector<string> allNames;
-	string name = "";
-	int actualCoord = 0;
-	ofstream arc_("combinacoes-do-6.txt");
-	for (int i1 = 0; i1 < size; i1++)
+	coord[6] = 1;
+	coord[7] = 1;
+	coord[8] = 1;
+	coord[9] = 1;
+	coord[10] = 1;
+	coord[11] = 1;
+	coord[12] = 2;
+	coord[13] = 2;
+	coord[14] = 2;
+	coord[15] = 2;
+	coord[16] = 2;
+	coord[17] = 2;
+	coord[18] = 2;
+	coord[19] = 2;
+	coord[20] = 2;
+	coord[21] = 2;
+	coord[22] = 2;
+	coord[23] = 2;
+}
+
+Combinations::~Combinations(){}
+
+
+void Combinations::doAllCombinations(int nCoordination)
+{
+	printCoord = 6;
+	stringstream convert;
+	convert << printCoord;
+	string coordName;
+	convert >> coordName;
+	string fileName = "combinations" + coordName + ".txt";
+	maxSize = coord.size();
+	vector<string> name(maxSize / 2);
+	vector<int> totalCoord(maxSize / 2);
+	printCombinations_.open(fileName.c_str());
+	for (int i1 = 0; i1 < maxSize; i1++)
 	{
-		string nameI1 = elem[i1];
-		name = nameI1;
-		int coordI1 = coord[i1];
-		int totalCoord = coordI1;
-		if (totalCoord == 6)
+		sumUpNameAndPrint(name, totalCoord, 0, elem[i1], coord[i1]);
+		for (int i2 = i1; i2 < maxSize; i2++)
 		{
-			arc_ << name << endl;
-		}
-		else if (actualCoord > 6)
-		{
-			actualCoord++;
-		}
-
-
-		for (int i2 = i1; i2 < size; i2++)
-		{
-			string nameI2 = elem[i2];
-			name = nameI1 + nameI2;
-			int coordI2 = coord[i2];
-			int totalCoord = coordI1 + coordI2;
-			if (totalCoord == 6)
+			if (printCoord < 2) break;
+			sumUpNameAndPrint(name, totalCoord, 1, elem[i2], coord[i2]);
+			for (int i3 = i2; i3 < maxSize; i3++)
 			{
-				arc_ << name << endl;
-			}
-			else if (actualCoord > 6)
-			{
-				actualCoord++;
-			}
-
-			for (int i3 = i2; i3 < size; i3++)
-			{
-				string nameI3 = elem[i3];
-				name = nameI1 + nameI2 + nameI3;
-				int coordI3 = coord[i3];
-				int totalCoord = coordI1 + coordI2 + coordI3;
-				if (totalCoord == 6)
+				if (printCoord < 3) break;
+				sumUpNameAndPrint(name, totalCoord, 2, elem[i3], coord[i3]);
+				for (int i4 = i3; i4 < maxSize; i4++)
 				{
-					arc_ << name << endl;
-				}
-				else if (actualCoord > 6)
-				{
-					actualCoord++;
-				}
-
-
-				for (int i4 = i3; i4 < size; i4++)
-				{
-					string nameI4 = elem[i4];
-					name = nameI1 + nameI2 + nameI3 + nameI4;
-					int coordI4 = coord[i4];
-					int totalCoord = coordI1 + coordI2 + coordI3 + coordI4;
-					if (totalCoord == 6)
+					if (printCoord < 4) break;
+					sumUpNameAndPrint(name, totalCoord, 3, elem[i4], coord[i4]);
+					for (int i5 = i4; i5 < maxSize; i5++)
 					{
-						arc_ << name << endl;
-					}
-					else if (actualCoord > 6)
-					{
-						actualCoord++;
-					}
-
-
-					for (int i5 = i4; i5 < size; i5++)
-					{
-						string nameI5 = elem[i5];
-						name = nameI1 + nameI2 + nameI3 + nameI4 + nameI5;
-						int coordI5 = coord[i5];
-						int totalCoord = coordI1 + coordI2 + coordI3 + coordI4 + coordI5;
-						if (totalCoord == 6)
+						if (printCoord < 5) break;
+						sumUpNameAndPrint(name, totalCoord, 4, elem[i5], coord[i5]);
+						for (int i6 = i5; i6 < maxSize; i6++)
 						{
-							arc_ << name << endl;
-						}
-						else if (actualCoord > 6)
-						{
-							actualCoord++;
-						}
-
-
-						for (int i6 = i5; i6 < size; i6++)
-						{
-							string nameI6 = elem[i6];
-							name = nameI1 + nameI2 + nameI3 + nameI4 + nameI5 + nameI6;
-							int coordI6 = coord[i6];
-							int totalCoord = coordI1 + coordI2 + coordI3 + coordI4 + coordI5 + coordI6;
-							if (totalCoord == 6)
+							if (printCoord < 6) break;
+							sumUpNameAndPrint(name, totalCoord, 5, elem[i6], coord[i6]);
+							for (int i7 = i6; i7 < maxSize; i7++)
 							{
-								arc_ << name << endl;
-							}
-							else if (actualCoord > 6)
-							{
-								actualCoord++;
+								if (printCoord < 7) break;
+								sumUpNameAndPrint(name, totalCoord, 6, elem[i7], coord[i7]);
+								for (int i8 = i7; i8 < maxSize; i8++)
+								{
+									if (printCoord < 8) break;
+									sumUpNameAndPrint(name, totalCoord, 7, elem[i8], coord[i8]);
+									for (int i9 = i8; i9 < maxSize; i9++)
+									{
+										if (printCoord < 9) break;
+										sumUpNameAndPrint(name, totalCoord, 8, elem[i9], coord[i9]);
+										for (int i10 = i9; i10 < maxSize; i10++)
+										{
+											if (printCoord < 10) break;
+											sumUpNameAndPrint(name, totalCoord, 9, elem[i10], coord[i10]);
+											for (int i11 = i10; i11 < maxSize; i11++)
+											{
+												if (printCoord < 11) break;
+												sumUpNameAndPrint(name, totalCoord, 10, elem[i11], coord[i11]);
+												for (int i12 = i11; i12 < maxSize; i12++)
+												{
+													if (printCoord < 12) break;
+													sumUpNameAndPrint(name, totalCoord, 11, elem[i12], coord[i12]);
+												}
+											}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -145,7 +137,121 @@ void Combinations::doAllCombinations()
 			}
 		}
 	}
-	arc_.close();
+	printCombinations_.close();
+}
+
+
+void Combinations::clearEqualCombinations(string combFile)
+{
+	ifstream combFile_(combFile.c_str());
+
+	vector< vector< vector<int> > > allCodes;
+
+	string auxline;
+	getline(combFile_, auxline);
+	vector< vector<int> > code0 = stringToNumber(auxline);
+	allCodes.push_back(code0);
+	while (getline(combFile_, auxline))
+	{
+		if (auxline == "") break;
+
+		vector< vector<int> > codeLine = stringToNumber(auxline);
+
+		if (compareToAll(allCodes, codeLine))
+			allCodes.push_back(codeLine);
+	}
+	combFile_.close();
+
+	string outFileName = "response-" + combFile;
+	ofstream out_(outFileName.c_str());
+
+	for (size_t i = 0; i < allCodes.size(); i++)
+		out_ << codeToString(allCodes[i]) << endl;
+
+	out_.close();
+}
+
+string Combinations::codeToString(vector < vector<int> > & codeLine)
+{
+	string name = "";
+	for (size_t i = 0; i < codeLine.size(); i++)
+	{
+		int startCount;
+		if (i == 0)
+			startCount = 0;
+		else if (i == 1)
+			startCount = 12;
+		else if (i == 2)
+			startCount = 18;
+		for (size_t j = 0; j < codeLine[i].size(); j++)
+		{
+			for (int k = 0; k < codeLine[i][j]; k++)
+			{
+				name += elem[j + startCount];				
+			}
+		}
+	}
+	return name;
+}
+
+
+
+
+bool Combinations::compareToAll(std::vector< std::vector< std::vector<int> > > & allCodes, std::vector< std::vector<int> > &actualCodes)
+{
+	for (size_t i = 0; i < allCodes.size(); i++)//run codes
+	{
+		bool compare = true;
+		for (size_t j = 0; j < allCodes[i].size(); j++)
+		{
+			if (actualCodes[j].size() != allCodes[i][j].size())
+			{
+				compare = false;
+				break;
+			}
+			for (size_t k = 0; k < allCodes[i][j].size(); k++)
+			{
+				if (actualCodes[j][k] != allCodes[i][j][k])
+				{
+					compare = false;
+					break;
+				}
+			}
+			if (!compare) break;
+		}
+		if (compare)
+			return false;
+	}
+	return true;
+}
+
+
+
+void Combinations::sumUpNameAndPrint(
+	std::vector< std::string > & name,
+	std::vector< int > & totalCoord,
+	int position,
+	std::string newLigand,
+	int coordination)
+{
+	name[position] = newLigand;
+	totalCoord[position] = coordination;
+	for (size_t i = position + 1; i < name.size(); i++)
+	{
+		name[i] = "";
+		totalCoord[i] = 0;
+	}
+	int sumCoord = 0;
+	for (size_t i = 0; i < totalCoord.size(); i++)
+		sumCoord += totalCoord[i];
+
+	if (sumCoord == printCoord)
+	{
+		string totalName = "";
+		for (size_t i = 0; i < name.size(); i++)
+			totalName += name[i];
+		printCombinations_ << totalName << endl;
+	}
 }
 
 
@@ -159,13 +265,11 @@ vector< vector<int> > Combinations::stringToNumber(string entryString)
 		if (((i % 3) == 0) && (i != 0))
 		{
 			allCodes.push_back(code);
-			cout << code << endl;
 			code = "";
 		}
 		code += entryString[i];
 	}
 	allCodes.push_back(code);
-	cout << code << endl;
 
 	vector<int> typeCode1;
 	vector<int> typeCode2;
@@ -205,6 +309,9 @@ vector< vector<int> > Combinations::stringToNumber(string entryString)
 	types.push_back(typeCode3);
 
 	// parece que esta ok
+	// obter o vector de vector para cada um e guardar
+	// ler todos os strings e comparar os novos com os anteriores
+	// guardar so os diferentes.
 	return types;
 }
 
@@ -212,10 +319,12 @@ int Combinations::codeToType(string code)
 {
 	if (code[0] == 'm')
 		return 0;
-	if (code[0] == 'B')
+	else if (code[0] == 'B')
 		return 1;
-	if (code[0] == 'C')
+	else if (code[0] == 'C')
 		return 2;
+
+	return -1;
 }
 
 void Combinations::addEqual(

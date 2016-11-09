@@ -14,24 +14,36 @@ public:
 
 	void doAllCombinations(int nCoordination);
 
-	void clearEqualCombinations(std::string combFile);
-
-	std::vector< std::vector<int> > stringToNumber(std::string entryString);
+	void findAllIsomersOnCombinations(std::string combinationFile);
 
 private:
+	//data
 	int coordination;
 	std::ofstream printCombinations_;
 	std::vector< std::string > elem;
 	std::vector<int> coord;
 	int printCoord;
 	int maxSize;
+	std::vector< std::string > allLigandsNames;
+	int ligandsSeparationSize;
 
+	//functions
+	void clearEqualCombinations(std::string combFile);
+
+	std::vector< std::vector<int> > stringToNumber(std::string entryString);
 
 	std::string codeToString(std::vector< std::vector<int> > & codeLine);
 
 	bool compareToAll(std::vector< std::vector< std::vector<int> > > & allCodes, std::vector< std::vector<int> > &actualCodes);
 
 	int codeToType(std::string code);
+
+	void printInputWithCode(std::string code);
+
+	void codeToLigands(
+		std::string code,
+		std::vector< std::string > & ligandNames,
+		std::vector<int> & denticity);
 
 	void addEqual(
 		int codeNumber,
@@ -54,8 +66,7 @@ private:
 		std::string newLigand,
 		int coordination);
 
-
-
+	int angleBidentateCut(size_t coordination);
 
 };
 

@@ -169,7 +169,7 @@ int main()
 //	FindIsomers findIso_;	
 //	findIso_.start();
 
-	/* CALCULANDO O COMPLEXO A PARTIR DOS CODIGOS
+	/* CALCULANDO O COMPLEXO A PARTIR DOS CODIGOS 
 	VERIFICAR - DOALLPERMUTATIONS
 	vector<int> permutation(7);
 	string projectName = "jalniu4";
@@ -178,9 +178,11 @@ int main()
 	permutation[0] = 0;	permutation[1] = 1;	permutation[2] = 2;	permutation[3] = 3;	permutation[4] = 4;	permutation[5] = 5;	permutation[6] = 6;
 	buildComplexWithALotOfIsomersAndDoWater(permutation, methodOptimize, methodCosmo, projectName);
 	*/
+
+
 //  COMPLEX WITH SELECTED ISOMER
 
-	/*
+/*
 	FindIsomers fd_;
 	vector<string> options;
 	vector<int> permutation(7);
@@ -208,7 +210,7 @@ int main()
 	options[3] = "";
 	options[4] = "";
 	bc_.runMopacAndPrint(options, mopacExecPath, res1);
-	*/
+*/
 
 /*
 	DoAllPermutations doall_;
@@ -224,20 +226,6 @@ int main()
 		filePermutations,
 		nPermutations);
 */
-
-
-	/*	
-	Cada atomo e um tipo: m1, m2, m3 ...
-	m1m1m1m1m1m2 (5,1)
-	m1m1m1m1m1m3 (5,1)
-	ordem decrescente
-	ordem decrescer dentro do mono e do B e do C
-
-	
-	
-	
-	
-	*/
 
 /*
 	ifstream all_("nomes.txt");
@@ -261,12 +249,9 @@ int main()
 //	RootMeanSquareDeviation rmsd_;
 
 	Combinations comb_;
+	//comb_.doAllCombinations(6);
+	comb_.findAllIsomersOnCombinations("allCombinations.txt");
 
-	//comb_.doAllCombinations();
-	//comb_.stringToNumber("m01m02B01B01m06m06C01C01C03C03");
-
-	comb_.doAllCombinations(6);
-	comb_.clearEqualCombinations("combinations6.txt");
 
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.

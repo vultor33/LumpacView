@@ -24,7 +24,7 @@ FindIsomers::FindIsomers()
 
 FindIsomers::~FindIsomers(){}
 
-void FindIsomers::start()
+int FindIsomers::start()
 {
 	readInput();
 
@@ -63,9 +63,10 @@ void FindIsomers::start()
 		for (size_t i = 0; i < allConfigurations.size(); i++)
 			appendPrintCoordXYZ(allConfigurations[i], streamAllIsomers_, permutationToString(allConfigurationPermutation[i]));
 
-		streamAllIsomers_ << endl << endl << "number of configurations = " << counter << endl;
+		streamAllIsomers_ << endl << "number_of_configurations: " << counter << endl;
 		streamAllIsomers_.close();
 	}
+	return counter;
 }
 
 void FindIsomers::printSelectedIsomer(

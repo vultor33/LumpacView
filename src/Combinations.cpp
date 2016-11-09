@@ -1,11 +1,14 @@
 #include "Combinations.h"
 
+#include <stdlib.h>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <algorithm>
 #include <iostream>
 #include <sstream>
+
+#include "FindIsomers.h"
 
 using namespace std;
 
@@ -61,9 +64,108 @@ Combinations::Combinations()
 	coord[21] = 2;
 	coord[22] = 2;
 	coord[23] = 2;
+
+	allLigandsNames.resize(36);
+	allLigandsNames[0] = "auxLigands/Lumpac-View-Dummy-Ligand-M1";
+	allLigandsNames[1] = "auxLigands/Lumpac-View-Dummy-Ligand-M2";
+	allLigandsNames[2] = "auxLigands/Lumpac-View-Dummy-Ligand-M3";
+	allLigandsNames[3] = "auxLigands/Lumpac-View-Dummy-Ligand-M4";
+	allLigandsNames[4] = "auxLigands/Lumpac-View-Dummy-Ligand-M5";
+	allLigandsNames[5] = "auxLigands/Lumpac-View-Dummy-Ligand-M6";
+	allLigandsNames[6] = "auxLigands/Lumpac-View-Dummy-Ligand-M7";
+	allLigandsNames[7] = "auxLigands/Lumpac-View-Dummy-Ligand-M8";
+	allLigandsNames[8] = "auxLigands/Lumpac-View-Dummy-Ligand-M9";
+	allLigandsNames[9] = "auxLigands/Lumpac-View-Dummy-Ligand-M10";
+	allLigandsNames[10] = "auxLigands/Lumpac-View-Dummy-Ligand-M11";
+	allLigandsNames[11] = "auxLigands/Lumpac-View-Dummy-Ligand-M12";
+	allLigandsNames[12] = "auxLigands/Lumpac-View-Dummy-Ligand-B11";
+	allLigandsNames[13] = "auxLigands/Lumpac-View-Dummy-Ligand-B21";
+	allLigandsNames[14] = "auxLigands/Lumpac-View-Dummy-Ligand-B31";
+	allLigandsNames[15] = "auxLigands/Lumpac-View-Dummy-Ligand-B41";
+	allLigandsNames[16] = "auxLigands/Lumpac-View-Dummy-Ligand-B51";
+	allLigandsNames[17] = "auxLigands/Lumpac-View-Dummy-Ligand-B61";
+	allLigandsNames[18] = "auxLigands/Lumpac-View-Dummy-Ligand-B12";
+	allLigandsNames[19] = "auxLigands/Lumpac-View-Dummy-Ligand-B22";
+	allLigandsNames[20] = "auxLigands/Lumpac-View-Dummy-Ligand-B32";
+	allLigandsNames[21] = "auxLigands/Lumpac-View-Dummy-Ligand-B42";
+	allLigandsNames[22] = "auxLigands/Lumpac-View-Dummy-Ligand-B52";
+	allLigandsNames[23] = "auxLigands/Lumpac-View-Dummy-Ligand-B62";
+	allLigandsNames[24] = "auxLigands/Lumpac-View-Dummy-Ligand-C11";
+	allLigandsNames[25] = "auxLigands/Lumpac-View-Dummy-Ligand-C21";
+	allLigandsNames[26] = "auxLigands/Lumpac-View-Dummy-Ligand-C31";
+	allLigandsNames[27] = "auxLigands/Lumpac-View-Dummy-Ligand-C41";
+	allLigandsNames[28] = "auxLigands/Lumpac-View-Dummy-Ligand-C51";
+	allLigandsNames[29] = "auxLigands/Lumpac-View-Dummy-Ligand-C61";
+	allLigandsNames[30] = "auxLigands/Lumpac-View-Dummy-Ligand-C12";
+	allLigandsNames[31] = "auxLigands/Lumpac-View-Dummy-Ligand-C22";
+	allLigandsNames[32] = "auxLigands/Lumpac-View-Dummy-Ligand-C32";
+	allLigandsNames[33] = "auxLigands/Lumpac-View-Dummy-Ligand-C42";
+	allLigandsNames[34] = "auxLigands/Lumpac-View-Dummy-Ligand-C52";
+	allLigandsNames[35] = "auxLigands/Lumpac-View-Dummy-Ligand-C62";
+	ligandsSeparationSize = 6;
 }
 
 Combinations::~Combinations(){}
+
+void Combinations::findAllIsomersOnCombinations(string combinationFile)
+{
+	ofstream printAllCsv_("CombinationsCsv.csv");
+	ifstream combFile_(combinationFile.c_str());
+	string auxline;
+	while (getline(combFile_, auxline))
+	{
+		if ((auxline == "") || (auxline == "end"))
+			break;
+
+		stringstream line;
+		line << auxline;
+		string code;
+		line >> code;
+		printInputWithCode(code);
+		FindIsomers findIso_;
+		int counter = findIso_.start();
+		printAllCsv_ << code << " ; " << counter << endl;
+	}
+	combFile_.close();
+	printAllCsv_.close();
+}
+
+void Combinations::printInputWithCode(std::string code)
+{
+	vector<string> ligandNames;
+	vector<int> denticity;
+	codeToLigands(code, ligandNames, denticity);
+	string inputName = "LumpacViewInput.txt";
+	remove(inputName.c_str());
+	ofstream pInput_(inputName.c_str());
+	pInput_ << code + ".xyz" << endl;
+	pInput_ << "Eu" << endl << "Eu_spk" << endl;
+	pInput_ << ligandNames.size() << endl;
+	for (size_t i = 0; i < ligandNames.size(); i++)
+		pInput_ << ligandNames[i] << endl;
+	pInput_ << angleBidentateCut(ligandNames.size()) << endl;
+	pInput_ << denticity.size() << endl;
+	for (size_t i = 0; i < denticity.size(); i++)
+		pInput_ << denticity[i] << endl;
+	pInput_.close();
+
+/*		
+teste.xyz
+Eu
+Eu_spk
+5
+auxLigands/Lumpac-View-Dummy-Ligand-M1
+auxLigands/Lumpac-View-Dummy-Ligand-M1
+auxLigands/Lumpac-View-Dummy-Ligand-M2
+auxLigands/Lumpac-View-Dummy-Ligand-B11
+auxLigands/Lumpac-View-Dummy-Ligand-B12
+120
+2
+3
+4
+*/
+}
+
 
 
 void Combinations::doAllCombinations(int nCoordination)
@@ -138,8 +240,53 @@ void Combinations::doAllCombinations(int nCoordination)
 		}
 	}
 	printCombinations_.close();
+
+	clearEqualCombinations(fileName);
+	
+	remove(fileName.c_str());
 }
 
+void Combinations::codeToLigands(
+	std::string code,
+	std::vector< std::string > & ligandNames,
+	std::vector<int> & denticity)
+{
+	vector< vector<int> > codeLine = stringToNumber(code);
+	int l = 0;
+	int m = 0;
+	for (size_t i = 0; i < codeLine.size(); i++)
+	{
+		int startCount;
+		if (i == 0)
+			startCount = 0;
+		else if (i == 1)
+			startCount = 12;
+		else if (i == 2)
+			startCount = 24;
+
+		for (size_t j = 0; j < codeLine[i].size(); j++)
+		{
+			for (int k = 0; k < codeLine[i][j]; k++)
+			{
+				if (startCount == 0)
+				{
+					ligandNames.push_back(allLigandsNames[j]);
+					l++;
+					m++;
+				}
+				else if (startCount > 0)
+				{
+					ligandNames.push_back(allLigandsNames[j + startCount]);
+					ligandNames.push_back(allLigandsNames[j + ligandsSeparationSize + startCount]);
+					denticity.push_back(l);
+					denticity.push_back(l + 1);
+					l += 2;
+					m++;
+				}
+			}
+		}
+	}
+}
 
 void Combinations::clearEqualCombinations(string combFile)
 {
@@ -194,9 +341,6 @@ string Combinations::codeToString(vector < vector<int> > & codeLine)
 	return name;
 }
 
-
-
-
 bool Combinations::compareToAll(std::vector< std::vector< std::vector<int> > > & allCodes, std::vector< std::vector<int> > &actualCodes)
 {
 	for (size_t i = 0; i < allCodes.size(); i++)//run codes
@@ -224,8 +368,6 @@ bool Combinations::compareToAll(std::vector< std::vector< std::vector<int> > > &
 	}
 	return true;
 }
-
-
 
 void Combinations::sumUpNameAndPrint(
 	std::vector< std::string > & name,
@@ -368,5 +510,36 @@ void Combinations::addDifferent(
 	{
 		typeCode3.push_back(newCode);
 	}
+}
+
+int Combinations::angleBidentateCut(size_t coordination)
+{
+	switch (coordination)
+	{
+	case 4:
+		return 120;
+	case 5:
+		return 130;
+	case 6:
+		return 100;
+	case 7:
+		return 90;
+	case 8:
+		return 90;
+	case 9:
+		return 90;
+	case 10:
+		return 90;
+	case 11:
+		return 90;
+	case 12:
+		return 90;
+	default:
+		break;
+	}
+	cout << "Error on Combinations::angleBidentateCut" << endl;
+	cout << "Coordination not found" << endl;
+	exit(1);
+
 }
 

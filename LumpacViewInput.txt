@@ -1,36 +1,11 @@
-teste.xyz
+m01m02m03m04m04.xyz
 Eu
 Eu_spk
 5
 auxLigands/Lumpac-View-Dummy-Ligand-M1
-auxLigands/Lumpac-View-Dummy-Ligand-M1
 auxLigands/Lumpac-View-Dummy-Ligand-M2
-auxLigands/Lumpac-View-Dummy-Ligand-B11
-auxLigands/Lumpac-View-Dummy-Ligand-B12
-120
-2
-3
-4
-
-
-
-
-
-
-! EXEMPLO DE INPUT DO FIND ISOMERS
-
-m1m1m1m1.xyz         !nome onde sera impresso todos as estruturas e codigos 
-Eu                   !atomo central
-Eu_spk               !parametros
-6                    !numero de atomos
-auxLigands/Lumpac-View-Dummy-Ligand-Monodentate1  !atoms  
-auxLigands/Lumpac-View-Dummy-Ligand-Monodentate2  !atoms  
-auxLigands/Lumpac-View-Dummy-Ligand-Monodentate3  !atoms  
-auxLigands/Lumpac-View-Dummy-Ligand-Monodentate4  !atoms  
-auxLigands/Lumpac-View-Dummy-Ligand-Monodentate5  !atoms  
-auxLigands/Lumpac-View-Dummy-Ligand-Monodentate6  !atoms  
-100     !angulo de corte do bidentado
-2       !numero de bidentados *2
-3       !atomo (acima) q pertence ao 1 bidentado
-4       !segundo atomo do 1 bidentado
- 
+auxLigands/Lumpac-View-Dummy-Ligand-M3
+auxLigands/Lumpac-View-Dummy-Ligand-M4
+auxLigands/Lumpac-View-Dummy-Ligand-M4
+130
+0

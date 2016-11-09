@@ -16,7 +16,7 @@ public:
 
 	~FindIsomers();
 
-	void start();
+	int start();
 
 	std::vector<CoordXYZ> generateSelectedIsomer(std::vector<int> permutation, std::vector<std::string > inputInformations);
 

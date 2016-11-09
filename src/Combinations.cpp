@@ -170,7 +170,7 @@ auxLigands/Lumpac-View-Dummy-Ligand-B12
 
 void Combinations::doAllCombinations(int nCoordination)
 {
-	printCoord = 6;
+	printCoord = nCoordination;
 	stringstream convert;
 	convert << printCoord;
 	string coordName;

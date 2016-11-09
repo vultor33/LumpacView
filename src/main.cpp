@@ -249,7 +249,7 @@ int main()
 //	RootMeanSquareDeviation rmsd_;
 
 	Combinations comb_;
-	//comb_.doAllCombinations(6);
+//	comb_.doAllCombinations(7);
 	comb_.findAllIsomersOnCombinations("allCombinations.txt");
 
 

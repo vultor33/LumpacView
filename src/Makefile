@@ -18,7 +18,7 @@ LFLAGS =
 LIBS = 
 
 # define the C++ source files
-SRCS = AdjustSaParameters.cpp AuxMath.cpp BestPermutation.cpp BuildComplex.cpp ComplexCreator.cpp ControlMopac.cpp FindIsomers.cpp Fitness.cpp KabschRmsd.cpp Ligand.cpp main.cpp MyExceptions.cpp PointAnalysis.cpp ReadInput.cpp ReadMopac.cpp ReadQuantumOutput.cpp RootMeanSquareDeviation.cpp WriteQuantumInput.cpp 
+SRCS = Combinations.cpp AdjustSaParameters.cpp AuxMath.cpp BestPermutation.cpp BuildComplex.cpp ComplexCreator.cpp ControlMopac.cpp FindIsomers.cpp Fitness.cpp KabschRmsd.cpp Ligand.cpp main.cpp MyExceptions.cpp PointAnalysis.cpp ReadInput.cpp ReadMopac.cpp ReadQuantumOutput.cpp RootMeanSquareDeviation.cpp WriteQuantumInput.cpp 
 
 
 # define the C++ object files 

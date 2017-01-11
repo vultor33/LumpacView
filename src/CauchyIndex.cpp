@@ -198,17 +198,6 @@ void CauchyIndex::setBidentateMap(int system)
 		// completamente automatico
 		// basta restringir o angulo maximo
 
-		bidentateMap[0][1] = 1;
-		bidentateMap[0][2] = 7;
-		bidentateMap[0][3] = 4;
-		bidentateMap[0][4] = 5;
-		bidentateMap[1][2] = -1;
-		bidentateMap[1][3] = 2;
-		bidentateMap[1][4] = 3;
-		bidentateMap[2][3] = 8;
-		bidentateMap[2][4] = 9;
-		bidentateMap[3][4] = 6;
-
 	default:
 		cout << "CauchyIndex::setSystem - system not found" << endl;
 		exit(1);
@@ -261,6 +250,18 @@ void CauchyIndex::calculateBidentateMap()
 }
 
 
+/*
+bidentateMap[0][1] = 1;
+bidentateMap[0][2] = 7;
+bidentateMap[0][3] = 4;
+bidentateMap[0][4] = 5;
+bidentateMap[1][2] = -1;
+bidentateMap[1][3] = 2;
+bidentateMap[1][4] = 3;
+bidentateMap[2][3] = 8;
+bidentateMap[2][4] = 9;
+bidentateMap[3][4] = 6;
+*/
 
 
 

@@ -23,6 +23,8 @@ public:
 
 	std::vector<CoordXYZ> readCoord(std::string fName);
 
+	double rmsOverlayThrouhgThreePoints(std::vector<CoordXYZ> & mol1, std::vector<CoordXYZ> & mol2);
+
 private:
 	std::vector<double> readPoint(std::string fName, int format = 1);
 	std::vector<double> rotateToZ0(const std::vector<double> &point);
@@ -35,7 +37,6 @@ private:
 	void rotateMol(std::vector<CoordXYZ> &mol, double x, double y, double z, double angle);
 	unsigned int factorial(unsigned int n);
 	double oldRmsdToAddressPoints(std::string file1, std::string file2);
-	double rmsOverlayThrouhgThreePoints(std::vector<CoordXYZ> & mol1, std::vector<CoordXYZ> & mol2);
 	std::vector< CoordXYZ > setThisPermutationAtoms(std::vector<int> permutation, std::vector<CoordXYZ> &  originAtoms);
 
 	//inertia tensor

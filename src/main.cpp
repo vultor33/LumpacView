@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
+#include <ctime>
 #include <time.h>
 #include <math.h>
 
@@ -13,7 +14,8 @@
 #include "ComplexCreator.h"
 #include "AuxMath.h"
 #include "DoAllPermutations.h"
-#include "Combinations.h"
+#include "AllMolecularFormulas.h"
+#include "CauchyIndex.h"
 
 using namespace std;
 
@@ -43,6 +45,25 @@ void buildComplexWithALotOfIsomersAndDoWater(
 
 int main()
 {
+	CauchyIndex ci_;
+
+	vector<CoordXYZ> mol(4);
+	mol[0].x = 1.0e0;
+	mol[0].y = 0.0e0;
+	mol[0].z = 0.0e0;
+	mol[1].x = 0.0e0;
+	mol[1].y = 1.0e0;
+	mol[1].z = 0.0e0;
+	mol[2].x = -1.0e0;
+	mol[2].y = 0.0e0;
+	mol[2].z = 0.0e0;
+	mol[3].x = 0.0e0;
+	mol[3].y = -1.0e0;
+	mol[3].z = 0.0e0;
+
+	ci_.getCauchy(0);
+
+
 	// ATENCAO - CADASTRAR OS PONTOS HARDIN COM 12 CASAS
 
 	/*
@@ -248,15 +269,16 @@ int main()
 
 //	RootMeanSquareDeviation rmsd_;
 
-	Combinations comb_;
-//	comb_.doAllCombinations(7);
-	comb_.findAllIsomersOnCombinations("allCombinations.txt");
 
-
+//	AllMolecularFormulas comb_;
+//	comb_.doAllCombinations(1);
+	//comb_.findAllIsomersOnCombinations("allCombinations.txt");
 	/*
 	- na verdade eu preciso dos ligantes nesse ponto aqui.
 	- vou ordena-los de varias formas e comparar com o kabsch algorithm
 	*/
+
+
 
 	return 0;
 }
@@ -383,3 +405,20 @@ projectName6,
 filePermutations,
 nPermutations);
 */
+
+
+/* CODIGO PARA VERIFICAR O TEMPO DE UMA ROTINA
+
+clock_t begin = clock();
+
+rotina AQUI
+
+clock_t end = clock();
+double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+
+cout << "demorou:  " << elapsed_secs << endl;
+*/
+
+
+
+

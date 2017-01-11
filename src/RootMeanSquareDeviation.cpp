@@ -1,5 +1,7 @@
 #include "RootMeanSquareDeviation.h"
 
+//#define useDlib
+
 #include <stdlib.h>
 #include <string>
 #include <vector>
@@ -78,7 +80,6 @@ double RootMeanSquareDeviation::hardRmsOverlay(vector<CoordXYZ> & mol1, vector<C
 	return rmsI;
 }
 
-#define useDlib
 double RootMeanSquareDeviation::inertiaTensorComparisson(
 	vector<CoordXYZ> & mol1,
 	vector<CoordXYZ> & mol2)

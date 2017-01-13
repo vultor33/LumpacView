@@ -61,7 +61,24 @@ int main()
 	mol[3].y = -1.0e0;
 	mol[3].z = 0.0e0;
 
-	ci_.getCauchy(0);
+	ci_.calculateAllIndexes();
+
+	vector<int> permutation(5);
+	vector<string> atoms(5);
+	for (size_t i = 0; i < 5; i++)
+	{
+		permutation[i] = i;
+		atoms[i] = "H ";
+	}
+	atoms[0] = "C ";
+	atoms[1] = "C ";
+	vector<int> bidentateAtomsChosen(2);
+	bidentateAtomsChosen[0] = 0;
+	bidentateAtomsChosen[1] = 1;
+
+	ci_.printMolecule(permutation, atoms, bidentateAtomsChosen);
+
+
 
 
 	// ATENCAO - CADASTRAR OS PONTOS HARDIN COM 12 CASAS

@@ -21,9 +21,14 @@ public:
 
 	void getAllRotationMatrix();
 
-	std::vector<int> getCauchy(int rotation);
-
 	std::vector<int> getCauchy(std::string fName);
+
+	void calculateAllIndexes();
+
+	void printMolecule(
+		std::vector<int> & permutation,
+		std::vector<std::string> & atoms,
+		std::vector<int> bidentateAtomsChosen);
 
 private:
 	std::vector<CoordXYZ> mol0;
@@ -36,16 +41,17 @@ private:
 
 	void calculateBidentateMap();
 
-	void setBidentateMap(int system);
-
 	void setSystem(int system);
 
 	void setAllRotations(const std::vector<double> &allRotationsVector);
 
 	void printCauchyNotation(std::vector<int> & cauchyList);
 
+	std::vector<int> getCauchy(int rotation);
+
+	std::vector<std::string> bidentateLabels;
+
 	AuxMath auxMath_;
-	// struct com todas as rotacoes
 
 
 };

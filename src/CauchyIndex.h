@@ -27,10 +27,11 @@ public:
 	~CauchyIndex();
 
 	//print with mol0 and molBidentate
+	// COLOCAR CONST EM TUDO
 	void printMolecule(
 		std::vector<int> & permutation,
-		std::vector<std::string> & atoms,
-		std::vector<int> & bidentateAtomsChosen,
+		const std::vector<std::string> & atoms,
+		const std::vector<int> & bidentateAtomsChosen,
 		std::ofstream & printFile_);
 
 	void rotationTest(
@@ -58,7 +59,6 @@ private:
 	std::vector<int> calculateRotationTransform(int rotation);
 
 	std::vector<int> applyRotation(const std::vector<int> & permutation, int iRotation);
-
 
 
 	void printCauchyNotation(std::vector<int> & cauchyList);

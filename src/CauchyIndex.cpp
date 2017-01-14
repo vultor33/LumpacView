@@ -54,31 +54,13 @@ void CauchyIndex::rotationTest(
 		permutation[i] = i;
 
 	ofstream of_("printTestRotations.xyz");
-
-	printMolecule(permutation, atoms, bidentateAtomsChosen, of_);
-
-	vector<int> perm0 = applyRotation(permutation, 0);
-
-	printMolecule(perm0, atoms, bidentateAtomsChosen, of_);
-
-	vector<int> perm1 = applyRotation(permutation, 1);
-
-	printMolecule(perm1, atoms, bidentateAtomsChosen, of_);
-
-	vector<int> perm2 = applyRotation(permutation, 2);
-
-	printMolecule(perm2, atoms, bidentateAtomsChosen, of_);	
-	
-	vector<int> perm3 = applyRotation(permutation, 3);
-
-	printMolecule(perm3, atoms, bidentateAtomsChosen, of_);
-
-	vector<int> perm4 = applyRotation(permutation, 4);
-
-	printMolecule(perm4, atoms, bidentateAtomsChosen, of_);
-
+	for (size_t i = 0; i < allRotationTransforms.size(); i++)
+	{
+		printMolecule(permutation, atoms, bidentateAtomsChosen, of_);
+		vector<int> auxPerm = applyRotation(permutation, i);
+		printMolecule(auxPerm, atoms, bidentateAtomsChosen, of_);
+	}
 	of_.close();
-
 }
 
 
@@ -295,8 +277,8 @@ vector<int> CauchyIndex::applyRotation(const vector<int> & permutation, int iRot
 
 void CauchyIndex::printMolecule(
 	vector<int> & permutation,
-	vector<string> & atoms,
-	vector<int> & bidentateAtomsChosen,
+	const vector<string> & atoms,
+	const vector<int> & bidentateAtomsChosen,
 	ofstream & printFile_)
 {
 	if (permutation.size() == 0)
@@ -306,14 +288,28 @@ void CauchyIndex::printMolecule(
 			permutation[i] = i;
 	}
 
+	vector<int> bidentateAtomsChosenRotated = bidentateAtomsChosen;
 	for (size_t i = 0; i < atoms.size(); i++)
+	{
 		mol0[i].atomlabel = atoms[permutation[i]];
+	}
+	for (size_t i = 0; i < bidentateAtomsChosenRotated.size(); i++)
+	{
+		for (size_t j = 0; j < permutation.size(); j++)
+		{
+			if (permutation[j] == bidentateAtomsChosenRotated[i])
+			{
+				bidentateAtomsChosenRotated[i] = j;
+				break;
+			}
+		}
+	}
 
 	vector<CoordXYZ> bidentates;
 	int k = 0;
 	for (size_t i = 0; i < bidentateAtomsChosen.size(); i+=2)
 	{
-		int mapPosition = bidentateMap[i][i + 1];
+		int mapPosition = bidentateMap[bidentateAtomsChosenRotated[i]][bidentateAtomsChosenRotated[i + 1]];
 		if (mapPosition == -1)
 			cout << "CauchyIndex::printMolecule - wrong bidentate choice" << endl;
 

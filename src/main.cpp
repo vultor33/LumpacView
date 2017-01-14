@@ -46,6 +46,7 @@ void buildComplexWithALotOfIsomersAndDoWater(
 int main()
 {
 	CauchyIndex ci_(5);
+
 	vector<int> permutation(5);
 	vector<string> atoms(5);
 	for (size_t i = 0; i < 5; i++)
@@ -55,9 +56,11 @@ int main()
 	}
 	atoms[0] = "C ";
 	atoms[1] = "C ";
-	vector<int> bidentateAtomsChosen(2);
-	bidentateAtomsChosen[0] = 0;
-	bidentateAtomsChosen[1] = 1;
+	vector<int> bidentateAtomsChosen;
+	//bidentateAtomsChosen[0] = 0;
+	//bidentateAtomsChosen[1] = 1;
+
+	ci_.rotationTest(atoms, bidentateAtomsChosen);
 
 	ofstream of_("printCauchy.xyz");
 	ci_.printMolecule(permutation, atoms, bidentateAtomsChosen,of_);

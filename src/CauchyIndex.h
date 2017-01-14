@@ -30,8 +30,13 @@ public:
 	void printMolecule(
 		std::vector<int> & permutation,
 		std::vector<std::string> & atoms,
-		std::vector<int> bidentateAtomsChosen,
-		std::ofstream & printFile);
+		std::vector<int> & bidentateAtomsChosen,
+		std::ofstream & printFile_);
+
+	void rotationTest(
+		std::vector<std::string> &atoms, 
+		std::vector<int> & bidentateAtomsChosen);
+
 
 private:
 	//data rotations
@@ -52,7 +57,7 @@ private:
 	void setAllRotations(const std::vector<double> &allRotationsVector);
 	std::vector<int> calculateRotationTransform(int rotation);
 
-
+	std::vector<int> applyRotation(const std::vector<int> & permutation, int iRotation);
 
 
 

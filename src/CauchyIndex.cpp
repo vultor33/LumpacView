@@ -40,6 +40,52 @@ bidentados - esqueca o ponto preto, concentre-se nos atomos coordenados.
 
 */
 
+/*
+TESTAR AS ROTACOES
+*/
+
+void CauchyIndex::rotationTest(
+	vector<string> & atoms, 
+	vector<int> & bidentateAtomsChosen)
+{
+	size_t size = atoms.size();
+	vector<int> permutation(size);
+	for (size_t i = 0; i < size; i++)
+		permutation[i] = i;
+
+	ofstream of_("printTestRotations.xyz");
+
+	printMolecule(permutation, atoms, bidentateAtomsChosen, of_);
+
+	vector<int> perm0 = applyRotation(permutation, 0);
+
+	printMolecule(perm0, atoms, bidentateAtomsChosen, of_);
+
+	vector<int> perm1 = applyRotation(permutation, 1);
+
+	printMolecule(perm1, atoms, bidentateAtomsChosen, of_);
+
+	vector<int> perm2 = applyRotation(permutation, 2);
+
+	printMolecule(perm2, atoms, bidentateAtomsChosen, of_);	
+	
+	vector<int> perm3 = applyRotation(permutation, 3);
+
+	printMolecule(perm3, atoms, bidentateAtomsChosen, of_);
+
+	vector<int> perm4 = applyRotation(permutation, 4);
+
+	printMolecule(perm4, atoms, bidentateAtomsChosen, of_);
+
+	of_.close();
+
+}
+
+
+
+
+
+
 void CauchyIndex::calculateAllIndexes(int iSystem)
 {
 	setSystem(iSystem);
@@ -237,10 +283,20 @@ void CauchyIndex::calculateBidentateMap()
 	}
 }
 
+vector<int> CauchyIndex::applyRotation(const vector<int> & permutation, int iRotation)
+{
+	size_t size = permutation.size();
+	vector<int> permRot(size);
+	for (size_t i = 0; i < size; i++)
+		permRot[i] = permutation[allRotationTransforms[iRotation][i]];
+
+	return permRot;
+}
+
 void CauchyIndex::printMolecule(
 	vector<int> & permutation,
 	vector<string> & atoms,
-	vector<int> bidentateAtomsChosen,
+	vector<int> & bidentateAtomsChosen,
 	ofstream & printFile_)
 {
 	if (permutation.size() == 0)

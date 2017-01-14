@@ -38,7 +38,6 @@ public:
 		std::vector<std::string> &atoms, 
 		std::vector<int> & bidentateAtomsChosen);
 
-
 private:
 	//data rotations
 	std::vector<CoordXYZ> mol0;
@@ -59,6 +58,11 @@ private:
 	std::vector<int> calculateRotationTransform(int rotation);
 
 	std::vector<int> applyRotation(const std::vector<int> & permutation, int iRotation);
+
+	std::vector<int> applyPermutation(
+		const std::vector<int> & permutation,
+		const std::vector<std::string> & atoms,
+		const std::vector<int> & bidentateAtomsChosen);
 
 
 	void printCauchyNotation(std::vector<int> & cauchyList);

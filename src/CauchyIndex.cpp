@@ -11,7 +11,7 @@
 
 using namespace std;
 
-CauchyIndex::CauchyIndex()
+CauchyIndex::CauchyIndex(int iSystem)
 {
 	bidentateLabels.resize(6);
 	bidentateLabels[0] = "He";
@@ -20,6 +20,8 @@ CauchyIndex::CauchyIndex()
 	bidentateLabels[3] = "Kr";
 	bidentateLabels[4] = "Xe";
 	bidentateLabels[5] = "Rn";
+
+	calculateAllIndexes(iSystem);
 }
 
 CauchyIndex::~CauchyIndex(){}
@@ -38,49 +40,25 @@ bidentados - esqueca o ponto preto, concentre-se nos atomos coordenados.
 
 */
 
-
-vector<int> CauchyIndex::getCauchy(string fName) 
+void CauchyIndex::calculateAllIndexes(int iSystem)
 {
-//	RootMeanSquareDeviation rmsd_;
-	return vector<int>();
-}
+	setSystem(iSystem);
 
-void CauchyIndex::calculateAllIndexes()
-{
-	setSystem(5);
-
-	vector< vector<int> > allIndexes;
-
-	for (size_t i = 0; i < allRotations.size(); i++)
+	for (size_t i = 0; i < allRotationsMatrix.size(); i++)
 	{
-		vector<int> cauchyI = getCauchy(i);
+		vector<int> cauchyI = calculateRotationTransform(i);
 
-		allIndexes.push_back(cauchyI);
+		allRotationTransforms.push_back(cauchyI);
 	}
 
 	calculateBidentateMap();
 }
 
-
-void CauchyIndex::getAllRotationMatrix()
+std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 {
-	setSystem(5);
-	vector< vector<int> > allIndexRotations;
-	for (size_t i = 0; i < allRotations.size(); i++)
-	{
-		vector<int> rotI = getCauchy(i);
-		allIndexRotations.push_back(rotI);
-	}
-}
-
-
-std::vector<int> CauchyIndex::getCauchy(int rotation)
-{
-	setSystem(5);
-	
 	vector<CoordXYZ> mol = mol0;
 
-	vector< vector<double> > rot = allRotations[rotation].mRot;
+	vector< vector<double> > rot = allRotationsMatrix[rotation].mRot;
 
 	size_t size = mol.size();
 
@@ -144,10 +122,10 @@ void CauchyIndex::printCauchyNotation(vector<int> & cauchyList)
 
 void CauchyIndex::setAllRotations(const vector<double> & allRotationsVector)
 {
-	allRotations.resize(allRotationsVector.size() / 4);
+	allRotationsMatrix.resize(allRotationsVector.size() / 4);
 	for (size_t i = 0; i < allRotationsVector.size(); i += 4)
 	{
-		allRotations[i / 4].mRot = auxMath_.rotationMatrix(
+		allRotationsMatrix[i / 4].mRot = auxMath_.rotationMatrix(
 			allRotationsVector[i],
 			allRotationsVector[i + 1],
 			allRotationsVector[i + 2],
@@ -204,6 +182,8 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations[17] = mol0[4].y;
 		vectorRotations[18] = mol0[4].z;
 		vectorRotations[19] = auxMath_._pi;
+		//cut angle
+		cutAngle = 3.0e0 * auxMath_._pi / 4.0e0;
 		break;
 
 	default:
@@ -216,7 +196,6 @@ void CauchyIndex::setSystem(int system)
 
 void CauchyIndex::calculateBidentateMap()
 {
-	double cutAngle = 3.0e0 * auxMath_._pi / 4.0e0;
 	double xi, yi, zi, xj, yj, zj;
 	int kMolBidentate = 0;
 	bidentateMap.resize(mol0.size());
@@ -261,8 +240,16 @@ void CauchyIndex::calculateBidentateMap()
 void CauchyIndex::printMolecule(
 	vector<int> & permutation,
 	vector<string> & atoms,
-	vector<int> bidentateAtomsChosen)
+	vector<int> bidentateAtomsChosen,
+	ofstream & printFile_)
 {
+	if (permutation.size() == 0)
+	{
+		permutation.resize(atoms.size());
+		for (size_t i = 0; i < atoms.size(); i++)
+			permutation[i] = i;
+	}
+
 	for (size_t i = 0; i < atoms.size(); i++)
 		mol0[i].atomlabel = atoms[permutation[i]];
 
@@ -281,29 +268,24 @@ void CauchyIndex::printMolecule(
 	}
 
 	int nAtoms = mol0.size() + bidentates.size();
-	ofstream of_("printCauchyMolecule.xyz");
-	of_ << nAtoms << endl << "title" << endl;
+	printFile_ << nAtoms << endl << "title" << endl;
 	for (int i = 0; i < nAtoms; i++)
 	{
-		if (i < mol0.size())
+		if (i < (int)mol0.size())
 		{
-			of_ << mol0[i].atomlabel << "  "
+			printFile_ << mol0[i].atomlabel << "  "
 				<< mol0[i].x << "  "
 				<< mol0[i].y << "  "
 				<< mol0[i].z << endl;
 		}
 		else
 		{
-			of_ << bidentates[i - mol0.size()].atomlabel << "  "
+			printFile_ << bidentates[i - mol0.size()].atomlabel << "  "
 				<< bidentates[i - mol0.size()].x << "  "
 				<< bidentates[i - mol0.size()].y << "  "
 				<< bidentates[i - mol0.size()].z << endl;
 		}
 	}
-
-	of_.close();
-
-
 }
 
 

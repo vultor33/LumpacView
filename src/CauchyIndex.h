@@ -3,9 +3,16 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 
 #include "Coordstructs.h"
 #include "AuxMath.h"
+
+/*
+WARNING - new systems need to be set on "setSystem"
+          need symmetry rotations and, for bidentate: cutAngle.
+*/
+
 
 struct cauchyRotation
 {
@@ -15,45 +22,43 @@ struct cauchyRotation
 class CauchyIndex
 {
 public:
-	CauchyIndex();
+	CauchyIndex(int iSystem);
 	
 	~CauchyIndex();
 
-	void getAllRotationMatrix();
-
-	std::vector<int> getCauchy(std::string fName);
-
-	void calculateAllIndexes();
-
+	//print with mol0 and molBidentate
 	void printMolecule(
 		std::vector<int> & permutation,
 		std::vector<std::string> & atoms,
-		std::vector<int> bidentateAtomsChosen);
+		std::vector<int> bidentateAtomsChosen,
+		std::ofstream & printFile);
 
 private:
+	//data rotations
 	std::vector<CoordXYZ> mol0;
-
 	std::vector<CoordXYZ> molBidentate;
-
-	std::vector<cauchyRotation> allRotations;
-
 	std::vector< std::vector<int> > bidentateMap;
+	std::vector<cauchyRotation> allRotationsMatrix;
+	std::vector< std::vector<int> > allRotationTransforms;
+	std::vector<std::string> bidentateLabels;
+	double cutAngle;
 
-	void calculateBidentateMap();
+	//data all isomers
 
+	// set system
+	void calculateAllIndexes(int iSystem);
 	void setSystem(int system);
-
+	void calculateBidentateMap();
 	void setAllRotations(const std::vector<double> &allRotationsVector);
+	std::vector<int> calculateRotationTransform(int rotation);
+
+
+
+
 
 	void printCauchyNotation(std::vector<int> & cauchyList);
 
-	std::vector<int> getCauchy(int rotation);
-
-	std::vector<std::string> bidentateLabels;
-
 	AuxMath auxMath_;
-
-
 };
 
 #endif

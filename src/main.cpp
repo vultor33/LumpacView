@@ -45,24 +45,7 @@ void buildComplexWithALotOfIsomersAndDoWater(
 
 int main()
 {
-	CauchyIndex ci_;
-
-	vector<CoordXYZ> mol(4);
-	mol[0].x = 1.0e0;
-	mol[0].y = 0.0e0;
-	mol[0].z = 0.0e0;
-	mol[1].x = 0.0e0;
-	mol[1].y = 1.0e0;
-	mol[1].z = 0.0e0;
-	mol[2].x = -1.0e0;
-	mol[2].y = 0.0e0;
-	mol[2].z = 0.0e0;
-	mol[3].x = 0.0e0;
-	mol[3].y = -1.0e0;
-	mol[3].z = 0.0e0;
-
-	ci_.calculateAllIndexes();
-
+	CauchyIndex ci_(5);
 	vector<int> permutation(5);
 	vector<string> atoms(5);
 	for (size_t i = 0; i < 5; i++)
@@ -76,7 +59,9 @@ int main()
 	bidentateAtomsChosen[0] = 0;
 	bidentateAtomsChosen[1] = 1;
 
-	ci_.printMolecule(permutation, atoms, bidentateAtomsChosen);
+	ofstream of_("printCauchy.xyz");
+	ci_.printMolecule(permutation, atoms, bidentateAtomsChosen,of_);
+	of_.close();
 
 
 

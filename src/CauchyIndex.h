@@ -19,6 +19,12 @@ struct cauchyRotation
 	std::vector< std::vector<double> > mRot;
 };
 
+struct liPermutation
+{
+	std::vector< std::vector<int> > rotPermutations;
+
+};
+
 class CauchyIndex
 {
 public:
@@ -37,6 +43,8 @@ public:
 	void rotationTest(
 		std::vector<std::string> &atoms, 
 		std::vector<int> & bidentateAtomsChosen);
+
+	void generateAllIndependentIsomers();
 
 private:
 	//data rotations
@@ -64,6 +72,7 @@ private:
 		const std::vector<std::string> & atoms,
 		const std::vector<int> & bidentateAtomsChosen);
 
+	unsigned int factorial(unsigned int n);
 
 	void printCauchyNotation(std::vector<int> & cauchyList);
 

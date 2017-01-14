@@ -66,7 +66,7 @@ int main()
 	ci_.printMolecule(permutation, atoms, bidentateAtomsChosen,of_);
 	of_.close();
 
-
+	ci_.generateAllIndependentIsomers();
 
 
 	// ATENCAO - CADASTRAR OS PONTOS HARDIN COM 12 CASAS

@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 #include "RootMeanSquareDeviation.h"
 #include "Coordstructs.h"
@@ -39,6 +40,65 @@ e fazer as rotacoes de novo. no espaço dos bidentados terao espacos vazios n tem
 bidentados - esqueca o ponto preto, concentre-se nos atomos coordenados.
 
 */
+
+void CauchyIndex::generateAllIndependentIsomers()
+{
+	int nMax = mol0.size();
+	long int size = factorial(nMax); // 10+ explosion
+
+	size_t nRotations = allRotationTransforms.size() + 1;
+	vector<liPermutation> allPermutations;
+
+	int * myints;
+	myints = new int[nMax];
+	for (int i = 0; i < nMax; i++)
+		myints[i] = i;
+	std::sort(myints, myints + nMax);
+	vector<int> permutation(nMax);
+	bool equal;
+	do
+	{
+		equal = false;
+		for (int i = 0; i < nMax; i++)
+			permutation[i] = myints[i];
+
+		// check if this permutation was already studied
+		for (size_t i = 0; i < allPermutations.size(); i++)
+		{
+			for (size_t j = 0; j < nRotations; j++)
+			{
+				if (permutation == allPermutations[i].rotPermutations[j])
+				{
+					equal = true;
+					break;
+				}
+				if (equal)
+					break;
+			}
+		}
+
+		if (equal)
+			continue;
+		else
+		{
+			//add permutation
+			vector< vector<int> > rotPermutations(nRotations);
+			rotPermutations[0] = permutation;
+			for (size_t j = 1; j < nRotations; j++)
+				rotPermutations[j] = applyRotation(permutation, j - 1);
+			liPermutation auxLiPermutation;
+			auxLiPermutation.rotPermutations = rotPermutations;
+			allPermutations.push_back(auxLiPermutation);
+		}
+
+	} while (std::next_permutation(myints, myints + nMax));
+
+	cout << "estou no fim" << endl;
+
+	delete[] myints;
+}
+
+
 
 void CauchyIndex::rotationTest(
 	vector<string> & atoms, 
@@ -273,14 +333,15 @@ std::vector<int> CauchyIndex::applyPermutation(
 	const std::vector<std::string> & atoms,
 	const std::vector<int> & bidentateAtomsChosen)
 {
+	size_t size = atoms.size();
 	vector<int> bidentateAtomsChosenRotated = bidentateAtomsChosen;
-	for (size_t i = 0; i < atoms.size(); i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		mol0[i].atomlabel = atoms[permutation[i]];
 	}
 	for (size_t i = 0; i < bidentateAtomsChosenRotated.size(); i++)
 	{
-		for (size_t j = 0; j < permutation.size(); j++)
+		for (size_t j = 0; j < size; j++)
 		{
 			if (permutation[j] == bidentateAtomsChosenRotated[i])
 			{
@@ -341,6 +402,13 @@ void CauchyIndex::printMolecule(
 				<< bidentates[i - mol0.size()].z << endl;
 		}
 	}
+}
+
+unsigned int CauchyIndex::factorial(unsigned int n)
+{
+	if (n == 0)
+		return 1;
+	return n * factorial(n - 1);
 }
 
 

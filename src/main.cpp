@@ -45,8 +45,8 @@ void buildComplexWithALotOfIsomersAndDoWater(
 
 int main()
 {
-	CauchyIndex ci_(5);
-
+	CauchyIndex ci_(12);
+	/*
 	vector<int> permutation(5);
 	vector<string> atoms(5);
 	for (size_t i = 0; i < 5; i++)
@@ -65,7 +65,7 @@ int main()
 	ofstream of_("printCauchy.xyz");
 	ci_.printMolecule(permutation, atoms, bidentateAtomsChosen,of_);
 	of_.close();
-
+	*/
 	ci_.generateAllIndependentIsomers();
 
 

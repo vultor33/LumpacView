@@ -56,8 +56,13 @@ void CauchyIndex::generateAllIndependentIsomers()
 	std::sort(myints, myints + nMax);
 	vector<int> permutation(nMax);
 	bool equal;
+	int k = 0; // fredmudar
 	do
 	{
+		k++;
+		if (k % 10000 == 0)
+			cout << "k:  " << k << endl;
+
 		equal = false;
 		for (int i = 0; i < nMax; i++)
 			permutation[i] = myints[i];
@@ -91,9 +96,21 @@ void CauchyIndex::generateAllIndependentIsomers()
 			allPermutations.push_back(auxLiPermutation);
 		}
 
+
 	} while (std::next_permutation(myints, myints + nMax));
 
 	cout << "estou no fim" << endl;
+
+	ofstream of_("printFinalPermutations.txt");
+
+	for (size_t i = 0; i < allPermutations.size(); i++)
+	{
+		for (size_t j = 0; j < nMax; j++)
+		{
+			of_ << allPermutations[i].rotPermutations[0][j] << "  ";
+		}
+		of_ << endl;
+	}
 
 	delete[] myints;
 }
@@ -210,67 +227,6 @@ void CauchyIndex::setAllRotations(const vector<double> & allRotationsVector)
 			allRotationsVector[i + 2],
 			allRotationsVector[i + 3]);
 	}
-}
-
-void CauchyIndex::setSystem(int system)
-{
-	vector<double> vectorRotations;
-
-	switch (system)
-	{
-	case 5:
-		mol0.resize(5);
-		mol0[0].x = 0.000;
-		mol0[0].y = 0.000;
-		mol0[0].z = 1.000;
-		mol0[1].x = 1.000;
-		mol0[1].y = 0.000;
-		mol0[1].z = 0.000;
-		mol0[2].x = -1.000;
-		mol0[2].y = 0.000;
-		mol0[2].z = 0.000;
-		mol0[3].x = 0.000;
-		mol0[3].y = 0.86602540;
-		mol0[3].z = -0.50000000;
-		mol0[4].x = 0.000;
-		mol0[4].y = -0.86602540;
-		mol0[4].z = -0.50000000;
-		//c3 - 1
-		vectorRotations.resize(mol0.size() * 4);
-		vectorRotations[0] = 1.0e0;
-		vectorRotations[1] = 0.0e0;
-		vectorRotations[2] = 0.0e0;
-		vectorRotations[3] = 2.0e0 * auxMath_._pi / 3.0e0;
-		//c3 - 2
-		vectorRotations[4] = 1.0e0;
-		vectorRotations[5] = 0.0e0;
-		vectorRotations[6] = 0.0e0;
-		vectorRotations[7] = 4.0e0 * auxMath_._pi / 3.0e0;
-		//c2 - 1
-		vectorRotations[8] = mol0[0].x;
-		vectorRotations[9] = mol0[0].y;
-		vectorRotations[10] = mol0[0].z;
-		vectorRotations[11] = auxMath_._pi;
-		//c2 - 2
-		vectorRotations[12] = mol0[3].x;
-		vectorRotations[13] = mol0[3].y;
-		vectorRotations[14] = mol0[3].z;
-		vectorRotations[15] = auxMath_._pi;
-		//c2 - 3
-		vectorRotations[16] = mol0[4].x;
-		vectorRotations[17] = mol0[4].y;
-		vectorRotations[18] = mol0[4].z;
-		vectorRotations[19] = auxMath_._pi;
-		//cut angle
-		cutAngle = 3.0e0 * auxMath_._pi / 4.0e0;
-		break;
-
-	default:
-		cout << "CauchyIndex::setSystem - system not found" << endl;
-		exit(1);
-		break;
-	}
-	setAllRotations(vectorRotations);
 }
 
 void CauchyIndex::calculateBidentateMap()
@@ -425,6 +381,132 @@ bidentateMap[2][4] = 9;
 bidentateMap[3][4] = 6;
 */
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void CauchyIndex::setSystem(int system)
+{
+	vector<double> vectorRotations;
+
+	switch (system)
+	{
+	case 5:
+		mol0.resize(5);
+		mol0[0].x = 0.000;
+		mol0[0].y = 0.000;
+		mol0[0].z = 1.000;
+		mol0[1].x = 1.000;
+		mol0[1].y = 0.000;
+		mol0[1].z = 0.000;
+		mol0[2].x = -1.000;
+		mol0[2].y = 0.000;
+		mol0[2].z = 0.000;
+		mol0[3].x = 0.000;
+		mol0[3].y = 0.86602540;
+		mol0[3].z = -0.50000000;
+		mol0[4].x = 0.000;
+		mol0[4].y = -0.86602540;
+		mol0[4].z = -0.50000000;
+		//c3 - 1
+		vectorRotations.resize(mol0.size() * 4);
+		vectorRotations[0] = 1.0e0;
+		vectorRotations[1] = 0.0e0;
+		vectorRotations[2] = 0.0e0;
+		vectorRotations[3] = 2.0e0 * auxMath_._pi / 3.0e0;
+		//c3 - 2
+		vectorRotations[4] = 1.0e0;
+		vectorRotations[5] = 0.0e0;
+		vectorRotations[6] = 0.0e0;
+		vectorRotations[7] = 4.0e0 * auxMath_._pi / 3.0e0;
+		//c2 - 1
+		vectorRotations[8] = mol0[0].x;
+		vectorRotations[9] = mol0[0].y;
+		vectorRotations[10] = mol0[0].z;
+		vectorRotations[11] = auxMath_._pi;
+		//c2 - 2
+		vectorRotations[12] = mol0[3].x;
+		vectorRotations[13] = mol0[3].y;
+		vectorRotations[14] = mol0[3].z;
+		vectorRotations[15] = auxMath_._pi;
+		//c2 - 3
+		vectorRotations[16] = mol0[4].x;
+		vectorRotations[17] = mol0[4].y;
+		vectorRotations[18] = mol0[4].z;
+		vectorRotations[19] = auxMath_._pi;
+		//cut angle
+		cutAngle = 3.0e0 * auxMath_._pi / 4.0e0;
+		break;
+
+	case 12:
+		mol0.resize(12);
+		mol0[0].x = 0.000;
+		mol0[0].y = 0.000;
+		mol0[0].z = 1.000;
+		mol0[1].x = 0.89442719;
+		mol0[1].y = 0.000;
+		mol0[1].z = 0.44721360;
+		mol0[2].x = 0.27639320;
+		mol0[2].y = 0.85065081;
+		mol0[2].z = 0.44721360;
+		mol0[3].x = -0.72360680;
+		mol0[3].y = 0.52573111;
+		mol0[3].z = 0.44721360;
+		mol0[4].x = -0.72360680;
+		mol0[4].y = -0.52573111;
+		mol0[4].z = 0.44721360;
+		mol0[5].x = 0.27639320;
+		mol0[5].y = -0.85065081;
+		mol0[5].z = 0.44721360;
+		mol0[6].x = 0.72360680;
+		mol0[6].y = 0.52573111;
+		mol0[6].z = -0.44721360;
+		mol0[7].x = -0.27639320;
+		mol0[7].y = 0.85065081;
+		mol0[7].z = -0.44721360;
+		mol0[8].x = -0.89442719;
+		mol0[8].y = 0.00000000;
+		mol0[8].z = -0.44721360;
+		mol0[9].x = -0.27639320;
+		mol0[9].y = -0.85065081;
+		mol0[9].z = -0.44721360;
+		mol0[10].x = 0.72360680;
+		mol0[10].y = -0.52573111;
+		mol0[10].z = -0.44721360;
+		mol0[11].x = 0.00000000;
+		mol0[11].y = 0.00000000;
+		mol0[11].z = -1.00000000;
+		cutAngle = auxMath_._pi / 2.0e0;
+		// add rotations
+		break;
+
+
+
+	default:
+		cout << "CauchyIndex::setSystem - system not found" << endl;
+		exit(1);
+		break;
+	}
+	setAllRotations(vectorRotations);
+}
 
 
 

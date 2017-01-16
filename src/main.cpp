@@ -1,3 +1,7 @@
+// IMPORTANTE - PROGRAMA QUE ACHA O GRUPO PONTUAL http://www.ccp14.ac.uk/ccp/web-mirrors/symmol/~pila/
+// busca: find point group molecule software
+// http://www.sciencedirect.com/science/article/pii/0097848576800046
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -66,7 +70,7 @@ int main()
 	ci_.printMolecule(permutation, atoms, bidentateAtomsChosen,of_);
 	of_.close();
 	*/
-	ci_.generateAllIndependentIsomers();
+	ci_.generateAllIndependentIsomersIO();
 
 
 	// ATENCAO - CADASTRAR OS PONTOS HARDIN COM 12 CASAS

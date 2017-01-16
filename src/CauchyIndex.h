@@ -46,6 +46,8 @@ public:
 
 	void generateAllIndependentIsomers();
 
+	void generateAllIndependentIsomersIO();
+
 private:
 	//data rotations
 	std::vector<CoordXYZ> mol0;
@@ -75,6 +77,13 @@ private:
 	unsigned int factorial(unsigned int n);
 
 	void printCauchyNotation(std::vector<int> & cauchyList);
+
+	//no division between rotations - fixed format number nRotations
+	size_t nRotations;
+	size_t systemSize;
+	void writeCauchyRotations(std::string fileName, std::vector< std::vector<int> > & rotPermutations);
+
+	std::vector<int> readCauchyNotations(std::ifstream & openedFile_);
 
 	AuxMath auxMath_;
 };

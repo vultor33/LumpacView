@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <sstream>
+#include <time.h>
 
 #include "RootMeanSquareDeviation.h"
 #include "Coordstructs.h"
@@ -43,18 +45,18 @@ bidentados - esqueca o ponto preto, concentre-se nos atomos coordenados.
 
 void CauchyIndex::generateAllIndependentIsomers()
 {
-	int nMax = mol0.size();
-	long int size = factorial(nMax); // 10+ explosion
+	systemSize = mol0.size();
+	long int size = factorial(systemSize); // 10+ explosion
 
-	size_t nRotations = allRotationTransforms.size() + 1;
+	nRotations = allRotationTransforms.size() + 1;
 	vector<liPermutation> allPermutations;
 
 	int * myints;
-	myints = new int[nMax];
-	for (int i = 0; i < nMax; i++)
+	myints = new int[systemSize];
+	for (size_t i = 0; i < systemSize; i++)
 		myints[i] = i;
-	std::sort(myints, myints + nMax);
-	vector<int> permutation(nMax);
+	std::sort(myints, myints + systemSize);
+	vector<int> permutation(systemSize);
 	bool equal;
 	int k = 0; // fredmudar
 	do
@@ -64,7 +66,7 @@ void CauchyIndex::generateAllIndependentIsomers()
 			cout << "k:  " << k << endl;
 
 		equal = false;
-		for (int i = 0; i < nMax; i++)
+		for (size_t i = 0; i < systemSize; i++)
 			permutation[i] = myints[i];
 
 		// check if this permutation was already studied
@@ -97,7 +99,7 @@ void CauchyIndex::generateAllIndependentIsomers()
 		}
 
 
-	} while (std::next_permutation(myints, myints + nMax));
+	} while (std::next_permutation(myints, myints + systemSize));
 
 	cout << "estou no fim" << endl;
 
@@ -105,7 +107,7 @@ void CauchyIndex::generateAllIndependentIsomers()
 
 	for (size_t i = 0; i < allPermutations.size(); i++)
 	{
-		for (size_t j = 0; j < nMax; j++)
+		for (size_t j = 0; j < systemSize; j++)
 		{
 			of_ << allPermutations[i].rotPermutations[0][j] << "  ";
 		}
@@ -115,6 +117,72 @@ void CauchyIndex::generateAllIndependentIsomers()
 	delete[] myints;
 }
 
+void CauchyIndex::generateAllIndependentIsomersIO()
+{
+	systemSize = mol0.size();
+	long int size = factorial(systemSize); // 10+ explosion
+	nRotations = allRotationTransforms.size() + 1;
+
+	int * myints;
+	myints = new int[systemSize];
+	for (size_t i = 0; i < systemSize; i++)
+		myints[i] = i;
+	std::sort(myints, myints + systemSize);
+	vector<int> permutation(systemSize);
+	remove("allCauchyRotatations.txt");
+	string cauchyFileName = "allCauchyRotatations.txt";
+	bool equal;
+	int k = 0;
+
+	clock_t begin = clock();
+
+	do
+	{
+		equal = false;
+		for (size_t i = 0; i < systemSize; i++)
+			permutation[i] = myints[i];
+
+
+		// check if this permutation was already studied
+		if (k != 0)
+		{
+			ifstream allPermutOpen_(cauchyFileName.c_str());
+			while(true)
+			{
+				vector<int> permutationK = readCauchyNotations(allPermutOpen_);
+				if (permutationK.size() == 0)
+					break;
+				if (permutation == permutationK)
+				{
+					equal = true;
+					break;
+				}
+			}
+		}
+
+		if (equal)
+			continue;
+		else
+		{
+			//add permutation
+			vector< vector<int> > rotPermutations(nRotations);
+			rotPermutations[0] = permutation;
+			for (size_t j = 1; j < nRotations; j++)
+				rotPermutations[j] = applyRotation(permutation, j - 1);
+			writeCauchyRotations(cauchyFileName, rotPermutations);
+		}
+
+		if (k % 10000 == 0)
+			cout << "k:  " << (double)k / (double)size << endl;
+		k++;
+	} while (std::next_permutation(myints, myints + systemSize));
+
+	delete[] myints;
+
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;
+}
 
 
 void CauchyIndex::rotationTest(
@@ -367,19 +435,38 @@ unsigned int CauchyIndex::factorial(unsigned int n)
 	return n * factorial(n - 1);
 }
 
+void CauchyIndex::writeCauchyRotations(string fileName, vector< vector<int> > & rotPermutations)
+{
+	ofstream cauchyFile_;
+	cauchyFile_.open(fileName.c_str(), std::ofstream::out | std::ofstream::app);
 
-/*
-bidentateMap[0][1] = 1;
-bidentateMap[0][2] = 7;
-bidentateMap[0][3] = 4;
-bidentateMap[0][4] = 5;
-bidentateMap[1][2] = -1;
-bidentateMap[1][3] = 2;
-bidentateMap[1][4] = 3;
-bidentateMap[2][3] = 8;
-bidentateMap[2][4] = 9;
-bidentateMap[3][4] = 6;
-*/
+	for (size_t i = 0; i < nRotations; i++)
+	{
+		for (size_t j = 0; j < systemSize; j++)
+		{
+			cauchyFile_ << rotPermutations[i][j] << " ";
+		}
+		cauchyFile_ << endl;
+	}
+	cauchyFile_.close();
+}
+
+vector<int> CauchyIndex::readCauchyNotations(ifstream & openendFile_)
+{
+	vector<int> notation;
+	string auxline;
+	getline(openendFile_, auxline);
+	if (auxline == "")
+		return notation;
+	notation.resize(systemSize);
+	stringstream line;
+	line << auxline;
+	for (size_t i = 0; i < systemSize; i++)
+	{
+		line >> notation[i];
+	}
+	return notation;
+}
 
 
 
@@ -509,4 +596,44 @@ void CauchyIndex::setSystem(int system)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* TESTANDO IO
+for (size_t i = 0; i < allPermutations.size(); i++)
+{
+writeCauchyRotations("allPermut.txt", allPermutations[i].rotPermutations);
+}
+
+ifstream ifOpen_("allPermut.txt");
+for (size_t i = 0; i < 120; i++)
+{
+vector<int> permutTeste = readCauchyNotations(ifOpen_);
+printCauchyNotation(permutTeste);
+}
+ifOpen_.close();
+*/
+
+/*
+bidentateMap[0][1] = 1;
+bidentateMap[0][2] = 7;
+bidentateMap[0][3] = 4;
+bidentateMap[0][4] = 5;
+bidentateMap[1][2] = -1;
+bidentateMap[1][3] = 2;
+bidentateMap[1][4] = 3;
+bidentateMap[2][3] = 8;
+bidentateMap[2][4] = 9;
+bidentateMap[3][4] = 6;
+*/
 

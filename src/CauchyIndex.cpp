@@ -187,6 +187,7 @@ void CauchyIndex::rotationTest(
 	vector<string> & atoms, 
 	vector<int> & bidentateAtomsChosen)
 {
+	remove("printFastMolecule.xyz");
 	size_t size = mol0.size();
 	vector<int> permutation(size);
 	for (size_t i = 0; i < size; i++)
@@ -241,6 +242,12 @@ std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 		molRot[i].y = newCoord[1];
 		molRot[i].z = newCoord[2];
 	}
+	molRot[0].atomlabel = "Li";
+	mol[0].atomlabel = "Li";
+	molRot[1].atomlabel = "F";
+	mol[1].atomlabel = "F";
+	printMoleculeFast(mol);
+	printMoleculeFast(molRot);
 	vector<int> cauchy(size);
 	double atomPosition;
 	for (size_t i = 0; i < size; i++)
@@ -261,7 +268,6 @@ std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 			if (j == (size - 1))
 			{
 				cout << "rotation problem" << endl;
-
 				exit(1);
 			}
 		}
@@ -285,6 +291,25 @@ void CauchyIndex::printCauchyNotation(vector<int> & cauchyList)
 		cout << cauchyList[i] << "   ";
 	}
 	cout << endl;
+}
+
+void CauchyIndex::printMoleculeFast(std::vector<CoordXYZ>& mol)
+{
+	ofstream of_;
+	of_.open("printFastMolecule.xyz", std::ofstream::out | std::ofstream::app);
+	size_t size = mol.size();
+	of_ << size << endl << "title " << endl;
+	for (size_t i = 0; i < size; i++)
+	{
+		if (mol[i].atomlabel == "")
+			mol[i].atomlabel = "H  ";
+		
+		of_ << mol[i].atomlabel << "  "
+			<< mol[i].x << "  "
+			<< mol[i].y << "  "
+			<< mol[i].z << endl;
+ 	}
+	of_.close();
 }
 
 void CauchyIndex::setAllRotations(const vector<double> & allRotationsVector)
@@ -517,6 +542,7 @@ vector<int> CauchyIndex::readCauchyNotations(ifstream & openendFile_)
 void CauchyIndex::setSystem(int system)
 {
 	vector<double> vectorRotations;
+	vector<double> auxReferenceAxis;
 
 	switch (system)
 	{
@@ -614,15 +640,21 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations[9] = mol0[5].y;
 		vectorRotations[10] = mol0[5].z;
 		vectorRotations[11] = auxMath_._pi;
+
+		// produto vetorial
+		auxReferenceAxis = auxMath_.vectorProduct(
+			mol0[0].x, mol0[0].y, mol0[0].z, 
+			mol0[6].x, mol0[6].y, mol0[6].z);
+		auxMath_.normalize(auxReferenceAxis);
 		//c3 - 1
-		vectorRotations[12] = mol0[7].x - mol0[8].x;
-		vectorRotations[13] = mol0[7].y - mol0[8].y;
-		vectorRotations[14] = mol0[7].z - mol0[8].z;
+		vectorRotations[12] = auxReferenceAxis[0];
+		vectorRotations[13] = auxReferenceAxis[1];
+		vectorRotations[14] = auxReferenceAxis[2];
 		vectorRotations[15] = 2.0e0 * auxMath_._pi / 3.0e0;
 		//c3 - 2
-		vectorRotations[16] = mol0[7].x - mol0[8].x;
-		vectorRotations[17] = mol0[7].y - mol0[8].y;
-		vectorRotations[18] = mol0[7].z - mol0[8].z;
+		vectorRotations[16] = auxReferenceAxis[0];
+		vectorRotations[17] = auxReferenceAxis[1];
+		vectorRotations[18] = auxReferenceAxis[2];
 		vectorRotations[19] = 4.0e0 * auxMath_._pi / 3.0e0;
 		break;
 
@@ -738,9 +770,9 @@ void CauchyIndex::setSystem(int system)
 
 	case 12:
 		mol0.resize(12);
-		mol0[0].x = 0.000;
-		mol0[0].y = 0.000;
-		mol0[0].z = 1.000;
+		mol0[0].x = 0.00000000;
+		mol0[0].y = 0.00000000;
+		mol0[0].z = 1.00000000;
 		mol0[1].x = 0.89442719;
 		mol0[1].y = 0.000;
 		mol0[1].z = 0.44721360;

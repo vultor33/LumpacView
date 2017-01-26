@@ -78,6 +78,8 @@ private:
 
 	void printCauchyNotation(std::vector<int> & cauchyList);
 
+	void printMoleculeFast(std::vector<CoordXYZ> & mol);
+
 	//no division between rotations - fixed format number nRotations
 	size_t nRotations;
 	size_t systemSize;

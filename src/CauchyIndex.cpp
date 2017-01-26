@@ -135,7 +135,6 @@ void CauchyIndex::generateAllIndependentIsomersIO()
 	int k = 0;
 
 	clock_t begin = clock();
-
 	do
 	{
 		equal = false;
@@ -184,16 +183,23 @@ void CauchyIndex::generateAllIndependentIsomersIO()
 	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;
 }
 
-
 void CauchyIndex::rotationTest(
 	vector<string> & atoms, 
 	vector<int> & bidentateAtomsChosen)
 {
-	size_t size = atoms.size();
+	size_t size = mol0.size();
 	vector<int> permutation(size);
 	for (size_t i = 0; i < size; i++)
 		permutation[i] = i;
-
+	if (atoms.size() == 0)
+	{
+		atoms.resize(size);
+		for (size_t i = 0; i < size; i++)
+			atoms[i] = " H ";
+	}
+	atoms[0] = " C ";
+	atoms[1] = " N ";
+	atoms[2] = " Li ";
 	ofstream of_("printTestRotations.xyz");
 	for (size_t i = 0; i < allRotationTransforms.size(); i++)
 	{
@@ -221,11 +227,8 @@ void CauchyIndex::calculateAllIndexes(int iSystem)
 std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 {
 	vector<CoordXYZ> mol = mol0;
-
 	vector< vector<double> > rot = allRotationsMatrix[rotation].mRot;
-
 	size_t size = mol.size();
-
 	vector<CoordXYZ> molRot = mol;
 	for (size_t i = 0; i < size; i++)
 	{
@@ -238,7 +241,6 @@ std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 		molRot[i].y = newCoord[1];
 		molRot[i].z = newCoord[2];
 	}
-
 	vector<int> cauchy(size);
 	double atomPosition;
 	for (size_t i = 0; i < size; i++)
@@ -250,7 +252,7 @@ std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 				(molRot[i].y - mol[j].y) * (molRot[i].y - mol[j].y) +
 				(molRot[i].z - mol[j].z) * (molRot[i].z - mol[j].z));
 			
-			//cout << "i:  " << i << " j: " << j << "  dist: " << atomPosition << endl;
+			cout << "i:  " << i << " j: " << j << "  dist: " << atomPosition << endl;
 			if (atomPosition < 1.0e-2)
 			{
 				cauchy[i] = j;
@@ -259,6 +261,7 @@ std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 			if (j == (size - 1))
 			{
 				cout << "rotation problem" << endl;
+
 				exit(1);
 			}
 		}
@@ -490,6 +493,27 @@ vector<int> CauchyIndex::readCauchyNotations(ifstream & openendFile_)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void CauchyIndex::setSystem(int system)
 {
 	vector<double> vectorRotations;
@@ -514,7 +538,7 @@ void CauchyIndex::setSystem(int system)
 		mol0[4].y = -0.86602540;
 		mol0[4].z = -0.50000000;
 		//c3 - 1
-		vectorRotations.resize(mol0.size() * 4);
+		vectorRotations.resize(20);
 		vectorRotations[0] = 1.0e0;
 		vectorRotations[1] = 0.0e0;
 		vectorRotations[2] = 0.0e0;
@@ -541,6 +565,175 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations[19] = auxMath_._pi;
 		//cut angle
 		cutAngle = 3.0e0 * auxMath_._pi / 4.0e0;
+		break;
+
+
+	case 9:
+		mol0.resize(9);
+		mol0[0].x = 0.000000;
+		mol0[0].y = 0.000000;
+		mol0[0].z = 1.000000;
+		mol0[1].x = -0.23570226;
+		mol0[1].y = 0.91287093;
+		mol0[1].z = 0.33333333;
+		mol0[2].x = -0.94280904;
+		mol0[2].y = 0.00000000;
+		mol0[2].z = 0.33333333;
+		mol0[3].x = 0.23570226;
+		mol0[3].y = -0.91287093;
+		mol0[3].z = 0.33333333;
+		mol0[4].x = 0.94280904;
+		mol0[4].y = 0.00000000;
+		mol0[4].z = 0.33333333;
+		mol0[5].x = 0.53033009;
+		mol0[5].y = 0.68465320;
+		mol0[5].z = -0.50000000;
+		mol0[6].x = -0.53033009;
+		mol0[6].y = -0.68465320;
+		mol0[6].z = -0.50000000;
+		mol0[7].x = -0.58925565;
+		mol0[7].y = 0.45643546;
+		mol0[7].z = -0.66666667;
+		mol0[8].x = 0.58925565;
+		mol0[8].y = -0.45643546;
+		mol0[8].z = -0.66666667;
+		cutAngle = auxMath_._pi / 2.0e0;
+		vectorRotations.resize(20);
+		//c2 - 1
+		vectorRotations[0] = mol0[0].x;
+		vectorRotations[1] = mol0[0].y;
+		vectorRotations[2] = mol0[0].z;
+		vectorRotations[3] = auxMath_._pi;
+		//c2 - 2
+		vectorRotations[4] = mol0[6].x;
+		vectorRotations[5] = mol0[6].y;
+		vectorRotations[6] = mol0[6].z;
+		vectorRotations[7] = auxMath_._pi;
+		//c2 - 3
+		vectorRotations[8] = mol0[5].x;
+		vectorRotations[9] = mol0[5].y;
+		vectorRotations[10] = mol0[5].z;
+		vectorRotations[11] = auxMath_._pi;
+		//c3 - 1
+		vectorRotations[12] = mol0[7].x - mol0[8].x;
+		vectorRotations[13] = mol0[7].y - mol0[8].y;
+		vectorRotations[14] = mol0[7].z - mol0[8].z;
+		vectorRotations[15] = 2.0e0 * auxMath_._pi / 3.0e0;
+		//c3 - 2
+		vectorRotations[16] = mol0[7].x - mol0[8].x;
+		vectorRotations[17] = mol0[7].y - mol0[8].y;
+		vectorRotations[18] = mol0[7].z - mol0[8].z;
+		vectorRotations[19] = 4.0e0 * auxMath_._pi / 3.0e0;
+		break;
+
+
+
+	case 10:
+		mol0.resize(10);
+		mol0[0].x = 0.000000;
+		mol0[0].y = 0.000000;
+		mol0[0].z = 1.000000;
+		mol0[1].x = 0.91458473;
+		mol0[1].y = 0.00000000;
+		mol0[1].z = 0.40439433;
+		mol0[2].x = 0.26335401;
+		mol0[2].y = 0.87584810;
+		mol0[2].z = 0.40439432;
+		mol0[3].x = -0.76291954;
+		mol0[3].y = 0.50439965;
+		mol0[3].z = 0.40439433;
+		mol0[4].x = -0.38787671;
+		mol0[4].y = -0.82826136;
+		mol0[4].z = 0.40439433;
+		mol0[5].x = 0.52670802;
+		mol0[5].y = -0.82826136;
+		mol0[5].z = -0.19121135;
+		mol0[6].x = -0.89351054;
+		mol0[6].y = -0.25145533;
+		mol0[6].z = -0.37203377;
+		mol0[7].x = 0.67837321;
+		mol0[7].y = 0.50439965;
+		mol0[7].z = -0.53421979;
+		mol0[8].x = -0.39464230;
+		mol0[8].y = 0.69067213;
+		mol0[8].z = -0.60599460;
+		mol0[9].x = 0.02107419;
+		mol0[9].y = -0.25145533;
+		mol0[9].z = -0.96763944;
+		cutAngle = auxMath_._pi / 2.0e0;
+		vectorRotations.resize(4);
+		//c2 - 1
+		vectorRotations[0] =
+			0.5e0 * (mol0[7].x + mol0[3].x);
+		vectorRotations[1] =
+			0.5e0 * (mol0[7].y + mol0[3].y);
+		vectorRotations[2] =
+			0.5e0 * (mol0[7].z + mol0[3].z);
+		vectorRotations[3] = auxMath_._pi;
+		break;
+
+
+
+
+
+	case 11:
+		mol0.resize(11);
+		mol0[0].x = 0.000000;
+		mol0[0].y = 0.000000;
+		mol0[0].z = 1.000000;
+		mol0[1].x = 0.89442719;
+		mol0[1].y = 0.00000000;
+		mol0[1].z = 0.44721360;
+		mol0[2].x = 0.27639320;
+		mol0[2].y = 0.85065081;
+		mol0[2].z = 0.44721360;
+		mol0[3].x = -0.72360680;
+		mol0[3].y = 0.52573111;
+		mol0[3].z = 0.44721360;
+		mol0[4].x = -0.72360680;
+		mol0[4].y = -0.52573111;
+		mol0[4].z = 0.44721360;
+		mol0[5].x = 0.27639320;
+		mol0[5].y = -0.85065081;
+		mol0[5].z = 0.44721360;
+		mol0[6].x = 0.72360680;
+		mol0[6].y = 0.52573111;
+		mol0[6].z = -0.44721360;
+		mol0[7].x = -0.27639320;
+		mol0[7].y = 0.85065081;
+		mol0[7].z = -0.44721360;
+		mol0[8].x = -0.89442719;
+		mol0[8].y = 0.00000000;
+		mol0[8].z = -0.44721360;
+		mol0[9].x = -0.27639320;
+		mol0[9].y = -0.85065081;
+		mol0[9].z = -0.44721360;
+		mol0[10].x = 0.00000000;
+		mol0[10].y = 0.00000000;
+		mol0[10].z = -1.00000000;
+		cutAngle = auxMath_._pi / 2.0e0;
+		vectorRotations.resize(16);
+		//add rotations
+		//c5 - 1
+		vectorRotations[0] = mol0[3].x;
+		vectorRotations[1] = mol0[3].y;
+		vectorRotations[2] = mol0[3].z;
+		vectorRotations[3] = (2.0e0 * auxMath_._pi / 5.0e0);
+		//c5 - 2
+		vectorRotations[4] = mol0[3].x;
+		vectorRotations[5] = mol0[3].y;
+		vectorRotations[6] = mol0[3].z;
+		vectorRotations[7] = 2.0e0 * (2.0e0 * auxMath_._pi / 5.0e0);
+		//c5 - 3
+		vectorRotations[8] = mol0[3].x;
+		vectorRotations[9] = mol0[3].y;
+		vectorRotations[10] = mol0[3].z;
+		vectorRotations[11] = 3.0e0 * (2.0e0 * auxMath_._pi / 5.0e0);
+		//c5 - 4
+		vectorRotations[12] = mol0[3].x;
+		vectorRotations[13] = mol0[3].y;
+		vectorRotations[14] = mol0[3].z;
+		vectorRotations[15] = 4.0e0 * (2.0e0 * auxMath_._pi / 5.0e0);
 		break;
 
 	case 12:
@@ -584,8 +777,6 @@ void CauchyIndex::setSystem(int system)
 		cutAngle = auxMath_._pi / 2.0e0;
 		// add rotations
 		break;
-
-
 
 	default:
 		cout << "CauchyIndex::setSystem - system not found" << endl;
@@ -637,3 +828,25 @@ bidentateMap[2][4] = 9;
 bidentateMap[3][4] = 6;
 */
 
+
+
+/* CODIGO Q DEVE SERVIR PRA ALGUMA COISA
+vector<int> permutation(5);
+vector<string> atoms(5);
+for (size_t i = 0; i < 5; i++)
+{
+permutation[i] = i;
+atoms[i] = "H ";
+}
+atoms[0] = "C ";
+atoms[1] = "C ";
+vector<int> bidentateAtomsChosen(2);
+bidentateAtomsChosen[0] = 0;
+bidentateAtomsChosen[1] = 1;
+
+ci_.rotationTest(atoms, bidentateAtomsChosen);
+
+ofstream of_("printCauchy.xyz");
+ci_.printMolecule(permutation, atoms, bidentateAtomsChosen,of_);
+of_.close();
+*/

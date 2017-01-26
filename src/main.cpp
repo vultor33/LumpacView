@@ -48,30 +48,16 @@ void buildComplexWithALotOfIsomersAndDoWater(
 }
 
 int main()
-{
-	CauchyIndex ci_(12);
-	/*
-	vector<int> permutation(5);
-	vector<string> atoms(5);
-	for (size_t i = 0; i < 5; i++)
-	{
-		permutation[i] = i;
-		atoms[i] = "H ";
-	}
-	atoms[0] = "C ";
-	atoms[1] = "C ";
-	vector<int> bidentateAtomsChosen(2);
-	bidentateAtomsChosen[0] = 0;
-	bidentateAtomsChosen[1] = 1;
-
-	ci_.rotationTest(atoms, bidentateAtomsChosen);
-
-	ofstream of_("printCauchy.xyz");
-	ci_.printMolecule(permutation, atoms, bidentateAtomsChosen,of_);
-	of_.close();
-	*/
-	ci_.generateAllIndependentIsomersIO();
-
+{	
+	clock_t begin = clock();
+	CauchyIndex ci_(9);
+	vector<string> atoms;
+	vector<int> bidentaChos;
+	ci_.rotationTest(atoms, bidentaChos);
+	//ci_.generateAllIndependentIsomers();
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;
 
 	// ATENCAO - CADASTRAR OS PONTOS HARDIN COM 12 CASAS
 
@@ -196,8 +182,14 @@ int main()
 	-> FIND ISOMERS - WORKING
 	*/
 
-//	FindIsomers findIso_;	
-//	findIso_.start();
+	/* CHECAR LumpacViewInput.txt para informacoes do input
+	clock_t begin = clock();
+	FindIsomers findIso_;	
+	findIso_.start();
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;
+	*/
 
 	/* CALCULANDO O COMPLEXO A PARTIR DOS CODIGOS 
 	VERIFICAR - DOALLPERMUTATIONS

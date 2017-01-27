@@ -1138,12 +1138,13 @@ void CauchyIndex::setSystem(int system)
 		mol0[11].y = 0.00000000;
 		mol0[11].z = -1.00000000;
 		cutAngle = auxMath_._pi / 2.0e0;
-		vectorRotations.resize(240);
+		vectorRotations.resize(236);
 		// 4 c5 para cada um dos 6 pontos principais (12 c5 e 12 c52)
 		// 2 c3 pra cada face unica (20 c3) 
 		// c2 para cada aresta (10 no topo e 5 ao redor = 15)
 		//add rotations
-		// c12 - 0
+		// 0 por cima
+		// c5 - 0
 		vectorRotations[0] = mol0[0].x;
 		vectorRotations[1] = mol0[0].y;
 		vectorRotations[2] = mol0[0].z;
@@ -1161,7 +1162,388 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations[14] = mol0[0].z;
 		vectorRotations[15] = (8.0e0 * auxMath_._pi / 5.0e0);
 
+		// c5 - 1
+		vectorRotations[16] = mol0[1].x;
+		vectorRotations[17] = mol0[1].y;
+		vectorRotations[18] = mol0[1].z;
+		vectorRotations[19] = (2.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[20] = mol0[1].x;
+		vectorRotations[21] = mol0[1].y;
+		vectorRotations[22] = mol0[1].z;
+		vectorRotations[23] = (4.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[24] = mol0[1].x;
+		vectorRotations[25] = mol0[1].y;
+		vectorRotations[26] = mol0[1].z;
+		vectorRotations[27] = (6.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[28] = mol0[1].x;
+		vectorRotations[29] = mol0[1].y;
+		vectorRotations[30] = mol0[1].z;
+		vectorRotations[31] = (8.0e0 * auxMath_._pi / 5.0e0);
 
+		// c5 - 2
+		vectorRotations[32] = mol0[2].x;
+		vectorRotations[33] = mol0[2].y;
+		vectorRotations[34] = mol0[2].z;
+		vectorRotations[35] = (2.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[36] = mol0[2].x;
+		vectorRotations[37] = mol0[2].y;
+		vectorRotations[38] = mol0[2].z;
+		vectorRotations[39] = (4.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[40] = mol0[2].x;
+		vectorRotations[41] = mol0[2].y;
+		vectorRotations[42] = mol0[2].z;
+		vectorRotations[43] = (6.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[44] = mol0[2].x;
+		vectorRotations[45] = mol0[2].y;
+		vectorRotations[46] = mol0[2].z;
+		vectorRotations[47] = (8.0e0 * auxMath_._pi / 5.0e0);
+
+		// c5 - 3
+		vectorRotations[48] = mol0[3].x;
+		vectorRotations[49] = mol0[3].y;
+		vectorRotations[50] = mol0[3].z;
+		vectorRotations[51] = (2.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[52] = mol0[3].x;
+		vectorRotations[53] = mol0[3].y;
+		vectorRotations[54] = mol0[3].z;
+		vectorRotations[55] = (4.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[56] = mol0[3].x;
+		vectorRotations[57] = mol0[3].y;
+		vectorRotations[58] = mol0[3].z;
+		vectorRotations[59] = (6.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[60] = mol0[3].x;
+		vectorRotations[61] = mol0[3].y;
+		vectorRotations[62] = mol0[3].z;
+		vectorRotations[63] = (8.0e0 * auxMath_._pi / 5.0e0);
+
+		// c5 - 4
+		vectorRotations[64] = mol0[4].x;
+		vectorRotations[65] = mol0[4].y;
+		vectorRotations[66] = mol0[4].z;
+		vectorRotations[67] = (2.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[68] = mol0[4].x;
+		vectorRotations[69] = mol0[4].y;
+		vectorRotations[70] = mol0[4].z;
+		vectorRotations[71] = (4.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[72] = mol0[4].x;
+		vectorRotations[73] = mol0[4].y;
+		vectorRotations[74] = mol0[4].z;
+		vectorRotations[75] = (6.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[76] = mol0[4].x;
+		vectorRotations[77] = mol0[4].y;
+		vectorRotations[78] = mol0[4].z;
+		vectorRotations[79] = (8.0e0 * auxMath_._pi / 5.0e0);
+
+		// c5 - 5
+		vectorRotations[80] = mol0[5].x;
+		vectorRotations[81] = mol0[5].y;
+		vectorRotations[82] = mol0[5].z;
+		vectorRotations[83] = (2.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[84] = mol0[5].x;
+		vectorRotations[85] = mol0[5].y;
+		vectorRotations[86] = mol0[5].z;
+		vectorRotations[87] = (4.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[88] = mol0[5].x;
+		vectorRotations[89] = mol0[5].y;
+		vectorRotations[90] = mol0[5].z;
+		vectorRotations[91] = (6.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[92] = mol0[5].x;
+		vectorRotations[93] = mol0[5].y;
+		vectorRotations[94] = mol0[5].z;
+		vectorRotations[95] = (8.0e0 * auxMath_._pi / 5.0e0);
+
+		auxReferenceAxis.resize(3);
+		// c3 pra cada face
+		// 0-1-2
+		auxReferenceAxis[0] = (mol0[0].x + mol0[1].x + mol0[2].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[1].y + mol0[2].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[1].z + mol0[2].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[96] = auxReferenceAxis[0];
+		vectorRotations[97] = auxReferenceAxis[1];
+		vectorRotations[98] = auxReferenceAxis[2];
+		vectorRotations[99] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[100] = auxReferenceAxis[0];
+		vectorRotations[101] = auxReferenceAxis[1];
+		vectorRotations[102] = auxReferenceAxis[2];
+		vectorRotations[103] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// 0-2-3
+		auxReferenceAxis[0] = (mol0[0].x + mol0[2].x + mol0[3].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[2].y + mol0[3].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[2].z + mol0[3].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[104] = auxReferenceAxis[0];
+		vectorRotations[105] = auxReferenceAxis[1];
+		vectorRotations[106] = auxReferenceAxis[2];
+		vectorRotations[107] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[108] = auxReferenceAxis[0];
+		vectorRotations[109] = auxReferenceAxis[1];
+		vectorRotations[110] = auxReferenceAxis[2];
+		vectorRotations[111] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// 0-3-4
+		auxReferenceAxis[0] = (mol0[0].x + mol0[3].x + mol0[4].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[3].y + mol0[4].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[3].z + mol0[4].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[112] = auxReferenceAxis[0];
+		vectorRotations[113] = auxReferenceAxis[1];
+		vectorRotations[114] = auxReferenceAxis[2];
+		vectorRotations[115] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[116] = auxReferenceAxis[0];
+		vectorRotations[117] = auxReferenceAxis[1];
+		vectorRotations[118] = auxReferenceAxis[2];
+		vectorRotations[119] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// 0-4-5
+		auxReferenceAxis[0] = (mol0[0].x + mol0[4].x + mol0[5].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[4].y + mol0[5].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[4].z + mol0[5].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[120] = auxReferenceAxis[0];
+		vectorRotations[121] = auxReferenceAxis[1];
+		vectorRotations[122] = auxReferenceAxis[2];
+		vectorRotations[123] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[124] = auxReferenceAxis[0];
+		vectorRotations[125] = auxReferenceAxis[1];
+		vectorRotations[126] = auxReferenceAxis[2];
+		vectorRotations[127] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// 0-5-1
+		auxReferenceAxis[0] = (mol0[0].x + mol0[5].x + mol0[1].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[5].y + mol0[1].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[5].z + mol0[1].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[128] = auxReferenceAxis[0];
+		vectorRotations[129] = auxReferenceAxis[1];
+		vectorRotations[130] = auxReferenceAxis[2];
+		vectorRotations[131] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[132] = auxReferenceAxis[0];
+		vectorRotations[133] = auxReferenceAxis[1];
+		vectorRotations[134] = auxReferenceAxis[2];
+		vectorRotations[135] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// 3-8-4
+		auxReferenceAxis[0] = (mol0[3].x + mol0[8].x + mol0[4].x);
+		auxReferenceAxis[1] = (mol0[3].y + mol0[8].y + mol0[4].y);
+		auxReferenceAxis[2] = (mol0[3].z + mol0[8].z + mol0[4].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[136] = auxReferenceAxis[0];
+		vectorRotations[137] = auxReferenceAxis[1];
+		vectorRotations[138] = auxReferenceAxis[2];
+		vectorRotations[139] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[140] = auxReferenceAxis[0];
+		vectorRotations[141] = auxReferenceAxis[1];
+		vectorRotations[142] = auxReferenceAxis[2];
+		vectorRotations[143] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// 8-4-9
+		auxReferenceAxis[0] = (mol0[8].x + mol0[4].x + mol0[9].x);
+		auxReferenceAxis[1] = (mol0[8].y + mol0[4].y + mol0[9].y);
+		auxReferenceAxis[2] = (mol0[8].z + mol0[4].z + mol0[9].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[144] = auxReferenceAxis[0];
+		vectorRotations[145] = auxReferenceAxis[1];
+		vectorRotations[146] = auxReferenceAxis[2];
+		vectorRotations[147] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[148] = auxReferenceAxis[0];
+		vectorRotations[149] = auxReferenceAxis[1];
+		vectorRotations[150] = auxReferenceAxis[2];
+		vectorRotations[151] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// 4-9-5
+		auxReferenceAxis[0] = (mol0[4].x + mol0[9].x + mol0[5].x);
+		auxReferenceAxis[1] = (mol0[4].y + mol0[9].y + mol0[5].y);
+		auxReferenceAxis[2] = (mol0[4].z + mol0[9].z + mol0[5].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[152] = auxReferenceAxis[0];
+		vectorRotations[153] = auxReferenceAxis[1];
+		vectorRotations[154] = auxReferenceAxis[2];
+		vectorRotations[155] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[156] = auxReferenceAxis[0];
+		vectorRotations[157] = auxReferenceAxis[1];
+		vectorRotations[158] = auxReferenceAxis[2];
+		vectorRotations[159] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// 9-5-10
+		auxReferenceAxis[0] = (mol0[9].x + mol0[5].x + mol0[10].x);
+		auxReferenceAxis[1] = (mol0[9].y + mol0[5].y + mol0[10].y);
+		auxReferenceAxis[2] = (mol0[9].z + mol0[5].z + mol0[10].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[160] = auxReferenceAxis[0];
+		vectorRotations[161] = auxReferenceAxis[1];
+		vectorRotations[162] = auxReferenceAxis[2];
+		vectorRotations[163] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[164] = auxReferenceAxis[0];
+		vectorRotations[165] = auxReferenceAxis[1];
+		vectorRotations[166] = auxReferenceAxis[2];
+		vectorRotations[167] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// 5-10-1
+		auxReferenceAxis[0] = (mol0[10].x + mol0[5].x + mol0[1].x);
+		auxReferenceAxis[1] = (mol0[10].y + mol0[5].y + mol0[1].y);
+		auxReferenceAxis[2] = (mol0[10].z + mol0[5].z + mol0[1].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[168] = auxReferenceAxis[0];
+		vectorRotations[169] = auxReferenceAxis[1];
+		vectorRotations[170] = auxReferenceAxis[2];
+		vectorRotations[171] = 2.0e0 * auxMath_._pi / 3.0e0;
+		vectorRotations[172] = auxReferenceAxis[0];
+		vectorRotations[173] = auxReferenceAxis[1];
+		vectorRotations[174] = auxReferenceAxis[2];
+		vectorRotations[175] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		// c2 nas arestas
+		// 0-1
+		auxReferenceAxis[0] = (mol0[0].x + mol0[1].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[1].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[1].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[176] = auxReferenceAxis[0];
+		vectorRotations[177] = auxReferenceAxis[1];
+		vectorRotations[178] = auxReferenceAxis[2];
+		vectorRotations[179] = auxMath_._pi;
+
+		// 0-2
+		auxReferenceAxis[0] = (mol0[0].x + mol0[2].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[2].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[2].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[180] = auxReferenceAxis[0];
+		vectorRotations[181] = auxReferenceAxis[1];
+		vectorRotations[182] = auxReferenceAxis[2];
+		vectorRotations[183] = auxMath_._pi;
+
+		// 0-3
+		auxReferenceAxis[0] = (mol0[0].x + mol0[3].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[3].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[3].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[184] = auxReferenceAxis[0];
+		vectorRotations[185] = auxReferenceAxis[1];
+		vectorRotations[186] = auxReferenceAxis[2];
+		vectorRotations[187] = auxMath_._pi;
+
+		// 0-4
+		auxReferenceAxis[0] = (mol0[0].x + mol0[4].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[4].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[4].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[188] = auxReferenceAxis[0];
+		vectorRotations[189] = auxReferenceAxis[1];
+		vectorRotations[190] = auxReferenceAxis[2];
+		vectorRotations[191] = auxMath_._pi;
+
+		// 0-5
+		auxReferenceAxis[0] = (mol0[0].x + mol0[5].x);
+		auxReferenceAxis[1] = (mol0[0].y + mol0[5].y);
+		auxReferenceAxis[2] = (mol0[0].z + mol0[5].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[192] = auxReferenceAxis[0];
+		vectorRotations[193] = auxReferenceAxis[1];
+		vectorRotations[194] = auxReferenceAxis[2];
+		vectorRotations[195] = auxMath_._pi;
+
+		// 1-2
+		auxReferenceAxis[0] = (mol0[1].x + mol0[2].x);
+		auxReferenceAxis[1] = (mol0[1].y + mol0[2].y);
+		auxReferenceAxis[2] = (mol0[1].z + mol0[2].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[196] = auxReferenceAxis[0];
+		vectorRotations[197] = auxReferenceAxis[1];
+		vectorRotations[198] = auxReferenceAxis[2];
+		vectorRotations[199] = auxMath_._pi;
+
+		// 2-3
+		auxReferenceAxis[0] = (mol0[2].x + mol0[3].x);
+		auxReferenceAxis[1] = (mol0[2].y + mol0[3].y);
+		auxReferenceAxis[2] = (mol0[2].z + mol0[3].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[200] = auxReferenceAxis[0];
+		vectorRotations[201] = auxReferenceAxis[1];
+		vectorRotations[202] = auxReferenceAxis[2];
+		vectorRotations[203] = auxMath_._pi;
+
+		// 3-4
+		auxReferenceAxis[0] = (mol0[3].x + mol0[4].x);
+		auxReferenceAxis[1] = (mol0[3].y + mol0[4].y);
+		auxReferenceAxis[2] = (mol0[3].z + mol0[4].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[204] = auxReferenceAxis[0];
+		vectorRotations[205] = auxReferenceAxis[1];
+		vectorRotations[206] = auxReferenceAxis[2];
+		vectorRotations[207] = auxMath_._pi;
+
+		// 4-5
+		auxReferenceAxis[0] = (mol0[4].x + mol0[5].x);
+		auxReferenceAxis[1] = (mol0[4].y + mol0[5].y);
+		auxReferenceAxis[2] = (mol0[4].z + mol0[5].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[208] = auxReferenceAxis[0];
+		vectorRotations[209] = auxReferenceAxis[1];
+		vectorRotations[210] = auxReferenceAxis[2];
+		vectorRotations[211] = auxMath_._pi;
+
+		// 5-1
+		auxReferenceAxis[0] = (mol0[5].x + mol0[1].x);
+		auxReferenceAxis[1] = (mol0[5].y + mol0[1].y);
+		auxReferenceAxis[2] = (mol0[5].z + mol0[1].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[212] = auxReferenceAxis[0];
+		vectorRotations[213] = auxReferenceAxis[1];
+		vectorRotations[214] = auxReferenceAxis[2];
+		vectorRotations[215] = auxMath_._pi;
+
+		// 1-6
+		auxReferenceAxis[0] = (mol0[1].x + mol0[6].x);
+		auxReferenceAxis[1] = (mol0[1].y + mol0[6].y);
+		auxReferenceAxis[2] = (mol0[1].z + mol0[6].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[216] = auxReferenceAxis[0];
+		vectorRotations[217] = auxReferenceAxis[1];
+		vectorRotations[218] = auxReferenceAxis[2];
+		vectorRotations[219] = auxMath_._pi;
+
+		// 6-2
+		auxReferenceAxis[0] = (mol0[6].x + mol0[2].x);
+		auxReferenceAxis[1] = (mol0[6].y + mol0[2].y);
+		auxReferenceAxis[2] = (mol0[6].z + mol0[2].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[220] = auxReferenceAxis[0];
+		vectorRotations[221] = auxReferenceAxis[1];
+		vectorRotations[222] = auxReferenceAxis[2];
+		vectorRotations[223] = auxMath_._pi;
+
+		// 2-7
+		auxReferenceAxis[0] = (mol0[2].x + mol0[7].x);
+		auxReferenceAxis[1] = (mol0[2].y + mol0[7].y);
+		auxReferenceAxis[2] = (mol0[2].z + mol0[7].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[224] = auxReferenceAxis[0];
+		vectorRotations[225] = auxReferenceAxis[1];
+		vectorRotations[226] = auxReferenceAxis[2];
+		vectorRotations[227] = auxMath_._pi;
+
+		// 7-3
+		auxReferenceAxis[0] = (mol0[7].x + mol0[3].x);
+		auxReferenceAxis[1] = (mol0[7].y + mol0[3].y);
+		auxReferenceAxis[2] = (mol0[7].z + mol0[3].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[228] = auxReferenceAxis[0];
+		vectorRotations[229] = auxReferenceAxis[1];
+		vectorRotations[230] = auxReferenceAxis[2];
+		vectorRotations[231] = auxMath_._pi;
+
+		// 3-8
+		auxReferenceAxis[0] = (mol0[3].x + mol0[8].x);
+		auxReferenceAxis[1] = (mol0[3].y + mol0[8].y);
+		auxReferenceAxis[2] = (mol0[3].z + mol0[8].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[232] = auxReferenceAxis[0];
+		vectorRotations[233] = auxReferenceAxis[1];
+		vectorRotations[234] = auxReferenceAxis[2];
+		vectorRotations[235] = auxMath_._pi;
 		break;
 
 	default:

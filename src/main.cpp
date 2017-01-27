@@ -50,7 +50,7 @@ void buildComplexWithALotOfIsomersAndDoWater(
 int main()
 {	
 	clock_t begin = clock();
-	CauchyIndex ci_(6);
+	CauchyIndex ci_(12);
 	vector<string> atoms;
 	vector<int> bidentaChos;
 	ci_.rotationTest(atoms, bidentaChos);

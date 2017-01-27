@@ -785,8 +785,6 @@ void CauchyIndex::setSystem(int system)
 		break;
 
 
-
-
 	case 7:
 		mol0.resize(7);
 		mol0[0].x = 0.00000000;
@@ -1107,7 +1105,7 @@ void CauchyIndex::setSystem(int system)
 		mol0[0].y = 0.00000000;
 		mol0[0].z = 1.00000000;
 		mol0[1].x = 0.89442719;
-		mol0[1].y = 0.000;
+		mol0[1].y = 0.00000000;
 		mol0[1].z = 0.44721360;
 		mol0[2].x = 0.27639320;
 		mol0[2].y = 0.85065081;
@@ -1140,7 +1138,30 @@ void CauchyIndex::setSystem(int system)
 		mol0[11].y = 0.00000000;
 		mol0[11].z = -1.00000000;
 		cutAngle = auxMath_._pi / 2.0e0;
-		// add rotations
+		vectorRotations.resize(240);
+		// 4 c5 para cada um dos 6 pontos principais (12 c5 e 12 c52)
+		// 2 c3 pra cada face unica (20 c3) 
+		// c2 para cada aresta (10 no topo e 5 ao redor = 15)
+		//add rotations
+		// c12 - 0
+		vectorRotations[0] = mol0[0].x;
+		vectorRotations[1] = mol0[0].y;
+		vectorRotations[2] = mol0[0].z;
+		vectorRotations[3] = (2.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[4] = mol0[0].x;
+		vectorRotations[5] = mol0[0].y;
+		vectorRotations[6] = mol0[0].z;
+		vectorRotations[7] = (4.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[8] = mol0[0].x;
+		vectorRotations[9] = mol0[0].y;
+		vectorRotations[10] = mol0[0].z;
+		vectorRotations[11] = (6.0e0 * auxMath_._pi / 5.0e0);
+		vectorRotations[12] = mol0[0].x;
+		vectorRotations[13] = mol0[0].y;
+		vectorRotations[14] = mol0[0].z;
+		vectorRotations[15] = (8.0e0 * auxMath_._pi / 5.0e0);
+
+
 		break;
 
 	default:

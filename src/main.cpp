@@ -50,11 +50,36 @@ void buildComplexWithALotOfIsomersAndDoWater(
 int main()
 {	
 	clock_t begin = clock();
-	CauchyIndex ci_(12);
+	CauchyIndex ci_(6);
 	vector<string> atoms;
 	vector<int> bidentaChos;
-	ci_.rotationTest(atoms, bidentaChos);
+	//ci_.rotationTest(atoms, bidentaChos);
 	//ci_.generateAllIndependentIsomers();
+
+	vector<int> bidentateAtomsChosen;
+	vector<int> atomTypes(6);
+	vector<int> permutationIsomer1(6);
+	vector<int> permutationIsomer2(6);
+
+	for (size_t i = 0; i < 6; i++)
+	{
+		atomTypes[i] = i;
+		permutationIsomer1[i] = i;
+		permutationIsomer2[i] = i;
+	}
+	permutationIsomer2[0] = 3;
+	permutationIsomer2[3] = 0;
+	atomTypes[3] = 0;
+	bool compare = ci_.compareTwoIsomers(
+		atomTypes,
+		bidentateAtomsChosen,
+		permutationIsomer1,
+		permutationIsomer2);
+
+
+
+
+
 	clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;

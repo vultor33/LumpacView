@@ -48,11 +48,18 @@ public:
 
 	void generateAllIndependentIsomersIO();
 
+	bool compareTwoIsomers(
+		std::vector<int> & atomTypes,
+		std::vector<int> & bidentateAtomsChosen,
+		std::vector<int> & permutationIsomer1,
+		std::vector<int> & permutationIsomer2
+		);
+
 private:
 	//data rotations
 	std::vector<CoordXYZ> mol0;
-	std::vector<CoordXYZ> molBidentate;
-	std::vector< std::vector<int> > bidentateMap;
+	std::vector<CoordXYZ> molBidentate; // all bidentate possible positions marked with atoms.
+	std::vector< std::vector<int> > bidentateMap; // between i and j we have k. K position is the same shown on molBidentate.
 	std::vector<cauchyRotation> allRotationsMatrix;
 	std::vector< std::vector<int> > allRotationTransforms;
 	std::vector<std::string> bidentateLabels;
@@ -73,6 +80,7 @@ private:
 		const std::vector<int> & permutation,
 		const std::vector<std::string> & atoms,
 		const std::vector<int> & bidentateAtomsChosen);
+
 
 	unsigned int factorial(unsigned int n);
 

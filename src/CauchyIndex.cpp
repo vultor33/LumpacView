@@ -183,6 +183,46 @@ void CauchyIndex::generateAllIndependentIsomersIO()
 	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;
 }
 
+// atomTypes is always refered to zero permutation
+bool CauchyIndex::compareTwoIsomers(
+	std::vector<int>& atomTypes,
+	std::vector<int>& bidentateAtomsChosen,
+	std::vector<int>& permutationIsomer1, 
+	std::vector<int>& permutationIsomer2)
+{
+	size_t size = mol0.size();
+	vector<int> types1(size);
+	vector<int> types2(size);
+	for (size_t i = 0; i < size; i++)
+	{
+		types1[i] = atomTypes[permutationIsomer1[i]];
+		types2[i] = atomTypes[permutationIsomer2[i]];
+	}
+	if (types1 == types2)
+	{
+		return true;
+		// bla bla bla
+	}
+	for (size_t j = 0; j < allRotationTransforms.size(); j++)
+	{
+		vector<int> auxPerm = applyRotation(permutationIsomer2, j);
+		for (size_t i = 0; i < size; i++)
+		{
+			types1[i] = atomTypes[permutationIsomer1[i]];
+			types2[i] = atomTypes[auxPerm[i]];
+		}
+		if (types1 == types2)
+		{
+			return true;
+			//sao igais
+			// se forem iguais
+			// ---------- verifique o bidentado
+		}
+	}
+
+	return false;
+}
+
 void CauchyIndex::rotationTest(
 	vector<string> & atoms, 
 	vector<int> & bidentateAtomsChosen)
@@ -417,9 +457,7 @@ void CauchyIndex::printMolecule(
 		for (size_t i = 0; i < atoms.size(); i++)
 			permutation[i] = i;
 	}
-
 	vector<int> bidentateAtomsChosenRotated = applyPermutation(permutation, atoms, bidentateAtomsChosen);
-
 	vector<CoordXYZ> bidentates;
 	int k = 0;
 	for (size_t i = 0; i < bidentateAtomsChosen.size(); i+=2)
@@ -433,7 +471,6 @@ void CauchyIndex::printMolecule(
 		k++;
 		bidentates.push_back(auxBidentateAtom);
 	}
-
 	int nAtoms = mol0.size() + bidentates.size();
 	printFile_ << nAtoms << endl << "title" << endl;
 	for (int i = 0; i < nAtoms; i++)
@@ -494,6 +531,19 @@ vector<int> CauchyIndex::readCauchyNotations(ifstream & openendFile_)
 	}
 	return notation;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

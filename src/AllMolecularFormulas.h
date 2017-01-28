@@ -30,6 +30,7 @@ private:
 	//functions
 	void clearEqualCombinations(std::string combFile);
 
+	// 3 entries: 0-mono ; 1-bisymmetric ; 2-biassymetric.
 	std::vector< std::vector<int> > stringToNumber(std::string entryString);
 
 	std::string codeToString(std::vector< std::vector<int> > & codeLine);

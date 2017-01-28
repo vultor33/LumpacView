@@ -48,10 +48,19 @@ public:
 
 	void generateAllIndependentIsomersIO();
 
+	void generateAllIndependentIsomersRuntimeRotations();
+
+
 	//0-true ; 1-false ; 2-bidentate problem
 	int compareTwoIsomers(
 		std::vector<int> & atomTypes,
 		std::vector<int> & bidentateAtomsChosen,
+		std::vector<int> & permutationIsomer1,
+		std::vector<int> & permutationIsomer2
+		);
+
+	// true = equal || cant use the same permutation
+	bool compareTwoIsomersAtoms(
 		std::vector<int> & permutationIsomer1,
 		std::vector<int> & permutationIsomer2
 		);

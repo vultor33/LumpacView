@@ -183,6 +183,69 @@ void CauchyIndex::generateAllIndependentIsomersIO()
 	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;
 }
 
+
+void CauchyIndex::generateAllIndependentIsomersRuntimeRotations()
+{
+	systemSize = mol0.size();
+	int size = factorial(systemSize); // 10+ explosion
+	nRotations = allRotationTransforms.size() + 1;
+	//vector< vector<int> > allPermutations(size / nRotations);
+	vector< vector<int> > allPermutations;
+	size_t isomerCounter = 0;
+	bool equal;
+
+	int * myints;
+	myints = new int[systemSize];
+	for (size_t i = 0; i < systemSize; i++)
+		myints[i] = i;
+	std::sort(myints, myints + systemSize);
+	vector<int> permutation(systemSize);
+
+	int k = 0; //fredmudar
+	do
+	{
+		k++;
+		if (k % 1000 == 0)
+			cout << "k:  " << k << endl;
+
+		equal = false;
+
+		for (size_t i = 0; i < systemSize; i++)
+			permutation[i] = myints[i];
+
+		//for (size_t i = 0; i < isomerCounter; i++)
+		for (size_t i = 0; i < allPermutations.size(); i++)
+		{
+			equal = compareTwoIsomersAtoms(allPermutations[i], permutation);
+			if (equal)
+				break;
+		}
+		if (!equal)
+		{
+			allPermutations.push_back(permutation);
+			//allPermutations[isomerCounter] = permutation;
+			//isomerCounter++;
+		}
+
+	} while (std::next_permutation(myints, myints + systemSize));
+
+	ofstream of_("printFinalPermutations.txt");
+
+	for (size_t i = 0; i < allPermutations.size(); i++)
+	{
+		for (size_t j = 0; j < systemSize; j++)
+		{
+			of_ << allPermutations[i][j] << "  ";
+		}
+		of_ << endl;
+	}
+
+	delete[] myints;
+}
+
+
+
+
 int CauchyIndex::compareTwoIsomers(
 	std::vector<int>& atomTypes,
 	std::vector<int>& bidentateAtomsChosen,
@@ -234,6 +297,19 @@ int CauchyIndex::compareTwoIsomers(
 		}
 	}
 	return 1;
+}
+
+bool CauchyIndex::compareTwoIsomersAtoms(
+	std::vector<int>& permutationIsomer1, 
+	std::vector<int>& permutationIsomer2)
+{
+	for (size_t j = 0; j < allRotationTransforms.size(); j++)
+	{
+		vector<int> auxPerm = applyRotation(permutationIsomer2, j);
+		if (permutationIsomer1 == auxPerm)
+			return true;
+	}
+	return false;
 }
 
 void CauchyIndex::rotationTest(
@@ -311,7 +387,7 @@ std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 				(molRot[i].y - mol[j].y) * (molRot[i].y - mol[j].y) +
 				(molRot[i].z - mol[j].z) * (molRot[i].z - mol[j].z));
 			
-			cout << "i:  " << i << " j: " << j << "  dist: " << atomPosition << endl;
+			//cout << "i:  " << i << " j: " << j << "  dist: " << atomPosition << endl;
 			if (atomPosition < 1.0e-2)
 			{
 				cauchy[i] = j;

@@ -183,8 +183,7 @@ void CauchyIndex::generateAllIndependentIsomersIO()
 	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;
 }
 
-// atomTypes is always refered to zero permutation
-bool CauchyIndex::compareTwoIsomers(
+int CauchyIndex::compareTwoIsomers(
 	std::vector<int>& atomTypes,
 	std::vector<int>& bidentateAtomsChosen,
 	std::vector<int>& permutationIsomer1, 
@@ -198,10 +197,20 @@ bool CauchyIndex::compareTwoIsomers(
 		types1[i] = atomTypes[permutationIsomer1[i]];
 		types2[i] = atomTypes[permutationIsomer2[i]];
 	}
+	vector<int> bidPos1 = applyPermutationBidentates(permutationIsomer1, bidentateAtomsChosen);
+	if (bidPos1.size() == 0 && bidentateAtomsChosen.size() != 0)
+	{
+		return 2;
+	}
 	if (types1 == types2)
 	{
-		return true;
-		// bla bla bla
+		vector<int> bidPos2 = applyPermutationBidentates(permutationIsomer2, bidentateAtomsChosen);
+		if (bidPos2.size() == 0 && bidentateAtomsChosen.size() != 0)
+		{
+			return 2;
+		}
+		if (bidPos1 == bidPos2)
+			return 0;
 	}
 	for (size_t j = 0; j < allRotationTransforms.size(); j++)
 	{
@@ -213,14 +222,18 @@ bool CauchyIndex::compareTwoIsomers(
 		}
 		if (types1 == types2)
 		{
-			return true;
-			//sao igais
-			// se forem iguais
-			// ---------- verifique o bidentado
+			vector<int> bidPos2 = applyPermutationBidentates(auxPerm, bidentateAtomsChosen);
+			if (bidPos2.size() == 0 && bidentateAtomsChosen.size() != 0)
+			{
+				//fred apagar -- rotacoes nunca levam bidentados a posicoes proibidas.
+				cout << "CauchyIndex::compareTwoIsomers( stop" << endl;
+				exit(1);
+			}
+			if (bidPos1 == bidPos2)
+				return 0;
 		}
 	}
-
-	return false;
+	return 1;
 }
 
 void CauchyIndex::rotationTest(
@@ -419,17 +432,17 @@ vector<int> CauchyIndex::applyRotation(
 	return permRot;
 }
 
-std::vector<int> CauchyIndex::applyPermutation(
+std::vector<int> CauchyIndex::applyPermutationCoordinates(
 	const std::vector<int> & permutation, 
 	const std::vector<std::string> & atoms,
 	const std::vector<int> & bidentateAtomsChosen)
 {
 	size_t size = atoms.size();
-	vector<int> bidentateAtomsChosenRotated = bidentateAtomsChosen;
 	for (size_t i = 0; i < size; i++)
 	{
 		mol0[i].atomlabel = atoms[permutation[i]];
 	}
+	vector<int> bidentateAtomsChosenRotated = bidentateAtomsChosen;
 	for (size_t i = 0; i < bidentateAtomsChosenRotated.size(); i++)
 	{
 		for (size_t j = 0; j < size; j++)
@@ -442,6 +455,34 @@ std::vector<int> CauchyIndex::applyPermutation(
 		}
 	}
 	return bidentateAtomsChosenRotated;
+}
+
+std::vector<int> CauchyIndex::applyPermutationBidentates(
+	const std::vector<int>& permutation, 
+	const std::vector<int>& bidentateAtomsChosen)
+{
+	size_t size = permutation.size();
+	vector<int> bidentateAtomsChosenRotated = bidentateAtomsChosen;
+	for (size_t i = 0; i < bidentateAtomsChosenRotated.size(); i++)
+	{
+		for (size_t j = 0; j < size; j++)
+		{
+			if (permutation[j] == bidentateAtomsChosenRotated[i])
+			{
+				bidentateAtomsChosenRotated[i] = j;
+				break;
+			}
+		}
+	}
+	vector<int> bidentatePositions;
+	for (size_t i = 0; i < bidentateAtomsChosen.size(); i += 2)
+	{
+		int mapPositions = bidentateMap[bidentateAtomsChosenRotated[i]][bidentateAtomsChosenRotated[i + 1]];
+		if (mapPositions == -1)
+			return vector<int>();
+		bidentatePositions.push_back(mapPositions);
+	}
+	return bidentatePositions;
 }
 
 
@@ -457,7 +498,7 @@ void CauchyIndex::printMolecule(
 		for (size_t i = 0; i < atoms.size(); i++)
 			permutation[i] = i;
 	}
-	vector<int> bidentateAtomsChosenRotated = applyPermutation(permutation, atoms, bidentateAtomsChosen);
+	vector<int> bidentateAtomsChosenRotated = applyPermutationCoordinates(permutation, atoms, bidentateAtomsChosen);
 	vector<CoordXYZ> bidentates;
 	int k = 0;
 	for (size_t i = 0; i < bidentateAtomsChosen.size(); i+=2)
@@ -663,7 +704,7 @@ void CauchyIndex::setSystem(int system)
 		mol0[5].x = 0.00000000;
 		mol0[5].y = 0.00000000;
 		mol0[5].z = -1.00000000;
-		cutAngle = auxMath_._pi / 2.0e0;
+		cutAngle = 2.0e0 * auxMath_._pi / 3.0e0;
 		auxReferenceAxis.resize(3);
 		vectorRotations.resize(92);
 		// 1 c3 por face.

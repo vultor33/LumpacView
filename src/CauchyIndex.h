@@ -48,7 +48,8 @@ public:
 
 	void generateAllIndependentIsomersIO();
 
-	bool compareTwoIsomers(
+	//0-true ; 1-false ; 2-bidentate problem
+	int compareTwoIsomers(
 		std::vector<int> & atomTypes,
 		std::vector<int> & bidentateAtomsChosen,
 		std::vector<int> & permutationIsomer1,
@@ -76,9 +77,13 @@ private:
 
 	std::vector<int> applyRotation(const std::vector<int> & permutation, int iRotation);
 
-	std::vector<int> applyPermutation(
+	std::vector<int> applyPermutationCoordinates(
 		const std::vector<int> & permutation,
 		const std::vector<std::string> & atoms,
+		const std::vector<int> & bidentateAtomsChosen);
+
+	std::vector<int> applyPermutationBidentates(
+		const std::vector<int> & permutation,
 		const std::vector<int> & bidentateAtomsChosen);
 
 

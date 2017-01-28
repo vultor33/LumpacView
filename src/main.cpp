@@ -60,25 +60,29 @@ int main()
 	vector<int> atomTypes(6);
 	vector<int> permutationIsomer1(6);
 	vector<int> permutationIsomer2(6);
-
 	for (size_t i = 0; i < 6; i++)
 	{
-		atomTypes[i] = i;
+		atomTypes[i] = 0;
 		permutationIsomer1[i] = i;
 		permutationIsomer2[i] = i;
 	}
-	permutationIsomer2[0] = 3;
-	permutationIsomer2[3] = 0;
-	atomTypes[3] = 0;
-	bool compare = ci_.compareTwoIsomers(
+	permutationIsomer2[1] = 2;
+	permutationIsomer2[2] = 3;
+	permutationIsomer2[3] = 4;
+	permutationIsomer2[4] = 1;
+	//	atomTypes[3] = 0;
+	bidentateAtomsChosen.resize(6);
+	bidentateAtomsChosen[0] = 0;
+	bidentateAtomsChosen[1] = 1;
+	bidentateAtomsChosen[2] = 2;
+	bidentateAtomsChosen[3] = 3;
+	bidentateAtomsChosen[4] = 4;
+	bidentateAtomsChosen[5] = 5;
+	int compare = ci_.compareTwoIsomers(
 		atomTypes,
 		bidentateAtomsChosen,
 		permutationIsomer1,
 		permutationIsomer2);
-
-
-
-
 
 	clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;

@@ -24,7 +24,6 @@ CauchyIndex::CauchyIndex(int iSystem)
 	bidentateLabels[3] = "Kr";
 	bidentateLabels[4] = "Xe";
 	bidentateLabels[5] = "Rn";
-
 	calculateAllIndexes(iSystem);
 }
 
@@ -98,8 +97,6 @@ void CauchyIndex::generateAllIndependentIsomers()
 			auxLiPermutation.rotPermutations = rotPermutations;
 			allPermutations.push_back(auxLiPermutation);
 		}
-
-
 	} while (std::next_permutation(myints, myints + systemSize));
 
 	cout << "estou no fim" << endl;
@@ -141,7 +138,6 @@ void CauchyIndex::generateAllIndependentIsomersIO()
 		equal = false;
 		for (size_t i = 0; i < systemSize; i++)
 			permutation[i] = myints[i];
-
 
 		// check if this permutation was already studied
 		if (k != 0)
@@ -304,27 +300,93 @@ void CauchyIndex::generateAllIndependentIsomersRuntimeRotationsAndReadBlock(stri
 }
 
 
-/*
-allmolecular formulas - eu tenho que ler o string com o codigo.
-stringToNumber - vai virar um vector com as quantidades
-                 de monodentados, bidentados simetricos e assimetricos
+void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, string code)
+{
+	vector<int> atomTypes;
+	vector<int> bidentateAtomChosen;
+	molecularFormulaToCauchyCode(code, atomTypes, bidentateAtomChosen);
 
-preciso transforma isso no meu codigo - atomtypes e bidentate atoms chosen.
-um cuidado precisa ser tomado no bidentate atoms chosen que eu nao posso comecar
-de um que o bidentado seja proibido, porque se nao ele e setado direto e
-atrapalha meu esquema. Tenho que comecar de um valido.
+	systemSize = mol0.size();
+	int size = factorial(systemSize);
+	nRotations = allRotationTransforms.size() + 1;
+	vector< vector<int> > allPermutations;
+	vector< vector<int> > blockPermutations;
+	ifstream openedFile_(blockFileName);
+	int compareResult;
+	bool equal;
+	while (true)
+	{
+		vector<int> auxBlock = readCauchyNotations(openedFile_);
+		if (auxBlock.size() == 0)
+			break;
+
+		equal = false;
+
+		for (size_t i = 0; i < allPermutations.size(); i++)
+		{
+			compareResult = compareTwoIsomersWithLabels(
+				atomTypes,
+				bidentateAtomChosen,
+				allPermutations[i],
+				auxBlock);
+
+			if (compareResult == 0 || compareResult == 2)
+				equal = true;
+
+			if (equal)
+				break;
+		}
+		if (!equal)
+			allPermutations.push_back(auxBlock);
+	}
+
+	ofstream of_((code + "-" + blockFileName).c_str());
+	for (size_t i = 0; i < allPermutations.size(); i++)
+	{
+		for (size_t j = 0; j < systemSize; j++)
+		{
+			of_ << allPermutations[i][j] << "  ";
+		}
+		of_ << endl;
+	}
+}
 
 
 
-*/
-
-void CauchyIndex::molecularFormulaToCauchyCode(string code)
+void CauchyIndex::molecularFormulaToCauchyCode(
+	string code, 
+	vector<int> & atomTypes,
+	vector<int> & bidentateAtomsChosen)
 {
 	AllMolecularFormulas allMolecular_;
 	vector< vector<int> > molecularCode = allMolecular_.stringToNumber(code);
-	vector<int> atomTypes;
-	vector<int> bidentateAtomsChosen;
 	int kType = 0;
+	for (size_t i = 0; i < molecularCode[2].size(); i++)
+	{
+		for (size_t j = 0; j < molecularCode[2][i]; j++)
+		{
+			atomTypes.push_back(kType);
+			atomTypes.push_back(kType + 1);
+		}
+		kType += 2;
+	}
+	for (size_t i = 0; i < molecularCode[1].size(); i++)
+	{
+		for (size_t j = 0; j < molecularCode[1][i]; j++)
+		{
+			atomTypes.push_back(kType);
+			atomTypes.push_back(kType);
+		}
+		kType++;
+	}
+	for (size_t i = 0; i < molecularCode[0].size(); i++)
+	{
+		for (size_t j = 0; j < molecularCode[0][i]; j++)
+		{
+			atomTypes.push_back(kType);
+		}
+		kType++;
+	}
 
 	int bidentateProblem;
 	vector<int> permutation(mol0.size());
@@ -337,29 +399,15 @@ void CauchyIndex::molecularFormulaToCauchyCode(string code)
 		{
 			for (size_t j = 0; j < molecularCode[2][i]; j++)
 			{
-				atomTypes.push_back(kType);
-				atomTypes.push_back(kType + 1);
 				setBidentateChosen(auxBidentateAtomsChosen);
 			}
-			kType += 2;
 		}
 		for (size_t i = 0; i < molecularCode[1].size(); i++)
 		{
 			for (size_t j = 0; j < molecularCode[1][i]; j++)
 			{
-				atomTypes.push_back(kType);
-				atomTypes.push_back(kType);
 				setBidentateChosen(auxBidentateAtomsChosen);
 			}
-			kType++;
-		}
-		for (size_t i = 0; i < molecularCode[0].size(); i++)
-		{
-			for (size_t j = 0; j < molecularCode[0][i]; j++)
-			{
-				atomTypes.push_back(kType);
-			}
-			kType++;
 		}
 		bidentateProblem = compareTwoIsomersWithLabels(
 			atomTypes,
@@ -374,7 +422,6 @@ void CauchyIndex::molecularFormulaToCauchyCode(string code)
 		}
 	} while (true);
 
-	return;
 }
 
 
@@ -413,13 +460,13 @@ int CauchyIndex::compareTwoIsomersWithLabels(
 	{
 		return 2;
 	}
+	vector<int> bidPos2 = applyPermutationBidentates(permutationIsomer2, bidentateAtomsChosen);
+	if (bidPos2.size() == 0 && bidentateAtomsChosen.size() != 0)
+	{
+		return 2;
+	}
 	if (types1 == types2)
 	{
-		vector<int> bidPos2 = applyPermutationBidentates(permutationIsomer2, bidentateAtomsChosen);
-		if (bidPos2.size() == 0 && bidentateAtomsChosen.size() != 0)
-		{
-			return 2;
-		}
 		if (bidPos1 == bidPos2)
 			return 0;
 	}

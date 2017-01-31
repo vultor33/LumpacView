@@ -54,9 +54,11 @@ void buildComplexWithALotOfIsomersAndDoWater(
 int main()
 {	
 	clock_t begin = clock();
-	CauchyIndex ci_(8); //91.859
+	CauchyIndex ci_(6); //91.859
 
-	ci_.molecularFormulaToCauchyCode("m01m02C01C02C02");
+	//ci_.generateAllIndependentIsomersRuntimeRotations();
+
+	ci_.generateAllIndependentIsomersWithFlag("6-independent-isomers.txt", "C01m01m02m03m04");
 
 //	ci_.printBlock(4);
 

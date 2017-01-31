@@ -52,6 +52,8 @@ public:
 
 	void generateAllIndependentIsomersRuntimeRotationsAndReadBlock(std::string blockFileName);
 
+	void generateAllIndependentIsomersWithFlag(std::string blockFileName, std::string code);
+
 	//0-true ; 1-false ; 2-bidentate problem
 	int compareTwoIsomersWithLabels(
 		std::vector<int> & atomTypes,
@@ -67,16 +69,6 @@ public:
 		);
 
 	void printBlock(int nPieces);
-
-
-
-	void molecularFormulaToCauchyCode(std::string code);
-
-	void setBidentateChosen(std::vector<int> & bidentateAtomsChosen);
-
-
-
-
 
 
 private:
@@ -122,8 +114,15 @@ private:
 	size_t nRotations;
 	size_t systemSize;
 	void writeCauchyRotations(std::string fileName, std::vector< std::vector<int> > & rotPermutations);
-
 	std::vector<int> readCauchyNotations(std::ifstream & openedFile_);
+
+	void molecularFormulaToCauchyCode(
+		std::string code,
+		std::vector<int> & atomTypes,
+		std::vector<int> & bidentateAtomsChosen);
+
+	void setBidentateChosen(std::vector<int> & bidentateAtomsChosen);
+
 
 	AuxMath auxMath_;
 };

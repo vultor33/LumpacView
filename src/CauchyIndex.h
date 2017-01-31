@@ -50,9 +50,10 @@ public:
 
 	void generateAllIndependentIsomersRuntimeRotations();
 
+	void generateAllIndependentIsomersRuntimeRotationsAndReadBlock(std::string blockFileName);
 
 	//0-true ; 1-false ; 2-bidentate problem
-	int compareTwoIsomers(
+	int compareTwoIsomersWithLabels(
 		std::vector<int> & atomTypes,
 		std::vector<int> & bidentateAtomsChosen,
 		std::vector<int> & permutationIsomer1,
@@ -60,10 +61,23 @@ public:
 		);
 
 	// true = equal || cant use the same permutation
-	bool compareTwoIsomersAtoms(
+	bool compareTwoIsomers(
 		std::vector<int> & permutationIsomer1,
 		std::vector<int> & permutationIsomer2
 		);
+
+	void printBlock(int nPieces);
+
+
+
+	void molecularFormulaToCauchyCode(std::string code);
+
+	void setBidentateChosen(std::vector<int> & bidentateAtomsChosen);
+
+
+
+
+
 
 private:
 	//data rotations
@@ -95,10 +109,12 @@ private:
 		const std::vector<int> & permutation,
 		const std::vector<int> & bidentateAtomsChosen);
 
-
 	unsigned int factorial(unsigned int n);
 
 	void printCauchyNotation(std::vector<int> & cauchyList);
+	void printCauchyNotation(
+		std::string fileName, 
+		std::vector<int> & cauchyList);
 
 	void printMoleculeFast(std::vector<CoordXYZ> & mol);
 
@@ -113,3 +129,5 @@ private:
 };
 
 #endif
+
+

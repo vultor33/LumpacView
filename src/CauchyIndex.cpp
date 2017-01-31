@@ -8,6 +8,7 @@
 #include <sstream>
 #include <time.h>
 
+#include "AllMolecularFormulas.h"
 #include "RootMeanSquareDeviation.h"
 #include "Coordstructs.h"
 #include "AuxMath.h"
@@ -189,8 +190,7 @@ void CauchyIndex::generateAllIndependentIsomersRuntimeRotations()
 	systemSize = mol0.size();
 	int size = factorial(systemSize); // 10+ explosion
 	nRotations = allRotationTransforms.size() + 1;
-	//vector< vector<int> > allPermutations(size / nRotations);
-	vector< vector<int> > allPermutations;
+	vector< vector<int> > allPermutations(size / nRotations);
 	size_t isomerCounter = 0;
 	bool equal;
 
@@ -213,18 +213,16 @@ void CauchyIndex::generateAllIndependentIsomersRuntimeRotations()
 		for (size_t i = 0; i < systemSize; i++)
 			permutation[i] = myints[i];
 
-		//for (size_t i = 0; i < isomerCounter; i++)
-		for (size_t i = 0; i < allPermutations.size(); i++)
+		for (size_t i = 0; i < isomerCounter; i++)
 		{
-			equal = compareTwoIsomersAtoms(allPermutations[i], permutation);
+			equal = compareTwoIsomers(allPermutations[i], permutation);
 			if (equal)
 				break;
 		}
 		if (!equal)
 		{
-			allPermutations.push_back(permutation);
-			//allPermutations[isomerCounter] = permutation;
-			//isomerCounter++;
+			allPermutations[isomerCounter] = permutation;
+			isomerCounter++;
 		}
 
 	} while (std::next_permutation(myints, myints + systemSize));
@@ -244,9 +242,159 @@ void CauchyIndex::generateAllIndependentIsomersRuntimeRotations()
 }
 
 
+void CauchyIndex::generateAllIndependentIsomersRuntimeRotationsAndReadBlock(string blockFileName)
+{
+	systemSize = mol0.size();
+	int size = factorial(systemSize);
+	nRotations = allRotationTransforms.size() + 1;
+	vector< vector<int> > allPermutations;
+	vector< vector<int> > blockPermutations;
+	ifstream openedFile_(blockFileName);
+	bool equal;
+	while (true)
+	{
+		vector<int> auxBlock = readCauchyNotations(openedFile_);
+		if (auxBlock.size() == 0)
+			break;
+
+		equal = false;
+
+		for (size_t i = 0; i < allPermutations.size(); i++)
+		{
+			equal = compareTwoIsomers(allPermutations[i], auxBlock);
+			if (equal)
+				break;
+		}
+		if (!equal)
+			allPermutations.push_back(auxBlock);
+	}
+
+/*  SAME CODE WITH RAM
+	while (true)
+	{
+		vector<int> auxBlock = readCauchyNotations(openedFile_);
+		if (auxBlock.size() == 0)
+			break;
+		blockPermutations.push_back(auxBlock);
+	}
+	for (size_t iBlock = 0; iBlock < blockPermutations.size(); iBlock++)
+	{
+		equal = false;
+
+		for (size_t i = 0; i < allPermutations.size(); i++)
+		{
+			equal = compareTwoIsomersAtoms(allPermutations[i], blockPermutations[iBlock]);
+			if (equal)
+				break;
+		}
+		if (!equal)
+			allPermutations.push_back(blockPermutations[iBlock]);
+	}
+*/
+
+	ofstream of_(("isomersOf-" + blockFileName).c_str());
+	for (size_t i = 0; i < allPermutations.size(); i++)
+	{
+		for (size_t j = 0; j < systemSize; j++)
+		{
+			of_ << allPermutations[i][j] << "  ";
+		}
+		of_ << endl;
+	}
+}
 
 
-int CauchyIndex::compareTwoIsomers(
+/*
+allmolecular formulas - eu tenho que ler o string com o codigo.
+stringToNumber - vai virar um vector com as quantidades
+                 de monodentados, bidentados simetricos e assimetricos
+
+preciso transforma isso no meu codigo - atomtypes e bidentate atoms chosen.
+um cuidado precisa ser tomado no bidentate atoms chosen que eu nao posso comecar
+de um que o bidentado seja proibido, porque se nao ele e setado direto e
+atrapalha meu esquema. Tenho que comecar de um valido.
+
+
+
+*/
+
+void CauchyIndex::molecularFormulaToCauchyCode(string code)
+{
+	AllMolecularFormulas allMolecular_;
+	vector< vector<int> > molecularCode = allMolecular_.stringToNumber(code);
+	vector<int> atomTypes;
+	vector<int> bidentateAtomsChosen;
+	int kType = 0;
+
+	int bidentateProblem;
+	vector<int> permutation(mol0.size());
+	for (size_t i = 0; i < mol0.size(); i++)
+		permutation[i] = i;
+	do
+	{
+		vector<int> auxBidentateAtomsChosen;
+		for (size_t i = 0; i < molecularCode[2].size(); i++)
+		{
+			for (size_t j = 0; j < molecularCode[2][i]; j++)
+			{
+				atomTypes.push_back(kType);
+				atomTypes.push_back(kType + 1);
+				setBidentateChosen(auxBidentateAtomsChosen);
+			}
+			kType += 2;
+		}
+		for (size_t i = 0; i < molecularCode[1].size(); i++)
+		{
+			for (size_t j = 0; j < molecularCode[1][i]; j++)
+			{
+				atomTypes.push_back(kType);
+				atomTypes.push_back(kType);
+				setBidentateChosen(auxBidentateAtomsChosen);
+			}
+			kType++;
+		}
+		for (size_t i = 0; i < molecularCode[0].size(); i++)
+		{
+			for (size_t j = 0; j < molecularCode[0][i]; j++)
+			{
+				atomTypes.push_back(kType);
+			}
+			kType++;
+		}
+		bidentateProblem = compareTwoIsomersWithLabels(
+			atomTypes,
+			auxBidentateAtomsChosen,
+			permutation,
+			permutation);
+
+		if (bidentateProblem != 2)
+		{
+			bidentateAtomsChosen = auxBidentateAtomsChosen;
+			break;
+		}
+	} while (true);
+
+	return;
+}
+
+
+void CauchyIndex::setBidentateChosen(std::vector<int>& bidentateAtomsChosen)
+{
+	int i1, i2;
+	do
+	{
+		i1 = auxMath_.randomNumber(0, mol0.size() - 1);
+	} while (find(bidentateAtomsChosen.begin(), bidentateAtomsChosen.end(), i1) != bidentateAtomsChosen.end());
+	bidentateAtomsChosen.push_back(i1);
+	do
+	{
+		i2 = auxMath_.randomNumber(0, mol0.size() - 1);
+	} while (find(bidentateAtomsChosen.begin(), bidentateAtomsChosen.end(), i2) != bidentateAtomsChosen.end());	
+	bidentateAtomsChosen.push_back(i2);
+}
+
+
+int CauchyIndex::compareTwoIsomersWithLabels(
 	std::vector<int>& atomTypes,
 	std::vector<int>& bidentateAtomsChosen,
 	std::vector<int>& permutationIsomer1, 
@@ -289,7 +437,7 @@ int CauchyIndex::compareTwoIsomers(
 			if (bidPos2.size() == 0 && bidentateAtomsChosen.size() != 0)
 			{
 				//fred apagar -- rotacoes nunca levam bidentados a posicoes proibidas.
-				cout << "CauchyIndex::compareTwoIsomers( stop" << endl;
+				cout << "CauchyIndex::compareTwoIsomersWithLabels( stop" << endl;
 				exit(1);
 			}
 			if (bidPos1 == bidPos2)
@@ -299,7 +447,7 @@ int CauchyIndex::compareTwoIsomers(
 	return 1;
 }
 
-bool CauchyIndex::compareTwoIsomersAtoms(
+bool CauchyIndex::compareTwoIsomers(
 	std::vector<int>& permutationIsomer1, 
 	std::vector<int>& permutationIsomer2)
 {
@@ -310,6 +458,48 @@ bool CauchyIndex::compareTwoIsomersAtoms(
 			return true;
 	}
 	return false;
+}
+
+void CauchyIndex::printBlock(int nPieces)
+{
+	int systemSize = mol0.size();
+	int totalSize = factorial(systemSize);
+	int cutBlock = totalSize / nPieces;
+	int * myints;
+	myints = new int[systemSize];
+	for (size_t i = 0; i < systemSize; i++)
+		myints[i] = i;
+	std::sort(myints, myints + systemSize);
+	vector<int> permutation(systemSize);
+
+	stringstream convert0;
+	convert0 << systemSize;
+	string auxFileName;
+	convert0 >> auxFileName;
+	string fileName = "block-" + auxFileName + "---";
+	string blockFileName;
+	int iBlock = 0;
+	int iBlockNumber = 0;
+	do
+	{
+		for (size_t i = 0; i < systemSize; i++)
+			permutation[i] = myints[i];
+
+		if (iBlock % cutBlock == 0)
+		{
+			iBlockNumber++;
+			stringstream convert;
+			convert << iBlockNumber;
+			string auxBlockName;
+			convert >> auxBlockName;
+			blockFileName = fileName + auxBlockName + ".txt";
+			remove(blockFileName.c_str());
+		}
+
+		printCauchyNotation(blockFileName, permutation);
+		iBlock++;
+	} while (std::next_permutation(myints, myints + systemSize));
+
 }
 
 void CauchyIndex::rotationTest(
@@ -420,6 +610,21 @@ void CauchyIndex::printCauchyNotation(vector<int> & cauchyList)
 	}
 	cout << endl;
 }
+
+void CauchyIndex::printCauchyNotation(
+	std::string fileName,
+	std::vector<int> & cauchyList)
+{
+	ofstream cauchyFile_;
+	cauchyFile_.open(fileName.c_str(), std::ofstream::out | std::ofstream::app);
+	for (size_t j = 0; j < cauchyList.size(); j++)
+	{
+		cauchyFile_ << cauchyList[j] << " ";
+	}
+	cauchyFile_ << endl;
+	cauchyFile_.close();
+}
+
 
 void CauchyIndex::printMoleculeFast(std::vector<CoordXYZ>& mol)
 {

@@ -8,6 +8,13 @@
 
 using namespace std;
 
+AuxMath::~AuxMath(){}
+
+AuxMath::AuxMath() 
+{
+	_pi = 3.14159265358979323846;
+}
+
 vector<double> AuxMath::matrixXVector(vector< vector<double> > &M, double x, double y, double z)
 {
 	int size = M.size();
@@ -23,6 +30,11 @@ double AuxMath::fRand(double fMin, double fMax)
 {
 	double f = (double)rand() / RAND_MAX;
 	return fMin + f * (fMax - fMin);
+}
+
+int AuxMath::randomNumber(int fMin, int fMax)
+{
+	return fMin + (rand() % (int)(fMax - fMin + 1));
 }
 
 double AuxMath::norm(const double x, const double y, const double z)

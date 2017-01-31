@@ -2,6 +2,10 @@
 // busca: find point group molecule software
 // http://www.sciencedirect.com/science/article/pii/0097848576800046
 
+// eu bi3 a a
+// eu bi3 a b
+// eu bi4
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -50,10 +54,17 @@ void buildComplexWithALotOfIsomersAndDoWater(
 int main()
 {	
 	clock_t begin = clock();
-	CauchyIndex ci_(10);
-	vector<string> atoms;
-	vector<int> bidentaChos;
-	ci_.generateAllIndependentIsomersRuntimeRotations();
+	CauchyIndex ci_(8); //91.859
+
+	ci_.molecularFormulaToCauchyCode("m01m02C01C02C02");
+
+//	ci_.printBlock(4);
+
+//	ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock("block-8---1.txt");
+	
+//	vector<string> atoms;
+//	vector<int> bidentaChos;
+//	ci_.generateAllIndependentIsomersRuntimeRotations();
 	//ci_.rotationTest(atoms, bidentaChos);
 
 /*

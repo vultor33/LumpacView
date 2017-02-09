@@ -34,7 +34,7 @@ public:
 	inline std::string getMopacExecPath() { return mopacExecPath; }
 
 private:
-	const std::string inputName = "LumpacViewInput.txt";
+	std::string inputName;
 	//data
 	std::vector<std::string> options;
 	std::vector< std::string > ligandFileName;

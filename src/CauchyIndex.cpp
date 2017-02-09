@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <sstream>
 #include <time.h>
+#include <cmath>
 
 #include "AllMolecularFormulas.h"
 #include "RootMeanSquareDeviation.h"
@@ -42,6 +43,12 @@ e fazer as rotacoes de novo. no espaço dos bidentados terao espacos vazios n tem
 bidentados - esqueca o ponto preto, concentre-se nos atomos coordenados.
 
 */
+
+std::vector<CoordXYZ> CauchyIndex::getPoints()
+{
+	return mol0;
+}
+
 
 void CauchyIndex::generateAllIndependentIsomers()
 {
@@ -98,8 +105,6 @@ void CauchyIndex::generateAllIndependentIsomers()
 			allPermutations.push_back(auxLiPermutation);
 		}
 	} while (std::next_permutation(myints, myints + systemSize));
-
-	cout << "estou no fim" << endl;
 
 	ofstream of_("printFinalPermutations.txt");
 
@@ -245,7 +250,7 @@ void CauchyIndex::generateAllIndependentIsomersRuntimeRotationsAndReadBlock(stri
 	nRotations = allRotationTransforms.size() + 1;
 	vector< vector<int> > allPermutations;
 	vector< vector<int> > blockPermutations;
-	ifstream openedFile_(blockFileName);
+	ifstream openedFile_(blockFileName.c_str());
 	bool equal;
 	while (true)
 	{
@@ -299,6 +304,49 @@ void CauchyIndex::generateAllIndependentIsomersRuntimeRotationsAndReadBlock(stri
 	}
 }
 
+void CauchyIndex::generateAllIndependentIsomers12(string blockFileName)
+{
+        systemSize = mol0.size();
+        int size = factorial(systemSize);
+        nRotations = allRotationTransforms.size() + 1;
+        vector< vector<int> > allPermutations;
+        vector< vector<int> > blockPermutations;
+        ifstream openedFile_(blockFileName.c_str());
+        bool equal;
+        while (true)
+        {
+                vector<int> auxBlock2 = readCauchyNotations(openedFile_);
+                if (auxBlock2.size() == 0)
+                        break;
+		vector<int> auxBlock(systemSize);
+		auxBlock[0] = 0;
+		for(size_t i = 0; i < systemSize - 1; i++)
+			auxBlock[i+1] = auxBlock2[i] + 1;
+
+                equal = false;
+
+                for (size_t i = 0; i < allPermutations.size(); i++)
+                {
+                        equal = compareTwoIsomers(allPermutations[i], auxBlock);
+                        if (equal)
+                                break;
+                }
+                if (!equal)
+                        allPermutations.push_back(auxBlock);
+        }
+        ofstream of_(("isomersOf-" + blockFileName).c_str());
+        for (size_t i = 0; i < allPermutations.size(); i++)
+        {
+                for (size_t j = 0; j < systemSize; j++)
+                {
+                        of_ << allPermutations[i][j] << "  ";
+                }
+                of_ << endl;
+        }
+}
+
+
+
 
 void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, string code)
 {
@@ -311,7 +359,7 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, st
 	nRotations = allRotationTransforms.size() + 1;
 	vector< vector<int> > allPermutations;
 	vector< vector<int> > blockPermutations;
-	ifstream openedFile_(blockFileName);
+	ifstream openedFile_(blockFileName.c_str());
 	int compareResult;
 	bool equal;
 	while (true)
@@ -506,6 +554,57 @@ bool CauchyIndex::compareTwoIsomers(
 	}
 	return false;
 }
+
+
+void CauchyIndex::mergeBlocks(std::vector<std::string> & allBlockNames, int nPieces)
+{
+	remove("auxAllBlocks.txt");
+	int total = 0;
+	for(size_t i = 0; i < allBlockNames.size(); i++)
+	{
+		ifstream openedFile_(allBlockNames[i].c_str());
+		while(true)
+		{
+			vector<int> auxBlock = readCauchyNotations(openedFile_);
+                	if (auxBlock.size() == 0)
+                        	break;
+			printCauchyNotation("auxAllBlocks.txt",auxBlock);
+			total++;
+		}
+		openedFile_.close();
+	}
+	cout << "total permutations:  " << total << endl;
+
+	ifstream openedFile_("auxAllBlocks.txt");
+	int cutBlock = total / nPieces;
+	int iBlockNumber = 0;
+	int iBlock = 0;
+	string fileName = "new-block--";
+	string blockFileName;
+	while(true)
+	{
+		vector<int> auxBlock = readCauchyNotations(openedFile_);
+                if (auxBlock.size() == 0)
+			break;
+		if (iBlock % cutBlock == 0)
+		{
+                        iBlockNumber++;
+                        stringstream convert;
+                        convert << iBlockNumber;
+                        string auxBlockName;
+                        convert >> auxBlockName;
+                        blockFileName = fileName + auxBlockName + ".txt";
+                        remove(blockFileName.c_str());
+	    	}
+                printCauchyNotation(blockFileName, auxBlock);
+                iBlock++;
+	}
+	openedFile_.close();
+
+
+}
+
+
 
 void CauchyIndex::printBlock(int nPieces)
 {
@@ -886,15 +985,16 @@ void CauchyIndex::writeCauchyRotations(string fileName, vector< vector<int> > & 
 
 vector<int> CauchyIndex::readCauchyNotations(ifstream & openendFile_)
 {
+	int size = mol0.size();
 	vector<int> notation;
 	string auxline;
 	getline(openendFile_, auxline);
 	if (auxline == "")
 		return notation;
-	notation.resize(systemSize);
+	notation.resize(size);
 	stringstream line;
 	line << auxline;
-	for (size_t i = 0; i < systemSize; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		line >> notation[i];
 	}

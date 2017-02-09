@@ -16,7 +16,7 @@ MyExceptions::MyExceptions(string customMessage_in)
 }
 
 
-MyExceptions::~MyExceptions(){}
+//MyExceptions::~MyExceptions(){}
 
 const char * MyExceptions::what() const throw()
 {

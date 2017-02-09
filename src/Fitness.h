@@ -16,7 +16,7 @@ public:
 		std::vector<CoordXYZ> & ligand2);
 
 private:
-	const int fitType = 0;
+	int fitType;
 
 };
 

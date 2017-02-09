@@ -11,7 +11,15 @@
 
 using namespace std;
 
-ReadMopac::ReadMopac(){}
+ReadMopac::ReadMopac()
+{
+        vibrationFlag1 = "DESCRIPTION";
+        vibrationFlag2 = "OF";
+        vibrationFlag3 = "VIBRATIONS";
+        energyFlag1 = "TOTAL";
+        energyFlag2 = "ENERGY";
+        energyFlag3 = "=";
+}
 
 ReadMopac::~ReadMopac(){}
 

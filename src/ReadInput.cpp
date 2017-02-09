@@ -12,7 +12,10 @@
 
 using namespace std;
 
-ReadInput::ReadInput(){}
+ReadInput::ReadInput()
+{
+	inputName = "LumpacViewInput.txt";
+}
 
 ReadInput::~ReadInput(){}
 

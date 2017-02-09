@@ -9,7 +9,7 @@ class MyExceptions : public std::exception
 public:
 	MyExceptions(int iError_in);
 	MyExceptions(std::string custom);
-	~MyExceptions();
+	virtual ~MyExceptions() throw() {};
 
 	const char * what() const throw ();
 

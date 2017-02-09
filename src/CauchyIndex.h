@@ -54,6 +54,8 @@ public:
 
 	void generateAllIndependentIsomersWithFlag(std::string blockFileName, std::string code);
 
+	void generateAllIndependentIsomers12(std::string blockFileName);
+
 	//0-true ; 1-false ; 2-bidentate problem
 	int compareTwoIsomersWithLabels(
 		std::vector<int> & atomTypes,
@@ -70,6 +72,9 @@ public:
 
 	void printBlock(int nPieces);
 
+	void mergeBlocks(std::vector<std::string> & allBlockNames, int nPieces);
+
+	std::vector<CoordXYZ> getPoints();
 
 private:
 	//data rotations

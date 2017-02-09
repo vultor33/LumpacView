@@ -53,7 +53,7 @@ public:
 
 
 private:
-	const double PI = 3.14159265358979323846;
+	double PI;
 
 	/*
 	* fast_rmsd()

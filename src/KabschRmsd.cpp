@@ -40,7 +40,10 @@ using namespace std;
 
 /* vector functions using c arrays */
 
-KabschRmsd::KabschRmsd(){}
+KabschRmsd::KabschRmsd()
+{
+	PI = 3.14159265358979323846;
+}
 
 KabschRmsd::~KabschRmsd(){}
 

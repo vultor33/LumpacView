@@ -20,12 +20,12 @@ public:
 //	inline double getFirstFrequency(){ return firstFrequency; }
 
 private:
-	const std::string vibrationFlag1 = "DESCRIPTION";
-	const std::string vibrationFlag2 = "OF";
-	const std::string vibrationFlag3 = "VIBRATIONS";
-	const std::string energyFlag1 = "TOTAL";
-	const std::string energyFlag2 = "ENERGY";
-	const std::string energyFlag3 = "=";
+	std::string vibrationFlag1;
+	std::string vibrationFlag2;
+	std::string vibrationFlag3;
+	std::string energyFlag1;
+	std::string energyFlag2;
+	std::string energyFlag3;
 };
 
 #endif

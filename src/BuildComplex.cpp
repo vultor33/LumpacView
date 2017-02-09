@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <stdlib.h>
 
 #include "AdjustSaParameters.h"
 #include "ReadInput.h"

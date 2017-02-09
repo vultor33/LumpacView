@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <stdlib.h>
 
 #include "Coordstructs.h"
 #include "AuxMath.h"

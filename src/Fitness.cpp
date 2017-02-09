@@ -7,7 +7,10 @@
 
 using namespace std;
 
-Fitness::Fitness(){}
+Fitness::Fitness()
+{
+	fitType = 0;
+}
 
 Fitness::~Fitness() {}
 

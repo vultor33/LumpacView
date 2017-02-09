@@ -43,7 +43,7 @@ int FindIsomers::start()
 	aplyPermutationBidentate(firstPermutation, atomsOriginal);
 	if (useFile)
 	{
-		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
+		streamAllIsomers_.open(fileAllIsomers.c_str(), std::ofstream::out | std::ofstream::app);
 		appendPrintCoordXYZ(atomsOriginal, streamAllIsomers_, permutationToString(firstPermutation));
 		streamAllIsomers_.close();
 	}
@@ -59,7 +59,7 @@ int FindIsomers::start()
 
 	if (!useFile)
 	{
-		streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
+		streamAllIsomers_.open(fileAllIsomers.c_str(), std::ofstream::out | std::ofstream::app);
 		for (size_t i = 0; i < allConfigurations.size(); i++)
 			appendPrintCoordXYZ(allConfigurations[i], streamAllIsomers_, permutationToString(allConfigurationPermutation[i]));
 
@@ -188,7 +188,7 @@ void FindIsomers::ligandFilePositionPermutation(vector<int> & permutation)
 	{
 		if (useFile)
 		{
-			streamAllIsomers_.open(fileAllIsomers, std::ofstream::out | std::ofstream::app);
+			streamAllIsomers_.open(fileAllIsomers.c_str(), std::ofstream::out | std::ofstream::app);
 			appendPrintCoordXYZ(atomsPointPermutation, streamAllIsomers_, permutationToString(permutation));
 			streamAllIsomers_.close();
 		}
@@ -213,7 +213,7 @@ bool FindIsomers::doOverlayWithPreviousConfigurations(vector<CoordXYZ> & atomsPo
 	if (useFile)
 	{
 		ifstream streamAllIsomersRead_;
-		streamAllIsomersRead_.open(fileAllIsomers);
+		streamAllIsomersRead_.open(fileAllIsomers.c_str());
 		RootMeanSquareDeviation rmsd_;
 		vector<CoordXYZ> atomsConfigurationsOnFile;
 		//LOOP ON FILE

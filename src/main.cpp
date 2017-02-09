@@ -51,19 +51,39 @@ void buildComplexWithALotOfIsomersAndDoWater(
 	bc_.runMopacAndPrint(options, mopacExecPath, allAtoms);
 }
 
-int main()
+int main(int argc, char *argv[]) 
 {	
 	clock_t begin = clock();
-	CauchyIndex ci_(6); //91.859
+	CauchyIndex ci_(10); //91.859
+	
+	string blockName = argv[1];
+
+	//ci_.generateAllIndependentIsomers12(blockName);
+
+	ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
 
 	//ci_.generateAllIndependentIsomersRuntimeRotations();
 
-	ci_.generateAllIndependentIsomersWithFlag("6-independent-isomers.txt", "C01m01m02m03m04");
-
-//	ci_.printBlock(4);
-
-//	ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock("block-8---1.txt");
+	/*
+	vector<string> allBlockNames(12);
+	allBlockNames[0] = "isomersOf-block-10---1.txt";
+	allBlockNames[1] = "isomersOf-block-10---7.txt";
+	allBlockNames[2] = "isomersOf-block-10---2.txt";
+	allBlockNames[3] = "isomersOf-block-10---8.txt";
+	allBlockNames[4] = "isomersOf-block-10---3.txt";
+	allBlockNames[5] = "isomersOf-block-10---9.txt";
+	allBlockNames[6] = "isomersOf-block-10---4.txt";
+	allBlockNames[7] = "isomersOf-block-10---10.txt";
+	allBlockNames[8] = "isomersOf-block-10---5.txt";
+	allBlockNames[9] = "isomersOf-block-10---11.txt";
+	allBlockNames[10] = "isomersOf-block-10---6.txt";
+	allBlockNames[11] = "isomersOf-block-10---12.txt";
+	ci_.mergeBlocks(allBlockNames,12);	
+	*/
 	
+
+
+
 //	vector<string> atoms;
 //	vector<int> bidentaChos;
 //	ci_.generateAllIndependentIsomersRuntimeRotations();

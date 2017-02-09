@@ -8,9 +8,9 @@
 #include <cmath>
 
 #include "Ligand.h"
-#include "Points.h"
 #include "AuxMath.h"
 #include "Fitness.h"
+#include "CauchyIndex.h"
 
 using namespace std;
 
@@ -90,19 +90,15 @@ bool ComplexCreator::start(vector<int> & ligandsPermutation)
 
 vector<double> ComplexCreator::getPoints(int totalChelation)
 {
-	Points allPoints;
-	// 2 points - 0 - 5; 3 points - 6 - 15; 4 points - 16 - 28 ...
-	int k = 0;
-	for (int i = 3; i <= totalChelation; i++)
-		k += (3 * (i - 1));
-
+        CauchyIndex ci_(totalChelation);
+	vector<CoordXYZ> mol0 = ci_.getPoints();
 	size_t size = totalChelation;
 	vector<double> out(3 * size);
 	for (size_t i = 0; i < size; i++)
 	{
-		out[i] = allPoints.p[k + i];
-		out[i + size] = allPoints.p[k + i + size];
-		out[i + 2 * size] = allPoints.p[k + i + 2 * size];
+		out[i] = mol0[i].x;
+		out[i + size] = mol0[i].y;
+		out[i + 2 * size] = mol0[i].z;
 	}
 	return out;
 }

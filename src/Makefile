@@ -2,7 +2,8 @@
 CC = g++
 
 # define any compile-time flags
-CFLAGS = -Wall -g -std=c++11
+CFLAGS = -Wall -g 
+#-std=c++11
 
 # define any directories containing header files other than /usr/include
 INCLUDES = -I.
@@ -18,7 +19,7 @@ LFLAGS =
 LIBS = 
 
 # define the C++ source files
-SRCS = Combinations.cpp AdjustSaParameters.cpp AuxMath.cpp BestPermutation.cpp BuildComplex.cpp ComplexCreator.cpp ControlMopac.cpp FindIsomers.cpp Fitness.cpp KabschRmsd.cpp Ligand.cpp main.cpp MyExceptions.cpp PointAnalysis.cpp ReadInput.cpp ReadMopac.cpp ReadQuantumOutput.cpp RootMeanSquareDeviation.cpp WriteQuantumInput.cpp 
+SRCS = AllMolecularFormulas.cpp CauchyIndex.cpp Combinations.cpp AdjustSaParameters.cpp AuxMath.cpp BestPermutation.cpp BuildComplex.cpp ComplexCreator.cpp ControlMopac.cpp FindIsomers.cpp Fitness.cpp KabschRmsd.cpp Ligand.cpp main.cpp MyExceptions.cpp PointAnalysis.cpp ReadInput.cpp ReadMopac.cpp ReadQuantumOutput.cpp RootMeanSquareDeviation.cpp WriteQuantumInput.cpp 
 
 
 # define the C++ object files 

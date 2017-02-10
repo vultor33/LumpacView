@@ -601,9 +601,7 @@ void CauchyIndex::mergeBlocks(std::vector<std::string> & allBlockNames, int nPie
 	}
 	openedFile_.close();
 
-
 }
-
 
 
 void CauchyIndex::printBlock(int nPieces)
@@ -645,8 +643,78 @@ void CauchyIndex::printBlock(int nPieces)
 		printCauchyNotation(blockFileName, permutation);
 		iBlock++;
 	} while (std::next_permutation(myints, myints + systemSize));
+	
+	delete[] myints;
 
 }
+
+
+void CauchyIndex::generateBlockFiles(int n, int kInit, int kFinal)
+{
+        int * myints;
+        myints = new int[n];
+        for (size_t i = 0; i < n; i++)
+                myints[i] = i;	       
+	string permutName;
+	int k = 1;
+	do
+        {
+		if(k >= kInit && k <= kFinal)
+		{
+			stringstream convert;
+	                for(int i = 0; i < n; i++)
+        	                convert << myints[i] << "-";
+			permutName = convert.str();
+
+			ofstream name_(permutName.c_str());
+			name_.close();
+		}
+		k++;
+
+        } while (std::next_permutation(myints, myints + n));
+
+	delete[] myints;
+
+}
+
+
+void CauchyIndex::doBlockDeletion(
+	int kInit,
+	int kFinal)
+{
+	int systemSize = mol0.size();
+        int * myints;
+        myints = new int[systemSize];
+        for (size_t i = 0; i < systemSize; i++)
+                myints[i] = i;
+        string permutName;
+        int k = 1;
+        do
+        {
+                if(k >= kInit && k <= kFinal)
+                {
+			vector<int> permutation(systemSize);
+        		for (size_t i = 0; i < systemSize; i++)
+        		        permutation[i] = myints[i];
+			for (size_t j = 0; j < allRotationTransforms.size(); j++)
+			{
+				vector<int> auxPerm = applyRotation(permutation, j);
+                        	stringstream convert;
+                	        for(int i = 0; i < systemSize; i++)
+        	                        convert << auxPerm[i] << "-";
+  	                      	permutName = convert.str();
+				if(exist_file(permutName))
+					remove(permutName.c_str());
+			}
+                }
+                k++;
+
+        } while (std::next_permutation(myints, myints + systemSize));
+
+        delete[] myints;
+
+}
+
 
 void CauchyIndex::rotationTest(
 	vector<string> & atoms, 

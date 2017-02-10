@@ -14,6 +14,8 @@
 #include <ctime>
 #include <time.h>
 #include <math.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
 #include "BuildComplex.h"
 #include "RootMeanSquareDeviation.h"
@@ -51,16 +53,26 @@ void buildComplexWithALotOfIsomersAndDoWater(
 	bc_.runMopacAndPrint(options, mopacExecPath, allAtoms);
 }
 
+inline bool exist_file (const std::string& name) {
+  struct stat buffer;   
+  return (stat (name.c_str(), &buffer) == 0); 
+}
+
+
 int main(int argc, char *argv[]) 
 {	
 	clock_t begin = clock();
-	CauchyIndex ci_(10); //91.859
+	CauchyIndex ci_(6); //91.859
+
+	ci_.doBlockDeletion(1,20);
+
+	//ci_.generateBlockFiles(6,700,720);
 	
-	string blockName = argv[1];
+	//string blockName = argv[1];
 
 	//ci_.generateAllIndependentIsomers12(blockName);
 
-	ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
+	//ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
 
 	//ci_.generateAllIndependentIsomersRuntimeRotations();
 
@@ -80,8 +92,6 @@ int main(int argc, char *argv[])
 	allBlockNames[11] = "isomersOf-block-10---12.txt";
 	ci_.mergeBlocks(allBlockNames,12);	
 	*/
-	
-
 
 
 //	vector<string> atoms;

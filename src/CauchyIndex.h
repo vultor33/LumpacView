@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <unistd.h>
+#include <sys/stat.h>
 
 #include "Coordstructs.h"
 #include "AuxMath.h"
@@ -76,6 +78,14 @@ public:
 
 	std::vector<CoordXYZ> getPoints();
 
+
+	void generateBlockFiles(int n, int kInit, int kFinal);
+
+	void doBlockDeletion(
+		int kInit, 
+		int kFinal);
+
+
 private:
 	//data rotations
 	std::vector<CoordXYZ> mol0;
@@ -128,6 +138,11 @@ private:
 
 	void setBidentateChosen(std::vector<int> & bidentateAtomsChosen);
 
+	inline bool exist_file (const std::string& name) 
+	{
+		struct stat buffer;
+  		return (stat (name.c_str(), &buffer) == 0);
+	}
 
 	AuxMath auxMath_;
 };

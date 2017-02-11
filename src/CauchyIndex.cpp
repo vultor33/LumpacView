@@ -693,6 +693,8 @@ void CauchyIndex::doBlockDeletion(
         {
                 if(k >= kInit && k <= kFinal)
                 {
+			if (k % 100 == 0)
+                        	cout << "k:  " << k << endl;
 			vector<int> permutation(systemSize);
         		for (size_t i = 0; i < systemSize; i++)
         		        permutation[i] = myints[i];
@@ -703,8 +705,9 @@ void CauchyIndex::doBlockDeletion(
                 	        for(int i = 0; i < systemSize; i++)
         	                        convert << auxPerm[i] << "-";
   	                      	permutName = convert.str();
-				if(exist_file(permutName))
-					remove(permutName.c_str());
+				//if(exist_file(permutName))
+				//remove(permutName.c_str());
+				unlink(permutName.c_str());
 			}
                 }
                 k++;

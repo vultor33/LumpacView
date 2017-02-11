@@ -62,7 +62,19 @@ inline bool exist_file (const std::string& name) {
 int main(int argc, char *argv[]) 
 {	
 	clock_t begin = clock();
-	CauchyIndex ci_(6); //91.859
+
+	
+	string execType;
+	int systemSize, kInit, kEnd;
+	stringstream cGen;
+	cGen << argv[1] << "  " << argv[2] << "  " << argv[3] << "  " << argv[4];
+	cGen >> execType >> systemSize >> kInit >> kEnd;	
+
+	CauchyIndex ci_(systemSize);
+	if(execType == "genBlock")
+		ci_.generateBlockFiles(systemSize,kInit,kEnd);
+	else if(execType == "deletion")
+		ci_.doBlockDeletion(kInit,kEnd);
 
 	ci_.doBlockDeletion(1,20);
 

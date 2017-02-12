@@ -745,6 +745,8 @@ void CauchyIndex::doBlockDeletion(
         delete[] myints;
 }
 
+
+/* ORIGINAL
 void CauchyIndex::doBlockRAMDeletion(
         int kInit,
         int kFinal,
@@ -800,6 +802,72 @@ void CauchyIndex::doBlockRAMDeletion(
 	of_.close();
 
 }
+*/
+
+void CauchyIndex::doBlockRAMDeletion(
+        int kInit,
+        int kFinal,
+	int ramInit,
+	int ramFinal)
+{
+        int systemSize = mol0.size();
+	vector< vector<int> > ramBlock;
+ 	generateRAMBlock(
+		systemSize, 
+		ramInit, 
+		ramFinal, 
+		ramBlock);
+
+	vector<int> permutation(systemSize);
+        for (size_t i = 0; i < systemSize; i++)
+                permutation[i] = i;
+        int k = 1;
+        do
+        {
+                if(k >= kInit && k <= kFinal)
+                {
+                        if (k % 100 == 0)
+                                cout << "k:  " << k << endl;
+                        for (size_t j = 0; j < allRotationTransforms.size(); j++)
+                        {
+                                vector<int> auxPerm = applyRotation(permutation, j);
+				/* OTHER DELETION METHOD
+				for(size_t k = 0; k < ramBlock.size(); k++)
+               			{
+                        		if(auxPerm == ramBlock[k])
+                        		{
+                               			vector< vector<int> >::iterator it = ramBlock.begin() + k;
+                                		rotate(it, it+1,ramBlock.end());
+                                		ramBlock.pop_back();
+                                		break;
+                        		}
+
+		                }
+				*/		
+				ramBlock.erase(std::remove(ramBlock.begin(), ramBlock.end(), auxPerm), ramBlock.end());
+                        }
+                }
+                k++;
+
+        } while (std::next_permutation(permutation.begin(), permutation.end()));
+
+	stringstream convert;
+	convert << "block-" << ramInit << "-to-" << ramFinal << ".txt";
+	string blockDelName = convert.str();
+        ofstream of_(blockDelName.c_str());
+        for (size_t i = 0; i < ramBlock.size(); i++)
+        {
+                for (size_t j = 0; j < systemSize; j++)
+                {
+                        of_ << ramBlock[i][j] << "  ";
+                }
+                of_ << endl;
+        }
+	of_.close();
+}
+
+
+
 
 
 

@@ -6,6 +6,7 @@
 // eu bi3 a b
 // eu bi4
 
+#include <utility>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -63,29 +64,25 @@ int main(int argc, char *argv[])
 {	
 	clock_t begin = clock();
 
-	CauchyIndex ci_(9);
-	ci_.doBlockRAMDeletion(1,100000,100001,200000);
-	
+        int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
+        stringstream cGen;
+        cGen << argv[1] << "  " << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
+        cGen >> systemSize >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
+	CauchyIndex ci_(systemSize);
+	ci_.doBlockRAMDeletion(kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd);
 
-	/* TESTANDO PARA DELETAR O CARA
+
+	/* TESTANDO PARA DELETAR O CARA 
 	int systemSize = 9;
-        int * myints;
-        myints = new int[systemSize];
+	vector<int> permutation(systemSize);
         for (size_t i = 0; i < systemSize; i++)
-                myints[i] = i;
-        std::sort(myints, myints + systemSize);
-        vector<int> permutation(systemSize);
+                permutation[i] = i;
 	vector< vector<int> > allPermutations;
         do
         {
-                for (size_t i = 0; i < systemSize; i++)
-                        permutation[i] = myints[i];
-
 		allPermutations.push_back(permutation);
 	
-	} while (std::next_permutation(myints, myints + systemSize));
-
-	delete [] myints;
+	} while (std::next_permutation(permutation.begin(), permutation.end()));
 
 	vector<int> apaga(systemSize);
 	for(size_t i = 0; i < apaga.size(); i++)
@@ -98,19 +95,44 @@ int main(int argc, char *argv[])
 
 	vector< vector<int> > auxPerm;
 	auxPerm = allPermutations;
-	for(size_t i = 0; i < 1; i++)
+	for(size_t i = 0; i < 100; i++)
 	{
+		auxPerm = allPermutations;
 
+		
+		for(size_t j = 0; j < auxPerm.size(); j++)
+		{
+			if(apaga == auxPerm[j])
+			{
+				vector< vector<int> >::iterator it = auxPerm.begin() + j;
+				rotate(it, it+1,auxPerm.end());
+				auxPerm.pop_back();
+				break;
+			}
+
+		}
+		
+		
 		//auxPerm = allPermutations;
-		auxPerm.erase(std::remove(auxPerm.begin(), auxPerm.end(), apaga), auxPerm.end());
+		//auxPerm.erase(std::remove(auxPerm.begin(), auxPerm.end(), apaga), auxPerm.end());
 		//inves de usar begin e end eu posso partir isso em 100 usar begin + 100, begin +200 e asism vai.
 		//e soltar em todos os processafores
 	}
 	*/
 	
+	/*
+	for(size_t i = 0; i < auxPerm.size(); i++)
+	{
+		for(size_t j = 0; j < systemSize; j++)
+		{
+			cout << auxPerm[i][j] << "  ";
+		}
+		cout << endl;
+	}
+	*/
+
+
 	
-
-
 
 	/*	
 	string execType;

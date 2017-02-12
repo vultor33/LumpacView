@@ -63,20 +63,69 @@ int main(int argc, char *argv[])
 {	
 	clock_t begin = clock();
 
+	CauchyIndex ci_(9);
+	ci_.doBlockRAMDeletion(1,100000,100001,200000);
 	
+
+	/* TESTANDO PARA DELETAR O CARA
+	int systemSize = 9;
+        int * myints;
+        myints = new int[systemSize];
+        for (size_t i = 0; i < systemSize; i++)
+                myints[i] = i;
+        std::sort(myints, myints + systemSize);
+        vector<int> permutation(systemSize);
+	vector< vector<int> > allPermutations;
+        do
+        {
+                for (size_t i = 0; i < systemSize; i++)
+                        permutation[i] = myints[i];
+
+		allPermutations.push_back(permutation);
+	
+	} while (std::next_permutation(myints, myints + systemSize));
+
+	delete [] myints;
+
+	vector<int> apaga(systemSize);
+	for(size_t i = 0; i < apaga.size(); i++)
+	{
+		if(i == apaga.size() - 1)
+			apaga[i] = 0;
+		else
+			apaga[i] = i + 1;
+	}
+
+	vector< vector<int> > auxPerm;
+	auxPerm = allPermutations;
+	for(size_t i = 0; i < 1; i++)
+	{
+
+		//auxPerm = allPermutations;
+		auxPerm.erase(std::remove(auxPerm.begin(), auxPerm.end(), apaga), auxPerm.end());
+		//inves de usar begin e end eu posso partir isso em 100 usar begin + 100, begin +200 e asism vai.
+		//e soltar em todos os processafores
+	}
+	*/
+	
+	
+
+
+
+	/*	
 	string execType;
 	int systemSize, kInit, kEnd;
 	stringstream cGen;
 	cGen << argv[1] << "  " << argv[2] << "  " << argv[3] << "  " << argv[4];
 	cGen >> execType >> systemSize >> kInit >> kEnd;	
-
 	CauchyIndex ci_(systemSize);
 	if(execType == "genBlock")
 		ci_.generateBlockFiles(systemSize,kInit,kEnd);
 	else if(execType == "deletion")
 		ci_.doBlockDeletion(kInit,kEnd);
+	*/
 
-	ci_.doBlockDeletion(1,20);
+	//ci_.doBlockDeletion(1,20);
 
 	//ci_.generateBlockFiles(6,700,720);
 	

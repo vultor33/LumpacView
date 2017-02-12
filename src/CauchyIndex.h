@@ -81,9 +81,17 @@ public:
 
 	void generateBlockFiles(int n, int kInit, int kFinal);
 
+	void generateRAMBlock(int n, int kInit, int kFinal, std::vector< std::vector<int> > & ramBlock);
+
 	void doBlockDeletion(
 		int kInit, 
 		int kFinal);
+
+	void doBlockRAMDeletion(
+		int kInit,
+        	int kFinal,
+        	int ramInit,
+       		int ramFinal);
 
 
 private:

@@ -678,6 +678,36 @@ void CauchyIndex::generateBlockFiles(int n, int kInit, int kFinal)
 }
 
 
+void CauchyIndex::generateRAMBlock(int n, int kInit, int kFinal, vector< vector<int> > & ramBlock)
+{
+	ramBlock.resize(kFinal - kInit + 1);
+        int * myints;
+        myints = new int[n];
+        for (size_t i = 0; i < n; i++)
+                myints[i] = i;
+        int k = 1;
+	int ramPos = 0;
+	vector<int> auxPerm(n);
+        do
+        {
+                if(k >= kInit && k <= kFinal)
+                {
+			for(size_t i = 0; i < n; i++)
+				auxPerm[i] = myints[i];
+			ramBlock[ramPos] = auxPerm;
+			ramPos++;
+                }
+                k++;
+
+        } while (std::next_permutation(myints, myints + n));
+
+        delete[] myints;
+
+}
+
+
+
+
 void CauchyIndex::doBlockDeletion(
 	int kInit,
 	int kFinal)
@@ -705,8 +735,6 @@ void CauchyIndex::doBlockDeletion(
                 	        for(int i = 0; i < systemSize; i++)
         	                        convert << auxPerm[i] << "-";
   	                      	permutName = convert.str();
-				//if(exist_file(permutName))
-				//remove(permutName.c_str());
 				unlink(permutName.c_str());
 			}
                 }
@@ -715,8 +743,66 @@ void CauchyIndex::doBlockDeletion(
         } while (std::next_permutation(myints, myints + systemSize));
 
         delete[] myints;
+}
+
+void CauchyIndex::doBlockRAMDeletion(
+        int kInit,
+        int kFinal,
+	int ramInit,
+	int ramFinal)
+{
+        int systemSize = mol0.size();
+	vector< vector<int> > ramBlock;
+ 	generateRAMBlock(
+		systemSize, 
+		ramInit, 
+		ramFinal, 
+		ramBlock);
+
+        int * myints;
+        myints = new int[systemSize];
+        for (size_t i = 0; i < systemSize; i++)
+                myints[i] = i;
+        int k = 1;
+        do
+        {
+                if(k >= kInit && k <= kFinal)
+                {
+                        if (k % 100 == 0)
+                                cout << "k:  " << k << endl;
+                        vector<int> permutation(systemSize);
+                        for (size_t i = 0; i < systemSize; i++)
+                                permutation[i] = myints[i];
+                        for (size_t j = 0; j < allRotationTransforms.size(); j++)
+                        {
+                                vector<int> auxPerm = applyRotation(permutation, j);
+				ramBlock.erase(std::remove(ramBlock.begin(), ramBlock.end(), auxPerm), ramBlock.end());
+                        }
+                }
+                k++;
+
+        } while (std::next_permutation(myints, myints + systemSize));
+
+        delete[] myints;
+
+	stringstream convert;
+	convert << "block-" << ramInit << "-to-" << ramFinal << ".txt";
+	string blockDelName = convert.str();
+        ofstream of_(blockDelName.c_str());
+        for (size_t i = 0; i < ramBlock.size(); i++)
+        {
+                for (size_t j = 0; j < systemSize; j++)
+                {
+                        of_ << ramBlock[i][j] << "  ";
+                }
+                of_ << endl;
+        }
+	of_.close();
 
 }
+
+
+
 
 
 void CauchyIndex::rotationTest(

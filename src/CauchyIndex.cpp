@@ -706,6 +706,66 @@ void CauchyIndex::generateRAMBlock(int n, int kInit, int kFinal, vector< vector<
 }
 
 
+void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc)
+{
+        int totalSize = factorial(nSystem);
+        if(totalSize % (nProc * nProc) != 0)
+        {
+                cout << "system and proc don't agree" << endl;
+                exit(1);
+        }
+        int bigBlock = totalSize / nProc;
+        int smallBlock = bigBlock / nProc;
+
+        // 2 -- nProc
+        string blockName = "Block";
+        for(int i = 2; i <= nProc; i++)
+        {
+                stringstream convert;
+                convert << i;
+                system(("mkdir " + blockName + convert.str()).c_str());
+
+                int indexBlock = (i-1)*bigBlock + 1;
+                int jSmallInit, jSmallEnd;
+                for(int j = 1; j <= nProc; j++)
+                {
+                        jSmallInit = indexBlock + (j-1)*smallBlock;
+                        jSmallEnd = indexBlock + j*smallBlock - 1;
+                        stringstream convert2;
+                        convert2 << j;
+                        ofstream fileSrm_((convert2.str() + ".srm").c_str());
+                        fileSrm_ << "#!/bin/bash" << endl;
+                        fileSrm_ << "#SBATCH -n 1" << endl;
+                        fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
+                        fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running" + blockName + convert.str() << endl;
+                        fileSrm_ << "cd $RODADIR" << endl;
+                        fileSrm_ << "./lumpacview.exe  " << nSystem << "  1  " << indexBlock - 1
+                                << "  " << jSmallInit << "   " << jSmallEnd << endl;
+                        fileSrm_.close();
+                        system(("mv  " + convert2.str() + ".srm" + "  " + blockName + convert.str()).c_str());
+                }
+        }
+
+
+	// generate block 1 here.
+	vector< vector<int> > ramBlock;
+        generateRAMBlock(
+                nSystem,
+                1,
+                bigBlock,
+                ramBlock);
+	string blockFileName1 = "independent-block-1";
+	for(size_t i = 0; i < ramBlock.size(); i++)
+	{	
+		printCauchyNotation(blockFileName1, ramBlock[i]);
+	}
+
+}
+
+
+
+
+
 
 
 void CauchyIndex::doBlockDeletion(

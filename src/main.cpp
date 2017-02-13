@@ -64,13 +64,17 @@ int main(int argc, char *argv[])
 {	
 	clock_t begin = clock();
 
+	CauchyIndex ci_(11);
+	ci_.generateSlurmFilesToDeletion(11, 120);
+
+	/*
         int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
         stringstream cGen;
         cGen << argv[1] << "  " << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
         cGen >> systemSize >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
 	CauchyIndex ci_(systemSize);
 	ci_.doBlockRAMDeletion(kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd);
-
+	*/
 
 	/* TESTANDO PARA DELETAR O CARA 
 	int systemSize = 9;

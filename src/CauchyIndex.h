@@ -83,6 +83,8 @@ public:
 
 	void generateRAMBlock(int n, int kInit, int kFinal, std::vector< std::vector<int> > & ramBlock);
 
+	void generateSlurmFilesToDeletion(int nSystem, int nProc);
+
 	void doBlockDeletion(
 		int kInit, 
 		int kFinal);

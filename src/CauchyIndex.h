@@ -83,7 +83,10 @@ public:
 
 	void generateRAMBlock(int n, int kInit, int kFinal, std::vector< std::vector<int> > & ramBlock);
 
-	void generateSlurmFilesToDeletion(int nSystem, int nProc);
+	// machineType:  slurm | pc
+	void generateSlurmFilesToDeletion(int nSystem, int nProc, std::string machineType);
+
+	void runall(int blockInit, int blockFinal, std::string machineType, std::string workingDirectory);
 
 	void doBlockDeletion(
 		int kInit, 

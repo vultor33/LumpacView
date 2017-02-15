@@ -64,10 +64,49 @@ int main(int argc, char *argv[])
 {	
 	clock_t begin = clock();
 
-	CauchyIndex ci_(11);
-	ci_.generateSlurmFilesToDeletion(11, 120);
+	stringstream convert0;
+	convert0 << argv[1];
+	string execType = convert0.str();
+	if(execType == "wholeBlockDeletion")
+	{
+        	int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
+        	stringstream cGen;
+        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5] << "  " << argv[6];
+        	cGen >> systemSize >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
+		CauchyIndex ci_(systemSize);
+		ci_.doBlockRAMDeletion(kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd);
+	}
+	else if(execType == "generateFiles")
+	{
+        	int systemSize, nProc;
+		string machineType;
+        	stringstream cGen;
+        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4];
+        	cGen >> systemSize >> nProc >> machineType;
+		CauchyIndex ci_(systemSize);
+		ci_.generateSlurmFilesToDeletion(systemSize, nProc, machineType);
+	}
+	else if(execType == "runall")
+	{
+	        system("pwd > workingDir");
+       		ifstream wDir_("workingDir");
+	        string workingDirectory;
+        	wDir_ >> workingDirectory;
+	        wDir_.close();
+		remove("workingDir");
+        	int blockInit, blockFinal;
+		string machineType;
+        	stringstream cGen;
+        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4];
+        	cGen >> blockInit >> blockFinal >> machineType;
+		CauchyIndex ci_(5);
+		ci_.runall(blockInit, blockFinal,machineType,workingDirectory);
+	}
+	else
+		cout << "execType not found" << endl;
 
-	/*
+
+	/* FUNCIONANDO PARA DELETAR OS CARAS	
         int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
         stringstream cGen;
         cGen << argv[1] << "  " << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];

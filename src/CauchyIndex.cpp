@@ -706,7 +706,8 @@ void CauchyIndex::generateRAMBlock(int n, int kInit, int kFinal, vector< vector<
 }
 
 
-void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc)
+
+void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string machineType)
 {
         int totalSize = factorial(nSystem);
         if(totalSize % (nProc * nProc) != 0)
@@ -717,6 +718,26 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc)
         int bigBlock = totalSize / nProc;
         int smallBlock = bigBlock / nProc;
 
+
+	ofstream fileRunAll_("runBlock.x");
+	fileRunAll_ << "#!/bin/bash" << endl;
+	for(int i = 1; i <= nProc; i++)
+	{
+		stringstream convert3;
+		convert3 << i;
+		if(machineType == "slurm")
+			fileRunAll_ << "./" << convert3.str() << ".srm" << endl;
+		else if(machineType == "pc")
+			fileRunAll_ << "./" << convert3.str() << ".x" << endl;
+		else
+		{
+			cout << "machine type not found" << endl;
+			exit(1);
+		}
+	}
+	system("chmod u+x runBlock.x");
+
+
         // 2 -- nProc
         string blockName = "Block";
         for(int i = 2; i <= nProc; i++)
@@ -724,6 +745,7 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc)
                 stringstream convert;
                 convert << i;
                 system(("mkdir " + blockName + convert.str()).c_str());
+               	system(("cp lumpacview.exe  " + blockName + convert.str()).c_str());
 
                 int indexBlock = (i-1)*bigBlock + 1;
                 int jSmallInit, jSmallEnd;
@@ -733,16 +755,31 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc)
                         jSmallEnd = indexBlock + j*smallBlock - 1;
                         stringstream convert2;
                         convert2 << j;
-                        ofstream fileSrm_((convert2.str() + ".srm").c_str());
-                        fileSrm_ << "#!/bin/bash" << endl;
-                        fileSrm_ << "#SBATCH -n 1" << endl;
-                        fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
-                        fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running" + blockName + convert.str() << endl;
-                        fileSrm_ << "cd $RODADIR" << endl;
-                        fileSrm_ << "./lumpacview.exe  " << nSystem << "  1  " << indexBlock - 1
-                                << "  " << jSmallInit << "   " << jSmallEnd << endl;
-                        fileSrm_.close();
-                        system(("mv  " + convert2.str() + ".srm" + "  " + blockName + convert.str()).c_str());
+			if(machineType == "slurm")
+			{
+                        	ofstream fileSrm_((convert2.str() + ".srm").c_str());
+                        	fileSrm_ << "#!/bin/bash" << endl;
+                        	fileSrm_ << "#SBATCH -n 1" << endl;
+                        	fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
+                        	fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running" + blockName + convert.str() << endl;
+                        	fileSrm_ << "cd $RODADIR" << endl;
+                        	fileSrm_ << "./lumpacview.exe  wholeBlockDeletion   " << nSystem << "  1  " << indexBlock - 1
+                                	<< "  " << jSmallInit << "   " << jSmallEnd << endl;
+                        	fileSrm_.close();
+                        	system(("mv  " + convert2.str() + ".srm" + "  " + blockName + convert.str()).c_str());
+                        	system(("cp runBlock.x  " + blockName + convert.str()).c_str());
+			}
+			else if(machineType == "pc")
+			{
+                        	ofstream fileSrm_((convert2.str() + ".x").c_str());
+                        	fileSrm_ << "#!/bin/bash" << endl;
+                        	fileSrm_ << "./lumpacview.exe  wholeBlockDeletion  " << nSystem << "  1  " << indexBlock - 1
+                                	<< "  " << jSmallInit << "   " << jSmallEnd << endl;
+                        	fileSrm_.close();
+                        	system(("chmod u+x  " + convert2.str() + ".x").c_str());
+                        	system(("mv  " + convert2.str() + ".x" + "  " + blockName + convert.str()).c_str());
+                        	system(("cp runBlock.x  " + blockName + convert.str()).c_str());
+			}
                 }
         }
 
@@ -759,12 +796,47 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc)
 	{	
 		printCauchyNotation(blockFileName1, ramBlock[i]);
 	}
+}
 
+
+void CauchyIndex::runall(int blockInit, int blockFinal,string machineType,string workingDirectory)
+{
+
+	string folderName;
+	for(int i = blockInit; i <= blockFinal; i++)
+	{
+                stringstream convert;
+                convert << i;
+                folderName = "Block" + convert.str();
+                chdir(folderName.c_str());
+                system("./runBlock.x");
+		chdir(workingDirectory.c_str());
+		cout << i << "   finished" << endl;
+	}
+}
+
+void CauchyIndex::cleanBlocksAndGenerateIsomers()
+{
+	string folderName;
+	for(int i = blockInit; i <= blockFinal; i++)
+	{
+                stringstream convert;
+                convert << i;
+                folderName = "Block" + convert.str();
+                chdir(folderName.c_str());
+                system(("cat block* > independent-isomers-" + convert.str()).c_str());
+                system((mv independent-isomers-" + convert.str() + " .. ").c_str());
+		chdir(workingDirectory.c_str());
+		system(("rm -rf " + folderName).c_str());
+	}
 }
 
 
 
 
+
+
+}
 
 
 
@@ -806,64 +878,6 @@ void CauchyIndex::doBlockDeletion(
 }
 
 
-/* ORIGINAL
-void CauchyIndex::doBlockRAMDeletion(
-        int kInit,
-        int kFinal,
-	int ramInit,
-	int ramFinal)
-{
-        int systemSize = mol0.size();
-	vector< vector<int> > ramBlock;
- 	generateRAMBlock(
-		systemSize, 
-		ramInit, 
-		ramFinal, 
-		ramBlock);
-
-        int * myints;
-        myints = new int[systemSize];
-        for (size_t i = 0; i < systemSize; i++)
-                myints[i] = i;
-        int k = 1;
-        do
-        {
-                if(k >= kInit && k <= kFinal)
-                {
-                        if (k % 100 == 0)
-                                cout << "k:  " << k << endl;
-                        vector<int> permutation(systemSize);
-                        for (size_t i = 0; i < systemSize; i++)
-                                permutation[i] = myints[i];
-                        for (size_t j = 0; j < allRotationTransforms.size(); j++)
-                        {
-                                vector<int> auxPerm = applyRotation(permutation, j);
-				ramBlock.erase(std::remove(ramBlock.begin(), ramBlock.end(), auxPerm), ramBlock.end());
-                        }
-                }
-                k++;
-
-        } while (std::next_permutation(myints, myints + systemSize));
-
-        delete[] myints;
-
-	stringstream convert;
-	convert << "block-" << ramInit << "-to-" << ramFinal << ".txt";
-	string blockDelName = convert.str();
-        ofstream of_(blockDelName.c_str());
-        for (size_t i = 0; i < ramBlock.size(); i++)
-        {
-                for (size_t j = 0; j < systemSize; j++)
-                {
-                        of_ << ramBlock[i][j] << "  ";
-                }
-                of_ << endl;
-        }
-	of_.close();
-
-}
-*/
-
 void CauchyIndex::doBlockRAMDeletion(
         int kInit,
         int kFinal,
@@ -886,8 +900,6 @@ void CauchyIndex::doBlockRAMDeletion(
         {
                 if(k >= kInit && k <= kFinal)
                 {
-                        if (k % 100 == 0)
-                                cout << "k:  " << k << endl;
                         for (size_t j = 0; j < allRotationTransforms.size(); j++)
                         {
                                 vector<int> auxPerm = applyRotation(permutation, j);

@@ -88,6 +88,8 @@ public:
 
 	void runall(int blockInit, int blockFinal, std::string machineType, std::string workingDirectory);
 
+	void cleanBlocksAndGenerateIsomers(int nProc, int systemSize, std::string workingDirectory);
+
 	void doBlockDeletion(
 		int kInit, 
 		int kFinal);

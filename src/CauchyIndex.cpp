@@ -791,7 +791,7 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string ma
                 1,
                 bigBlock,
                 ramBlock);
-	string blockFileName1 = "independent-block-1";
+	string blockFileName1 = "independent-isomers-1";
 	for(size_t i = 0; i < ramBlock.size(); i++)
 	{	
 		printCauchyNotation(blockFileName1, ramBlock[i]);
@@ -815,26 +815,33 @@ void CauchyIndex::runall(int blockInit, int blockFinal,string machineType,string
 	}
 }
 
-void CauchyIndex::cleanBlocksAndGenerateIsomers()
+void CauchyIndex::cleanBlocksAndGenerateIsomers(int nProc, int systemSize, string workingDirectory)
 {
 	string folderName;
-	for(int i = blockInit; i <= blockFinal; i++)
+	for(int i = 2; i <= nProc; i++)
 	{
                 stringstream convert;
                 convert << i;
                 folderName = "Block" + convert.str();
                 chdir(folderName.c_str());
                 system(("cat block* > independent-isomers-" + convert.str()).c_str());
-                system((mv independent-isomers-" + convert.str() + " .. ").c_str());
+                system(("mv independent-isomers-" + convert.str() + " .. ").c_str());
 		chdir(workingDirectory.c_str());
 		system(("rm -rf " + folderName).c_str());
 	}
-}
 
-
-
-
-
+	stringstream convert0;
+	convert0 << systemSize;
+	string systemSizeName = convert0.str();
+	string isomerName;
+	for(int i = 1; i <= nProc; i++)
+	{
+                stringstream convert;
+                convert << i;
+		isomerName = "independent-isomers-" + convert.str();
+	
+                system(("./lumpacview.exe blockGeneration " + systemSizeName + " independent-isomers-" + convert.str()).c_str());
+	}
 
 }
 

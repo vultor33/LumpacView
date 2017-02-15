@@ -94,13 +94,25 @@ int main(int argc, char *argv[])
         	wDir_ >> workingDirectory;
 	        wDir_.close();
 		remove("workingDir");
-        	int blockInit, blockFinal;
+        	int systemSize, blockInit, nProc;
 		string machineType;
         	stringstream cGen;
-        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4];
-        	cGen >> blockInit >> blockFinal >> machineType;
-		CauchyIndex ci_(5);
-		ci_.runall(blockInit, blockFinal,machineType,workingDirectory);
+        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
+        	cGen >> systemSize >> blockInit >> nProc >> machineType;
+		CauchyIndex ci_(systemSize);
+		if(blockInit <= nProc)
+			ci_.runall(blockInit, nProc,machineType,workingDirectory);
+		ci_.cleanBlocksAndGenerateIsomers(nProc,systemSize,workingDirectory);
+	}
+	else if(execType == "blockGeneration")
+	{
+		int systemSize;
+                string blockName;
+                stringstream cGen;
+                cGen << argv[2] << "  " << argv[3];
+                cGen >> systemSize >> blockName;
+                CauchyIndex ci_(systemSize);
+		ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
 	}
 	else
 		cout << "execType not found" << endl;

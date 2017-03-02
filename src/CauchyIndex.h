@@ -31,7 +31,7 @@ class CauchyIndex
 {
 public:
 	CauchyIndex(int iSystem);
-	
+
 	~CauchyIndex();
 
 	//print with mol0 and molBidentate
@@ -43,7 +43,7 @@ public:
 		std::ofstream & printFile_);
 
 	void rotationTest(
-		std::vector<std::string> &atoms, 
+		std::vector<std::string> &atoms,
 		std::vector<int> & bidentateAtomsChosen);
 
 	void generateAllIndependentIsomers();
@@ -78,7 +78,6 @@ public:
 
 	std::vector<CoordXYZ> getPoints();
 
-
 	void generateBlockFiles(int n, int kInit, int kFinal);
 
 	void generateRAMBlock(int n, int kInit, int kFinal, std::vector< std::vector<int> > & ramBlock);
@@ -91,7 +90,7 @@ public:
 	void cleanBlocksAndGenerateIsomers(int nProc, int systemSize, std::string workingDirectory);
 
 	void doBlockDeletion(
-		int kInit, 
+		int kInit,
 		int kFinal);
 
 	void doBlockRAMDeletion(
@@ -135,7 +134,7 @@ private:
 
 	void printCauchyNotation(std::vector<int> & cauchyList);
 	void printCauchyNotation(
-		std::string fileName, 
+		std::string fileName,
 		std::vector<int> & cauchyList);
 
 	void printMoleculeFast(std::vector<CoordXYZ> & mol);
@@ -153,7 +152,7 @@ private:
 
 	void setBidentateChosen(std::vector<int> & bidentateAtomsChosen);
 
-	inline bool exist_file (const std::string& name) 
+	inline bool exist_file (const std::string& name)
 	{
 		struct stat buffer;
   		return (stat (name.c_str(), &buffer) == 0);

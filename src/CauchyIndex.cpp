@@ -402,61 +402,71 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, st
 
 
 void CauchyIndex::molecularFormulaToCauchyCode(
-	string code, 
+	string code,
 	vector<int> & atomTypes,
 	vector<int> & bidentateAtomsChosen)
 {
 	AllMolecularFormulas allMolecular_;
+	atomTypes.resize(mol0.size());
 	vector< vector<int> > molecularCode = allMolecular_.stringToNumber(code);
 	int kType = 0;
-	for (size_t i = 0; i < molecularCode[2].size(); i++)
-	{
-		for (size_t j = 0; j < molecularCode[2][i]; j++)
-		{
-			atomTypes.push_back(kType);
-			atomTypes.push_back(kType + 1);
-		}
-		kType += 2;
-	}
-	for (size_t i = 0; i < molecularCode[1].size(); i++)
-	{
-		for (size_t j = 0; j < molecularCode[1][i]; j++)
-		{
-			atomTypes.push_back(kType);
-			atomTypes.push_back(kType);
-		}
-		kType++;
-	}
-	for (size_t i = 0; i < molecularCode[0].size(); i++)
-	{
-		for (size_t j = 0; j < molecularCode[0][i]; j++)
-		{
-			atomTypes.push_back(kType);
-		}
-		kType++;
-	}
 
 	int bidentateProblem;
 	vector<int> permutation(mol0.size());
 	for (size_t i = 0; i < mol0.size(); i++)
 		permutation[i] = i;
+    int k = 0;
 	do
 	{
+	    k++;
+	    if(k > 100000)
+        {
+            cout << "CauchyIndex::molecularFormulaToCauchyCode error" << endl;
+            exit(1);
+        }
 		vector<int> auxBidentateAtomsChosen;
+		vector<int> auxAtomTypes = atomTypes;
+		int kAuxBidentatePosition = 0;
+		int kTypes = 0;
 		for (size_t i = 0; i < molecularCode[2].size(); i++)
 		{
 			for (size_t j = 0; j < molecularCode[2][i]; j++)
 			{
 				setBidentateChosen(auxBidentateAtomsChosen);
+				auxAtomTypes[auxBidentateAtomsChosen[kAuxBidentatePosition]] = kTypes;
+				kAuxBidentatePosition++;
+				auxAtomTypes[auxBidentateAtomsChosen[kAuxBidentatePosition]] = kTypes + 1;
+				kAuxBidentatePosition++;
 			}
+			kTypes += 2;
 		}
 		for (size_t i = 0; i < molecularCode[1].size(); i++)
 		{
 			for (size_t j = 0; j < molecularCode[1][i]; j++)
 			{
 				setBidentateChosen(auxBidentateAtomsChosen);
+				auxAtomTypes[auxBidentateAtomsChosen[kAuxBidentatePosition]] = kTypes;
+				kAuxBidentatePosition++;
+				auxAtomTypes[auxBidentateAtomsChosen[kAuxBidentatePosition]] = kTypes;
+				kAuxBidentatePosition++;
 			}
+            kTypes++;
 		}
+		vector<int> auxAtomsChosen = auxBidentateAtomsChosen;
+        for (size_t i = 0; i < molecularCode[0].size(); i++)
+        {
+            for (size_t j = 0; j < molecularCode[0][i]; j++)
+            {
+                int iAuxAtomTypes;
+                do
+                {
+                    iAuxAtomTypes = auxMath_.randomNumber(0, mol0.size() - 1);
+                } while (find(auxAtomsChosen.begin(), auxAtomsChosen.end(), iAuxAtomTypes) != auxAtomsChosen.end());
+                auxAtomTypes[iAuxAtomTypes] = kTypes;
+                auxAtomsChosen.push_back(iAuxAtomTypes);
+            }
+            kTypes++;
+        }
 		bidentateProblem = compareTwoIsomersWithLabels(
 			atomTypes,
 			auxBidentateAtomsChosen,
@@ -466,9 +476,38 @@ void CauchyIndex::molecularFormulaToCauchyCode(
 		if (bidentateProblem != 2)
 		{
 			bidentateAtomsChosen = auxBidentateAtomsChosen;
+			atomTypes = auxAtomTypes;
 			break;
 		}
 	} while (true);
+
+	vector<string> labels(6);
+	labels[0] = "F";
+	labels[1] = "B";
+	labels[2] = "C";
+	labels[3] = "Li";
+	labels[4] = "N";
+	labels[5] = "O";
+	vector<string> atomLabels(6);
+	//tenho q ter uma coisa que pega o types e transforma em letras
+	for(size_t i = 0; i < atomTypes.size(); i++)
+    {
+            atomLabels[i] = labels[atomTypes[i]];
+            cout << "labels:  "  << atomTypes[i] << endl;
+    }
+    for(size_t i = 0; i < bidentateAtomsChosen.size(); i++)
+        cout << "bidentate:  " << bidentateAtomsChosen[i] << endl;
+
+    ofstream of_("teste-print.xyz");
+    printMolecule(
+		permutation,
+		atomLabels,
+		bidentateAtomsChosen,
+		of_);
+    of_.close();
+
+	//for (size_t i = 0; i < mol0.size(); i++)
+	//	cout << permutation[i] = i;
 
 }
 
@@ -484,7 +523,7 @@ void CauchyIndex::setBidentateChosen(std::vector<int>& bidentateAtomsChosen)
 	do
 	{
 		i2 = auxMath_.randomNumber(0, mol0.size() - 1);
-	} while (find(bidentateAtomsChosen.begin(), bidentateAtomsChosen.end(), i2) != bidentateAtomsChosen.end());	
+	} while (find(bidentateAtomsChosen.begin(), bidentateAtomsChosen.end(), i2) != bidentateAtomsChosen.end());
 	bidentateAtomsChosen.push_back(i2);
 }
 
@@ -492,7 +531,7 @@ void CauchyIndex::setBidentateChosen(std::vector<int>& bidentateAtomsChosen)
 int CauchyIndex::compareTwoIsomersWithLabels(
 	std::vector<int>& atomTypes,
 	std::vector<int>& bidentateAtomsChosen,
-	std::vector<int>& permutationIsomer1, 
+	std::vector<int>& permutationIsomer1,
 	std::vector<int>& permutationIsomer2)
 {
 	size_t size = mol0.size();
@@ -543,7 +582,7 @@ int CauchyIndex::compareTwoIsomersWithLabels(
 }
 
 bool CauchyIndex::compareTwoIsomers(
-	std::vector<int>& permutationIsomer1, 
+	std::vector<int>& permutationIsomer1,
 	std::vector<int>& permutationIsomer2)
 {
 	for (size_t j = 0; j < allRotationTransforms.size(); j++)
@@ -643,7 +682,7 @@ void CauchyIndex::printBlock(int nPieces)
 		printCauchyNotation(blockFileName, permutation);
 		iBlock++;
 	} while (std::next_permutation(myints, myints + systemSize));
-	
+
 	delete[] myints;
 
 }
@@ -654,7 +693,7 @@ void CauchyIndex::generateBlockFiles(int n, int kInit, int kFinal)
         int * myints;
         myints = new int[n];
         for (size_t i = 0; i < n; i++)
-                myints[i] = i;	       
+                myints[i] = i;
 	string permutName;
 	int k = 1;
 	do
@@ -793,7 +832,7 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string ma
                 ramBlock);
 	string blockFileName1 = "independent-isomers-1";
 	for(size_t i = 0; i < ramBlock.size(); i++)
-	{	
+	{
 		printCauchyNotation(blockFileName1, ramBlock[i]);
 	}
 }
@@ -839,7 +878,7 @@ void CauchyIndex::cleanBlocksAndGenerateIsomers(int nProc, int systemSize, strin
                 stringstream convert;
                 convert << i;
 		isomerName = "independent-isomers-" + convert.str();
-	
+
                 system(("./lumpacview.exe blockGeneration " + systemSizeName + " independent-isomers-" + convert.str()).c_str());
 	}
 
@@ -894,9 +933,9 @@ void CauchyIndex::doBlockRAMDeletion(
         int systemSize = mol0.size();
 	vector< vector<int> > ramBlock;
  	generateRAMBlock(
-		systemSize, 
-		ramInit, 
-		ramFinal, 
+		systemSize,
+		ramInit,
+		ramFinal,
 		ramBlock);
 
 	vector<int> permutation(systemSize);
@@ -922,7 +961,7 @@ void CauchyIndex::doBlockRAMDeletion(
                         		}
 
 		                }
-				*/		
+				*/
 				ramBlock.erase(std::remove(ramBlock.begin(), ramBlock.end(), auxPerm), ramBlock.end());
                         }
                 }
@@ -953,7 +992,7 @@ void CauchyIndex::doBlockRAMDeletion(
 
 
 void CauchyIndex::rotationTest(
-	vector<string> & atoms, 
+	vector<string> & atoms,
 	vector<int> & bidentateAtomsChosen)
 {
 	size_t size = mol0.size();
@@ -1009,7 +1048,7 @@ std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 		molRot[i].z = newCoord[2];
 	}
 
-// fredapagar	
+// fredapagar
 //	molRot[0].atomlabel = "Li";
 //	mol[0].atomlabel = "Li";
 //	molRot[1].atomlabel = "F";
@@ -1026,7 +1065,7 @@ std::vector<int> CauchyIndex::calculateRotationTransform(int rotation)
 				(molRot[i].x - mol[j].x) * (molRot[i].x - mol[j].x) +
 				(molRot[i].y - mol[j].y) * (molRot[i].y - mol[j].y) +
 				(molRot[i].z - mol[j].z) * (molRot[i].z - mol[j].z));
-			
+
 			//cout << "i:  " << i << " j: " << j << "  dist: " << atomPosition << endl;
 			if (atomPosition < 1.0e-2)
 			{
@@ -1086,7 +1125,7 @@ void CauchyIndex::printMoleculeFast(std::vector<CoordXYZ>& mol)
 	{
 		if (mol[i].atomlabel == "")
 			mol[i].atomlabel = "H  ";
-		
+
 		of_ << mol[i].atomlabel << "  "
 			<< mol[i].x << "  "
 			<< mol[i].y << "  "
@@ -1164,7 +1203,7 @@ vector<int> CauchyIndex::applyRotation(
 }
 
 std::vector<int> CauchyIndex::applyPermutationCoordinates(
-	const std::vector<int> & permutation, 
+	const std::vector<int> & permutation,
 	const std::vector<std::string> & atoms,
 	const std::vector<int> & bidentateAtomsChosen)
 {
@@ -1189,7 +1228,7 @@ std::vector<int> CauchyIndex::applyPermutationCoordinates(
 }
 
 std::vector<int> CauchyIndex::applyPermutationBidentates(
-	const std::vector<int>& permutation, 
+	const std::vector<int>& permutation,
 	const std::vector<int>& bidentateAtomsChosen)
 {
 	size_t size = permutation.size();
@@ -1798,7 +1837,7 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations[11] = auxMath_._pi;
 		// produto vetorial
 		auxReferenceAxis = auxMath_.vectorProduct(
-			mol0[0].x, mol0[0].y, mol0[0].z, 
+			mol0[0].x, mol0[0].y, mol0[0].z,
 			mol0[6].x, mol0[6].y, mol0[6].z);
 		auxMath_.normalize(auxReferenceAxis);
 		//c3 - 1
@@ -1963,7 +2002,7 @@ void CauchyIndex::setSystem(int system)
 		cutAngle = auxMath_._pi / 2.0e0;
 		vectorRotations.resize(236);
 		// 4 c5 para cada um dos 6 pontos principais (12 c5 e 12 c52)
-		// 2 c3 pra cada face unica (20 c3) 
+		// 2 c3 pra cada face unica (20 c3)
 		// c2 para cada aresta (10 no topo e 5 ao redor = 15)
 		//add rotations
 		// 0 por cima

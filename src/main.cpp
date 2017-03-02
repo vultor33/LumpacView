@@ -55,24 +55,44 @@ void buildComplexWithALotOfIsomersAndDoWater(
 }
 
 inline bool exist_file (const std::string& name) {
-  struct stat buffer;   
-  return (stat (name.c_str(), &buffer) == 0); 
+  struct stat buffer;
+  return (stat (name.c_str(), &buffer) == 0);
 }
 
 
-int main(int argc, char *argv[]) 
-{	
+int main(int argc, char *argv[])
+{
 	clock_t begin = clock();
+
+	CauchyIndex ci_(6);
+	//ci_.generateAllIndependentIsomersRuntimeRotations();
+/*
+	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01B02");
+	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B02B03");
+	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B02C01");
+	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B02m01m02");
+	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01B01");
+*/
+
+    ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","m01m01m02m02m03m03");
+
+	//ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01C01");
+	//ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01m01m01");
+	//ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01m01m02");
+    //ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B02m01m01");
+
+	//tem que dizer qual atomo e qual cor.
+	return 0;
 
 	stringstream convert0;
 	convert0 << argv[1];
 	string execType = convert0.str();
 	if(execType == "wholeBlockDeletion")
 	{
-        	int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
-        	stringstream cGen;
-        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5] << "  " << argv[6];
-        	cGen >> systemSize >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
+        int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
+        stringstream cGen;
+        cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5] << "  " << argv[6];
+        cGen >> systemSize >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
 		CauchyIndex ci_(systemSize);
 		ci_.doBlockRAMDeletion(kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd);
 	}
@@ -118,7 +138,7 @@ int main(int argc, char *argv[])
 		cout << "execType not found" << endl;
 
 
-	/* FUNCIONANDO PARA DELETAR OS CARAS	
+	/* FUNCIONANDO PARA DELETAR OS CARAS
         int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
         stringstream cGen;
         cGen << argv[1] << "  " << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
@@ -127,7 +147,7 @@ int main(int argc, char *argv[])
 	ci_.doBlockRAMDeletion(kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd);
 	*/
 
-	/* TESTANDO PARA DELETAR O CARA 
+	/* TESTANDO PARA DELETAR O CARA
 	int systemSize = 9;
 	vector<int> permutation(systemSize);
         for (size_t i = 0; i < systemSize; i++)
@@ -136,7 +156,7 @@ int main(int argc, char *argv[])
         do
         {
 		allPermutations.push_back(permutation);
-	
+
 	} while (std::next_permutation(permutation.begin(), permutation.end()));
 
 	vector<int> apaga(systemSize);
@@ -154,7 +174,7 @@ int main(int argc, char *argv[])
 	{
 		auxPerm = allPermutations;
 
-		
+
 		for(size_t j = 0; j < auxPerm.size(); j++)
 		{
 			if(apaga == auxPerm[j])
@@ -166,15 +186,15 @@ int main(int argc, char *argv[])
 			}
 
 		}
-		
-		
+
+
 		//auxPerm = allPermutations;
 		//auxPerm.erase(std::remove(auxPerm.begin(), auxPerm.end(), apaga), auxPerm.end());
 		//inves de usar begin e end eu posso partir isso em 100 usar begin + 100, begin +200 e asism vai.
 		//e soltar em todos os processafores
 	}
 	*/
-	
+
 	/*
 	for(size_t i = 0; i < auxPerm.size(); i++)
 	{
@@ -187,14 +207,14 @@ int main(int argc, char *argv[])
 	*/
 
 
-	
 
-	/*	
+
+	/*
 	string execType;
 	int systemSize, kInit, kEnd;
 	stringstream cGen;
 	cGen << argv[1] << "  " << argv[2] << "  " << argv[3] << "  " << argv[4];
-	cGen >> execType >> systemSize >> kInit >> kEnd;	
+	cGen >> execType >> systemSize >> kInit >> kEnd;
 	CauchyIndex ci_(systemSize);
 	if(execType == "genBlock")
 		ci_.generateBlockFiles(systemSize,kInit,kEnd);
@@ -205,7 +225,7 @@ int main(int argc, char *argv[])
 	//ci_.doBlockDeletion(1,20);
 
 	//ci_.generateBlockFiles(6,700,720);
-	
+
 	//string blockName = argv[1];
 
 	//ci_.generateAllIndependentIsomers12(blockName);
@@ -228,7 +248,7 @@ int main(int argc, char *argv[])
 	allBlockNames[9] = "isomersOf-block-10---11.txt";
 	allBlockNames[10] = "isomersOf-block-10---6.txt";
 	allBlockNames[11] = "isomersOf-block-10---12.txt";
-	ci_.mergeBlocks(allBlockNames,12);	
+	ci_.mergeBlocks(allBlockNames,12);
 	*/
 
 
@@ -322,7 +342,7 @@ int main(int argc, char *argv[])
 	BestPermutation bp_(ligandNames, "BUVXAR11.xyz");
 	*/
 
-	
+
 	/* DUCNAQ WORKING
 	vector<string> ligandNames(5);
 	ligandNames[0] = "Lumpac-View-Ligand-DUCNAQ-ligand-FALTA-OTIMIZAR";
@@ -359,19 +379,19 @@ int main(int argc, char *argv[])
 	*/
 
 
-	/* SERHED  
+	/* SERHED
 	vector<string> ligandNames(3);
 	ligandNames[0] = "SERHED-ligand-ciclo-5";
 	ligandNames[1] = "SERHED-ligand-ciclo-5";
 	ligandNames[2] = "SERHED-mono";
 	*/
-	
-	
+
+
 	//BestPermutation bp_("serhed-complex.xyz");
 	//bp_.findBestPermutation();
-	
 
-	/* SOPFUY 
+
+	/* SOPFUY
 	vector<string> ligandNames(3);
 	ligandNames[0] = "SOPFUY-ligand";
 	ligandNames[1] = "SOPFUY-ligand";
@@ -380,7 +400,7 @@ int main(int argc, char *argv[])
 	bp_.findBestPermutation();
 	*/
 
-	/* SUXXIS 
+	/* SUXXIS
 	vector<string> ligandNames(6);
 	ligandNames[0] = "SUXXIS-ligand";
 	ligandNames[1] = "SUXXIS-ligand";
@@ -391,20 +411,20 @@ int main(int argc, char *argv[])
 	BestPermutation bp_(ligandNames, "suxxis-complex.xyz");
 	bp_.findBestPermutation();  */
 
-	/* 
+	/*
 	-> FIND ISOMERS - WORKING
 	*/
 
 	/* CHECAR LumpacViewInput.txt para informacoes do input
 	clock_t begin = clock();
-	FindIsomers findIso_;	
+	FindIsomers findIso_;
 	findIso_.start();
 	clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;
 	*/
 
-	/* CALCULANDO O COMPLEXO A PARTIR DOS CODIGOS 
+	/* CALCULANDO O COMPLEXO A PARTIR DOS CODIGOS
 	VERIFICAR - DOALLPERMUTATIONS
 	vector<int> permutation(7);
 	string projectName = "jalniu4";

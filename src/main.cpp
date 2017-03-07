@@ -74,10 +74,8 @@ int main(int argc, char *argv[])
 	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01B01");
 */
 
-    ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","m01m01m02m02m03m03");
-
-	//ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01C01");
-	//ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01m01m01");
+	//ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","m01m02m02m02C01");
+	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01m01m01");
 	//ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01m01m02");
     //ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B02m01m01");
 

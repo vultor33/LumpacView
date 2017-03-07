@@ -346,8 +346,6 @@ void CauchyIndex::generateAllIndependentIsomers12(string blockFileName)
 }
 
 
-
-
 void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, string code)
 {
 	vector<int> atomTypes;
@@ -505,10 +503,8 @@ void CauchyIndex::molecularFormulaToCauchyCode(
 		bidentateAtomsChosen,
 		of_);
     of_.close();
-
 	//for (size_t i = 0; i < mol0.size(); i++)
 	//	cout << permutation[i] = i;
-
 }
 
 
@@ -543,6 +539,11 @@ int CauchyIndex::compareTwoIsomersWithLabels(
 		types2[i] = atomTypes[permutationIsomer2[i]];
 	}
 	vector<int> bidPos1 = applyPermutationBidentates(permutationIsomer1, bidentateAtomsChosen);
+	for(size_t i = 0; i < bidPos1.size(); i++)
+    {
+        cout << "bidpos:  " << bidPos1[i] << endl;
+        cout << "esse types acho que nao esta rolando --- compareTwoIsomersWithLabels" << endl;
+    }
 	if (bidPos1.size() == 0 && bidentateAtomsChosen.size() != 0)
 	{
 		return 2;

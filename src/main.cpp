@@ -64,29 +64,9 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 
-	/* FIND ISOMERS ANTIGO
-	FindIsomers find_;
-	find_.start();
-	return 0;
-	*/
-
-
 	CauchyIndex ci_(6);
-	//ci_.generateAllIndependentIsomersRuntimeRotations();
-/*
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01B02");
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B02B03");
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B02C01");
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B02m01m02");
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01B01");
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01m01m01");
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","m01m02m02m02C01");
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B02m01m01");
-
-	*/
-
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","B01B01m01m02");
-	ci_.printMoleculeFromFile("B01B01m01m02-printFinalPermutations.txt");
+	ci_.generateAllIndependentIsomersRuntimeRotations();
+	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","m01m01m01m01m02m03");
 
 	//tem que dizer qual atomo e qual cor.
 	return 0;

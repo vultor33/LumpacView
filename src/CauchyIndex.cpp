@@ -413,7 +413,6 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, st
 	of_ << "  -1  ";
 	of_ << endl;
 
-	ofstream xyzFile_((code + "-" + blockFileName + ".xyz").c_str());
 	for (size_t i = 0; i < allPermutations.size(); i++)
 	{
 		for (size_t j = 0; j < systemSize; j++)
@@ -421,13 +420,7 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, st
 			of_ << allPermutations[i][j] << "  ";
 		}
 		of_ << endl;
-		printMolecule(
-			allPermutations[i],
-			atomTypes,
-			bidentateAtomChosen,
-			xyzFile_);
 	}
-	xyzFile_.close();
 
 	/*print xyz
 	ofstream xyzFile_((code + "-" + blockFileName + ".xyz").c_str());

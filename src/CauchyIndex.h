@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <unistd.h>
+//#include <unistd.h>
 #include <sys/stat.h>
 
 #include "Coordstructs.h"
@@ -38,9 +38,16 @@ public:
 	// COLOCAR CONST EM TUDO
 	void printMolecule(
 		std::vector<int> & permutation,
+		std::vector<int> & atomTypes,
+		const std::vector<int> & bidentateAtomsChosen,
+		std::ofstream & printFile_);
+	void printMolecule(
+		std::vector<int> & permutation,
 		const std::vector<std::string> & atoms,
 		const std::vector<int> & bidentateAtomsChosen,
 		std::ofstream & printFile_);
+
+	void printMoleculeFromFile(std::string fileName);
 
 	void rotationTest(
 		std::vector<std::string> &atoms,
@@ -108,6 +115,7 @@ private:
 	std::vector<cauchyRotation> allRotationsMatrix;
 	std::vector< std::vector<int> > allRotationTransforms;
 	std::vector<std::string> bidentateLabels;
+	std::vector<std::string> atomLabels;
 	double cutAngle;
 
 	//data all isomers

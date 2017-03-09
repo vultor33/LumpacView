@@ -26,9 +26,10 @@ FindIsomers::~FindIsomers(){}
 
 int FindIsomers::start()
 {
+	fileAllIsomers = "Lumpac-allIsomers.xyz";
+
 	readInput();
 
-//	fileAllIsomers = "Lumpac-allIsomers.xyz";
 	if (exists_test0(fileAllIsomers))
 		remove(fileAllIsomers.c_str());
 

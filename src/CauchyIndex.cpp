@@ -14,6 +14,8 @@
 #include "Coordstructs.h"
 #include "AuxMath.h"
 
+//#define UNIX
+
 using namespace std;
 
 CauchyIndex::CauchyIndex(int iSystem)
@@ -25,6 +27,21 @@ CauchyIndex::CauchyIndex(int iSystem)
 	bidentateLabels[3] = "Kr";
 	bidentateLabels[4] = "Xe";
 	bidentateLabels[5] = "Rn";
+	atomLabels.resize(12);
+	atomLabels[0] = "Li";
+	atomLabels[1] = "B";
+	atomLabels[2] = "C";
+	atomLabels[3] = "N";
+	atomLabels[4] = "O";
+	atomLabels[5] = "F";
+	atomLabels[6] = "Cl";
+	atomLabels[7] = "Br";
+	atomLabels[8] = "I";
+	atomLabels[9] = "Ti";
+	atomLabels[10] = "Sc";
+	atomLabels[11] = "Au";
+
+
 	calculateAllIndexes(iSystem);
 }
 
@@ -133,7 +150,7 @@ void CauchyIndex::generateAllIndependentIsomersIO()
 	std::sort(myints, myints + systemSize);
 	vector<int> permutation(systemSize);
 	remove("allCauchyRotatations.txt");
-	string cauchyFileName = "allCauchyRotatations.txt";
+	string cauchyFileName = "a llCauchyRotatations.txt";
 	bool equal;
 	int k = 0;
 
@@ -387,6 +404,16 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, st
 	}
 
 	ofstream of_((code + "-" + blockFileName).c_str());
+	of_ << allPermutations.size() << "  types:  ";
+	for (size_t i = 0; i < atomTypes.size(); i++)
+		of_ << atomTypes[i] << "  ";
+	of_ << "  -1  bidentates:  ";
+	for (size_t i = 0; i < bidentateAtomChosen.size(); i++)
+		of_ << bidentateAtomChosen[i] << "  ";
+	of_ << "  -1  ";
+	of_ << endl;
+
+	ofstream xyzFile_((code + "-" + blockFileName + ".xyz").c_str());
 	for (size_t i = 0; i < allPermutations.size(); i++)
 	{
 		for (size_t j = 0; j < systemSize; j++)
@@ -394,7 +421,44 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, st
 			of_ << allPermutations[i][j] << "  ";
 		}
 		of_ << endl;
+		printMolecule(
+			allPermutations[i],
+			atomTypes,
+			bidentateAtomChosen,
+			xyzFile_);
 	}
+	xyzFile_.close();
+
+	/*print xyz
+	ofstream xyzFile_((code + "-" + blockFileName + ".xyz").c_str());
+	for (size_t i = 0; i < allPermutations.size(); i++)
+	{
+	printMolecule(
+	allPermutations[i],
+	atomTypes,
+	bidentateAtomChosen,
+	xyzFile_);
+	}
+	xyzFile_.close();
+	*/
+
+
+	/* TESTE ESPECIFICO
+	vector<int> auxBlock(6);
+	auxBlock[0] = 0;
+	auxBlock[1] = 1;
+	auxBlock[2] = 4;
+	auxBlock[3] = 2;
+	auxBlock[4] = 3;
+	auxBlock[5] = 5;
+	equal = false;
+	int i = 2;
+	compareResult = compareTwoIsomersWithLabels(
+	atomTypes,
+	bidentateAtomChosen,
+	allPermutations[i],
+	auxBlock);
+	*/
 }
 
 
@@ -479,6 +543,8 @@ void CauchyIndex::molecularFormulaToCauchyCode(
 		}
 	} while (true);
 
+	//fredapagar
+	/*
 	vector<string> labels(6);
 	labels[0] = "F";
 	labels[1] = "B";
@@ -503,6 +569,7 @@ void CauchyIndex::molecularFormulaToCauchyCode(
 		bidentateAtomsChosen,
 		of_);
     of_.close();
+	*/
 	//for (size_t i = 0; i < mol0.size(); i++)
 	//	cout << permutation[i] = i;
 }
@@ -539,11 +606,6 @@ int CauchyIndex::compareTwoIsomersWithLabels(
 		types2[i] = atomTypes[permutationIsomer2[i]];
 	}
 	vector<int> bidPos1 = applyPermutationBidentates(permutationIsomer1, bidentateAtomsChosen);
-	for(size_t i = 0; i < bidPos1.size(); i++)
-    {
-        cout << "bidpos:  " << bidPos1[i] << endl;
-        cout << "esse types acho que nao esta rolando --- compareTwoIsomersWithLabels" << endl;
-    }
 	if (bidPos1.size() == 0 && bidentateAtomsChosen.size() != 0)
 	{
 		return 2;
@@ -553,22 +615,25 @@ int CauchyIndex::compareTwoIsomersWithLabels(
 	{
 		return 2;
 	}
+	sort(bidPos1.begin(), bidPos1.end());
+	sort(bidPos2.begin(), bidPos2.end());
 	if (types1 == types2)
 	{
 		if (bidPos1 == bidPos2)
 			return 0;
 	}
-	for (size_t j = 0; j < allRotationTransforms.size(); j++)
+ 	for (size_t j = 0; j < allRotationTransforms.size(); j++)
 	{
 		vector<int> auxPerm = applyRotation(permutationIsomer2, j);
 		for (size_t i = 0; i < size; i++)
 		{
-			types1[i] = atomTypes[permutationIsomer1[i]];
+			//types1[i] = atomTypes[permutationIsomer1[i]]; fredapagar
 			types2[i] = atomTypes[auxPerm[i]];
 		}
 		if (types1 == types2)
 		{
 			vector<int> bidPos2 = applyPermutationBidentates(auxPerm, bidentateAtomsChosen);
+			sort(bidPos2.begin(), bidPos2.end());
 			if (bidPos2.size() == 0 && bidentateAtomsChosen.size() != 0)
 			{
 				//fred apagar -- rotacoes nunca levam bidentados a posicoes proibidas.
@@ -841,7 +906,7 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string ma
 
 void CauchyIndex::runall(int blockInit, int blockFinal,string machineType,string workingDirectory)
 {
-
+#ifdef UNIX
 	string folderName;
 	for(int i = blockInit; i <= blockFinal; i++)
 	{
@@ -853,10 +918,12 @@ void CauchyIndex::runall(int blockInit, int blockFinal,string machineType,string
 		chdir(workingDirectory.c_str());
 		cout << i << "   finished" << endl;
 	}
+#endif
 }
 
 void CauchyIndex::cleanBlocksAndGenerateIsomers(int nProc, int systemSize, string workingDirectory)
 {
+#ifdef UNIX
 	string folderName;
 	for(int i = 2; i <= nProc; i++)
 	{
@@ -882,7 +949,7 @@ void CauchyIndex::cleanBlocksAndGenerateIsomers(int nProc, int systemSize, strin
 
                 system(("./lumpacview.exe blockGeneration " + systemSizeName + " independent-isomers-" + convert.str()).c_str());
 	}
-
+#endif
 }
 
 
@@ -910,11 +977,13 @@ void CauchyIndex::doBlockDeletion(
 			for (size_t j = 0; j < allRotationTransforms.size(); j++)
 			{
 				vector<int> auxPerm = applyRotation(permutation, j);
-                        	stringstream convert;
-                	        for(int i = 0; i < systemSize; i++)
-        	                        convert << auxPerm[i] << "-";
-  	                      	permutName = convert.str();
+				stringstream convert;
+				for(int i = 0; i < systemSize; i++)                
+					convert << auxPerm[i] << "-";          	
+				permutName = convert.str();
+#ifdef UNIX
 				unlink(permutName.c_str());
+#endif
 			}
                 }
                 k++;
@@ -1257,6 +1326,24 @@ std::vector<int> CauchyIndex::applyPermutationBidentates(
 }
 
 
+
+void CauchyIndex::printMolecule(
+	vector<int> & permutation,
+	vector<int> & atomTypes,
+	const vector<int> & bidentateAtomsChosen,
+	ofstream & printFile_)
+{
+	vector<string> labels(permutation.size());
+	for (size_t i = 0; i < atomTypes.size(); i++)
+		labels[i] = atomLabels[atomTypes[i]];
+	printMolecule(
+		permutation,
+		labels,
+		bidentateAtomsChosen,
+		printFile_
+	);
+}
+
 void CauchyIndex::printMolecule(
 	vector<int> & permutation,
 	const vector<string> & atoms,
@@ -1303,6 +1390,50 @@ void CauchyIndex::printMolecule(
 		}
 	}
 }
+
+
+void CauchyIndex::printMoleculeFromFile(string fileName)
+{
+	ifstream allPermt_(fileName.c_str());
+	string line;
+	getline(allPermt_, line);
+	stringstream convert;
+	convert << line;
+	string dummy;
+	convert >> dummy;
+	convert >> dummy;
+	vector<int> atomTypes;
+	while (true)
+	{
+		int type;
+		convert >> type;
+		if (type == -1)
+			break;
+		atomTypes.push_back(type);
+	}
+	convert >> dummy;
+	vector<int> bidentateChosen;
+	while (true)
+	{
+		int bid;
+		convert >> bid;
+		if (bid == -1)
+			break;
+		bidentateChosen.push_back(bid);
+	}
+
+	ofstream xyz_((fileName + ".xyz").c_str());
+	while(true)
+	{
+		vector<int> permutation = readCauchyNotations(allPermt_);
+		if (permutation.size() == 0)
+			break;
+		printMolecule(permutation, atomTypes, bidentateChosen, xyz_);
+	}
+	xyz_.close();
+	allPermt_.close();
+}
+
 
 unsigned int CauchyIndex::factorial(unsigned int n)
 {

@@ -1,11 +1,36 @@
-m01m02m03m04m04.xyz
+teste---FIND-ALL-ISOMERS.xyz
 Eu
 Eu_spk
-5
-auxLigands/Lumpac-View-Dummy-Ligand-M1
-auxLigands/Lumpac-View-Dummy-Ligand-M2
-auxLigands/Lumpac-View-Dummy-Ligand-M3
-auxLigands/Lumpac-View-Dummy-Ligand-M4
-auxLigands/Lumpac-View-Dummy-Ligand-M4
+6
+auxLigands/Lumpac-View-Dummy-Ligand-B11
+auxLigands/Lumpac-View-Dummy-Ligand-B12
+auxLigands/Lumpac-View-Dummy-Ligand-B11
+auxLigands/Lumpac-View-Dummy-Ligand-B12
+auxLigands/Lumpac-View-Dummy-Ligand-M5
+auxLigands/Lumpac-View-Dummy-Ligand-M6
 130
+4
 0
+1
+2
+3
+
+
+TUTORIAL
+
+teste---FIND-ALL-ISOMERS.xyz                 ! Nome do arquivo de saida
+Eu                                           ! So se for fazer calculo do mopac
+Eu_spk                                       ! inutil
+6                                            ! numero de coordenacao 
+auxLigands/Lumpac-View-Dummy-Ligand-B11      ! atomos ---- precisa ter essa pasta auxLigands (ta no dropbox)
+auxLigands/Lumpac-View-Dummy-Ligand-B12      ! lalala
+auxLigands/Lumpac-View-Dummy-Ligand-B11      ! lalala
+auxLigands/Lumpac-View-Dummy-Ligand-B12      ! lalala
+auxLigands/Lumpac-View-Dummy-Ligand-M5       ! lalala
+auxLigands/Lumpac-View-Dummy-Ligand-M6       ! lalala
+130                                          ! angulo de corte para impedir bidentados
+4                                            ! numero de ATOMOS bidentados
+0                                            ! esse e o proximo definem o primeiro bidentado
+1                                            ! prim bid
+2                                            ! segundo bidentado e assim por diante.
+3

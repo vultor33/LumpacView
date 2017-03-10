@@ -64,9 +64,8 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 
-	CauchyIndex ci_(6);
-	ci_.generateAllIndependentIsomersRuntimeRotations();
-	ci_.generateAllIndependentIsomersWithFlag("printFinalPermutations.txt","m01m01m01m01m02m03");
+	CauchyIndex ci_(12);
+	ci_.doBlockRAMDeletion12(1, 10, 11, 20);
 
 	//tem que dizer qual atomo e qual cor.
 	return 0;

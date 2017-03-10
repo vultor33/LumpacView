@@ -102,6 +102,13 @@ public:
 
 	void doBlockRAMDeletion(
 		int kInit,
+		int kFinal,
+		int ramInit,
+		int ramFinal);
+
+
+	void doBlockRAMDeletion12(
+		int kInit,
         	int kFinal,
         	int ramInit,
        		int ramFinal);

@@ -988,12 +988,12 @@ void CauchyIndex::doBlockDeletion(
 
 
 void CauchyIndex::doBlockRAMDeletion(
-        int kInit,
-        int kFinal,
+    int kInit,
+    int kFinal,
 	int ramInit,
 	int ramFinal)
 {
-        int systemSize = mol0.size();
+	int systemSize = mol0.size();
 	vector< vector<int> > ramBlock;
  	generateRAMBlock(
 		systemSize,
@@ -1049,8 +1049,67 @@ void CauchyIndex::doBlockRAMDeletion(
 
 
 
+void CauchyIndex::doBlockRAMDeletion12(
+	int kInit,
+	int kFinal,
+	int ramInit,
+	int ramFinal)
+{
+	int systemSize = 11;
+	vector< vector<int> > ramBlock;
+	generateRAMBlock(
+		systemSize,
+		ramInit,
+		ramFinal,
+		ramBlock);
 
+	for (size_t i = 0; i < ramBlock.size(); i++)
+	{
+		for (size_t j = 0; j < systemSize; j++)
+		{
+			ramBlock[i][j] += 1;
+		}
+		ramBlock[i].insert(ramBlock[i].begin(), 0);
+	}
 
+	vector<int> permutation(systemSize);
+	for (size_t i = 0; i < systemSize; i++)
+		permutation[i] = i;
+	int k = 1;
+	do
+	{
+		if (k >= kInit && k <= kFinal)
+		{
+			vector<int> permutation12 = permutation;
+			for (size_t j = 0; j < systemSize; j++)
+			{
+				permutation12[j] += 1;
+			}
+			permutation12.insert(permutation12.begin(), 0);
+			for (size_t j = 0; j < 4; j++) //rotations over 0
+			{
+				vector<int> auxPerm = applyRotation(permutation12, j);
+				ramBlock.erase(std::remove(ramBlock.begin(), ramBlock.end(), auxPerm), ramBlock.end());
+			}
+		}
+		k++;
+
+	} while (std::next_permutation(permutation.begin(), permutation.end()));
+
+	stringstream convert;
+	convert << "block-" << ramInit << "-to-" << ramFinal << ".txt";
+	string blockDelName = convert.str();
+	ofstream of_(blockDelName.c_str());
+	for (size_t i = 0; i < ramBlock.size(); i++)
+	{
+		for (size_t j = 0; j < systemSize + 1; j++)
+		{
+			of_ << ramBlock[i][j] << "  ";
+		}
+		of_ << endl;
+	}
+	of_.close();
+}
 
 
 

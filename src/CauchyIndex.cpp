@@ -14,7 +14,7 @@
 #include "Coordstructs.h"
 #include "AuxMath.h"
 
-//#define UNIX
+#define UNIX
 
 using namespace std;
 
@@ -867,7 +867,7 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string ma
                         	fileSrm_ << "#!/bin/bash" << endl;
                         	fileSrm_ << "#SBATCH -n 1" << endl;
                         	fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
-                        	fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running" + blockName + convert.str() << endl;
+                        	fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running/" + blockName + convert.str() << endl;
                         	fileSrm_ << "cd $RODADIR" << endl;
                         	fileSrm_ << "./lumpacview.exe  wholeBlockDeletion   " << deletionSystem << "  1  " << indexBlock - 1
                                 	<< "  " << jSmallInit << "   " << jSmallEnd << endl;

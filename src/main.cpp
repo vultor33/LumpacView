@@ -64,12 +64,6 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 
-	CauchyIndex ci_(12);
-	ci_.doBlockRAMDeletion12(1, 10, 11, 20);
-
-	//tem que dizer qual atomo e qual cor.
-	return 0;
-
 	stringstream convert0;
 	convert0 << argv[1];
 	string execType = convert0.str();
@@ -80,7 +74,10 @@ int main(int argc, char *argv[])
         cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5] << "  " << argv[6];
         cGen >> systemSize >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
 		CauchyIndex ci_(systemSize);
-		ci_.doBlockRAMDeletion(kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd);
+		if(systemSize == 12)
+			ci_.doBlockRAMDeletion12(kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd);
+		else
+			ci_.doBlockRAMDeletion(kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd);
 	}
 	else if(execType == "generateFiles")
 	{
@@ -108,7 +105,7 @@ int main(int argc, char *argv[])
 		CauchyIndex ci_(systemSize);
 		if(blockInit <= nProc)
 			ci_.runall(blockInit, nProc,machineType,workingDirectory);
-		ci_.cleanBlocksAndGenerateIsomers(nProc,systemSize,workingDirectory);
+		ci_.cleanBlocksAndGenerateIsomers(nProc,systemSize,workingDirectory,machineType);
 	}
 	else if(execType == "blockGeneration")
 	{

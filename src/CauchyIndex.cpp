@@ -807,15 +807,23 @@ void CauchyIndex::generateRAMBlock(int n, int kInit, int kFinal, vector< vector<
 
 void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string machineType)
 {
-        int totalSize = factorial(nSystem);
-        if(totalSize % (nProc * nProc) != 0)
-        {
-                cout << "system and proc don't agree" << endl;
-                exit(1);
-        }
-        int bigBlock = totalSize / nProc;
-        int smallBlock = bigBlock / nProc;
+	int deletionSystem;
+	if (nSystem == 12)
+	{
+		deletionSystem = 12;
+		nSystem--;
+	}
+	else
+		deletionSystem = nSystem;
 
+	int totalSize = factorial(nSystem);
+	if(totalSize % (nProc * nProc) != 0)
+	{
+		cout << "system and proc don't agree" << endl;
+		exit(1);
+	}
+	int bigBlock = totalSize / nProc;
+	int smallBlock = bigBlock / nProc;
 
 	ofstream fileRunAll_("runBlock.x");
 	fileRunAll_ << "#!/bin/bash" << endl;
@@ -853,33 +861,34 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string ma
                         jSmallEnd = indexBlock + j*smallBlock - 1;
                         stringstream convert2;
                         convert2 << j;
-			if(machineType == "slurm")
-			{
+						if(machineType == "slurm")
+						{
                         	ofstream fileSrm_((convert2.str() + ".srm").c_str());
                         	fileSrm_ << "#!/bin/bash" << endl;
                         	fileSrm_ << "#SBATCH -n 1" << endl;
                         	fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
                         	fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running" + blockName + convert.str() << endl;
                         	fileSrm_ << "cd $RODADIR" << endl;
-                        	fileSrm_ << "./lumpacview.exe  wholeBlockDeletion   " << nSystem << "  1  " << indexBlock - 1
+                        	fileSrm_ << "./lumpacview.exe  wholeBlockDeletion   " << deletionSystem << "  1  " << indexBlock - 1
                                 	<< "  " << jSmallInit << "   " << jSmallEnd << endl;
                         	fileSrm_.close();
                         	system(("mv  " + convert2.str() + ".srm" + "  " + blockName + convert.str()).c_str());
                         	system(("cp runBlock.x  " + blockName + convert.str()).c_str());
-			}
-			else if(machineType == "pc")
-			{
+						}
+						else if(machineType == "pc")
+						{
                         	ofstream fileSrm_((convert2.str() + ".x").c_str());
                         	fileSrm_ << "#!/bin/bash" << endl;
-                        	fileSrm_ << "./lumpacview.exe  wholeBlockDeletion  " << nSystem << "  1  " << indexBlock - 1
+                        	fileSrm_ << "./lumpacview.exe  wholeBlockDeletion  " << deletionSystem << "  1  " << indexBlock - 1
                                 	<< "  " << jSmallInit << "   " << jSmallEnd << endl;
                         	fileSrm_.close();
                         	system(("chmod u+x  " + convert2.str() + ".x").c_str());
                         	system(("mv  " + convert2.str() + ".x" + "  " + blockName + convert.str()).c_str());
                         	system(("cp runBlock.x  " + blockName + convert.str()).c_str());
-			}
-                }
-        }
+		
+						}
+				}				
+		}
 
 
 	// generate block 1 here.
@@ -914,7 +923,11 @@ void CauchyIndex::runall(int blockInit, int blockFinal,string machineType,string
 #endif
 }
 
-void CauchyIndex::cleanBlocksAndGenerateIsomers(int nProc, int systemSize, string workingDirectory)
+void CauchyIndex::cleanBlocksAndGenerateIsomers(
+	int nProc, 
+	int systemSize, 
+	string workingDirectory,
+	string machineType)
 {
 #ifdef UNIX
 	string folderName;
@@ -933,14 +946,26 @@ void CauchyIndex::cleanBlocksAndGenerateIsomers(int nProc, int systemSize, strin
 	stringstream convert0;
 	convert0 << systemSize;
 	string systemSizeName = convert0.str();
-	string isomerName;
 	for(int i = 1; i <= nProc; i++)
 	{
-                stringstream convert;
-                convert << i;
-		isomerName = "independent-isomers-" + convert.str();
+        stringstream convert;
+        convert << i;
 
-                system(("./lumpacview.exe blockGeneration " + systemSizeName + " independent-isomers-" + convert.str()).c_str());
+		if (machineType == "slurm")
+		{
+			ofstream fileSrm_((convert.str() + ".srm").c_str());
+			fileSrm_ << "#!/bin/bash" << endl;
+			fileSrm_ << "#SBATCH -n 1" << endl;
+			fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
+			fileSrm_ << "RODADIR=" << workingDirectory << endl;
+			fileSrm_ << "cd $RODADIR" << endl;
+			fileSrm_ << ("./lumpacview.exe blockGeneration " + systemSizeName + " independent-isomers-" + convert.str()).c_str()
+				<< endl;
+			fileSrm_.close();
+			system(("sbatch " + convert.str() + ".srm").c_str());
+		}
+		else
+			system(("./lumpacview.exe blockGeneration " + systemSizeName + " independent-isomers-" + convert.str()).c_str());
 	}
 #endif
 }

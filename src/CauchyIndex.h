@@ -15,7 +15,6 @@ WARNING - new systems need to be set on "setSystem"
           need symmetry rotations and, for bidentate: cutAngle.
 */
 
-
 struct cauchyRotation
 {
 	std::vector< std::vector<double> > mRot;
@@ -94,7 +93,7 @@ public:
 
 	void runall(int blockInit, int blockFinal, std::string machineType, std::string workingDirectory);
 
-	void cleanBlocksAndGenerateIsomers(int nProc, int systemSize, std::string workingDirectory);
+	void cleanBlocksAndGenerateIsomers(int nProc, int systemSize, std::string workingDirectory, std::string machineType);
 
 	void doBlockDeletion(
 		int kInit,

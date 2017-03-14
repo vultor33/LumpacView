@@ -65,12 +65,20 @@ public:
 	void generateAllIndependentIsomers12(std::string blockFileName);
 
 	//0-true ; 1-false ; 2-bidentate problem
-	int compareTwoIsomersWithLabels(
+	int compareTwoIsomersWithLabelsRotations(
 		std::vector<int> & atomTypes,
 		std::vector<int> & bidentateAtomsChosen,
 		std::vector<int> & permutationIsomer1,
 		std::vector<int> & permutationIsomer2
 		);
+
+	int compareTwoIsomersWithLabels(
+		std::vector<int> & atomTypes,
+		std::vector<int> & bidentateAtomsChosen,
+		std::vector<int> & permutationIsomer1,
+		std::vector<int> & permutationIsomer2
+	);
+
 
 	// true = equal || cant use the same permutation
 	bool compareTwoIsomers(
@@ -111,6 +119,18 @@ public:
         	int kFinal,
         	int ramInit,
        		int ramFinal);
+
+	void doBlockDeletionFlags(
+		int kInit,
+		int kFinal,
+		int ramInit,
+		int ramFinal);
+
+
+// uma parada que leia os isomeros esqueletos
+// ele precisa renumerar. posso soltar so os 120 mesmo.
+// os flags precisam ser os mesmos sempre - vou ter que gerar um arquivo na pasta para todos lerem.
+
 
 
 private:
@@ -158,6 +178,7 @@ private:
 	size_t systemSize;
 	void writeCauchyRotations(std::string fileName, std::vector< std::vector<int> > & rotPermutations);
 	std::vector<int> readCauchyNotations(std::ifstream & openedFile_);
+	std::vector< std::vector<int> > readCauchyNotationsRAMBlock(std::ifstream & openedFile_, int kInitial, int kFinal);
 
 	void molecularFormulaToCauchyCode(
 		std::string code,

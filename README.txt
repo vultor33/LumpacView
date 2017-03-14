@@ -2,6 +2,11 @@ Lumpac View
 
 Programa que automatiza a construção de estruturas.
 
+IMPORTANTE - PROGRAMA QUE ACHA O GRUPO PONTUAL http://www.ccp14.ac.uk/ccp/web-mirrors/symmol/~pila/
+busca: find point group molecule software
+ http://www.sciencedirect.com/science/article/pii/0097848576800046
+
+
 
 MODIFICACOES PROPOSTAS
 

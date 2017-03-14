@@ -14,7 +14,7 @@
 #include "Coordstructs.h"
 #include "AuxMath.h"
 
-#define UNIX
+//#define UNIX
 
 using namespace std;
 
@@ -387,7 +387,7 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, st
 
 		for (size_t i = 0; i < allPermutations.size(); i++)
 		{
-			compareResult = compareTwoIsomersWithLabels(
+			compareResult = compareTwoIsomersWithLabelsRotations(
 				atomTypes,
 				bidentateAtomChosen,
 				allPermutations[i],
@@ -522,7 +522,7 @@ void CauchyIndex::molecularFormulaToCauchyCode(
             }
             kTypes++;
         }
-		bidentateProblem = compareTwoIsomersWithLabels(
+		bidentateProblem = compareTwoIsomersWithLabelsRotations(
 			atomTypes,
 			auxBidentateAtomsChosen,
 			permutation,
@@ -584,7 +584,7 @@ void CauchyIndex::setBidentateChosen(std::vector<int>& bidentateAtomsChosen)
 }
 
 
-int CauchyIndex::compareTwoIsomersWithLabels(
+int CauchyIndex::compareTwoIsomersWithLabelsRotations(
 	std::vector<int>& atomTypes,
 	std::vector<int>& bidentateAtomsChosen,
 	std::vector<int>& permutationIsomer1,
@@ -639,6 +639,34 @@ int CauchyIndex::compareTwoIsomersWithLabels(
 	}
 	return 1;
 }
+
+
+int CauchyIndex::compareTwoIsomersWithLabels(
+	std::vector<int>& atomTypes,
+	std::vector<int>& bidentateAtomsChosen,
+	std::vector<int>& permutationIsomer1,
+	std::vector<int>& permutationIsomer2)
+{
+	size_t size = mol0.size();
+	vector<int> types1(size);
+	vector<int> types2(size);
+	for (size_t i = 0; i < size; i++)
+	{
+		types1[i] = atomTypes[permutationIsomer1[i]];
+		types2[i] = atomTypes[permutationIsomer2[i]];
+	}
+	vector<int> bidPos1 = applyPermutationBidentates(permutationIsomer1, bidentateAtomsChosen);
+	vector<int> bidPos2 = applyPermutationBidentates(permutationIsomer2, bidentateAtomsChosen);
+	sort(bidPos1.begin(), bidPos1.end());
+	sort(bidPos2.begin(), bidPos2.end());
+	if (types1 == types2)
+	{
+		if (bidPos1 == bidPos2)
+			return 0;
+	}
+	return 1;
+}
+
 
 bool CauchyIndex::compareTwoIsomers(
 	std::vector<int>& permutationIsomer1,
@@ -933,12 +961,12 @@ void CauchyIndex::cleanBlocksAndGenerateIsomers(
 	string folderName;
 	for(int i = 2; i <= nProc; i++)
 	{
-                stringstream convert;
-                convert << i;
-                folderName = "Block" + convert.str();
-                chdir(folderName.c_str());
-                system(("cat block* > independent-isomers-" + convert.str()).c_str());
-                system(("mv independent-isomers-" + convert.str() + " .. ").c_str());
+        stringstream convert;
+        convert << i;
+        folderName = "Block" + convert.str();
+        chdir(folderName.c_str());
+        system(("cat block* > independent-isomers-" + convert.str()).c_str());
+        system(("mv independent-isomers-" + convert.str() + " .. ").c_str());
 		chdir(workingDirectory.c_str());
 		system(("rm -rf " + folderName).c_str());
 	}
@@ -1135,6 +1163,86 @@ void CauchyIndex::doBlockRAMDeletion12(
 	}
 	of_.close();
 }
+
+
+
+void CauchyIndex::doBlockDeletionFlags(
+	int kInit,
+	int kFinal,
+	int ramInit,
+	int ramFinal)
+{
+	int systemSize = mol0.size();
+	ifstream openedFile_("skeleton-isomers.txt"); //fredmudar
+	vector< vector<int> > ramBlock = readCauchyNotationsRAMBlock(openedFile_, ramInit, ramFinal);
+	openedFile_.close();
+
+	/*
+	Aqui eu tenho que ler o atomTypes e o bidentate chosen para poder comparar
+
+
+
+
+
+	*/
+
+
+	openedFile_.open("skeleton-isomers.txt"); //fredmudar
+	int k = 1;
+	do
+	{
+		vector<int> permutation = readCauchyNotations(openedFile_);
+		if (permutation.size() == 0)
+			break;
+		if (k >= kInit && k <= kFinal)
+		{
+			for (size_t j = 0; j < allRotationTransforms.size(); j++)
+			{
+				vector<int> auxPerm = applyRotation(permutation, j);
+				/* OTHER DELETION METHOD */
+				for(size_t k = 0; k < ramBlock.size(); k++)
+				{
+					// sem rotacoes int compare = compareTwoIsomersWithLabels
+					/*
+					int compare = compareTwoIsomersWithLabels
+					(atomTypes,
+						bidentatechosen,
+						auxPerm,
+						ramBlock[k]);
+						*/
+
+					int compare = 0;
+					if(compare == 0)
+					{
+						vector< vector<int> >::iterator it = ramBlock.begin() + k;
+						rotate(it, it+1,ramBlock.end());
+						ramBlock.pop_back();
+						break;
+					}
+
+				}
+				ramBlock.erase(std::remove(ramBlock.begin(), ramBlock.end(), auxPerm), ramBlock.end());
+			}
+		}
+		k++;
+	} while (true);
+	openedFile_.close();
+
+	stringstream convert;
+	convert << "block-" << ramInit << "-to-" << ramFinal << ".txt";
+	string blockDelName = convert.str();
+	ofstream of_(blockDelName.c_str());
+	for (size_t i = 0; i < ramBlock.size(); i++)
+	{
+		for (size_t j = 0; j < systemSize; j++)
+		{
+			of_ << ramBlock[i][j] << "  ";
+		}
+		of_ << endl;
+	}
+	of_.close();
+}
+
 
 
 
@@ -1553,6 +1661,23 @@ vector<int> CauchyIndex::readCauchyNotations(ifstream & openendFile_)
 	return notation;
 }
 
+vector< vector<int> > CauchyIndex::readCauchyNotationsRAMBlock(ifstream & openendFile_, int kInit, int kFinal)
+{
+	vector< vector<int> > ramBlock;
+	int k = 1;
+	while (true)
+	{
+		vector<int> isomer = readCauchyNotations(openendFile_);
+		if (isomer.size() == 0)
+			break;
+		if (k >= kInit && k <= kFinal)
+		{
+			ramBlock.push_back(isomer);
+		}
+		k++;
+	}
+	return ramBlock;
+}
 
 
 

@@ -1,10 +1,3 @@
-// IMPORTANTE - PROGRAMA QUE ACHA O GRUPO PONTUAL http://www.ccp14.ac.uk/ccp/web-mirrors/symmol/~pila/
-// busca: find point group molecule software
-// http://www.sciencedirect.com/science/article/pii/0097848576800046
-
-// eu bi3 a a
-// eu bi3 a b
-// eu bi4
 
 #include <utility>
 #include <iostream>
@@ -64,6 +57,13 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 
+	CauchyIndex ci_(6);
+	ci_.doBlockDeletionFlags(
+		1,
+		33,
+		1,
+		10);
+
 	stringstream convert0;
 	convert0 << argv[1];
 	string execType = convert0.str();
@@ -81,27 +81,27 @@ int main(int argc, char *argv[])
 	}
 	else if(execType == "generateFiles")
 	{
-        	int systemSize, nProc;
+        int systemSize, nProc;
 		string machineType;
-        	stringstream cGen;
-        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4];
-        	cGen >> systemSize >> nProc >> machineType;
+        stringstream cGen;
+        cGen << argv[2] << "  " << argv[3] << "  " << argv[4];
+        cGen >> systemSize >> nProc >> machineType;
 		CauchyIndex ci_(systemSize);
 		ci_.generateSlurmFilesToDeletion(systemSize, nProc, machineType);
 	}
 	else if(execType == "runall")
 	{
-	        system("pwd > workingDir");
-       		ifstream wDir_("workingDir");
-	        string workingDirectory;
-        	wDir_ >> workingDirectory;
-	        wDir_.close();
+	    system("pwd > workingDir");
+       	ifstream wDir_("workingDir");
+	    string workingDirectory;
+        wDir_ >> workingDirectory;
+	    wDir_.close();
 		remove("workingDir");
-        	int systemSize, blockInit, nProc;
+        int systemSize, blockInit, nProc;
 		string machineType;
-        	stringstream cGen;
-        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
-        	cGen >> systemSize >> blockInit >> nProc >> machineType;
+        stringstream cGen;
+        cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
+        cGen >> systemSize >> blockInit >> nProc >> machineType;
 		CauchyIndex ci_(systemSize);
 		if(blockInit <= nProc)
 			ci_.runall(blockInit, nProc,machineType,workingDirectory);
@@ -110,11 +110,11 @@ int main(int argc, char *argv[])
 	else if(execType == "blockGeneration")
 	{
 		int systemSize;
-                string blockName;
-                stringstream cGen;
-                cGen << argv[2] << "  " << argv[3];
-                cGen >> systemSize >> blockName;
-                CauchyIndex ci_(systemSize);
+        string blockName;
+        stringstream cGen;
+        cGen << argv[2] << "  " << argv[3];
+        cGen >> systemSize >> blockName;
+        CauchyIndex ci_(systemSize);
 		ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
 	}
 	else

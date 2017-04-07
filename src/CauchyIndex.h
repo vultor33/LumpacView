@@ -120,11 +120,21 @@ public:
         	int ramInit,
        		int ramFinal);
 
+	void generateAtomTypesAndBidentateChosenFile(std::string complexCode);
+
+	void readAtomTypesAndBidentateChosenFile(
+		std::string fileName,
+		std::vector<int> & atomTypes,
+		std::vector<int> & bidentateChosen);
+
 	void doBlockDeletionFlags(
+		std::string skeletonFile,
+		std::string flagsFile,
 		int kInit,
 		int kFinal,
 		int ramInit,
 		int ramFinal);
+
 
 
 // uma parada que leia os isomeros esqueletos

@@ -1165,29 +1165,78 @@ void CauchyIndex::doBlockRAMDeletion12(
 }
 
 
+void CauchyIndex::generateAtomTypesAndBidentateChosenFile(string complexCode)
+{
+	vector<int> atomTypes;
+	vector<int> bidentateChosen;
+	molecularFormulaToCauchyCode(complexCode, atomTypes, bidentateChosen);
+	ofstream of_((complexCode + "---atomTypes.txt").c_str());
+	for (size_t i = 0; i < atomTypes.size(); i++)
+		of_ << atomTypes[i] << "  ";
+	of_ << "  -1  bidentates:  ";
+	for (size_t i = 0; i < bidentateChosen.size(); i++)
+		of_ << bidentateChosen[i] << "  ";
+	of_ << "  -1  ";
+	of_ << endl;
+	of_.close();
+}
 
+
+
+void CauchyIndex::readAtomTypesAndBidentateChosenFile(
+	std::string fileName, 
+	vector<int> & atomTypes, 
+	vector<int> & bidentateChosen)
+{
+	ifstream in_(fileName.c_str());
+	string line;
+	getline(in_, line);
+	stringstream auxline;
+	auxline << line;
+	while (true)
+	{
+		int aux;
+		auxline >> aux;
+		if (aux == -1)
+			break;
+		else
+			atomTypes.push_back(aux);
+	}
+	string dummy;
+	auxline >> dummy;
+	while (true)
+	{
+		int aux;
+		auxline >> aux;
+		if (aux == -1)
+			break;
+		else
+			bidentateChosen.push_back(aux);
+	}
+	in_.close();
+}
+
+
+// ATENCAO  --- ativar o [[[generateAtomTypesAndBidentateChosenFile]]]
+//              antes de comecar e colcoar os atomTypes no flagsFile.
 void CauchyIndex::doBlockDeletionFlags(
+	string skeletonFile,
+	string flagsFile,
 	int kInit,
 	int kFinal,
 	int ramInit,
 	int ramFinal)
 {
 	int systemSize = mol0.size();
-	ifstream openedFile_("skeleton-isomers.txt"); //fredmudar
+	ifstream openedFile_(skeletonFile.c_str());
 	vector< vector<int> > ramBlock = readCauchyNotationsRAMBlock(openedFile_, ramInit, ramFinal);
 	openedFile_.close();
 
-	/*
-	Aqui eu tenho que ler o atomTypes e o bidentate chosen para poder comparar
+	vector<int> atomTypes;
+	vector<int> bidentateChosen;
+	readAtomTypesAndBidentateChosenFile(flagsFile, atomTypes, bidentateChosen);
 
-
-
-
-
-	*/
-
-
-	openedFile_.open("skeleton-isomers.txt"); //fredmudar
+	openedFile_.open(skeletonFile.c_str());
 	int k = 1;
 	do
 	{
@@ -1203,23 +1252,17 @@ void CauchyIndex::doBlockDeletionFlags(
 				for(size_t k = 0; k < ramBlock.size(); k++)
 				{
 					// sem rotacoes int compare = compareTwoIsomersWithLabels
-					/*
-					int compare = compareTwoIsomersWithLabels
-					(atomTypes,
-						bidentatechosen,
+					int compare = compareTwoIsomersWithLabels(
+						atomTypes,
+						bidentateChosen,
 						auxPerm,
 						ramBlock[k]);
-						*/
-
-					int compare = 0;
-					if(compare == 0)
+					if (compare == 0)
 					{
 						vector< vector<int> >::iterator it = ramBlock.begin() + k;
-						rotate(it, it+1,ramBlock.end());
+						rotate(it, it + 1, ramBlock.end());
 						ramBlock.pop_back();
-						break;
 					}
-
 				}
 				ramBlock.erase(std::remove(ramBlock.begin(), ramBlock.end(), auxPerm), ramBlock.end());
 			}

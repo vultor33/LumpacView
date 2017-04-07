@@ -58,11 +58,36 @@ int main(int argc, char *argv[])
 	clock_t begin = clock();
 
 	CauchyIndex ci_(6);
+
+	ci_.generateAtomTypesAndBidentateChosenFile("m01m01m01m02m02m02");
+
+	// CONFERIR SE ESTA RODANDO TUDO NA TABELA
+	ci_.doBlockDeletionFlags(
+		"skeleton-isomers.txt",
+		"m01m01m01m02m02m02---atomTypes.txt",
+		1,
+		1,
+		2,
+		30);
+
+
+
+
+	/*
+	ci_.generateAtomTypesAndBidentateChosenFile("m01m01m01m01m01m01");
+
+	ci_.doBlockDeletionFlags("m01m01m01m01m01m01---atomTypes.txt", 1, 1, 2, 30);
+	*/
+	
+	return 0;
+
+	/*
 	ci_.doBlockDeletionFlags(
 		1,
 		33,
 		1,
 		10);
+*/
 
 	stringstream convert0;
 	convert0 << argv[1];

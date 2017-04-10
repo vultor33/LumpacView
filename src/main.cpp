@@ -55,27 +55,27 @@ inline bool exist_file (const std::string& name) {
 
 int main(int argc, char *argv[])
 {
+	// tenho que cortar pela metade e fazer os dois blocos.
+
 	clock_t begin = clock();
-
 	CauchyIndex ci_(6);
-
-	ci_.generateAtomTypesAndBidentateChosenFile("m01m01m01m02m02m02");
-
+	string composition = "B01B02C01";
+	ci_.generateAtomTypesAndBidentateChosenFile(composition);
 	// CONFERIR SE ESTA RODANDO TUDO NA TABELA
 	ci_.doBlockDeletionFlags(
 		"skeleton-isomers.txt",
-		"m01m01m01m02m02m02---atomTypes.txt",
+		composition + "---atomTypes.txt",
 		1,
-		1,
-		2,
+		10,
+		11,
 		30);
-
-
-
+	// ok o primeiro do segundo grupo e obvio.
+	// talvez nao esteja apagando direito
+	ci_.generateAllIndependentIsomersWithFlag("skeleton-isomers.txt", composition + "---atomTypes.txt", composition);
+	ci_.generateAllIndependentIsomersWithFlag("block-11-to-30.txt", composition + "---atomTypes.txt", composition);
 
 	/*
 	ci_.generateAtomTypesAndBidentateChosenFile("m01m01m01m01m01m01");
-
 	ci_.doBlockDeletionFlags("m01m01m01m01m01m01---atomTypes.txt", 1, 1, 2, 30);
 	*/
 	
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 		33,
 		1,
 		10);
-*/
+	*/
 
 	stringstream convert0;
 	convert0 << argv[1];

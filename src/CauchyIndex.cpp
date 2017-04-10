@@ -363,11 +363,16 @@ void CauchyIndex::generateAllIndependentIsomers12(string blockFileName)
 }
 
 
-void CauchyIndex::generateAllIndependentIsomersWithFlag(string blockFileName, string code)
+void CauchyIndex::generateAllIndependentIsomersWithFlag(
+	string blockFileName, 
+	string flagsFile, 
+	string code)
 {
 	vector<int> atomTypes;
 	vector<int> bidentateAtomChosen;
-	molecularFormulaToCauchyCode(code, atomTypes, bidentateAtomChosen);
+	readAtomTypesAndBidentateChosenFile(flagsFile, atomTypes, bidentateAtomChosen);
+
+//	molecularFormulaToCauchyCode(code, atomTypes, bidentateAtomChosen);
 
 	systemSize = mol0.size();
 	int size = factorial(systemSize);
@@ -656,7 +661,7 @@ int CauchyIndex::compareTwoIsomersWithLabels(
 		types2[i] = atomTypes[permutationIsomer2[i]];
 	}
 	vector<int> bidPos1 = applyPermutationBidentates(permutationIsomer1, bidentateAtomsChosen);
-	vector<int> bidPos2 = applyPermutationBidentates(permutationIsomer2, bidentateAtomsChosen);
+   	vector<int> bidPos2 = applyPermutationBidentates(permutationIsomer2, bidentateAtomsChosen);
 	sort(bidPos1.begin(), bidPos1.end());
 	sort(bidPos2.begin(), bidPos2.end());
 	if (types1 == types2)
@@ -1243,28 +1248,47 @@ void CauchyIndex::doBlockDeletionFlags(
 		vector<int> permutation = readCauchyNotations(openedFile_);
 		if (permutation.size() == 0)
 			break;
-		if (k >= kInit && k <= kFinal)
+		if (k >= kInit && k <= kFinal) // from block use this to delete
 		{
+			int compare;
+			int kRam = 0;
+			while (kRam < ramBlock.size())
+			{
+
+				// sem rotacoes int compare = compareTwoIsomersWithLabels
+				compare = compareTwoIsomersWithLabels(
+					atomTypes,
+					bidentateChosen,
+					permutation,
+					ramBlock[kRam]);
+				if (compare == 0)
+				{
+					vector< vector<int> >::iterator it = ramBlock.begin() + kRam;
+					rotate(it, it + 1, ramBlock.end());
+					ramBlock.pop_back();
+				}
+				kRam++;
+			}
 			for (size_t j = 0; j < allRotationTransforms.size(); j++)
 			{
 				vector<int> auxPerm = applyRotation(permutation, j);
-				/* OTHER DELETION METHOD */
-				for(size_t k = 0; k < ramBlock.size(); k++)
+				kRam = 0;
+				while(kRam < ramBlock.size())
 				{
 					// sem rotacoes int compare = compareTwoIsomersWithLabels
-					int compare = compareTwoIsomersWithLabels(
+					compare = compareTwoIsomersWithLabels(
 						atomTypes,
 						bidentateChosen,
 						auxPerm,
-						ramBlock[k]);
+						ramBlock[kRam]);
 					if (compare == 0)
 					{
-						vector< vector<int> >::iterator it = ramBlock.begin() + k;
+						vector< vector<int> >::iterator it = ramBlock.begin() + kRam;
 						rotate(it, it + 1, ramBlock.end());
 						ramBlock.pop_back();
 					}
+					kRam++;
 				}
-				ramBlock.erase(std::remove(ramBlock.begin(), ramBlock.end(), auxPerm), ramBlock.end());
 			}
 		}
 		k++;
@@ -1285,6 +1309,143 @@ void CauchyIndex::doBlockDeletionFlags(
 	}
 	of_.close();
 }
+
+/*
+void CauchyIndex::doBlockDeletionFlags(
+string skeletonFile,
+string flagsFile,
+int kInit,
+int kFinal,
+int ramInit,
+int ramFinal)
+{
+int systemSize = mol0.size();
+ifstream openedFile_(skeletonFile.c_str());
+vector< vector<int> > ramBlock = readCauchyNotationsRAMBlock(openedFile_, ramInit, ramFinal);
+openedFile_.close();
+
+vector<int> atomTypes;
+vector<int> bidentateChosen;
+readAtomTypesAndBidentateChosenFile(flagsFile, atomTypes, bidentateChosen);
+
+openedFile_.open(skeletonFile.c_str());
+int k = 1;
+do
+{
+vector<int> permutation = readCauchyNotations(openedFile_);
+if (permutation.size() == 0)
+break;
+if (k >= kInit && k <= kFinal)
+{
+int compare;
+compare = compareTwoIsomersWithLabels(
+atomTypes,
+bidentateChosen,
+permutation,
+ramBlock[k]);
+if (compare == 0)
+{
+vector< vector<int> >::iterator it = ramBlock.begin() + k;
+rotate(it, it + 1, ramBlock.end());
+ramBlock.pop_back();
+}
+for (size_t j = 0; j < allRotationTransforms.size(); j++)
+{
+vector<int> auxPerm = applyRotation(permutation, j);
+for (size_t k = 0; k < ramBlock.size(); k++)
+{
+	// sem rotacoes int compare = compareTwoIsomersWithLabels
+	compare = compareTwoIsomersWithLabels(
+		atomTypes,
+		bidentateChosen,
+		auxPerm,
+		ramBlock[k]);
+	if (compare == 0)
+	{
+		vector< vector<int> >::iterator it = ramBlock.begin() + k;
+		rotate(it, it + 1, ramBlock.end());
+		ramBlock.pop_back();
+	}
+}
+//ramBlock.erase(std::remove(ramBlock.begin(), ramBlock.end(), auxPerm), ramBlock.end()); fredapagar
+			}
+		}
+		k++;
+	} while (true);
+	openedFile_.close();
+
+	stringstream convert;
+	convert << "block-" << ramInit << "-to-" << ramFinal << ".txt";
+	string blockDelName = convert.str();
+	ofstream of_(blockDelName.c_str());
+	for (size_t i = 0; i < ramBlock.size(); i++)
+	{
+		for (size_t j = 0; j < systemSize; j++)
+		{
+			of_ << ramBlock[i][j] << "  ";
+		}
+		of_ << endl;
+	}
+	of_.close();
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

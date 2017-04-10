@@ -60,7 +60,10 @@ public:
 
 	void generateAllIndependentIsomersRuntimeRotationsAndReadBlock(std::string blockFileName);
 
-	void generateAllIndependentIsomersWithFlag(std::string blockFileName, std::string code);
+	void generateAllIndependentIsomersWithFlag(
+		std::string blockFileName, 
+		std::string flagsFile,
+		std::string code);
 
 	void generateAllIndependentIsomers12(std::string blockFileName);
 

@@ -660,10 +660,17 @@ int CauchyIndex::compareTwoIsomersWithLabels(
 		types1[i] = atomTypes[permutationIsomer1[i]];
 		types2[i] = atomTypes[permutationIsomer2[i]];
 	}
-	vector<int> bidPos1 = applyPermutationBidentates(permutationIsomer1, bidentateAtomsChosen);
-   	vector<int> bidPos2 = applyPermutationBidentates(permutationIsomer2, bidentateAtomsChosen);
-	sort(bidPos1.begin(), bidPos1.end());
-	sort(bidPos2.begin(), bidPos2.end());
+	vector<int> bidPos1;
+	vector<int> bidPos2;
+	if (bidentateAtomsChosen.size() != 0)
+	{
+		bidPos1 = applyPermutationBidentates(permutationIsomer1, bidentateAtomsChosen);
+		bidPos2 = applyPermutationBidentates(permutationIsomer2, bidentateAtomsChosen);
+		if (bidPos2.size() == 0)
+			return 2;
+		sort(bidPos1.begin(), bidPos1.end());
+		sort(bidPos2.begin(), bidPos2.end());
+	}
 	if (types1 == types2)
 	{
 		if (bidPos1 == bidPos2)
@@ -1261,11 +1268,12 @@ void CauchyIndex::doBlockDeletionFlags(
 					bidentateChosen,
 					permutation,
 					ramBlock[kRam]);
-				if (compare == 0)
+				if ((compare == 0) || (compare == 2))
 				{
 					vector< vector<int> >::iterator it = ramBlock.begin() + kRam;
 					rotate(it, it + 1, ramBlock.end());
 					ramBlock.pop_back();
+					kRam--;
 				}
 				kRam++;
 			}
@@ -1281,11 +1289,12 @@ void CauchyIndex::doBlockDeletionFlags(
 						bidentateChosen,
 						auxPerm,
 						ramBlock[kRam]);
-					if (compare == 0)
+					if ((compare == 0) || (compare == 2))
 					{
 						vector< vector<int> >::iterator it = ramBlock.begin() + kRam;
 						rotate(it, it + 1, ramBlock.end());
 						ramBlock.pop_back();
+						kRam--;
 					}
 					kRam++;
 				}

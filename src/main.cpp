@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
 	clock_t begin = clock();
 	CauchyIndex ci_(6);
-	string composition = "B01B02C01";
+	string composition = "B01B01C01";
 	ci_.generateAtomTypesAndBidentateChosenFile(composition);
 	// CONFERIR SE ESTA RODANDO TUDO NA TABELA
 	ci_.doBlockDeletionFlags(
@@ -71,8 +71,9 @@ int main(int argc, char *argv[])
 		30);
 	// ok o primeiro do segundo grupo e obvio.
 	// talvez nao esteja apagando direito
-	ci_.generateAllIndependentIsomersWithFlag("skeleton-isomers.txt", composition + "---atomTypes.txt", composition);
+	ci_.generateAllIndependentIsomersWithFlag("zblock-1-to-10.txt", composition + "---atomTypes.txt", composition);
 	ci_.generateAllIndependentIsomersWithFlag("block-11-to-30.txt", composition + "---atomTypes.txt", composition);
+	ci_.generateAllIndependentIsomersWithFlag("skeleton-isomers.txt", composition + "---atomTypes.txt", composition);
 
 	/*
 	ci_.generateAtomTypesAndBidentateChosenFile("m01m01m01m01m01m01");

@@ -1,4 +1,3 @@
-
 #include <utility>
 #include <iostream>
 #include <string>
@@ -56,6 +55,12 @@ inline bool exist_file (const std::string& name) {
 int main(int argc, char *argv[])
 {
 	// tenho que cortar pela metade e fazer os dois blocos.
+
+	CauchyIndex ci2_(6);
+	ci2_.generateSlurmFilesToDeletionFlags();
+	return 0;
+
+
 
 	clock_t begin = clock();
 	CauchyIndex ci_(6);
@@ -142,6 +147,32 @@ int main(int argc, char *argv[])
         cGen >> systemSize >> blockName;
         CauchyIndex ci_(systemSize);
 		ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
+	}
+	else if (execType == "generateAtomTypes") //gerar os arquivos aqui tambem
+	{
+		int systemSize, nProc;
+		string composition;
+		stringstream cGen;
+		cGen << argv[2] << "  " << argv[3];
+		cGen >> systemSize >> composition;
+		CauchyIndex ci_(systemSize);
+		ci_.generateAtomTypesAndBidentateChosenFile(composition);
+	}
+	else if (execType == "compositionBlockDeletion")
+	{
+		int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
+		stringstream cGen;
+		string rawIsomers, composition;
+		cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5] << "  " << argv[6] << "  " << argv[7] << "  " << argv[8];
+		cGen >> systemSize >> rawIsomers >> composition >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
+		CauchyIndex ci_(systemSize);
+		ci_.doBlockDeletionFlags(
+			rawIsomers,
+			composition + "---atomTypes.txt",
+			kRotateInit,
+			kRotateEnd,
+			lDeleteInit,
+			lDeleteEnd);
 	}
 	else
 		cout << "execType not found" << endl;

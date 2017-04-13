@@ -926,7 +926,6 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string ma
 		}
 	}
 
-
 	// generate block 1 here.
 	vector< vector<int> > ramBlock;
         generateRAMBlock(
@@ -948,36 +947,53 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags()
 	int bigBlockSize = 120000;
 	int smallBlockSize = 120;
 	*/
-	int total = 30;
-	int bigBlockSize = 12;
-	int smallBlockSize = 4;
-
+	int total = 32;
+	int bigBlockSize = 9;
+	int smallBlockSize = 3;
 	int nWholeBlocks = floor((double)total / (double)bigBlockSize);
-
 	int lastBlock = bigBlockSize * nWholeBlocks + 1;
+	int smallBlockNumber = bigBlockSize / smallBlockSize;
 
+	// mid blocks
+	for (int i = nWholeBlocks; i > 1; i--)
+	{
+		cout << "apaga de 1 ate " << (i - 1) * bigBlockSize
+			<< "  alvo:  " << (i -1) * bigBlockSize + 1 << " ate "
+			<< i * bigBlockSize
+			<< endl;
+		for (int j = 0; j < smallBlockNumber; j++)
+		{
+			cout << "        smallblock " << (i - 1) * bigBlockSize + j * smallBlockSize + 1
+				<< " ate "
+				<< (i - 1) * bigBlockSize + (j + 1) * smallBlockSize << endl;
+		}
+	}
 
-	cout << "blocks:  " << nWholeBlocks << endl;
-
-
+	// ultimo
+	cout << "ultimo" << endl;
+	for (int j = 0; j < smallBlockNumber; j++)
+	{
+		if (total > lastBlock + (j + 1) * smallBlockSize - 1)
+		{
+			cout << "De  "
+				<< lastBlock + j * smallBlockSize << " ate "
+				<< lastBlock + (j + 1) * smallBlockSize - 1
+				<< endl;
+		}
+		else
+		{
+			cout << "De  "
+				<< lastBlock + j * smallBlockSize << " ate "
+				<< total
+				<< endl;
+			break;
+		}
+	}
 
 	// conte os blocos -- o ultimo vai fazer
 	// um processador apagar cada bloco
 
 	int reduction = total;
-	while (true)
-	{
-		if (reduction > bigBlockSize)
-			reduction -= bigBlockSize;
-		else
-		{
-			//colocar coisas aqui
-			break;
-		}
-
-		cout << "apaga do 1 ao  " << reduction << endl;
-	}
-
 }
 
 

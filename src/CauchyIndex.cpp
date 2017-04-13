@@ -1,5 +1,7 @@
 #include "CauchyIndex.h"
 
+#define UNIX
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -8,13 +10,14 @@
 #include <sstream>
 #include <time.h>
 #include <cmath>
+#ifdef UNIX
+	#include <unistd.h>
+#endif
 
 #include "AllMolecularFormulas.h"
 #include "RootMeanSquareDeviation.h"
 #include "Coordstructs.h"
 #include "AuxMath.h"
-
-//#define UNIX
 
 using namespace std;
 
@@ -947,6 +950,10 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags()
 	int bigBlockSize = 120000;
 	int smallBlockSize = 120;
 	*/
+	string compositionFile = "B01B02B03.txt";
+	string rawIsomersFile = "skeleton-6.txt";
+	int deletionSystem = 6;
+	string machineType = "pc";
 	int total = 32;
 	int bigBlockSize = 9;
 	int smallBlockSize = 3;
@@ -954,7 +961,150 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags()
 	int lastBlock = bigBlockSize * nWholeBlocks + 1;
 	int smallBlockNumber = bigBlockSize / smallBlockSize;
 
+
+
+
+	ofstream fileRunAll_("runBlock.x");
+	fileRunAll_ << "#!/bin/bash" << endl;
+        for(int i = 0; i < smallBlockNumber; i++)
+        {
+                stringstream convert3;
+                convert3 << i;
+                if(machineType == "slurm")
+                        fileRunAll_ << "./" << convert3.str() << ".srm" << endl;
+                else if(machineType == "pc")
+                        fileRunAll_ << "./" << convert3.str() << ".x" << endl;
+                else
+                {
+                        cout << "machine type not found" << endl;
+                        exit(1);
+                }
+        }
+        system("chmod u+x runBlock.x");
+	fileRunAll_.close();
+
+
+
+
 	// mid blocks
+	string blockName = "Block";
+        for (int i = nWholeBlocks; i > 1; i--)
+        {
+                stringstream convert;
+                convert << i;
+                system(("mkdir " + blockName + convert.str()).c_str());
+                system(("cp lumpacview.exe  " + blockName + convert.str()).c_str());
+		int indexBlock = (i-1) * bigBlockSize; 
+                int jSmallInit, jSmallEnd;
+                for (int j = 0; j < smallBlockNumber; j++)
+                {
+			jSmallInit = (i - 1) * bigBlockSize + j * smallBlockSize + 1;
+			jSmallEnd = (i - 1) * bigBlockSize + (j + 1) * smallBlockSize;
+                        stringstream convert2;
+                        convert2 << j;
+                        if (machineType == "slurm")
+                        {
+                                ofstream fileSrm_((convert2.str() + ".srm").c_str());
+                                fileSrm_ << "#!/bin/bash" << endl;
+                                fileSrm_ << "#SBATCH -n 1" << endl;
+                                fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
+                                fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running/" + blockName + convert.str() << endl;
+                                fileSrm_ << "cd $RODADIR" << endl;
+                                fileSrm_ << "./lumpacview.exe  compositionBlockDeletion   " 
+					<< deletionSystem << "  "
+					<< rawIsomersFile << "  "
+					<< compositionFile << "  "
+					<< "  1  " << indexBlock
+                                        << "  " << jSmallInit << "   " << jSmallEnd << endl;
+                                fileSrm_.close();
+                                system(("mv  " + convert2.str() + ".srm" + "  " + blockName + convert.str()).c_str());
+                                system(("cp runBlock.x  " + blockName + convert.str()).c_str());
+                        }
+                        else if (machineType == "pc")
+                        {
+                                ofstream fileSrm_((convert2.str() + ".x").c_str());
+                                fileSrm_ << "#!/bin/bash" << endl;
+                                fileSrm_ << "./lumpacview.exe  compositionBlockDeletion   "
+                                        << deletionSystem << "  "
+                                        << rawIsomersFile << "  "
+                                        << compositionFile << "  "
+                                        << "  1  " << indexBlock
+                                        << "  " << jSmallInit << "   " << jSmallEnd << endl;
+                                fileSrm_.close();
+                                system(("chmod u+x  " + convert2.str() + ".x").c_str());
+                                system(("mv  " + convert2.str() + ".x" + "  " + blockName + convert.str()).c_str());
+                                system(("cp runBlock.x  " + blockName + convert.str()).c_str());
+			}
+		}
+
+	}
+
+
+	int i = nWholeBlocks;
+	stringstream convert;
+        convert << i + 1;
+        system(("mkdir " + blockName + convert.str()).c_str());
+        system(("cp lumpacview.exe  " + blockName + convert.str()).c_str());
+        int indexBlock = i * bigBlockSize;
+        int jSmallInit, jSmallEnd;
+	bool haveToBreak = false;
+        for (int j = 0; j < smallBlockNumber; j++)
+        {
+		jSmallInit = lastBlock + j * smallBlockSize;
+        	if (total > lastBlock + (j + 1) * smallBlockSize - 1)
+	        {
+                        jSmallEnd = lastBlock + (j + 1) * smallBlockSize - 1;
+		}
+		else
+		{
+                        jSmallEnd = total;
+			haveToBreak = true;
+		}
+
+                stringstream convert2;
+                convert2 << j;
+                if (machineType == "slurm")
+                {
+                	ofstream fileSrm_((convert2.str() + ".srm").c_str());
+                	fileSrm_ << "#!/bin/bash" << endl;
+                        fileSrm_ << "#SBATCH -n 1" << endl;
+                        fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
+                        fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running/" + blockName + convert.str() << endl;
+                        fileSrm_ << "cd $RODADIR" << endl;
+                        fileSrm_ << "./lumpacview.exe  compositionBlockDeletion   "
+                                        << deletionSystem << "  "
+                                        << rawIsomersFile << "  "
+                                        << compositionFile << "  "
+                                        << "  1  " << indexBlock
+                                        << "  " << jSmallInit << "   " << jSmallEnd << endl;
+                        fileSrm_.close();
+                        system(("mv  " + convert2.str() + ".srm" + "  " + blockName + convert.str()).c_str());
+                        system(("cp runBlock.x  " + blockName + convert.str()).c_str());
+                }
+                else if (machineType == "pc")
+                {
+                	ofstream fileSrm_((convert2.str() + ".x").c_str());
+                	fileSrm_ << "#!/bin/bash" << endl;
+                        fileSrm_ << "./lumpacview.exe  compositionBlockDeletion   "
+                                        << deletionSystem << "  "
+                                        << rawIsomersFile << "  "
+                                        << compositionFile << "  "
+                                        << "  1  " << indexBlock
+                                        << "  " << jSmallInit << "   " << jSmallEnd << endl;
+                        fileSrm_.close();
+                        system(("chmod u+x  " + convert2.str() + ".x").c_str());
+                        system(("mv  " + convert2.str() + ".x" + "  " + blockName + convert.str()).c_str());
+                        system(("cp runBlock.x  " + blockName + convert.str()).c_str());
+                }
+		if(haveToBreak)
+			break;
+	}
+
+
+
+
+
+/*
 	for (int i = nWholeBlocks; i > 1; i--)
 	{
 		cout << "apaga de 1 ate " << (i - 1) * bigBlockSize
@@ -990,10 +1140,9 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags()
 		}
 	}
 
-	// conte os blocos -- o ultimo vai fazer
+*/	// conte os blocos -- o ultimo vai fazer
 	// um processador apagar cada bloco
 
-	int reduction = total;
 }
 
 

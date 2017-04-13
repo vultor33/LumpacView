@@ -162,13 +162,13 @@ int main(int argc, char *argv[])
 	{
 		int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
 		stringstream cGen;
-		string rawIsomers, composition;
+		string rawIsomers, compositionFile;
 		cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5] << "  " << argv[6] << "  " << argv[7] << "  " << argv[8];
-		cGen >> systemSize >> rawIsomers >> composition >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
+		cGen >> systemSize >> rawIsomers >> compositionFile >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
 		CauchyIndex ci_(systemSize);
 		ci_.doBlockDeletionFlags(
 			rawIsomers,
-			composition + "---atomTypes.txt",
+			compositionFile,
 			kRotateInit,
 			kRotateEnd,
 			lDeleteInit,

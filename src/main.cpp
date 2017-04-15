@@ -57,40 +57,11 @@ int main(int argc, char *argv[])
 	clock_t begin = clock();
 
 
-	/*
-	// tenho que cortar pela metade e fazer os dois blocos.
-        string compositionFile = "B01B02B03.txt";
-        string rawIsomersFile = "skeleton-6.txt";
-        int deletionSystem = 6;
-        string machineType = "pc";
-        int total = 32;
-        int bigBlockSize = 9;
-        int smallBlockSize = 3;
-
-	CauchyIndex ci2_(6);
-	ci2_.generateSlurmFilesToDeletionFlags(deletionSystem,total,bigBlockSize,smallBlockSize,compositionFile,rawIsomersFile,machineType);
-	return 0;
-
-	CauchyIndex ci_(6);
-	string composition = "B01B01C01";
-	ci_.generateAtomTypesAndBidentateChosenFile(composition);
-	// CONFERIR SE ESTA RODANDO TUDO NA TABELA
-	ci_.doBlockDeletionFlags(
-		"skeleton-isomers.txt",
-		composition + "---atomTypes.txt",
-		1,
-		10,
-		11,
-		30);
-	// ok o primeiro do segundo grupo e obvio.
-	// talvez nao esteja apagando direito
-	ci_.generateAllIndependentIsomersWithFlag("zblock-1-to-10.txt", composition + "---atomTypes.txt", composition);
-	ci_.generateAllIndependentIsomersWithFlag("block-11-to-30.txt", composition + "---atomTypes.txt", composition);
-	ci_.generateAllIndependentIsomersWithFlag("skeleton-isomers.txt", composition + "---atomTypes.txt", composition);
-
-	return 0;
-	*/
-
+/*    	 EXEMPLO PARA RODAR
+	./lumpacview.exe generateCompositionFiles 6 30 12 3 m01m02m03m04m04m04 skeleton-6 pc
+	./lumpacview.exe cleanBlocks m01m02m03m04m04m04 6 3 pc
+	cat composition---atomTypes composition-independent* > results-composition
+*/
 
 	stringstream convert0;
 	convert0 << argv[1];

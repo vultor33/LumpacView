@@ -412,6 +412,7 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(
 	}
 
 	ofstream of_((code + "-" + blockFileName).c_str());
+/* HEADER
 	of_ << allPermutations.size() << "  types:  ";
 	for (size_t i = 0; i < atomTypes.size(); i++)
 		of_ << atomTypes[i] << "  ";
@@ -420,7 +421,7 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(
 		of_ << bidentateAtomChosen[i] << "  ";
 	of_ << "  -1  ";
 	of_ << endl;
-
+*/
 	for (size_t i = 0; i < allPermutations.size(); i++)
 	{
 		for (size_t j = 0; j < systemSize; j++)

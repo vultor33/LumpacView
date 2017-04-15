@@ -102,7 +102,14 @@ public:
 	// machineType:  slurm | pc
 	void generateSlurmFilesToDeletion(int nSystem, int nProc, std::string machineType);
 
-	void generateSlurmFilesToDeletionFlags();
+	void generateSlurmFilesToDeletionFlags(
+		        int deletionSystem,
+        		int total,
+        		int bigBlockSize,
+        		int smallBlockSize,
+        		std::string compositionFile,
+        		std::string rawIsomersFile,
+        		std::string machineType);
 
 	void runall(int blockInit, int blockFinal, std::string machineType, std::string workingDirectory);
 

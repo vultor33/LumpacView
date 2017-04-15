@@ -54,15 +54,23 @@ inline bool exist_file (const std::string& name) {
 
 int main(int argc, char *argv[])
 {
+	clock_t begin = clock();
+
+
+	/*
 	// tenho que cortar pela metade e fazer os dois blocos.
+        string compositionFile = "B01B02B03.txt";
+        string rawIsomersFile = "skeleton-6.txt";
+        int deletionSystem = 6;
+        string machineType = "pc";
+        int total = 32;
+        int bigBlockSize = 9;
+        int smallBlockSize = 3;
 
 	CauchyIndex ci2_(6);
-	ci2_.generateSlurmFilesToDeletionFlags();
+	ci2_.generateSlurmFilesToDeletionFlags(deletionSystem,total,bigBlockSize,smallBlockSize,compositionFile,rawIsomersFile,machineType);
 	return 0;
 
-
-
-	clock_t begin = clock();
 	CauchyIndex ci_(6);
 	string composition = "B01B01C01";
 	ci_.generateAtomTypesAndBidentateChosenFile(composition);
@@ -80,20 +88,9 @@ int main(int argc, char *argv[])
 	ci_.generateAllIndependentIsomersWithFlag("block-11-to-30.txt", composition + "---atomTypes.txt", composition);
 	ci_.generateAllIndependentIsomersWithFlag("skeleton-isomers.txt", composition + "---atomTypes.txt", composition);
 
-	/*
-	ci_.generateAtomTypesAndBidentateChosenFile("m01m01m01m01m01m01");
-	ci_.doBlockDeletionFlags("m01m01m01m01m01m01---atomTypes.txt", 1, 1, 2, 30);
-	*/
-	
 	return 0;
-
-	/*
-	ci_.doBlockDeletionFlags(
-		1,
-		33,
-		1,
-		10);
 	*/
+
 
 	stringstream convert0;
 	convert0 << argv[1];
@@ -148,16 +145,51 @@ int main(int argc, char *argv[])
         CauchyIndex ci_(systemSize);
 		ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
 	}
-	else if (execType == "generateAtomTypes") //gerar os arquivos aqui tambem
+	else if(execType == "generateCompositionFiles")
 	{
-		int systemSize, nProc;
-		string composition;
+		system("pwd > workingDir");
+                ifstream wDir_("workingDir");
+                string workingDirectory;
+                wDir_ >> workingDirectory;
+                wDir_.close();
+                remove("workingDir");
+
+		int systemSize, total, bigBlockSize, smallBlockSize;
+		string composition, rawIsomersFile, machineType;
+
 		stringstream cGen;
-		cGen << argv[2] << "  " << argv[3];
-		cGen >> systemSize >> composition;
+		cGen << argv[2] << "  " 
+			<< argv[3] << "  " 
+			<< argv[4] << "  " 
+			<< argv[5] << "  " 
+			<< argv[6] << "  " 
+			<< argv[7] << "  " 
+			<< argv[8];
+		
+		cGen >> systemSize
+			>> total 
+			>> bigBlockSize
+			>> smallBlockSize
+			>> composition
+			>> rawIsomersFile
+			>> machineType;
+		
 		CauchyIndex ci_(systemSize);
 		ci_.generateAtomTypesAndBidentateChosenFile(composition);
-	}
+		
+		string compositionFile = workingDirectory + "/" + composition + "---atomTypes.txt";
+
+		ci_.generateSlurmFilesToDeletionFlags(
+			systemSize,
+			total,
+			bigBlockSize,	
+			smallBlockSize,
+			compositionFile,
+			workingDirectory + "/" + rawIsomersFile,
+			machineType);
+
+
+	}	
 	else if (execType == "compositionBlockDeletion")
 	{
 		int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;

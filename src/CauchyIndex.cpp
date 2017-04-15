@@ -943,26 +943,18 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string ma
 	}
 }
 
-void CauchyIndex::generateSlurmFilesToDeletionFlags()
+void CauchyIndex::generateSlurmFilesToDeletionFlags(
+	int deletionSystem,
+	int total,
+	int bigBlockSize,
+	int smallBlockSize,
+	string compositionFile,
+	string rawIsomersFile,
+	string machineType)
 {
-	/*
-	int total = 7983360;
-	int bigBlockSize = 120000;
-	int smallBlockSize = 120;
-	*/
-	string compositionFile = "B01B02B03.txt";
-	string rawIsomersFile = "skeleton-6.txt";
-	int deletionSystem = 6;
-	string machineType = "pc";
-	int total = 32;
-	int bigBlockSize = 9;
-	int smallBlockSize = 3;
 	int nWholeBlocks = floor((double)total / (double)bigBlockSize);
 	int lastBlock = bigBlockSize * nWholeBlocks + 1;
 	int smallBlockNumber = bigBlockSize / smallBlockSize;
-
-
-
 
 	ofstream fileRunAll_("runBlock.x");
 	fileRunAll_ << "#!/bin/bash" << endl;

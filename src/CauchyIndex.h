@@ -113,7 +113,12 @@ public:
 
 	void runall(int blockInit, int blockFinal, std::string machineType, std::string workingDirectory);
 
-	void cleanBlocksAndGenerateIsomers(int nProc, int systemSize, std::string workingDirectory, std::string machineType);
+	void cleanBlocksAndGenerateIsomers(
+		int nProc, 
+		int systemSize, 
+		std::string composition,
+		std::string workingDirectory, 
+		std::string machineType);
 
 	void doBlockDeletion(
 		int kInit,

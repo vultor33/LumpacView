@@ -1093,49 +1093,22 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags(
 	}
 
 
-
-
-
-/*
-	for (int i = nWholeBlocks; i > 1; i--)
+	ofstream isomers1_("independent-isomers-1");
+        ifstream openedFile_(rawIsomersFile.c_str());
+	for(int i = 1; i <= bigBlockSize; i++)
 	{
-		cout << "apaga de 1 ate " << (i - 1) * bigBlockSize
-			<< "  alvo:  " << (i -1) * bigBlockSize + 1 << " ate "
-			<< i * bigBlockSize
-			<< endl;
-		for (int j = 0; j < smallBlockNumber; j++)
+                vector<int> permutation = readCauchyNotations(openedFile_);
+		for(size_t j = 0; j < permutation.size(); j++)
 		{
-			cout << "        smallblock " << (i - 1) * bigBlockSize + j * smallBlockSize + 1
-				<< " ate "
-				<< (i - 1) * bigBlockSize + (j + 1) * smallBlockSize << endl;
+			isomers1_ << permutation[j] << "  ";
 		}
+		isomers1_ << endl;
 	}
-
-	// ultimo
-	cout << "ultimo" << endl;
-	for (int j = 0; j < smallBlockNumber; j++)
-	{
-		if (total > lastBlock + (j + 1) * smallBlockSize - 1)
-		{
-			cout << "De  "
-				<< lastBlock + j * smallBlockSize << " ate "
-				<< lastBlock + (j + 1) * smallBlockSize - 1
-				<< endl;
-		}
-		else
-		{
-			cout << "De  "
-				<< lastBlock + j * smallBlockSize << " ate "
-				<< total
-				<< endl;
-			break;
-		}
-	}
-
-*/	// conte os blocos -- o ultimo vai fazer
-	// um processador apagar cada bloco
+	openedFile_.close();
+	isomers1_.close();	
 
 }
+
 
 
 void CauchyIndex::runall(int blockInit, int blockFinal,string machineType,string workingDirectory)
@@ -1158,6 +1131,7 @@ void CauchyIndex::runall(int blockInit, int blockFinal,string machineType,string
 void CauchyIndex::cleanBlocksAndGenerateIsomers(
 	int nProc, 
 	int systemSize, 
+	string composition,
 	string workingDirectory,
 	string machineType)
 {
@@ -1191,13 +1165,13 @@ void CauchyIndex::cleanBlocksAndGenerateIsomers(
 			fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
 			fileSrm_ << "RODADIR=" << workingDirectory << endl;
 			fileSrm_ << "cd $RODADIR" << endl;
-			fileSrm_ << ("./lumpacview.exe blockGeneration " + systemSizeName + " independent-isomers-" + convert.str()).c_str()
+			fileSrm_ << ("./lumpacview.exe blockGeneration " + composition + "  " + systemSizeName + " independent-isomers-" + convert.str()).c_str()
 				<< endl;
 			fileSrm_.close();
 			system(("sbatch " + convert.str() + ".srm").c_str());
 		}
 		else
-			system(("./lumpacview.exe blockGeneration " + systemSizeName + " independent-isomers-" + convert.str()).c_str());
+			system(("./lumpacview.exe blockGeneration " + composition + "  " + systemSizeName + " independent-isomers-" + convert.str()).c_str());
 	}
 #endif
 }

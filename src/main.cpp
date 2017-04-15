@@ -133,17 +133,38 @@ int main(int argc, char *argv[])
 		CauchyIndex ci_(systemSize);
 		if(blockInit <= nProc)
 			ci_.runall(blockInit, nProc,machineType,workingDirectory);
-		ci_.cleanBlocksAndGenerateIsomers(nProc,systemSize,workingDirectory,machineType);
 	}
 	else if(execType == "blockGeneration")
 	{
 		int systemSize;
-        string blockName;
-        stringstream cGen;
-        cGen << argv[2] << "  " << argv[3];
-        cGen >> systemSize >> blockName;
-        CauchyIndex ci_(systemSize);
-		ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
+	        string blockName;
+		string composition;
+        	stringstream cGen;
+        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4];
+        	cGen >> composition >> systemSize >> blockName;
+        	CauchyIndex ci_(systemSize);
+		if(composition == "none")
+			ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
+		else
+			ci_.generateAllIndependentIsomersWithFlag(blockName, composition + "---atomTypes.txt", composition);
+	}
+	else if(execType == "cleanBlocks")
+	{
+		system("pwd > workingDir");
+		ifstream wDir_("workingDir");
+		string workingDirectory;
+		wDir_ >> workingDirectory;
+		wDir_.close();
+		remove("workingDir");
+        	int systemSize, nMaxBlock;
+		string composition;
+		string machineType;
+        	stringstream cGen;
+        	cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
+        	cGen >> composition >> systemSize >> nMaxBlock >> machineType;
+		CauchyIndex ci_(systemSize);
+		ci_.cleanBlocksAndGenerateIsomers(nMaxBlock,systemSize,composition,workingDirectory,machineType);
+
 	}
 	else if(execType == "generateCompositionFiles")
 	{

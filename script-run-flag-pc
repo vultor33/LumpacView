@@ -1,0 +1,30 @@
+#!/bin/bash
+
+
+COMPOSITION=$1
+SKELETON="skeleton-6"
+
+./lumpacview.exe generateCompositionFiles 6 30 12 3 $COMPOSITION  $SKELETON    pc 
+cd Block2
+./runBlock.x
+cd ..
+cd Block3
+./runBlock.x
+cd ..
+./lumpacview.exe cleanBlocks $COMPOSITION 6 3 pc
+MID="independent-isomers-"
+LAST=$COMPOSITION"-independent-isomers-"
+cat $COMPOSITION"---atomTypes.txt"  $LAST"1" $LAST"2" $LAST"3" > "results-"$COMPOSITION 
+rm $COMPOSITION"---atomTypes.txt"
+rm $LAST"1"
+rm $LAST"2"
+rm $LAST"3"
+rm $MID"1"
+rm $MID"2"
+rm $MID"3"
+
+wc -l -w "results-"$COMPOSITION 
+
+
+
+

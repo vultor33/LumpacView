@@ -2000,6 +2000,36 @@ void CauchyIndex::printMoleculeFromFile(string fileName)
 }
 
 
+
+
+
+void CauchyIndex::printAllMoleculesFromFile(string fileName)
+{
+	vector<int> atomTypes;
+	vector<int> bidentateChosen;
+	readAtomTypesAndBidentateChosenFile(fileName, atomTypes, bidentateChosen);
+	
+	ifstream filePermutations_(fileName.c_str());
+	string line;
+	getline(filePermutations_,line);	
+
+	while(true)
+	{
+		vector<int> permutation = readCauchyNotations(filePermutations_);
+		if(permutation.size() == 0)
+			break;
+		string permtString = permutationToString(permutation);
+		ofstream fileXyz_((fileName + "-" + permtString + ".xyz").c_str());
+		printMolecule(permutation,atomTypes,bidentateChosen,fileXyz_);
+		fileXyz_.close();	
+	}
+
+	filePermutations_.close();
+}
+
+
+
+
 unsigned int CauchyIndex::factorial(unsigned int n)
 {
 	if (n == 0)
@@ -2060,8 +2090,13 @@ vector< vector<int> > CauchyIndex::readCauchyNotationsRAMBlock(ifstream & openen
 }
 
 
-
-
+string CauchyIndex::permutationToString(vector<int> permutation)
+{
+	stringstream permt;
+	for(size_t i = 0; i < permutation.size(); i++)
+		permt << permutation[i] << "-";	
+	return permt.str();
+}
 
 
 

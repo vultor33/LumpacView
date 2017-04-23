@@ -48,6 +48,8 @@ public:
 
 	void printMoleculeFromFile(std::string fileName);
 
+	void printAllMoleculesFromFile(std::string fileName);
+
 	void rotationTest(
 		std::vector<std::string> &atoms,
 		std::vector<int> & bidentateAtomsChosen);
@@ -206,6 +208,8 @@ private:
 	void writeCauchyRotations(std::string fileName, std::vector< std::vector<int> > & rotPermutations);
 	std::vector<int> readCauchyNotations(std::ifstream & openedFile_);
 	std::vector< std::vector<int> > readCauchyNotationsRAMBlock(std::ifstream & openedFile_, int kInitial, int kFinal);
+
+	std::string permutationToString(std::vector<int> permutation); 
 
 	void molecularFormulaToCauchyCode(
 		std::string code,

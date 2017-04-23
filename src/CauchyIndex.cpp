@@ -10,6 +10,7 @@
 #include <sstream>
 #include <time.h>
 #include <cmath>
+#include <iomanip>
 #ifdef UNIX
 	#include <unistd.h>
 #endif
@@ -1762,10 +1763,11 @@ void CauchyIndex::printMoleculeFast(std::vector<CoordXYZ>& mol)
 			mol[i].atomlabel = "H  ";
 
 		of_ << mol[i].atomlabel << "  "
-			<< mol[i].x << "  "
-			<< mol[i].y << "  "
-			<< mol[i].z << endl;
- 	}
+			<<  setprecision(12) << mol[i].x << "  "
+			<<  setprecision(12) << mol[i].y << "  "
+			<<  setprecision(12) << mol[i].z << endl;
+
+	}
 	of_.close();
 }
 
@@ -1937,21 +1939,22 @@ void CauchyIndex::printMolecule(
 	}
 	int nAtoms = mol0.size() + bidentates.size();
 	printFile_ << nAtoms << endl << "title" << endl;
+	printFile_,setprecision(12);
 	for (int i = 0; i < nAtoms; i++)
 	{
 		if (i < (int)mol0.size())
 		{
 			printFile_ << mol0[i].atomlabel << "  "
-				<< mol0[i].x << "  "
-				<< mol0[i].y << "  "
-				<< mol0[i].z << endl;
+				 << fixed << setprecision(12) << setw(16) << mol0[i].x << "  "
+				 << fixed << setprecision(12) << setw(16) << mol0[i].y << "  "
+				<< fixed << setprecision(12) << setw(16) << mol0[i].z << endl;
 		}
 		else
 		{
 			printFile_ << bidentates[i - mol0.size()].atomlabel << "  "
-				<< bidentates[i - mol0.size()].x << "  "
-				<< bidentates[i - mol0.size()].y << "  "
-				<< bidentates[i - mol0.size()].z << endl;
+				<< fixed << setprecision(12) << setw(16) << bidentates[i - mol0.size()].x << "  "
+				<< fixed << setprecision(12) << setw(16) << bidentates[i - mol0.size()].y << "  "
+				<< fixed << setprecision(12) << setw(16) << bidentates[i - mol0.size()].z << endl;
 		}
 	}
 }
@@ -2003,28 +2006,29 @@ void CauchyIndex::printMoleculeFromFile(string fileName)
 
 
 
-void CauchyIndex::printAllMoleculesFromFile(string fileName)
+void CauchyIndex::printAllMoleculesFromFile(string composition)
 {
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
-	readAtomTypesAndBidentateChosenFile(fileName, atomTypes, bidentateChosen);
+	readAtomTypesAndBidentateChosenFile("results-" + composition, atomTypes, bidentateChosen);
 	
-	ifstream filePermutations_(fileName.c_str());
+	ifstream filePermutations_(("results-" + composition).c_str());
 	string line;
 	getline(filePermutations_,line);	
-
 	while(true)
 	{
 		vector<int> permutation = readCauchyNotations(filePermutations_);
 		if(permutation.size() == 0)
 			break;
 		string permtString = permutationToString(permutation);
-		ofstream fileXyz_((fileName + "-" + permtString + ".xyz").c_str());
+		ofstream fileXyz_((composition + "-" + permtString + ".xyz").c_str());
 		printMolecule(permutation,atomTypes,bidentateChosen,fileXyz_);
 		fileXyz_.close();	
 	}
-
 	filePermutations_.close();
+	system(("mkdir " + composition).c_str());
+	system(("mv " + composition + "* " + composition).c_str());
+
 }
 
 

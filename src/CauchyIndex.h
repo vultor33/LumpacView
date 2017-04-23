@@ -48,7 +48,7 @@ public:
 
 	void printMoleculeFromFile(std::string fileName);
 
-	void printAllMoleculesFromFile(std::string fileName);
+	void printAllMoleculesFromFile(std::string composition);
 
 	void rotationTest(
 		std::vector<std::string> &atoms,

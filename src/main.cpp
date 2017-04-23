@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	clock_t begin = clock();
 
 	CauchyIndex ci_(6);
-	ci_.printAllMoleculesFromFile("results-C01m01m02m03m04");
+	ci_.printAllMoleculesFromFile("C01m01m02m03m04");
 	return 0;
 	
 

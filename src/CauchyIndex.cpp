@@ -874,7 +874,7 @@ void CauchyIndex::generateSlurmFilesToDeletion(int nSystem, int nProc, string ma
 		stringstream convert3;
 		convert3 << i;
 		if(machineType == "slurm")
-			fileRunAll_ << "./" << convert3.str() << ".srm" << endl;
+			fileRunAll_ << "sbatch " << convert3.str() << ".srm" << endl;
 		else if(machineType == "pc")
 			fileRunAll_ << "./" << convert3.str() << ".x" << endl;
 		else
@@ -952,6 +952,7 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags(
 	int smallBlockSize,
 	string compositionFile,
 	string rawIsomersFile,
+	string workingDir,
 	string machineType)
 {
 	int nWholeBlocks = floor((double)total / (double)bigBlockSize);
@@ -965,7 +966,7 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags(
                 stringstream convert3;
                 convert3 << i;
                 if(machineType == "slurm")
-                        fileRunAll_ << "./" << convert3.str() << ".srm" << endl;
+                        fileRunAll_ << "sbatch " << convert3.str() << ".srm" << endl;
                 else if(machineType == "pc")
                         fileRunAll_ << "./" << convert3.str() << ".x" << endl;
                 else
@@ -1002,7 +1003,7 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags(
                                 fileSrm_ << "#!/bin/bash" << endl;
                                 fileSrm_ << "#SBATCH -n 1" << endl;
                                 fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
-                                fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running/" + blockName + convert.str() << endl;
+                                fileSrm_ << "RODADIR=" + workingDir + "/" + blockName + convert.str() << endl;
                                 fileSrm_ << "cd $RODADIR" << endl;
                                 fileSrm_ << "./lumpacview.exe  compositionBlockDeletion   " 
 					<< deletionSystem << "  "

@@ -111,6 +111,7 @@ public:
         		int smallBlockSize,
         		std::string compositionFile,
         		std::string rawIsomersFile,
+			std::string workingDir,
         		std::string machineType);
 
 	void runall(int blockInit, int blockFinal, std::string machineType, std::string workingDirectory);

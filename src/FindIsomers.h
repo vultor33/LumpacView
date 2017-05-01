@@ -30,6 +30,8 @@ public:
 		std::string & mopacExecPath);
 
 	void buildComplexWithSelectedIsomer();
+	
+	void printSelectedIsomer(std::vector<int> & permutation);
 
 private:
 	//data

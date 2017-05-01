@@ -57,9 +57,25 @@ int main(int argc, char *argv[])
 	clock_t begin = clock();
 
 //	CauchyIndex ci_(6);
-//	ci_.printAllMoleculesFromFile("C01m01m02m03m04");
+//	ci_.printAllMoleculesFromFile("m01m02m03m04m04m04");
 //	return 0;
 	
+	FindIsomers fd_;
+	vector<int> permutation(6);
+	permutation[0] = 0;
+	permutation[1] = 1;
+	permutation[2] = 2;
+	permutation[3] = 5;
+	permutation[4] = 3;
+	permutation[5] = 4;
+	fd_.printSelectedIsomer(permutation);
+	return 0;
+	
+// !!! IMPORTANTE - mudar bool ComplexCreator::start(vector<int> & ligandsPermutation)
+
+// ele troca as coordenadas
+
+
 
 
 /*    	 EXEMPLO PARA RODAR

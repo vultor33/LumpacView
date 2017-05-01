@@ -147,6 +147,54 @@ void FindIsomers::buildComplexWithSelectedIsomer()
 	*/
 }
 
+void FindIsomers::printSelectedIsomer(
+	vector<int> & permutation)
+{
+	string mopacExecPath;
+	vector<string> options;
+	vector<string> inputPermutations;
+	vector<int> zeroPermutation;
+	//vector<string> options;
+	//string execpath;
+	readInputpermutation(
+		inputPermutations, 
+		zeroPermutation, 
+		options, 
+		mopacExecPath);
+	FindIsomers fd_;
+	vector<CoordXYZ> allAtoms = fd_.generateSelectedIsomer(
+		permutation, 
+		inputInformations);
+	appendPrintCoordXYZ(
+		allAtoms, 
+		permutationToString(permutation) + "-isomer.xyz", 
+		"praise the sun");
+
+
+	/*
+	size_t size = permutation.size();
+	for (size_t i = 0; i < size; i++)
+	{
+		mol0[i].atomlabel = atoms[permutation[i]];
+	}
+	vector<int> bidentateAtomsChosenRotated = bidentateAtomsChosen;
+	for (size_t i = 0; i < bidentateAtomsChosenRotated.size(); i++)
+	{
+		for (size_t j = 0; j < size; j++)
+		{
+			if (permutation[j] == bidentateAtomsChosenRotated[i])
+			{
+				bidentateAtomsChosenRotated[i] = j;
+				break;
+			}
+		}
+	}
+	return bidentateAtomsChosenRotated;
+	*/
+
+
+}
+
 
 
 void FindIsomers::permutation(int nMax)

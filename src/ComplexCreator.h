@@ -55,6 +55,8 @@ private:
 
 	void setInitialPosition(const std::vector<double> & points, std::vector<int> & ligandsPermutation);
 
+	void setInitialPositionCauchy(const std::vector<double> & points, std::vector<int> & ligandsPermutation);
+
 	std::vector<int> findGoodPoint(
 		int chelation, 
 		const std::vector<double> & points,

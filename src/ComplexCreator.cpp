@@ -82,7 +82,9 @@ bool ComplexCreator::start(vector<int> & ligandsPermutation)
 
 	vector<double> points = getPoints(sumChelation);
 
-	setInitialPosition(points, ligandsPermutation); //view fredmudar
+//	setInitialPosition(points, ligandsPermutation); //view fredmudar
+
+	setInitialPositionCauchy(points, ligandsPermutation); //view fredmudar
 
 	return true;
 }
@@ -90,7 +92,7 @@ bool ComplexCreator::start(vector<int> & ligandsPermutation)
 
 vector<double> ComplexCreator::getPoints(int totalChelation)
 {
-        CauchyIndex ci_(totalChelation);
+    CauchyIndex ci_(totalChelation);
 	vector<CoordXYZ> mol0 = ci_.getPoints();
 	size_t size = totalChelation;
 	vector<double> out(3 * size);
@@ -184,10 +186,86 @@ void ComplexCreator::setInitialPosition(
 		for (size_t i = 0; i < allLigands.size(); i++)
 		{
 			vector<int> pointsOverLigand(allLigands[i].getChelation());
-
 			for (size_t j = 0; j < allLigands[i].getChelation(); j++)
 			{
 				pointsOverLigand[j] = ligandsPermutation[k];
+				k++;
+			}
+
+			allLigands[i].placeLigandOnPoins(
+				pointsOverLigand,
+				points);
+
+			allLigands[i].rotateOverReferencePoints();
+		}
+	}
+}
+
+
+
+void ComplexCreator::setInitialPositionCauchy(
+	const vector<double> &points,
+	vector<int> & ligandsPermutation)
+{
+	size_t nPoints = points.size() / 3;
+	vector<bool> pointsTaken(nPoints);
+	for (size_t k = 0; k < nPoints; k++)
+		pointsTaken[k] = false;
+
+	if (ligandsPermutation.size() == 0)
+	{
+		for (size_t i = 0; i < allLigands.size(); i++)
+		{
+			vector<int> pointsOverLigand = findGoodPoint(
+				allLigands[i].getChelation(),
+				points,
+				pointsTaken);
+
+			allLigands[i].placeLigandOnPoins(
+				pointsOverLigand,
+				points);
+
+			allLigands[i].rotateOverReferencePoints();
+		}
+	}
+	else
+	{
+		//fredmudar
+		// vou entrar com -- m1(0) m2(1) m3(2) m4(3) m4(4) m4(5)
+		// tenho 6 pontos -- p1 p2 p3 p4 p5 p6
+		vector<int> zeroPerm(6);
+		zeroPerm[0] = 1;//m1
+		zeroPerm[1] = 4;//m2
+		zeroPerm[2] = 3;//m3
+		zeroPerm[3] = 0;//m4
+		zeroPerm[4] = 2;//m4
+		zeroPerm[5] = 5;//m4
+			
+		vector<int> initialPermut(6);
+		for (int i = 0; i < 6; i++)
+			initialPermut[i] = zeroPerm[i];
+
+		int k = 0;
+		for (size_t i = 0; i < allLigands.size(); i++)
+		{
+			vector<int> pointsOverLigand(allLigands[i].getChelation());
+
+			// adicionar aqui uma permutacao zero para os bidentados.
+			// para os monos tambem.
+			// se o bi for 0-1
+			// o mono esta em segundo mas a posicao dele e a 2
+			// 0  1  0  0  2  0  0  0    -1  bidentates:  3  0  7  5  6  2    -1  
+			// na permutacao 012345 o bidentado fica no 1 e 5 por exemplo.
+			// o monodentado 1 fica na posicao 1, o monodentado 2 fica na posicao 4
+			// CONFERIR - OLHAR OS GERADOS PELO PRINT MOLECULE E OS DAQUI
+			// coordenada por coordenada
+
+			for (size_t j = 0; j < allLigands[i].getChelation(); j++)
+			{
+				//pointsOverLigand[j] = initialPermut[ligandsPermutation[k]];
+				auto it = find(ligandsPermutation.begin(), ligandsPermutation.end(), initialPermut[i]);
+				pointsOverLigand[j] = distance(ligandsPermutation.begin(), it);
+				cout << "point" << i << "  " << pointsOverLigand[j] << endl;
 				k++;
 			}
 

@@ -1,6 +1,6 @@
 #include "CauchyIndex.h"
 
-#define UNIX
+//#define UNIX
 
 #include <vector>
 #include <string>
@@ -324,6 +324,31 @@ void CauchyIndex::generateAllIndependentIsomersRuntimeRotationsAndReadBlock(stri
 		of_ << endl;
 	}
 }
+
+
+void CauchyIndex::correctIndependentIsomers()
+{
+	int systemSize = 12;
+	ifstream openedFile_("independent-isomers-1");
+	ofstream out_("independent");
+	while (true)
+	{
+		vector<int> auxBlock2 = readCauchyNotations(openedFile_);
+		if (auxBlock2.size() == 0)
+			break;
+		vector<int> auxBlock(systemSize);
+		auxBlock[0] = 0;
+		for (size_t i = 0; i < systemSize - 1; i++)
+			auxBlock[i + 1] = auxBlock2[i] + 1;
+
+		for (size_t i = 0; i < auxBlock.size(); i++)
+			out_ << auxBlock[i] << " ";
+		out_ << endl;
+	}	
+	openedFile_.close();
+	out_.close();
+}
+
 
 void CauchyIndex::generateAllIndependentIsomers12(string blockFileName)
 {
@@ -2027,8 +2052,10 @@ void CauchyIndex::printAllMoleculesFromFile(string composition)
 		fileXyz_.close();	
 	}
 	filePermutations_.close();
+#ifdef UNIX
 	system(("mkdir " + composition).c_str());
 	system(("mv " + composition + "* " + composition).c_str());
+#endif
 
 }
 

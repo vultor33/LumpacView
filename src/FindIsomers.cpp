@@ -147,8 +147,9 @@ void FindIsomers::buildComplexWithSelectedIsomer()
 	*/
 }
 
-void FindIsomers::printSelectedIsomer(
-	vector<int> & permutation)
+void FindIsomers::printSelectedIsomerCauchy(
+	vector<int> & permutation,
+	string flagsFile)
 {
 	string mopacExecPath;
 	vector<string> options;
@@ -162,9 +163,9 @@ void FindIsomers::printSelectedIsomer(
 		options, 
 		mopacExecPath);
 	FindIsomers fd_;
-	vector<CoordXYZ> allAtoms = fd_.generateSelectedIsomer(
-		permutation, 
-		inputInformations);
+	BuildComplex bc_;
+	vector<Ligand> allLigands = bc_.assembleComplexWithoutSACauchy(permutation, inputInformations, flagsFile);
+	vector<CoordXYZ> allAtoms = ligandToCoordXYZ(allLigands);
 	appendPrintCoordXYZ(
 		allAtoms, 
 		permutationToString(permutation) + "-isomer.xyz", 

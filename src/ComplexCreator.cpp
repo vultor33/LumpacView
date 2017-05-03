@@ -82,12 +82,25 @@ bool ComplexCreator::start(vector<int> & ligandsPermutation)
 
 	vector<double> points = getPoints(sumChelation);
 
-//	setInitialPosition(points, ligandsPermutation); //view fredmudar
-
-	setInitialPositionCauchy(points, ligandsPermutation); //view fredmudar
+	setInitialPosition(points, ligandsPermutation); //view fredmudar
 
 	return true;
 }
+
+bool ComplexCreator::startCauchy(vector<int> & ligandsPermutation, string flagsFile)
+{
+	int sumChelation = orderAllLigands();
+
+	if (sumChelation > maxChelation)
+		return false;
+
+	vector<double> points = getPoints(sumChelation);
+
+	setInitialPositionCauchy(points, ligandsPermutation, flagsFile); //view fredmudar
+
+	return true;
+}
+
 
 
 vector<double> ComplexCreator::getPoints(int totalChelation)
@@ -205,7 +218,8 @@ void ComplexCreator::setInitialPosition(
 
 void ComplexCreator::setInitialPositionCauchy(
 	const vector<double> &points,
-	vector<int> & ligandsPermutation)
+	vector<int> & ligandsPermutation,
+	string flagsFile)
 {
 	size_t nPoints = points.size() / 3;
 	vector<bool> pointsTaken(nPoints);
@@ -230,6 +244,7 @@ void ComplexCreator::setInitialPositionCauchy(
 	}
 	else
 	{
+		/*
 		//fredmudar
 		// vou entrar com -- m1(0) m2(1) m3(2) m4(3) m4(4) m4(5)
 		// tenho 6 pontos -- p1 p2 p3 p4 p5 p6
@@ -237,13 +252,16 @@ void ComplexCreator::setInitialPositionCauchy(
 		zeroPerm[0] = 1;//m1
 		zeroPerm[1] = 4;//m2
 		zeroPerm[2] = 3;//m3
-		zeroPerm[3] = 0;//m4
-		zeroPerm[4] = 2;//m4
-		zeroPerm[5] = 5;//m4
-			
-		vector<int> initialPermut(6);
-		for (int i = 0; i < 6; i++)
-			initialPermut[i] = zeroPerm[i];
+		zeroPerm[3] = 0;//m4 
+		zeroPerm[4] = 2;//b1 --- esses numeros vem do bidentateChosen
+		zeroPerm[5] = 5;//b2
+		// na funcao de gerar os caras eu tenho que gerar o LumpacViewInput-Permutation
+		// nessa ordem m1 m2 m3 de ligantes
+		*/
+
+		// primeiro vem os assimetricos e depois os simetricos, pelo numero dos tipos eu sei.
+		CauchyIndex ci_(nPoints);
+		vector<int> initialPermut = ci_.zeroPermutation(flagsFile);
 
 		int k = 0;
 		for (size_t i = 0; i < allLigands.size(); i++)
@@ -262,10 +280,9 @@ void ComplexCreator::setInitialPositionCauchy(
 
 			for (size_t j = 0; j < allLigands[i].getChelation(); j++)
 			{
-				//pointsOverLigand[j] = initialPermut[ligandsPermutation[k]];
-				auto it = find(ligandsPermutation.begin(), ligandsPermutation.end(), initialPermut[i]);
+				auto it = find(ligandsPermutation.begin(), ligandsPermutation.end(), initialPermut[k]);
 				pointsOverLigand[j] = distance(ligandsPermutation.begin(), it);
-				cout << "point" << i << "  " << pointsOverLigand[j] << endl;
+//				cout << "point" << i << "  " << pointsOverLigand[j] << endl; //fredmudar
 				k++;
 			}
 

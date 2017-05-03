@@ -30,6 +30,10 @@ public:
 
 	bool start(std::vector<int> & ligandsPermutation);
 
+	bool startCauchy(
+		std::vector<int> & ligandsPermutation,
+		std::string flagsFile);
+
 	std::vector<CoordXYZ> simulatedAnnealing();
 
 	int getIterationOfLowestFit() { return finalI; }
@@ -55,7 +59,7 @@ private:
 
 	void setInitialPosition(const std::vector<double> & points, std::vector<int> & ligandsPermutation);
 
-	void setInitialPositionCauchy(const std::vector<double> & points, std::vector<int> & ligandsPermutation);
+	void setInitialPositionCauchy(const std::vector<double> & points, std::vector<int> & ligandsPermutation, std::string flagsFile);
 
 	std::vector<int> findGoodPoint(
 		int chelation, 

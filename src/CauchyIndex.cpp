@@ -490,6 +490,39 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(
 }
 
 
+vector<int> CauchyIndex::zeroPermutation(string flagsFile)
+{
+	vector<int> atomTypes;
+	vector<int> bidentateAtomChosen;
+	readAtomTypesAndBidentateChosenFile(flagsFile, atomTypes, bidentateAtomChosen);
+
+	//os ligantes vao estar na ordem -- C, B e m.
+
+	vector<int> zero(atomTypes.size());
+	int k = 0;
+	for (size_t i = 0; i < bidentateAtomChosen.size(); i++)
+	{
+		zero[k] = bidentateAtomChosen[i];
+		k++;
+	}
+	for (size_t i = 0; i < atomTypes.size(); i++)
+	{
+		if (find(bidentateAtomChosen.begin(), bidentateAtomChosen.end(), i) != bidentateAtomChosen.end())
+			atomTypes[i] = 999;
+	}
+	while (k != (int)atomTypes.size())
+	{
+		auto lowest = min_element(atomTypes.begin(), atomTypes.end());
+		int lowestIndex = distance(atomTypes.begin(), lowest);
+		zero[k] = lowestIndex;
+		k++;
+		atomTypes[lowestIndex] = 999;
+	}
+	return zero;
+}
+
+
+
 
 void CauchyIndex::molecularFormulaToCauchyCode(
 	string code,

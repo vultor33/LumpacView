@@ -25,11 +25,19 @@ public:
 	void makeComplexOptimizingInMopac(std::string ligandName, int coordination, int charge, std::vector<std::string> options, std::string mopacExecPath);
 	
 	std::vector<Ligand> assembleComplexWithoutSA();
-	
-	std::vector<Ligand> assembleComplexWithoutSA(std::vector<int> & ligandsPermutation);
 
-	std::vector<Ligand> assembleComplexWithoutSA(std::vector<int> & ligandsPermutation, std::vector< std::string > & inputInformations);
+	std::vector<Ligand> assembleComplexWithoutSA(
+		std::vector<int> & ligandsPermutation);
 
+	std::vector<Ligand> assembleComplexWithoutSA(
+		std::vector<int> & ligandsPermutation,
+		std::vector< std::string > & inputInformations);
+
+	std::vector<Ligand> assembleComplexWithoutSACauchy(
+		std::vector<int> & ligandsPermutation, 
+		std::vector< std::string > & inputInformations,
+		std::string flagsFile);
+		
 	void runMopacAndPrint(std::vector< std::string > options, std::string mopacExecPath, std::vector<CoordXYZ> & allAtoms); // run optimization and frequency with previous coordinates.
 
 	void fitSA();

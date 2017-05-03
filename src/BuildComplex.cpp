@@ -143,7 +143,7 @@ vector<Ligand> BuildComplex::assembleComplexWithoutSA()
 
 vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermutation)
 {
-	vector<string>  inputInformations;
+	vector<string> inputInformations;
 	return assembleComplexWithoutSA(ligandsPermutation,inputInformations);
 }
 
@@ -197,6 +197,63 @@ vector<Ligand> BuildComplex::assembleComplexWithoutSA(vector<int> & ligandsPermu
 
 	return allLigands;
 }
+
+vector<Ligand> BuildComplex::assembleComplexWithoutSACauchy(
+	vector<int> & ligandsPermutation, 
+	vector<string> & inputInformations,
+	string flagsFile)
+{
+	ReadInput readInp_ = activateReadInput(inputInformations);
+
+	bool terminate = buildLigands(readInp_);
+
+	if (ligandsPermutation.size() == 0)
+	{
+		int allChelation = 0;
+		for (size_t i = 0; i < readInp_.allLigands.size(); i++)
+		{
+			allChelation += readInp_.allLigands[i].getChelation();
+		}
+		actualLigandPermutation.resize(allChelation);
+		for (int i = 0; i < allChelation; i++)
+		{
+			actualLigandPermutation[i] = i;
+		}
+	}
+	else
+		actualLigandPermutation = ligandsPermutation;
+
+	if (terminate) return vector<Ligand>();
+
+	// tinicial, saUpdate, maxAlfa, maxBeta,
+	AdjustSaParameters saParameters_(
+		0.13113111182697784,
+		1.8245257230764378,
+		2.0524859126887280,
+		503.81980808157266,
+		0.5000000000000000);
+
+	vector<CoordXYZ> allAtoms;
+
+	int maxChelation = 12;
+	int saMaxIterations = 1000;
+	ComplexCreator cpCreator(
+		readInp_.allLigands,
+		maxChelation,
+		saMaxIterations,
+		saParameters_.maxAlfaAngle,
+		saParameters_.maxBetaAngle,
+		saParameters_.saTemperatureUpdate,
+		saParameters_.saInitialTemperature,
+		saParameters_.saAcceptance);
+	bool sucess = cpCreator.startCauchy(actualLigandPermutation,flagsFile);
+	vector<Ligand> allLigands = cpCreator.getLigandsCreated();
+
+	return allLigands;
+}
+
+
+
 
 int BuildComplex::getLigandsNumber()
 {

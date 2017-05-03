@@ -67,7 +67,9 @@ public:
 		std::string flagsFile,
 		std::string code);
 
-	void CauchyIndex::correctIndependentIsomers();
+	std::vector<int> zeroPermutation(std::string flagsFile);
+
+	void correctIndependentIsomers();
 	void generateAllIndependentIsomers12(std::string blockFileName);
 
 	//0-true ; 1-false ; 2-bidentate problem

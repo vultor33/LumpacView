@@ -22,6 +22,8 @@ public:
 
 	void printSelectedIsomer(std::vector<int> permutation, std::vector<std::string > inputInformations, std::string outputName);
 
+	void printSelectedIsomerCauchy(std::vector<int> & permutation, std::string flagsFile);
+
 	std::vector<CoordXYZ> buildComplexWithSelectedIsomer(
 		std::vector<int> & permutation, 
 		std::string projectName, 
@@ -31,8 +33,6 @@ public:
 
 	void buildComplexWithSelectedIsomer();
 	
-	void printSelectedIsomer(std::vector<int> & permutation);
-
 private:
 	//data
 	int counter;

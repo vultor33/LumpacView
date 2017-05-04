@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iomanip>
 #include <cmath>
+#include <algorithm>
 
 #include "Ligand.h"
 #include "AuxMath.h"
@@ -280,7 +281,7 @@ void ComplexCreator::setInitialPositionCauchy(
 
 			for (size_t j = 0; j < allLigands[i].getChelation(); j++)
 			{
-				auto it = find(ligandsPermutation.begin(), ligandsPermutation.end(), initialPermut[k]);
+				vector<int>::iterator it = find(ligandsPermutation.begin(), ligandsPermutation.end(), initialPermut[k]);
 				pointsOverLigand[j] = distance(ligandsPermutation.begin(), it);
 //				cout << "point" << i << "  " << pointsOverLigand[j] << endl; //fredmudar
 				k++;

@@ -56,26 +56,28 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 
-	CauchyIndex ci_(6);
-	ci_.zeroPermutation("results-m01m02B01B01B01");
 
 
-//	CauchyIndex ci_(6);
-//	ci_.printAllMoleculesFromFile("m01m02m03m04m04m04");
+//	CauchyIndex ci_(8);
+//	ci_.printAllMoleculesFromFile("m01m02B01B01B01");
 //	return 0;
-	
-	string flagsFile = "results-m01m02m03m04m04m04";
+
+	/*
+	string flagsFile = "results-m01m02B01B01B01";
 	FindIsomers fd_;
-	vector<int> permutation(6);
+	vector<int> permutation(8);
 	permutation[0] = 0;
 	permutation[1] = 1;
 	permutation[2] = 2;
-	permutation[3] = 5;
-	permutation[4] = 3;
-	permutation[5] = 4;
+	permutation[3] = 3;
+	permutation[4] = 4;
+	permutation[5] = 6;
+	permutation[6] = 5;
+	permutation[7] = 7;
 	fd_.printSelectedIsomerCauchy(permutation, flagsFile);
 	return 0;
-	
+	*/
+
 // !!! IMPORTANTE - mudar bool ComplexCreator::start(vector<int> & ligandsPermutation)
 
 // ele troca as coordenadas

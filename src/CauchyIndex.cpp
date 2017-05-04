@@ -2221,6 +2221,96 @@ void CauchyIndex::setSystem(int system)
 
 	switch (system)
 	{
+	case 4:
+		mol0.resize(4);
+		mol0[0].x =  0.0000000;
+		mol0[0].y =  0.0000000;
+		mol0[0].z =  1.0000000;
+		mol0[1].x =  0.81649658;
+		mol0[1].y =  0.47140452;
+		mol0[1].z = -0.33333333;
+		mol0[2].x = -0.81649658;
+		mol0[2].y =  0.47140452;
+		mol0[2].z = -0.33333333;
+		mol0[3].x =  0.00000000;
+		mol0[3].y = -0.94280904;
+		mol0[3].z = -0.33333333;
+		vectorRotations.resize(44);
+		//c3 - 0
+		vectorRotations[0] = mol0[0].x;
+		vectorRotations[1] = mol0[0].y;
+		vectorRotations[2] = mol0[0].z;
+		vectorRotations[3] = 2.0e0 * auxMath_._pi / 3.0e0;
+		//c32 - 0
+		vectorRotations[4] = mol0[0].x;
+		vectorRotations[5] = mol0[0].y;
+		vectorRotations[6] = mol0[0].z;
+		vectorRotations[7] = 4.0e0 * auxMath_._pi / 3.0e0;
+		//c3 - 1
+		vectorRotations[8] = mol0[1].x;
+		vectorRotations[9] = mol0[1].y;
+		vectorRotations[10] = mol0[1].z;
+		vectorRotations[11] = 2.0e0 * auxMath_._pi / 3.0e0;
+		//c32 - 1
+		vectorRotations[12] = mol0[1].x;
+		vectorRotations[13] = mol0[1].y;
+		vectorRotations[14] = mol0[1].z;
+		vectorRotations[15] = 4.0e0 * auxMath_._pi / 3.0e0;
+		//c3 - 2
+		vectorRotations[16] = mol0[2].x;
+		vectorRotations[17] = mol0[2].y;
+		vectorRotations[18] = mol0[2].z;
+		vectorRotations[19] = 2.0e0 * auxMath_._pi / 3.0e0;
+		//c32 - 2
+		vectorRotations[20] = mol0[2].x;
+		vectorRotations[21] = mol0[2].y;
+		vectorRotations[22] = mol0[2].z;
+		vectorRotations[23] = 4.0e0 * auxMath_._pi / 3.0e0;
+		//c3 - 3
+		vectorRotations[24] = mol0[3].x;
+		vectorRotations[25] = mol0[3].y;
+		vectorRotations[26] = mol0[3].z;
+		vectorRotations[27] = 2.0e0 * auxMath_._pi / 3.0e0;
+		//c32 - 3
+		vectorRotations[28] = mol0[3].x;
+		vectorRotations[29] = mol0[3].y;
+		vectorRotations[30] = mol0[3].z;
+		vectorRotations[31] = 4.0e0 * auxMath_._pi / 3.0e0;
+
+		auxReferenceAxis.resize(3);		
+		//c2 - 1
+		auxReferenceAxis[0] = 0.5e0 * (mol0[0].x + mol0[1].x);
+		auxReferenceAxis[1] = 0.5e0 * (mol0[0].y + mol0[1].y);
+		auxReferenceAxis[2] = 0.5e0 * (mol0[0].z + mol0[1].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[32] = auxReferenceAxis[0];
+		vectorRotations[33] = auxReferenceAxis[1];
+		vectorRotations[34] = auxReferenceAxis[2];
+		vectorRotations[35] = auxMath_._pi;
+		//c2 - 2
+		auxReferenceAxis[0] = 0.5e0 * (mol0[0].x + mol0[2].x);
+		auxReferenceAxis[1] = 0.5e0 * (mol0[0].y + mol0[2].y);
+		auxReferenceAxis[2] = 0.5e0 * (mol0[0].z + mol0[2].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[36] = auxReferenceAxis[0];
+		vectorRotations[37] = auxReferenceAxis[1];
+		vectorRotations[38] = auxReferenceAxis[2];
+		vectorRotations[39] = auxMath_._pi;
+		//c2 - 3
+		auxReferenceAxis[0] = 0.5e0 * (mol0[0].x + mol0[3].x);
+		auxReferenceAxis[1] = 0.5e0 * (mol0[0].y + mol0[3].y);
+		auxReferenceAxis[2] = 0.5e0 * (mol0[0].z + mol0[3].z);
+		auxMath_.normalize(auxReferenceAxis);
+		vectorRotations[40] = auxReferenceAxis[0];
+		vectorRotations[41] = auxReferenceAxis[1];
+		vectorRotations[42] = auxReferenceAxis[2];
+		vectorRotations[43] = auxMath_._pi;
+
+		//cut angle
+		cutAngle = 2.0e0 * auxMath_._pi;
+		break;
+
+
 	case 5:
 		mol0.resize(5);
 		mol0[0].x = 0.000;
@@ -2265,7 +2355,7 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations[18] = mol0[4].z;
 		vectorRotations[19] = auxMath_._pi;
 		//cut angle
-		cutAngle = 3.0e0 * auxMath_._pi / 4.0e0;
+		cutAngle = 0.9 * auxMath_._pi;
 		break;
 
 

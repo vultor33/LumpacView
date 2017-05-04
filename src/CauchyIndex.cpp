@@ -1,6 +1,6 @@
 #include "CauchyIndex.h"
 
-//#define UNIX
+#define UNIX
 
 #include <vector>
 #include <string>
@@ -512,7 +512,7 @@ vector<int> CauchyIndex::zeroPermutation(string flagsFile)
 	}
 	while (k != (int)atomTypes.size())
 	{
-		auto lowest = min_element(atomTypes.begin(), atomTypes.end());
+		vector<int>::iterator lowest = min_element(atomTypes.begin(), atomTypes.end());
 		int lowestIndex = distance(atomTypes.begin(), lowest);
 		zero[k] = lowestIndex;
 		k++;
@@ -747,7 +747,11 @@ bool CauchyIndex::compareTwoIsomers(
 	std::vector<int>& permutationIsomer1,
 	std::vector<int>& permutationIsomer2)
 {
-	for (size_t j = 0; j < allRotationTransforms.size(); j++)
+	size_t nRotations = allRotationTransforms.size();
+	if(mol0.size() == 12)
+		nRotations = 4;
+
+	for (size_t j = 0; j < nRotations; j++)
 	{
 		vector<int> auxPerm = applyRotation(permutationIsomer2, j);
 		if (permutationIsomer1 == auxPerm)

@@ -1,6 +1,6 @@
 #include "CauchyIndex.h"
 
-#define UNIX
+//#define UNIX
 
 #include <vector>
 #include <string>
@@ -1550,6 +1550,59 @@ void CauchyIndex::doBlockDeletionFlags(
 	of_.close();
 }
 
+void CauchyIndex::enantiomersOrdering()
+{
+	ifstream openedFile_("skeleton-isomers.txt");
+
+	vector< vector<int> > allIsomers;
+	while (true)
+	{
+		vector<int> isomer = readCauchyNotations(openedFile_);
+		if (isomer.size() == 0)
+			break;
+
+		allIsomers.push_back(isomer);
+	}
+	openedFile_.close();
+
+	string fileName = "enatiomers-selection.txt";
+	ofstream enantiomersOrder_(fileName);
+	for (size_t i = 0; i < allIsomers.size(); i++)
+	{
+		// reflection
+		vector<int> distortedI = applyZAxisReflection(allIsomers[i]);
+		for (size_t j = i; j < allIsomers.size(); j++)
+		{
+			bool equal = compareTwoIsomers(distortedI, allIsomers[j]);
+
+			if ((i == j) && equal)
+			{
+				for (size_t k = 0; k < allIsomers[i].size(); k++)
+				{
+					enantiomersOrder_ << allIsomers[i][k] << " ";
+				}
+				enantiomersOrder_ << endl << endl;
+				break;
+			}
+			else if (equal)
+			{
+				for (size_t k = 0; k < allIsomers[i].size(); k++)
+				{
+					enantiomersOrder_ << allIsomers[i][k] << " ";
+				}
+				enantiomersOrder_ << endl;
+				for (size_t k = 0; k < allIsomers[j].size(); k++)
+				{
+					enantiomersOrder_ << allIsomers[j][k] << " ";
+				}
+				enantiomersOrder_ << endl << endl;
+				break;
+				// set to jump J
+			}
+		}
+	}
+}
+
 /*
 void CauchyIndex::doBlockDeletionFlags(
 string skeletonFile,
@@ -1698,6 +1751,8 @@ void CauchyIndex::rotationTest(
 	vector<int> permutation(size);
 	for (size_t i = 0; i < size; i++)
 		permutation[i] = i;
+	permutation[0] = 5;
+	permutation[5] = 0;
 	if (atoms.size() == 0)
 	{
 		atoms.resize(size);
@@ -1713,6 +1768,8 @@ void CauchyIndex::rotationTest(
 		printMolecule(permutation, atoms, bidentateAtomsChosen, of_);
 		vector<int> auxPerm = applyRotation(permutation, i);
 		printMolecule(auxPerm, atoms, bidentateAtomsChosen, of_);
+		printCauchyNotation(auxPerm);
+		cout << endl;
 	}
 	of_.close();
 }
@@ -1955,6 +2012,17 @@ std::vector<int> CauchyIndex::applyPermutationBidentates(
 	return bidentatePositions;
 }
 
+
+vector<int> CauchyIndex::applyZAxisReflection(vector<int> permutation)
+{
+	vector<int> permutReflected = permutation;
+
+	for (size_t i = 0; i < permutation.size(); i++)
+	{
+		permutReflected[reflectionOperation[i]] = permutation[i];
+	}
+	return permutReflected;
+}
 
 
 void CauchyIndex::printMolecule(
@@ -2332,6 +2400,14 @@ void CauchyIndex::setSystem(int system)
 		mol0[4].x = 0.000;
 		mol0[4].y = -0.86602540;
 		mol0[4].z = -0.50000000;
+
+		reflectionOperation.resize(5);
+		for (size_t i = 0; i < reflectionOperation.size(); i++)
+			reflectionOperation[i] = i;
+		reflectionOperation[1] = 2;
+		reflectionOperation[2] = 1;
+
+
 		//c3 - 1
 		vectorRotations.resize(20);
 		vectorRotations[0] = 1.0e0;
@@ -2383,6 +2459,13 @@ void CauchyIndex::setSystem(int system)
 		mol0[5].x = 0.00000000;
 		mol0[5].y = 0.00000000;
 		mol0[5].z = -1.00000000;
+
+		reflectionOperation.resize(6);
+		for (size_t i = 0; i < reflectionOperation.size(); i++)
+			reflectionOperation[i] = i;
+		reflectionOperation[0] = 5;
+		reflectionOperation[5] = 0;
+
 		cutAngle = 2.0e0 * auxMath_._pi / 3.0e0;
 		auxReferenceAxis.resize(3);
 		vectorRotations.resize(92);
@@ -2578,6 +2661,15 @@ void CauchyIndex::setSystem(int system)
 		mol0[6].x = -0.26010411;
 		mol0[6].y = 0.45051354;
 		mol0[6].z = -0.85403946;
+
+		reflectionOperation.resize(7);
+		for (size_t i = 0; i < reflectionOperation.size(); i++)
+			reflectionOperation[i] = i;
+		reflectionOperation[0] = 2;
+		reflectionOperation[2] = 0;
+		reflectionOperation[4] = 6;
+		reflectionOperation[6] = 4;
+
 		cutAngle = auxMath_._pi / 2.0e0;
 		vectorRotations.resize(8);
 		//c3 - 1
@@ -2620,6 +2712,17 @@ void CauchyIndex::setSystem(int system)
 		mol0[7].x = 0.48264183;
 		mol0[7].y = -0.39116453;
 		mol0[7].z = -0.78361162;
+
+		reflectionOperation.resize(8);
+		for (size_t i = 0; i < reflectionOperation.size(); i++)
+			reflectionOperation[i] = i;
+		reflectionOperation[2] = 5;
+		reflectionOperation[5] = 2;
+		reflectionOperation[1] = 0;
+		reflectionOperation[0] = 1;
+		reflectionOperation[7] = 3;
+		reflectionOperation[3] = 7;
+
 		cutAngle = auxMath_._pi / 2.0e0;
 		vectorRotations.resize(28);
 		auxReferenceAxis.resize(3);
@@ -2726,6 +2829,18 @@ void CauchyIndex::setSystem(int system)
 		mol0[8].x = 0.58925565;
 		mol0[8].y = -0.45643546;
 		mol0[8].z = -0.66666667;
+
+		reflectionOperation.resize(9);
+		for (size_t i = 0; i < reflectionOperation.size(); i++)
+			reflectionOperation[i] = i;
+		reflectionOperation[7] = 8;
+		reflectionOperation[8] = 7;
+		reflectionOperation[2] = 3;
+		reflectionOperation[3] = 2;
+		reflectionOperation[1] = 4;
+		reflectionOperation[4] = 1;
+
+
 		cutAngle = auxMath_._pi / 2.0e0;
 		vectorRotations.resize(20);
 		//c2 - 1
@@ -2793,6 +2908,19 @@ void CauchyIndex::setSystem(int system)
 		mol0[9].x = 0.02107419;
 		mol0[9].y = -0.25145533;
 		mol0[9].z = -0.96763944;
+
+		reflectionOperation.resize(10);
+		for (size_t i = 0; i < reflectionOperation.size(); i++)
+			reflectionOperation[i] = i;
+		reflectionOperation[9] = 6;
+		reflectionOperation[6] = 9;
+		reflectionOperation[5] = 4;
+		reflectionOperation[4] = 5;
+		reflectionOperation[7] = 3;
+		reflectionOperation[3] = 7;
+		reflectionOperation[1] = 0;
+		reflectionOperation[0] = 1;
+
 		cutAngle = auxMath_._pi / 2.0e0;
 		vectorRotations.resize(4);
 		//c2 - 1
@@ -2843,6 +2971,19 @@ void CauchyIndex::setSystem(int system)
 		mol0[10].x = 0.00000000;
 		mol0[10].y = 0.00000000;
 		mol0[10].z = -1.00000000;
+
+		reflectionOperation.resize(11);
+		for (size_t i = 0; i < reflectionOperation.size(); i++)
+			reflectionOperation[i] = i;
+		reflectionOperation[7] = 2;
+		reflectionOperation[2] = 7;
+		reflectionOperation[8] = 0;
+		reflectionOperation[0] = 8;
+		reflectionOperation[10] = 1;
+		reflectionOperation[1] = 10;
+		reflectionOperation[9] = 5;
+		reflectionOperation[5] = 9;
+
 		cutAngle = auxMath_._pi / 2.0e0;
 		vectorRotations.resize(16);
 		//add rotations
@@ -2907,6 +3048,19 @@ void CauchyIndex::setSystem(int system)
 		mol0[11].x = 0.00000000;
 		mol0[11].y = 0.00000000;
 		mol0[11].z = -1.00000000;
+
+		reflectionOperation.resize(12);
+		for (size_t i = 0; i < reflectionOperation.size(); i++)
+			reflectionOperation[i] = i;
+		reflectionOperation[4] = 1;
+		reflectionOperation[1] = 4;
+		reflectionOperation[3] = 2;
+		reflectionOperation[2] = 3;
+		reflectionOperation[9] = 10;
+		reflectionOperation[10] = 9;
+		reflectionOperation[8] = 6;
+		reflectionOperation[6] = 8;
+
 		cutAngle = auxMath_._pi / 2.0e0;
 		vectorRotations.resize(236);
 		// 4 c5 para cada um dos 6 pontos principais (12 c5 e 12 c52)

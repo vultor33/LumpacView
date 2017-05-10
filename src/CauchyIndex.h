@@ -23,7 +23,6 @@ struct cauchyRotation
 struct liPermutation
 {
 	std::vector< std::vector<int> > rotPermutations;
-
 };
 
 class CauchyIndex
@@ -70,6 +69,7 @@ public:
 	std::vector<int> zeroPermutation(std::string flagsFile);
 
 	void correctIndependentIsomers();
+
 	void generateAllIndependentIsomers12(std::string blockFileName);
 
 	//0-true ; 1-false ; 2-bidentate problem
@@ -114,7 +114,7 @@ public:
         		int smallBlockSize,
         		std::string compositionFile,
         		std::string rawIsomersFile,
-			std::string workingDir,
+				std::string workingDir,
         		std::string machineType);
 
 	void runall(int blockInit, int blockFinal, std::string machineType, std::string workingDirectory);
@@ -159,6 +159,7 @@ public:
 		int ramFinal);
 
 
+	void enantiomersOrdering();
 
 // uma parada que leia os isomeros esqueletos
 // ele precisa renumerar. posso soltar so os 120 mesmo.
@@ -175,6 +176,7 @@ private:
 	std::vector< std::vector<int> > allRotationTransforms;
 	std::vector<std::string> bidentateLabels;
 	std::vector<std::string> atomLabels;
+	std::vector<int> reflectionOperation;
 	double cutAngle;
 
 	//data all isomers
@@ -196,6 +198,8 @@ private:
 	std::vector<int> applyPermutationBidentates(
 		const std::vector<int> & permutation,
 		const std::vector<int> & bidentateAtomsChosen);
+
+	std::vector<int> applyZAxisReflection(std::vector<int> permutation);
 
 	unsigned int factorial(unsigned int n);
 

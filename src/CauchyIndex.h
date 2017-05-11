@@ -161,6 +161,12 @@ public:
 
 	void enantiomersOrdering();
 
+	void enantiomersOrderingBlock(
+		int kInit,
+		int kFinal,
+		std::string fileName,
+		std::vector<int> & permutation);
+
 // uma parada que leia os isomeros esqueletos
 // ele precisa renumerar. posso soltar so os 120 mesmo.
 // os flags precisam ser os mesmos sempre - vou ter que gerar um arquivo na pasta para todos lerem.

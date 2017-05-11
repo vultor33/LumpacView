@@ -1565,14 +1565,24 @@ void CauchyIndex::enantiomersOrdering()
 	}
 	openedFile_.close();
 
+	vector<bool> taken(allIsomers.size());
+	for (size_t i = 0; i < allIsomers.size(); i++)
+		taken[i] = false;
+
+
 	string fileName = "enatiomers-selection.txt";
 	ofstream enantiomersOrder_(fileName);
 	for (size_t i = 0; i < allIsomers.size(); i++)
 	{
+		if (taken[i])
+			continue;
 		// reflection
 		vector<int> distortedI = applyZAxisReflection(allIsomers[i]);
 		for (size_t j = i; j < allIsomers.size(); j++)
 		{
+			if (taken[j])
+				continue;
+
 			bool equal = compareTwoIsomers(distortedI, allIsomers[j]);
 
 			if ((i == j) && equal)
@@ -1582,6 +1592,7 @@ void CauchyIndex::enantiomersOrdering()
 					enantiomersOrder_ << allIsomers[i][k] << " ";
 				}
 				enantiomersOrder_ << endl << endl;
+				taken[i] = true;
 				break;
 			}
 			else if (equal)
@@ -1596,12 +1607,55 @@ void CauchyIndex::enantiomersOrdering()
 					enantiomersOrder_ << allIsomers[j][k] << " ";
 				}
 				enantiomersOrder_ << endl << endl;
+				taken[i] = true;
+				taken[j] = true;
 				break;
-				// set to jump J
 			}
 		}
 	}
 }
+
+
+void CauchyIndex::enantiomersOrderingBlock(
+	int kInit,
+	int kFinal,
+	string fileName,
+	vector<int> & permutation)
+{
+	ifstream openedFile_(fileName.c_str());
+	int k = 1;
+	vector<int> distortedI = applyZAxisReflection(permutation);
+	vector<int> isomer;
+	while (true)
+	{
+		if (k >= kInit && k <= kFinal)
+		{
+			isomer = readCauchyNotations(openedFile_);
+			bool equal = compareTwoIsomers(distortedI, isomer);
+			if (equal)
+			{
+				ofstream enantiomersOrder_;
+				enantiomersOrder_.open(("enantiomers---" + fileName).c_str(), std::ofstream::out | std::ofstream::app);
+				for (size_t k = 0; k < permutation.size(); k++)
+				{
+					enantiomersOrder_ << permutation[k] << " ";
+				}
+				enantiomersOrder_ << endl;
+				for (size_t k = 0; k < isomer.size(); k++)
+				{
+					enantiomersOrder_ << isomer[k] << " ";
+				}
+				enantiomersOrder_ << endl << endl;
+				enantiomersOrder_.close();
+				break;
+			}
+		}
+		if (k > kFinal)
+			break;
+		k++;
+	}
+}
+
 
 /*
 void CauchyIndex::doBlockDeletionFlags(

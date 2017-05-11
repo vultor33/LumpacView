@@ -56,14 +56,33 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 
-//	CauchyIndex ci3_(7);
-//	ci3_.generateAllIndependentIsomers();
+	CauchyIndex ci_(6);
+	vector<int> permut(6);
+	for (int i = 0; i < 6; i++)
+		permut[i] = i;
+	ci_.enantiomersOrderingBlock(2, 30, "skeleton-6.txt", permut);
+	return 0;
 
-	CauchyIndex ci_(7);
+
 	vector<string> atom;
 	vector<int> bidentate;
 	ci_.enantiomersOrdering();
 	return 0;
+
+	// TENHO QUE CRIAR UMA PARADA QUE SEPARE OS ISOMEROS NA GRAFENO.
+	// acho que e correr todos com todos mesmo, fazer o q.
+	// de cima pra baixo com numeros lidos atraves do modulo.
+
+	// colocar todos para trabalhar juntos, pega o primeiro
+	// divide o resto nos processadores (80 mil em cada)
+	// fica tipo - do 400 ao 700.
+	// se nao tiver nada eu descarto. (quando tiver eu bato la)
+
+
+
+
+
+
 
 	// ATENCAAAAAOOOOOOOOOOOOOOOOOOOO
 	// a comparacao de isomeros do 12 esta restrita

@@ -1617,20 +1617,26 @@ void CauchyIndex::enantiomersOrdering()
 
 
 void CauchyIndex::enantiomersOrderingBlock(
-	int kInit,
+	int iPermut,
 	int kFinal,
-	string fileName,
-	vector<int> & permutation)
+	string fileName)
 {
 	ifstream openedFile_(fileName.c_str());
-	int k = 1;
-	vector<int> distortedI = applyZAxisReflection(permutation);
+	vector<int> distortedI;
 	vector<int> isomer;
+	vector<int> permutation;
+	int kInit = iPermut + 1;
+	int k = 1;
 	while (true)
 	{
+		isomer = readCauchyNotations(openedFile_);
+		if (k == iPermut)
+		{
+			permutation = isomer;
+			distortedI = applyZAxisReflection(permutation);
+		}
 		if (k >= kInit && k <= kFinal)
 		{
-			isomer = readCauchyNotations(openedFile_);
 			bool equal = compareTwoIsomers(distortedI, isomer);
 			if (equal)
 			{

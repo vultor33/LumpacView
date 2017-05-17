@@ -158,14 +158,12 @@ public:
 		int ramInit,
 		int ramFinal);
 
-
 	void enantiomersOrdering();
 
 	void enantiomersOrderingBlock(
-		int kInit,
+		int iPermut,
 		int kFinal,
-		std::string fileName,
-		std::vector<int> & permutation);
+		std::string fileName);
 
 // uma parada que leia os isomeros esqueletos
 // ele precisa renumerar. posso soltar so os 120 mesmo.

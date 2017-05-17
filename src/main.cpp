@@ -56,12 +56,34 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 
-	CauchyIndex ci_(6);
-	vector<int> permut(6);
-	for (int i = 0; i < 6; i++)
-		permut[i] = i;
-	ci_.enantiomersOrderingBlock(2, 30, "skeleton-6.txt", permut);
+	// fazer isso aqui rodar no linux construindo o executavel
+	// tenho que construir um arquivo com esses caras, pc e tal.
+	int nProc = 4;
+	int iMax = 30;
+	string skeleton = "skeleton-6";
+	for (int j = 1; j <= nProc; j++)
+	{
+		int i = j;
+		while (i < 30)
+		{
+			cout << "./lumpacView.exe enantiomerDeletion " << i << "  " << iMax << "  " << skeleton << endl;
+			i += nProc;
+		}
+		cout << "cabou 1 loop" << endl;
+	}
 	return 0;
+
+	CauchyIndex ci_(6);
+	int iPer = 7;
+	ci_.enantiomersOrderingBlock(iPer, 30, "skeleton-6.txt");
+	return 0;
+
+	// agora tenho que fazer aquele negocio ---
+	// os numeros precisam variar de 1 - 31 - 61
+	// e assim vai. cada processador vai fazer uma serie dessas.
+	// definida a serie e so chamar
+	// ci_.enantiomersOrderingBlock(i + 1, iFinal, "skeleton-6.txt", permut(i));
+	// que resolve
 
 
 	vector<string> atom;
@@ -235,8 +257,6 @@ int main(int argc, char *argv[])
 			workingDirectory + "/" + rawIsomersFile,
 			workingDirectory,
 			machineType);
-
-
 	}	
 	else if (execType == "compositionBlockDeletion")
 	{
@@ -253,6 +273,16 @@ int main(int argc, char *argv[])
 			kRotateEnd,
 			lDeleteInit,
 			lDeleteEnd);
+	}
+	else if (execType == "enantiomerDeletion")
+	{
+		int systemSize, iPer, iMax;
+		stringstream cGen;
+		string skeletonFile;
+		cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
+		cGen >> systemSize >> iPer >> iMax >> skeletonFile;
+		CauchyIndex ci_(systemSize);
+		ci_.enantiomersOrderingBlock(iPer, iMax, skeletonFile);
 	}
 	else
 		cout << "execType not found" << endl;

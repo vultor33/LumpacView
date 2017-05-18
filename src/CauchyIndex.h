@@ -158,6 +158,13 @@ public:
 		int ramInit,
 		int ramFinal);
 
+	void createEnantiomersFiles(
+		int nProc,
+		int iMax,
+		std::string skeletonFile,
+		std::string workingDirectory,
+		std::string machineType);
+
 	void enantiomersOrdering();
 
 	void enantiomersOrderingBlock(

@@ -56,6 +56,16 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 
+	CauchyIndex ci5_(6);
+	ci5_.createEnantiomersFiles(
+		4,
+		30,
+		"skeleton-6",
+		"",
+		"pc");
+	return 0;
+
+
 	// fazer isso aqui rodar no linux construindo o executavel
 	// tenho que construir um arquivo com esses caras, pc e tal.
 	int nProc = 4;

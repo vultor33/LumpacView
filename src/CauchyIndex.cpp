@@ -1550,6 +1550,47 @@ void CauchyIndex::doBlockDeletionFlags(
 	of_.close();
 }
 
+void CauchyIndex::createEnantiomersFiles(
+	int nProc, 
+	int iMax, 
+	std::string skeletonFile, 
+	std::string workingDirectory, 
+	std::string machineType)
+{
+	for (int j = 1; j <= nProc; j++)
+	{
+		int i = j;
+		stringstream convert;
+		convert << j;
+		string name_;
+		if(machineType == "pc")
+			name_ = convert.str() + ".x";
+		else
+			name_ = convert.str() + ".srm";
+		ofstream roda_(name_.c_str());
+		if (machineType == "pc")
+			roda_ << "#!/bin/bash" << endl;
+		else
+		{
+			roda_ << "#!/bin/bash" << endl;
+			roda_ << "#SBATCH -n 1" << endl;
+			roda_ << "#SBATCH --hint=nomultithread" << endl;
+			roda_ << "RODADIR=" << workingDirectory << endl;
+			roda_ << "cd $RODADIR" << endl;
+		}
+		while (i < iMax)
+		{
+			roda_ << "./lumpacView.exe enantiomerDeletion " 
+				<< i << "  " 
+				<< iMax 
+				<< "  " 
+				<< skeletonFile << endl;
+			i += nProc;
+		}
+		roda_.close();
+	}
+}
+
 void CauchyIndex::enantiomersOrdering()
 {
 	ifstream openedFile_("skeleton-isomers.txt");

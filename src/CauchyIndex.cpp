@@ -1,6 +1,6 @@
 #include "CauchyIndex.h"
 
-//#define UNIX
+#define UNIX
 
 #include <vector>
 #include <string>
@@ -1580,7 +1580,8 @@ void CauchyIndex::createEnantiomersFiles(
 		}
 		while (i < iMax)
 		{
-			roda_ << "./lumpacView.exe enantiomerDeletion " 
+			roda_ << "./lumpacview.exe enantiomerDeletion " 
+				<< mol0.size() << "  "
 				<< i << "  " 
 				<< iMax 
 				<< "  " 
@@ -1588,6 +1589,7 @@ void CauchyIndex::createEnantiomersFiles(
 			i += nProc;
 		}
 		roda_.close();
+		system(("chmod u+x " + name_).c_str());
 	}
 }
 
@@ -1612,7 +1614,7 @@ void CauchyIndex::enantiomersOrdering()
 
 
 	string fileName = "enatiomers-selection.txt";
-	ofstream enantiomersOrder_(fileName);
+	ofstream enantiomersOrder_(fileName.c_str());
 	for (size_t i = 0; i < allIsomers.size(); i++)
 	{
 		if (taken[i])

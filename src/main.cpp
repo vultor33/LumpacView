@@ -55,8 +55,9 @@ inline bool exist_file (const std::string& name) {
 int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
-
+/*
 	CauchyIndex ci5_(6);
+	ci5_.generateAllIndependentIsomers();
 	ci5_.createEnantiomersFiles(
 		4,
 		30,
@@ -65,29 +66,11 @@ int main(int argc, char *argv[])
 		"pc");
 	return 0;
 
-
-	// fazer isso aqui rodar no linux construindo o executavel
-	// tenho que construir um arquivo com esses caras, pc e tal.
-	int nProc = 4;
-	int iMax = 30;
-	string skeleton = "skeleton-6";
-	for (int j = 1; j <= nProc; j++)
-	{
-		int i = j;
-		while (i < 30)
-		{
-			cout << "./lumpacView.exe enantiomerDeletion " << i << "  " << iMax << "  " << skeleton << endl;
-			i += nProc;
-		}
-		cout << "cabou 1 loop" << endl;
-	}
-	return 0;
-
 	CauchyIndex ci_(6);
 	int iPer = 7;
 	ci_.enantiomersOrderingBlock(iPer, 30, "skeleton-6.txt");
 	return 0;
-
+*/
 	// agora tenho que fazer aquele negocio ---
 	// os numeros precisam variar de 1 - 31 - 61
 	// e assim vai. cada processador vai fazer uma serie dessas.
@@ -95,12 +78,12 @@ int main(int argc, char *argv[])
 	// ci_.enantiomersOrderingBlock(i + 1, iFinal, "skeleton-6.txt", permut(i));
 	// que resolve
 
-
+/*
 	vector<string> atom;
 	vector<int> bidentate;
 	ci_.enantiomersOrdering();
 	return 0;
-
+*/
 	// TENHO QUE CRIAR UMA PARADA QUE SEPARE OS ISOMEROS NA GRAFENO.
 	// acho que e correr todos com todos mesmo, fazer o q.
 	// de cima pra baixo com numeros lidos atraves do modulo.
@@ -283,6 +266,28 @@ int main(int argc, char *argv[])
 			kRotateEnd,
 			lDeleteInit,
 			lDeleteEnd);
+	}
+	else if (execType == "generateEnantiomersFiles")
+	{
+                system("pwd > workingDir");
+                ifstream wDir_("workingDir");
+                string workingDirectory;
+                wDir_ >> workingDirectory;
+                wDir_.close();
+                remove("workingDir");
+                int systemSize, nProc, iMax;
+		string skeletonFile;
+                string machineType;
+                stringstream cGen;
+                cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5] << "  " << argv[6];
+                cGen >> systemSize >> nProc >> iMax >> skeletonFile >> machineType;
+                CauchyIndex ci_(systemSize);
+        	ci_.createEnantiomersFiles(
+                	nProc,
+                	iMax,
+                	skeletonFile,
+                	workingDirectory,
+                	machineType);
 	}
 	else if (execType == "enantiomerDeletion")
 	{

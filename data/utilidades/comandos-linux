@@ -1,0 +1,3 @@
+verificar semelhancas entre arquivos
+perl -ne 'print if ($seen{$_} .= @ARGV) =~ /10$/'  file1 file2
+

@@ -170,6 +170,7 @@ public:
 	void enantiomersOrderingBlock(
 		int iPermut,
 		int kFinal,
+		int nProc,
 		std::string fileName);
 
 // uma parada que leia os isomeros esqueletos

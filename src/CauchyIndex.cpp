@@ -1583,8 +1583,8 @@ void CauchyIndex::createEnantiomersFiles(
 			roda_ << "./lumpacview.exe enantiomerDeletion " 
 				<< mol0.size() << "  "
 				<< i << "  " 
-				<< iMax 
-				<< "  " 
+				<< iMax << "  " 
+				<< convert.str() << "  "
 				<< skeletonFile << endl;
 			i += nProc;
 		}
@@ -1611,7 +1611,6 @@ void CauchyIndex::enantiomersOrdering()
 	vector<bool> taken(allIsomers.size());
 	for (size_t i = 0; i < allIsomers.size(); i++)
 		taken[i] = false;
-
 
 	string fileName = "enatiomers-selection.txt";
 	ofstream enantiomersOrder_(fileName.c_str());
@@ -1662,12 +1661,16 @@ void CauchyIndex::enantiomersOrdering()
 void CauchyIndex::enantiomersOrderingBlock(
 	int iPermut,
 	int kFinal,
+	int nProc,
 	string fileName)
 {
 	ifstream openedFile_(fileName.c_str());
 	vector<int> distortedI;
 	vector<int> isomer;
 	vector<int> permutation;
+	stringstream convert;
+	convert << nProc;
+	string numberProc = convert.str();
 	int kInit = iPermut + 1;
 	int k = 1;
 	while (true)
@@ -1684,7 +1687,7 @@ void CauchyIndex::enantiomersOrderingBlock(
 			if (equal)
 			{
 				ofstream enantiomersOrder_;
-				enantiomersOrder_.open(("enantiomers---" + fileName).c_str(), std::ofstream::out | std::ofstream::app);
+				enantiomersOrder_.open(("enantiomers---" + numberProc + "-" + fileName).c_str(), std::ofstream::out | std::ofstream::app);
 				for (size_t k = 0; k < permutation.size(); k++)
 				{
 					enantiomersOrder_ << permutation[k] << " ";
@@ -2936,12 +2939,12 @@ void CauchyIndex::setSystem(int system)
 		reflectionOperation.resize(9);
 		for (size_t i = 0; i < reflectionOperation.size(); i++)
 			reflectionOperation[i] = i;
-		reflectionOperation[7] = 8;
-		reflectionOperation[8] = 7;
-		reflectionOperation[2] = 3;
-		reflectionOperation[3] = 2;
-		reflectionOperation[1] = 4;
-		reflectionOperation[4] = 1;
+		reflectionOperation[5] = 0;
+		reflectionOperation[0] = 5;
+		reflectionOperation[8] = 3;
+		reflectionOperation[3] = 8;
+		reflectionOperation[7] = 2;
+		reflectionOperation[2] = 7;
 
 
 		cutAngle = auxMath_._pi / 2.0e0;
@@ -3015,14 +3018,20 @@ void CauchyIndex::setSystem(int system)
 		reflectionOperation.resize(10);
 		for (size_t i = 0; i < reflectionOperation.size(); i++)
 			reflectionOperation[i] = i;
+		//reflectionOperation[2] = 8;
+		//reflectionOperation[8] = 2;
+		//reflectionOperation[1] = 9;
+		//reflectionOperation[9] = 1;
+		//reflectionOperation[0] = 6;
+		//reflectionOperation[6] = 0;
 		reflectionOperation[9] = 6;
 		reflectionOperation[6] = 9;
 		reflectionOperation[5] = 4;
 		reflectionOperation[4] = 5;
 		reflectionOperation[7] = 3;
 		reflectionOperation[3] = 7;
-		reflectionOperation[1] = 0;
 		reflectionOperation[0] = 1;
+		reflectionOperation[1] = 0;
 
 		cutAngle = auxMath_._pi / 2.0e0;
 		vectorRotations.resize(4);

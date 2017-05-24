@@ -161,19 +161,19 @@ int main(int argc, char *argv[])
 	else if(execType == "runall")
 	{
 	    system("pwd > workingDir");
-       	ifstream wDir_("workingDir");
+       	    ifstream wDir_("workingDir");
 	    string workingDirectory;
-        wDir_ >> workingDirectory;
+            wDir_ >> workingDirectory;
 	    wDir_.close();
-		remove("workingDir");
-        int systemSize, blockInit, nProc;
-		string machineType;
-        stringstream cGen;
-        cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
-        cGen >> systemSize >> blockInit >> nProc >> machineType;
-		CauchyIndex ci_(systemSize);
-		if(blockInit <= nProc)
-			ci_.runall(blockInit, nProc,machineType,workingDirectory);
+	    remove("workingDir");
+            int systemSize, blockInit, nProc;
+	    string machineType;
+            stringstream cGen;
+            cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
+            cGen >> systemSize >> blockInit >> nProc >> machineType;
+	    CauchyIndex ci_(systemSize);
+	    if(blockInit <= nProc)
+	 	ci_.runall(blockInit, nProc,machineType,workingDirectory);
 	}
 	else if(execType == "blockGeneration")
 	{
@@ -291,13 +291,13 @@ int main(int argc, char *argv[])
 	}
 	else if (execType == "enantiomerDeletion")
 	{
-		int systemSize, iPer, iMax;
+		int systemSize, iPer, iMax, nProc;
 		stringstream cGen;
 		string skeletonFile;
-		cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5];
-		cGen >> systemSize >> iPer >> iMax >> skeletonFile;
+		cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5] << "  " << argv[6];
+		cGen >> systemSize >> iPer >> iMax >> nProc >> skeletonFile;
 		CauchyIndex ci_(systemSize);
-		ci_.enantiomersOrderingBlock(iPer, iMax, skeletonFile);
+		ci_.enantiomersOrderingBlock(iPer, iMax, nProc, skeletonFile);
 	}
 	else
 		cout << "execType not found" << endl;

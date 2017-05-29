@@ -1,6 +1,6 @@
 #include "CauchyIndex.h"
 
-#define UNIX
+//#define UNIX
 
 #include <vector>
 #include <string>
@@ -488,6 +488,103 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(
 	auxBlock);
 	*/
 }
+
+
+void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
+	string blockFileName,
+	string flagsFile,
+	string code)
+{
+	vector<int> atomTypes;
+	vector<int> bidentateAtomChosen;
+	readAtomTypesAndBidentateChosenFile(flagsFile, atomTypes, bidentateAtomChosen);
+
+	systemSize = mol0.size();
+	int size = factorial(systemSize);
+	nRotations = allRotationTransforms.size() + 1;
+	vector< vector<int> > allPermutations;
+	vector< vector<int> > blockPermutations;
+	vector<int> weights;
+	ifstream openedFile_(blockFileName.c_str());
+	int compareResult;
+	bool equal;
+	int k = 0;
+	int kDupe = 0;
+	ofstream of_((code + "-" + blockFileName).c_str());
+	while (true)
+	{
+		vector<int> auxBlock = readCauchyNotations(openedFile_);
+		if (auxBlock.size() == 0)
+		{
+			if (kDupe != 0)
+			{
+				of_ << endl;
+				kDupe = 0;
+			}
+			continue;
+		}
+		equal = false;
+		for (size_t i = 0; i < allPermutations.size(); i++)
+		{
+			compareResult = compareTwoIsomersWithLabelsRotations(
+				atomTypes,
+				bidentateAtomChosen,
+				allPermutations[i],
+				auxBlock);
+
+			if (compareResult == 0 || compareResult == 2)
+				equal = true;
+
+			if (equal)
+			{
+				weights[i]++;
+				break;
+			}
+		}
+		if (!equal)
+		{
+			allPermutations.push_back(auxBlock);
+			weights.push_back(0);
+			for (size_t j = 0; j < systemSize; j++)
+			{
+				of_ << allPermutations[k][j] << "  ";
+			}
+			of_ << endl;
+			k++;
+			kDupe++;
+		}
+		if (openedFile_.eof())
+			break;
+	}
+	of_.close();
+
+	ofstream ofCsv_((code + "-" + blockFileName + ".csv").c_str());
+	ifstream fileEnant_((code + "-" + blockFileName).c_str());
+	int i = 0;
+	while(true)
+	{
+		vector<int> auxEnant = readCauchyNotations(fileEnant_);
+		if (auxEnant.size() == 0)
+		{
+			ofCsv_ << endl;
+			continue;
+		}
+		ofCsv_ << weights[i] << " ; ";
+		for (size_t j = 0; j < systemSize; j++)
+		{
+			ofCsv_ << auxEnant[j] << "  ";
+		}
+		ofCsv_ << endl;
+		i++;
+		if (i == weights.size())
+			break;
+	}
+	ofCsv_.close();
+	fileEnant_.close();
+
+
+}
+
 
 
 vector<int> CauchyIndex::zeroPermutation(string flagsFile)

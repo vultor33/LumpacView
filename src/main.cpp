@@ -55,7 +55,18 @@ inline bool exist_file (const std::string& name) {
 int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
-/*
+
+	int systemSize = 6;
+	string composition = "m01m02B01B01";
+	string blockName = "enantiomers-6.log";
+	CauchyIndex ci13_(systemSize);
+	ci13_.generateAtomTypesAndBidentateChosenFile(composition);
+	ci13_.generateAllIndependentIsomersWithFlagEnantiomers(blockName, composition + "---atomTypes.txt", composition);
+	//blockName = "skeleton-6.txt";
+	//ci13_.generateAllIndependentIsomersWithFlag(blockName, composition + "---atomTypes.txt", composition);
+	return 0;
+	
+	/*
 	CauchyIndex ci5_(6);
 	ci5_.generateAllIndependentIsomers();
 	ci5_.createEnantiomersFiles(
@@ -125,7 +136,7 @@ int main(int argc, char *argv[])
 
 
 
-/*    	 EXEMPLO PARA RODAR
+/*  EXEMPLO PARA RODAR
 	./lumpacview.exe generateCompositionFiles 6 30 12 3 m01m02m03m04m04m04 skeleton-6 pc
 	./lumpacview.exe cleanBlocks m01m02m03m04m04m04 6 3 pc
 	cat composition---atomTypes composition-independent* > results-composition

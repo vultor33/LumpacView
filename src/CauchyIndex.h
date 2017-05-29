@@ -66,6 +66,12 @@ public:
 		std::string flagsFile,
 		std::string code);
 
+	void generateAllIndependentIsomersWithFlagEnantiomers(
+		std::string blockFileName,
+		std::string flagsFile,
+		std::string code);
+
+
 	std::vector<int> zeroPermutation(std::string flagsFile);
 
 	void correctIndependentIsomers();

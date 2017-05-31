@@ -55,10 +55,10 @@ inline bool exist_file (const std::string& name) {
 int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
-
-	int systemSize = 6;
-	string composition = "m01m02B01B01";
-	string blockName = "enantiomers-6.log";
+	
+	int systemSize = 8;
+	string composition = "m01m02B01B01C01";
+	string blockName = "enantiomers-8.log";
 	CauchyIndex ci13_(systemSize);
 	ci13_.generateAtomTypesAndBidentateChosenFile(composition);
 	ci13_.generateAllIndependentIsomersWithFlagEnantiomers(blockName, composition + "---atomTypes.txt", composition);

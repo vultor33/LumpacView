@@ -537,7 +537,8 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 
 			if (equal)
 			{
-				weights[i]++;
+				if(compareResult == 0)
+					weights[i]++;
 				break;
 			}
 		}

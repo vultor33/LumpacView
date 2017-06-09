@@ -489,6 +489,8 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(
 	*/
 }
 
+// nao tem o que fazer - toda vez que eu deletar manda uma  linha
+// em um arquivo -> k
 
 void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	string blockFileName,
@@ -582,8 +584,6 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	}
 	ofCsv_.close();
 	fileEnant_.close();
-
-
 }
 
 
@@ -1690,6 +1690,39 @@ void CauchyIndex::createEnantiomersFiles(
 		system(("chmod u+x " + name_).c_str());
 	}
 }
+
+void CauchyIndex::temporario()
+{
+	//"0 2 3 4 5 9 1 7 8 6"
+	vector<int> isomerReflection(10);
+	isomerReflection[0] = 0;
+	isomerReflection[1] = 2;
+	isomerReflection[2] = 3;
+	isomerReflection[3] = 4;
+	isomerReflection[4] = 5;
+	isomerReflection[5] = 9;
+	isomerReflection[6] = 1;
+	isomerReflection[7] = 7;
+	isomerReflection[8] = 8;
+	isomerReflection[9] = 6;
+
+	vector<int> distortedI = applyZAxisReflection(isomerReflection);
+
+	printCauchyNotation(distortedI);
+
+	cout << "ROTACOES" << endl;
+	size_t nRotations = allRotationTransforms.size();
+	for (size_t j = 0; j < nRotations; j++)
+	{
+		vector<int> auxPerm = applyRotation(isomerReflection, j);
+		printCauchyNotation(auxPerm);
+	}
+
+
+
+
+}
+
 
 void CauchyIndex::enantiomersOrdering()
 {
@@ -3116,12 +3149,16 @@ void CauchyIndex::setSystem(int system)
 		reflectionOperation.resize(10);
 		for (size_t i = 0; i < reflectionOperation.size(); i++)
 			reflectionOperation[i] = i;
-		//reflectionOperation[2] = 8;
-		//reflectionOperation[8] = 2;
-		//reflectionOperation[1] = 9;
-		//reflectionOperation[9] = 1;
-		//reflectionOperation[0] = 6;
-		//reflectionOperation[6] = 0;
+		
+		/*
+		reflectionOperation[2] = 8;
+		reflectionOperation[8] = 2;
+		reflectionOperation[1] = 9;
+		reflectionOperation[9] = 1;
+		reflectionOperation[0] = 6;
+		reflectionOperation[6] = 0;
+		*/
+
 		reflectionOperation[9] = 6;
 		reflectionOperation[6] = 9;
 		reflectionOperation[5] = 4;

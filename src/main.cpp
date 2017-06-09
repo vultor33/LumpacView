@@ -56,10 +56,19 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 	
-	int systemSize = 8;
-	string composition = "m01m02B01B01C01";
-	string blockName = "enantiomers-8.log";
+	
+	//CauchyIndex ci123_(10);
+	//ci123_.temporario();
+	//return 0;
+
+
+
+	int systemSize = 7;
+	string composition = "m01m02m02B01C01";
+	string blockName = "enantiomers-7.log";
 	CauchyIndex ci13_(systemSize);
+	ci13_.printAllMoleculesFromFile(composition);
+	return 0;
 	ci13_.generateAtomTypesAndBidentateChosenFile(composition);
 	ci13_.generateAllIndependentIsomersWithFlagEnantiomers(blockName, composition + "---atomTypes.txt", composition);
 	//blockName = "skeleton-6.txt";

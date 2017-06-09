@@ -183,7 +183,7 @@ public:
 // ele precisa renumerar. posso soltar so os 120 mesmo.
 // os flags precisam ser os mesmos sempre - vou ter que gerar um arquivo na pasta para todos lerem.
 
-
+	void temporario();
 
 private:
 	//data rotations

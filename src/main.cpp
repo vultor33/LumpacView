@@ -60,6 +60,22 @@ int main(int argc, char *argv[])
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();
 	//return 0;
+	string rawIsomers2 = "enantiomers-6";
+	string composition3 = "m01m02m03m04m05m05";
+	CauchyIndex ci14_(6);
+	int kInit3 = 1;
+	int kFinal3 = 10;
+	int lDeleteI = 11;
+	int lDeleteF = 30;
+	ci14_.generateAtomTypesAndBidentateChosenFile(composition3);
+	ci14_.doBlockDeletionFlagsEnantiomers(
+			rawIsomers2,
+                        composition3 + "---atomTypes.txt" ,
+                        kInit3,
+                        kFinal3,
+                        lDeleteI,
+                        lDeleteF);
+	return 0;
 
 
 

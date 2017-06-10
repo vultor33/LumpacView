@@ -1,6 +1,6 @@
 #include "CauchyIndex.h"
 
-//#define UNIX
+#define UNIX
 
 #include <vector>
 #include <string>
@@ -1648,6 +1648,120 @@ void CauchyIndex::doBlockDeletionFlags(
 	of_.close();
 }
 
+
+void CauchyIndex::doBlockDeletionFlagsEnantiomers(
+	string skeletonFile,
+	string flagsFile,
+	int kInit,
+	int kFinal,
+	int ramInit,
+	int ramFinal)
+{
+	int systemSize = mol0.size();
+	ifstream openedFile_(skeletonFile.c_str());
+	vector< vector<int> > ramBlock = readCauchyNotationsRAMBlockEnantiomers(openedFile_, ramInit, ramFinal);
+
+	openedFile_.close();
+	vector<int> atomTypes;
+	vector<int> bidentateChosen;
+	readAtomTypesAndBidentateChosenFile(flagsFile, atomTypes, bidentateChosen);
+	openedFile_.open(skeletonFile.c_str());
+	ofstream weightFile_;
+	int k = 1;
+	do
+	{
+		vector<int> permutation = readCauchyNotations(openedFile_);
+		if (permutation.size() == 0)
+			continue;
+		if (k >= kInit && k <= kFinal) // from block use this to delete
+		{
+			int compare;
+			int kRam = 0;
+			while (kRam < ramBlock.size())
+			{
+				if(ramBlock[kRam][0] == -1)
+				{
+					kRam++;
+					continue;
+				}
+				// sem rotacoes int compare = compareTwoIsomersWithLabels
+				compare = compareTwoIsomersWithLabels(
+					atomTypes,
+					bidentateChosen,
+					permutation,
+					ramBlock[kRam]);
+				if ((compare == 0) || (compare == 2))
+				{
+					vector< vector<int> >::iterator it = ramBlock.begin() + kRam;
+					rotate(it, it + 1, ramBlock.end());
+					ramBlock.pop_back();
+					kRam--;
+					weightFile_.open((flagsFile + "---weights.txt").c_str(),  std::ofstream::out | std::ofstream::app);
+					weightFile_ << k << endl;
+					weightFile_.close();
+				}
+				kRam++;
+			}
+			for (size_t j = 0; j < allRotationTransforms.size(); j++)
+			{
+				vector<int> auxPerm = applyRotation(permutation, j);
+				kRam = 0;
+				while(kRam < ramBlock.size())
+				{
+					if(ramBlock[kRam][0] == -1)
+					{
+						kRam++;
+						continue;
+					}
+					// sem rotacoes int compare = compareTwoIsomersWithLabels
+					compare = compareTwoIsomersWithLabels(
+						atomTypes,
+						bidentateChosen,
+						auxPerm,
+						ramBlock[kRam]);
+					if ((compare == 0) || (compare == 2))
+					{
+						vector< vector<int> >::iterator it = ramBlock.begin() + kRam;
+						rotate(it, it + 1, ramBlock.end());
+						ramBlock.pop_back();
+						kRam--;
+						weightFile_.open((flagsFile + "---weights.txt").c_str(),  std::ofstream::out | std::ofstream::app);
+						weightFile_ << k << endl;
+						weightFile_.close();
+					}
+					kRam++;
+				}
+			}
+		}
+		k++;
+		if(k > kFinal)
+			break;
+	} while (true);
+	openedFile_.close();
+
+	stringstream convert;
+	convert << "block-" << ramInit << "-to-" << ramFinal << ".txt";
+	string blockDelName = convert.str();
+	ofstream of_(blockDelName.c_str());
+	for (size_t i = 0; i < ramBlock.size(); i++)
+	{
+		if(ramBlock[i][0] == -1)
+		{
+			of_ << endl;
+			continue;
+		}
+		for (size_t j = 0; j < systemSize; j++)
+		{
+			of_ << ramBlock[i][j] << "  ";
+		}
+		of_ << endl;
+	}
+	of_.close();
+}
+
+
+
+
 void CauchyIndex::createEnantiomersFiles(
 	int nProc, 
 	int iMax, 
@@ -2459,6 +2573,31 @@ vector< vector<int> > CauchyIndex::readCauchyNotationsRAMBlock(ifstream & openen
 			ramBlock.push_back(isomer);
 		}
 		k++;
+	}
+	return ramBlock;
+}
+
+
+vector< vector<int> > CauchyIndex::readCauchyNotationsRAMBlockEnantiomers(ifstream & openendFile_, int kInit, int kFinal)
+{
+	vector< vector<int> > ramBlock;
+	vector<int> zero(1);
+	zero[0] = -1;
+	int k = 1;
+	while (true)
+	{
+		vector<int> isomer = readCauchyNotations(openendFile_);
+		if (k >= kInit && k <= kFinal)
+		{
+			if (isomer.size() == 0)
+				ramBlock.push_back(zero);
+			else
+				ramBlock.push_back(isomer);
+		}
+		if(k == kFinal)
+			break;
+		if(isomer.size() != 0)
+			k++;
 	}
 	return ramBlock;
 }

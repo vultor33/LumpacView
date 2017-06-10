@@ -164,6 +164,14 @@ public:
 		int ramInit,
 		int ramFinal);
 
+	void doBlockDeletionFlagsEnantiomers(
+		std::string skeletonFile,
+		std::string flagsFile,
+		int kInit,
+		int kFinal,
+		int ramInit,
+		int ramFinal);
+
 	void createEnantiomersFiles(
 		int nProc,
 		int iMax,
@@ -234,6 +242,7 @@ private:
 	void writeCauchyRotations(std::string fileName, std::vector< std::vector<int> > & rotPermutations);
 	std::vector<int> readCauchyNotations(std::ifstream & openedFile_);
 	std::vector< std::vector<int> > readCauchyNotationsRAMBlock(std::ifstream & openedFile_, int kInitial, int kFinal);
+	std::vector< std::vector<int> > readCauchyNotationsRAMBlockEnantiomers(std::ifstream & openedFile_, int kInitial, int kFinal);
 
 	std::string permutationToString(std::vector<int> permutation); 
 

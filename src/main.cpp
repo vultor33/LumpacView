@@ -56,10 +56,10 @@ int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
 	
-	
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();
 	//return 0;
+	/*
 	string rawIsomers2 = "enantiomers-6";
 	string composition3 = "m01m02m03m04m05m05";
 	CauchyIndex ci14_(6);
@@ -77,8 +77,6 @@ int main(int argc, char *argv[])
                         lDeleteF);
 	return 0;
 
-
-
 	int systemSize = 7;
 	string composition = "m01m02m02B01C01";
 	string blockName = "enantiomers-7.log";
@@ -90,7 +88,7 @@ int main(int argc, char *argv[])
 	//blockName = "skeleton-6.txt";
 	//ci13_.generateAllIndependentIsomersWithFlag(blockName, composition + "---atomTypes.txt", composition);
 	return 0;
-	
+	*/
 	/*
 	CauchyIndex ci5_(6);
 	ci5_.generateAllIndependentIsomers();
@@ -223,7 +221,8 @@ int main(int argc, char *argv[])
 		if(composition == "none")
 			ci_.generateAllIndependentIsomersRuntimeRotationsAndReadBlock(blockName);
 		else
-			ci_.generateAllIndependentIsomersWithFlag(blockName, composition + "---atomTypes.txt", composition);
+			ci_.generateAllIndependentIsomersWithFlagEnantiomers(blockName, composition + "---atomTypes.txt", composition);
+			//ci_.generateAllIndependentIsomersWithFlag(blockName, composition + "---atomTypes.txt", composition);
 	}
 	else if(execType == "cleanBlocks")
 	{
@@ -295,7 +294,8 @@ int main(int argc, char *argv[])
 		cGen << argv[2] << "  " << argv[3] << "  " << argv[4] << "  " << argv[5] << "  " << argv[6] << "  " << argv[7] << "  " << argv[8];
 		cGen >> systemSize >> rawIsomers >> compositionFile >> kRotateInit >> kRotateEnd >> lDeleteInit >> lDeleteEnd;
 		CauchyIndex ci_(systemSize);
-		ci_.doBlockDeletionFlags(
+		//ci_.doBlockDeletionFlags(
+		ci_.doBlockDeletionFlagsEnantiomers(
 			rawIsomers,
 			compositionFile,
 			kRotateInit,

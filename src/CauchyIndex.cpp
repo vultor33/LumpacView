@@ -489,14 +489,17 @@ void CauchyIndex::generateAllIndependentIsomersWithFlag(
 	*/
 }
 
+
 // nao tem o que fazer - toda vez que eu deletar manda uma  linha
 // em um arquivo -> k
-
 void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	string blockFileName,
 	string flagsFile,
 	string code)
 {
+
+	cout << "bora porra " << endl;
+
 	vector<int> atomTypes;
 	vector<int> bidentateAtomChosen;
 	readAtomTypesAndBidentateChosenFile(flagsFile, atomTypes, bidentateAtomChosen);
@@ -515,7 +518,16 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	ofstream of_((code + "-" + blockFileName).c_str());
 	while (true)
 	{
+		cout << " cade?? " << endl;
 		vector<int> auxBlock = readCauchyNotations(openedFile_);
+		cout << "leu o bloco" << endl;
+		if (openedFile_.eof())
+		{
+			openedFile_.close();
+			cout << "fechou o arquivo" << endl;
+			break;
+		}
+		cout << "fim do arquivo" << endl;
 		if (auxBlock.size() == 0)
 		{
 			if (kDupe != 0)
@@ -526,6 +538,7 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 			continue;
 		}
 		equal = false;
+		cout << "antes das rotacoes" << endl;
 		for (size_t i = 0; i < allPermutations.size(); i++)
 		{
 			compareResult = compareTwoIsomersWithLabelsRotations(
@@ -556,10 +569,9 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 			k++;
 			kDupe++;
 		}
-		if (openedFile_.eof())
-			break;
 	}
 	of_.close();
+	cout << "eitcha" << endl;
 
 	ofstream ofCsv_((code + "-" + blockFileName + ".csv").c_str());
 	ifstream fileEnant_((code + "-" + blockFileName).c_str());
@@ -567,6 +579,11 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	while(true)
 	{
 		vector<int> auxEnant = readCauchyNotations(fileEnant_);
+		if (fileEnant_.eof())
+		{
+			fileEnant_.close();
+			break;
+		}
 		if (auxEnant.size() == 0)
 		{
 			ofCsv_ << endl;
@@ -1261,6 +1278,12 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags(
 	for(int i = 1; i <= bigBlockSize; i++)
 	{
                 vector<int> permutation = readCauchyNotations(openedFile_);
+		if(permutation.size() == 0)
+		{
+			i--;
+			isomers1_ << endl;
+			continue;
+		}
 		for(size_t j = 0; j < permutation.size(); j++)
 		{
 			isomers1_ << permutation[j] << "  ";
@@ -1311,6 +1334,8 @@ void CauchyIndex::cleanBlocksAndGenerateIsomers(
 		chdir(workingDirectory.c_str());
 		system(("rm -rf " + folderName).c_str());
 	}
+
+	cout << "limpei os blocos todods " << endl;
 
 	stringstream convert0;
 	convert0 << systemSize;
@@ -1667,6 +1692,9 @@ void CauchyIndex::doBlockDeletionFlagsEnantiomers(
 	readAtomTypesAndBidentateChosenFile(flagsFile, atomTypes, bidentateChosen);
 	openedFile_.open(skeletonFile.c_str());
 	ofstream weightFile_;
+	stringstream weightIndex;
+	weightIndex << ramInit << "to" << ramFinal;
+	string weightFileName = flagsFile + "---weights---" + weightIndex.str() + ".txt";
 	int k = 1;
 	do
 	{
@@ -1696,7 +1724,7 @@ void CauchyIndex::doBlockDeletionFlagsEnantiomers(
 					rotate(it, it + 1, ramBlock.end());
 					ramBlock.pop_back();
 					kRam--;
-					weightFile_.open((flagsFile + "---weights.txt").c_str(),  std::ofstream::out | std::ofstream::app);
+					weightFile_.open((weightFileName).c_str(),  std::ofstream::out | std::ofstream::app);
 					weightFile_ << k << endl;
 					weightFile_.close();
 				}
@@ -1725,7 +1753,7 @@ void CauchyIndex::doBlockDeletionFlagsEnantiomers(
 						rotate(it, it + 1, ramBlock.end());
 						ramBlock.pop_back();
 						kRam--;
-						weightFile_.open((flagsFile + "---weights.txt").c_str(),  std::ofstream::out | std::ofstream::app);
+						weightFile_.open((weightFileName).c_str(),  std::ofstream::out | std::ofstream::app);
 						weightFile_ << k << endl;
 						weightFile_.close();
 					}

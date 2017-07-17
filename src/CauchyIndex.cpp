@@ -574,6 +574,7 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	cout << "eitcha" << endl;
 
 	ofstream ofCsv_((code + "-" + blockFileName + ".csv").c_str());
+	ofCsv_ << endl;
 	ifstream fileEnant_((code + "-" + blockFileName).c_str());
 	int i = 0;
 	while(true)
@@ -865,6 +866,9 @@ bool CauchyIndex::compareTwoIsomers(
 	size_t nRotations = allRotationTransforms.size();
 	if(mol0.size() == 12)
 		nRotations = 4;
+
+	if(permutationIsomer1 == permutationIsomer2)
+		return true;
 
 	for (size_t j = 0; j < nRotations; j++)
 	{
@@ -1241,7 +1245,7 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags(
                 	fileSrm_ << "#!/bin/bash" << endl;
                         fileSrm_ << "#SBATCH -n 1" << endl;
                         fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
-                        fileSrm_ << "RODADIR=/home/guga/PERMUTACOES/running/" + blockName + convert.str() << endl;
+                        fileSrm_ << "RODADIR=" + workingDir + "/" + blockName + convert.str() << endl;
                         fileSrm_ << "cd $RODADIR" << endl;
                         fileSrm_ << "./lumpacview.exe  compositionBlockDeletion   "
                                         << deletionSystem << "  "

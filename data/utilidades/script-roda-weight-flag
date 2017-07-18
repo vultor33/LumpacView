@@ -1,0 +1,34 @@
+#!/bin/bash
+
+./lumpacview.exe generateCompositionFiles 6 30 8 8 m01m02m03m04m05m05 isomers-6 slurm
+
+for i in `seq 2 4`;
+do
+cd Block$i
+./runBlock.x
+cd ..
+done
+
+./lumpacview.exe waitSlurm 5
+
+./lumpacview.exe cleanBlocks m01m02m03m04m05m05 6 4 slurm
+
+./lumpacview.exe waitSlurm 5
+
+./lumpacview.exe buildCsvFile 6 isomers-6 
+
+mv allIsomers-final.csv final-m01m02m03m04m05m05
+
+rm *.csv
+rm slurm*
+rm independent*
+rm *.srm
+rm runBlock*
+rm m01m02m03m04m05m05*
+rm *.txt
+
+
+# tenho que escolher numeros pares para apagar que ele nao vai separar
+# os caras.
+# outro cuidado e o esqueleto comecar com 0 1 2 3 4 5...
+# e no esqueleto a ultima linha tem q ser apagada

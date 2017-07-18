@@ -52,6 +52,13 @@ inline bool exist_file (const std::string& name) {
 }
 
 
+
+void waitSlurmFinish(int usedProc);
+
+
+void buildCsvFile(int size, string skeletonName);
+
+
 int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
@@ -334,6 +341,24 @@ int main(int argc, char *argv[])
 		cGen >> systemSize >> iPer >> iMax >> nProc >> skeletonFile;
 		CauchyIndex ci_(systemSize);
 		ci_.enantiomersOrderingBlock(iPer, iMax, nProc, skeletonFile);
+	}
+	else if(execType == "waitSlurm")
+	{
+		int numberJobs;
+		stringstream cGen;
+		cGen << argv[2];
+		cGen >> numberJobs;
+		waitSlurmFinish(numberJobs);
+
+	}
+	else if(execType == "buildCsvFile")
+	{
+		int size;
+		string skeletonName;
+		stringstream cGen;
+		cGen << argv[2] << "  " << argv[3];
+		cGen >> size >> skeletonName;
+		buildCsvFile(size, skeletonName);
 	}
 	else
 		cout << "execType not found" << endl;
@@ -718,6 +743,139 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+
+void waitSlurmFinish(int usedProc)
+{
+        while(true)
+        {
+                sleep(0.1);
+                system("squeue > quee.txt");
+                ifstream in_("quee.txt");
+                string line;
+                for(int i = 0; i < usedProc; i++)
+                {
+                        getline(in_,line);
+                }
+                in_.close();
+                remove("quee.txt");
+
+                if(line == "")
+                        break;
+        }
+}
+
+
+void buildCsvFile(int size, string skeletonName)
+{
+	system("cat *.csv > allIsomers.csv");
+	string csvName = "allIsomers";
+
+	ifstream csvFile1_((csvName + ".csv").c_str());
+	ifstream skeleton_(skeletonName.c_str());
+	ofstream csvFileNumber_((csvName + "-number.csv").c_str());
+
+	string line1;
+	int k1 = 1;
+	while(getline(csvFile1_,line1))
+	{
+		if(line1 == "")
+		{
+			csvFileNumber_ << endl;
+			continue;
+		}
+
+
+		string aux1, aux2;
+		vector<int> permutCsv(size);
+		stringstream lineCsv;
+		lineCsv << line1;
+		lineCsv >> aux1 >> aux2;
+		for(int i = 0; i < size; i++)
+			lineCsv >> permutCsv[i];
+
+		string line2;
+		while(getline(skeleton_,line2))
+		{
+			if(line2 == "")
+				continue;
+
+			vector<int> permutSkeleton(size);
+			stringstream lineSkel;
+			lineSkel << line2;
+			for(int i = 0; i < size; i++)
+				lineSkel >> permutSkeleton[i];
+			
+			if(permutSkeleton == permutCsv)
+			{
+				csvFileNumber_ << aux1 << "  " 
+				<< aux2 << " " << k1 << " ; ";
+				for(int i = 0; i < size; i++)
+					csvFileNumber_ << permutCsv[i] << "  ";
+
+				csvFileNumber_ << endl;
+				k1++;
+				break;
+			}
+			k1++;
+		}
+	}
+	csvFileNumber_.close();
+	skeleton_.close();
+	csvFile1_.close();
+
+	system("cat *weights* > allWeights.txt");
+	ifstream weightsFile_("allWeights.txt");
+	string line;
+	vector<int> allWeights;
+	while(getline(weightsFile_,line))
+		{
+		stringstream readLine;
+		readLine << line;
+		int number;
+		readLine >> number;
+		allWeights.push_back(number);
+	}
+	sort(allWeights.begin(),allWeights.end());
+
+
+	ifstream csvNumber_((csvName + "-number.csv").c_str());
+	ofstream csvFinal_((csvName + "-final.csv").c_str());
+	int kAll = 0;
+	while(getline(csvNumber_,line))
+	{
+		if(line == "")
+		{
+			csvFinal_ << endl;
+			continue;
+		}
+
+		string dum1, dum2;
+		vector<int> permutCsv(size);
+		int currentWeight, permutIndex;
+		stringstream csvLine;
+		csvLine << line;
+		csvLine >> currentWeight >> dum1 >> permutIndex >> dum2;
+		for(int i = 0; i < size; i++)
+			csvLine >> permutCsv[i];
+
+		while(permutIndex == allWeights[kAll])
+		{
+			currentWeight++;
+			kAll++;
+		}
+
+		csvFinal_ << currentWeight << "  ;  " << permutIndex << "  ;  ";
+		for(int i = 0; i < size; i++)
+			csvFinal_ << permutCsv[i] << "  ";
+		csvFinal_ << endl;
+
+	}
+
+}
+
+
+
+
 /*
 CRIACAO DE LIGANTES
 
@@ -853,7 +1011,5 @@ double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
 cout << "demorou:  " << elapsed_secs << endl;
 */
-
-
 
 

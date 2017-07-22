@@ -498,8 +498,6 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	string code)
 {
 
-	cout << "bora porra " << endl;
-
 	vector<int> atomTypes;
 	vector<int> bidentateAtomChosen;
 	readAtomTypesAndBidentateChosenFile(flagsFile, atomTypes, bidentateAtomChosen);
@@ -518,16 +516,12 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	ofstream of_((code + "-" + blockFileName).c_str());
 	while (true)
 	{
-		cout << " cade?? " << endl;
 		vector<int> auxBlock = readCauchyNotations(openedFile_);
-		cout << "leu o bloco" << endl;
 		if (openedFile_.eof())
 		{
 			openedFile_.close();
-			cout << "fechou o arquivo" << endl;
 			break;
 		}
-		cout << "fim do arquivo" << endl;
 		if (auxBlock.size() == 0)
 		{
 			if (kDupe != 0)
@@ -538,7 +532,6 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 			continue;
 		}
 		equal = false;
-		cout << "antes das rotacoes" << endl;
 		for (size_t i = 0; i < allPermutations.size(); i++)
 		{
 			compareResult = compareTwoIsomersWithLabelsRotations(
@@ -571,9 +564,24 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 		}
 	}
 	of_.close();
-	cout << "eitcha" << endl;
 
-	ofstream ofCsv_((code + "-" + blockFileName + ".csv").c_str());
+
+	string blockNum = blockFileName.substr(20,blockFileName.size());
+	stringstream convBlockNum;
+	convBlockNum << blockNum;
+	int iBlock;
+	convBlockNum >> iBlock;
+	stringstream numberBackToString;
+	numberBackToString << iBlock;
+	if(iBlock < 10)
+		blockNum = "000";
+	else if(iBlock < 100)
+		blockNum = "00";
+	else if(iBlock < 1000)
+		blockNum = "0";
+	blockNum = blockNum + numberBackToString.str();//fredmudar
+
+	ofstream ofCsv_((code + "-" + blockNum + ".csv").c_str());
 	ofCsv_ << endl;
 	ifstream fileEnant_((code + "-" + blockFileName).c_str());
 	int i = 0;
@@ -1338,8 +1346,6 @@ void CauchyIndex::cleanBlocksAndGenerateIsomers(
 		chdir(workingDirectory.c_str());
 		system(("rm -rf " + folderName).c_str());
 	}
-
-	cout << "limpei os blocos todods " << endl;
 
 	stringstream convert0;
 	convert0 << systemSize;

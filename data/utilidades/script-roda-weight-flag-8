@@ -2,12 +2,14 @@
 
 COMPOSITION0=$1
 
-COMPOSITION=$COMPOSITION0" "
+COMPOSITION=$COMPOSITION0
 
 if [ "$COMPOSITION" == " " ]
 then
 	exit
 fi
+
+# problema na contagem de pesos dos bidentados - acumulando no primeiro
 
 
 SYSTEM="8"
@@ -36,6 +38,8 @@ done
 ./lumpacview.exe buildCsvFile $SYSTEM $SKELETON
 
 mv allIsomers-final.csv final-$COMPOSITION
+
+cat final-$COMPOSITION | sed '/^\s*$/d' | wc -l > count-$COMPOSITION
 
 rm *.csv
 rm slurm*

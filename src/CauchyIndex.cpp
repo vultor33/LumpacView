@@ -582,7 +582,6 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	blockNum = blockNum + numberBackToString.str();//fredmudar
 
 	ofstream ofCsv_((code + "-" + blockNum + ".csv").c_str());
-	ofCsv_ << endl;
 	ifstream fileEnant_((code + "-" + blockFileName).c_str());
 	int i = 0;
 	while(true)
@@ -590,6 +589,8 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 		vector<int> auxEnant = readCauchyNotations(fileEnant_);
 		if (fileEnant_.eof())
 		{
+			if(i != 0)
+				ofCsv_ << endl;
 			fileEnant_.close();
 			break;
 		}
@@ -606,7 +607,11 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 		ofCsv_ << endl;
 		i++;
 		if (i == weights.size())
+		{
+			if(i != 0)
+				ofCsv_ << endl;
 			break;
+		}
 	}
 	ofCsv_.close();
 	fileEnant_.close();
@@ -1734,9 +1739,12 @@ void CauchyIndex::doBlockDeletionFlagsEnantiomers(
 					rotate(it, it + 1, ramBlock.end());
 					ramBlock.pop_back();
 					kRam--;
-					weightFile_.open((weightFileName).c_str(),  std::ofstream::out | std::ofstream::app);
-					weightFile_ << k << endl;
-					weightFile_.close();
+					if(compare == 0)
+					{
+						weightFile_.open((weightFileName).c_str(),  std::ofstream::out | std::ofstream::app);
+						weightFile_ << k << endl;
+						weightFile_.close();
+					}
 				}
 				kRam++;
 			}
@@ -1763,9 +1771,12 @@ void CauchyIndex::doBlockDeletionFlagsEnantiomers(
 						rotate(it, it + 1, ramBlock.end());
 						ramBlock.pop_back();
 						kRam--;
-						weightFile_.open((weightFileName).c_str(),  std::ofstream::out | std::ofstream::app);
-						weightFile_ << k << endl;
-						weightFile_.close();
+						if(compare == 0)
+						{
+							weightFile_.open((weightFileName).c_str(),  std::ofstream::out | std::ofstream::app);
+							weightFile_ << k << endl;
+							weightFile_.close();
+						}
 					}
 					kRam++;
 				}

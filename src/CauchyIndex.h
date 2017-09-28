@@ -45,9 +45,17 @@ public:
 		const std::vector<int> & bidentateAtomsChosen,
 		std::ofstream & printFile_);
 
+	void printMoleculeMolFormat(
+		std::vector<int> & permutation,
+		std::vector<int> & atomTypes,
+		const std::vector<int> & bidentateAtomsChosen,
+		std::ofstream & printFile_);
+
 	void printMoleculeFromFile(std::string fileName);
 
 	void printAllMoleculesFromFile(std::string composition);
+	
+	void printAllMoleculesFromFileEnantiomers(std::string composition);
 
 	void rotationTest(
 		std::vector<std::string> &atoms,
@@ -241,7 +249,11 @@ private:
 	size_t systemSize;
 	void writeCauchyRotations(std::string fileName, std::vector< std::vector<int> > & rotPermutations);
 	std::vector<int> readCauchyNotations(std::ifstream & openedFile_);
+
+	std::vector<int> readCauchyNotationsEnantiomers(std::ifstream & openedFile_);
+
 	std::vector< std::vector<int> > readCauchyNotationsRAMBlock(std::ifstream & openedFile_, int kInitial, int kFinal);
+
 	std::vector< std::vector<int> > readCauchyNotationsRAMBlockEnantiomers(std::ifstream & openedFile_, int kInitial, int kFinal);
 
 	std::string permutationToString(std::vector<int> permutation); 

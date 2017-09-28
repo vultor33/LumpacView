@@ -1,3 +1,5 @@
+//#define UNIX
+
 #include <utility>
 #include <iostream>
 #include <string>
@@ -7,8 +9,10 @@
 #include <ctime>
 #include <time.h>
 #include <math.h>
-//#include <unistd.h>
 #include <sys/stat.h>
+#ifdef UNIX
+	#include <unistd.h>
+#endif
 
 #include "BuildComplex.h"
 #include "RootMeanSquareDeviation.h"
@@ -62,6 +66,10 @@ void buildCsvFile(int size, string skeletonName);
 int main(int argc, char *argv[])
 {
 	clock_t begin = clock();
+
+	CauchyIndex ci123_(6);
+	ci123_.printAllMoleculesFromFileEnantiomers("m01m01B01C01");
+	exit(0);
 	
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();
@@ -749,7 +757,9 @@ void waitSlurmFinish(int usedProc)
 {
         while(true)
         {
+#ifdef UNIX
                 sleep(0.1);
+#endif
                 system("squeue > quee.txt");
                 ifstream in_("quee.txt");
                 string line;

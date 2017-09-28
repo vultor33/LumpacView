@@ -14,6 +14,13 @@ int main(int argc, char *argv[])
 	int kInit, kFinal;
 	ssReadInput >> responseName >> kInit >> kFinal;
 
+	if(responseName == "")
+	{
+		cout << "input:  reponse name --- initial line --- final line" << endl;
+		exit(1);
+	}
+
+
 	ifstream resp_(responseName.c_str());
 	string line;
 	int k = 1;
@@ -27,7 +34,7 @@ int main(int argc, char *argv[])
 			convert << line;
 			string name;
 			convert >> name;
-			roda_ << "./script-run-flag-pc " << name << endl;
+			roda_ << "./script-roda-weight-flag " << name << endl;
 
 		} 
 		k++;

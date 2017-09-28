@@ -280,7 +280,8 @@ int main(int argc, char *argv[])
 		
 		CauchyIndex ci_(systemSize);
 		ci_.generateAtomTypesAndBidentateChosenFile(composition);
-		
+	
+	
 		string compositionFile = workingDirectory + "/" + composition + "---atomTypes.txt";
 
 		ci_.generateSlurmFilesToDeletionFlags(
@@ -824,23 +825,29 @@ void buildCsvFile(int size, string skeletonName)
 	csvFile1_.close();
 
 	system("cat *weights* > allWeights.txt");
-	ifstream weightsFile_("allWeights.txt");
-	string line;
 	vector<int> allWeights;
-	while(getline(weightsFile_,line))
+	ifstream weightsFile_("allWeights.txt");
+	if(weightsFile_.is_open())
+	{
+		string line;
+		while(getline(weightsFile_,line))
 		{
-		stringstream readLine;
-		readLine << line;
-		int number;
-		readLine >> number;
-		allWeights.push_back(number);
+			stringstream readLine;
+			readLine << line;
+			int number;
+			readLine >> number;
+			allWeights.push_back(number);
+		}
+		sort(allWeights.begin(),allWeights.end());
 	}
-	sort(allWeights.begin(),allWeights.end());
-
 
 	ifstream csvNumber_((csvName + "-number.csv").c_str());
 	ofstream csvFinal_((csvName + "-final.csv").c_str());
 	int kAll = 0;
+	if(allWeights.size() == 0)
+		allWeights.push_back(-1);
+
+	string line;
 	while(getline(csvNumber_,line))
 	{
 		if(line == "")

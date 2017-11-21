@@ -55,20 +55,24 @@ inline bool exist_file (const std::string& name) {
   return (stat (name.c_str(), &buffer) == 0);
 }
 
-
-
 void waitSlurmFinish(int usedProc);
-
 
 void buildCsvFile(int size, string skeletonName);
 
+void changeNameOfFiles(string name);
 
 int main(int argc, char *argv[])
 {
+	string responseName;
+	cout << "type line: " << endl;
+	cin >> responseName;
+	changeNameOfFiles(responseName);
+	return 0;
+
 	clock_t begin = clock();
 
 	CauchyIndex ci123_(6);
-	ci123_.printAllMoleculesFromFileEnantiomers("m01m01B01C01");
+	ci123_.printAllMoleculesFromFileEnantiomers("m01m01C01C01");
 	exit(0);
 	
 	//CauchyIndex ci123_(10);
@@ -888,6 +892,38 @@ void buildCsvFile(int size, string skeletonName)
 
 	}
 
+}
+
+
+void changeNameOfFiles(string responseName)
+{
+	AllMolecularFormulas allMol_;
+	string newName = "Simas-Isomeros-";
+	ifstream response_(responseName.c_str());
+	string line;
+	while (!response_.eof())
+	{
+		getline(response_, line);
+		string combination;
+		stringstream convert;
+		convert << line;
+		convert >> combination;
+		vector< vector<int> > combinationCode = allMol_.stringToNumber(combination);
+		string newCombinationName = allMol_.newCodeToString(combinationCode);
+
+		ofstream newFile_((newName + newCombinationName).c_str());
+		ifstream typesFile_((combination + "---atomTypes.txt").c_str());
+		string typeLine;
+		getline(typesFile_, typeLine);
+		newFile_ << typeLine << endl;
+		ifstream isomerFile_((("final-") + combination).c_str());
+		string isomerLine;
+		while (!isomerFile_.eof())
+		{
+			getline(isomerFile_, isomerLine);
+			newFile_ << isomerLine << endl;
+		}
+	}
 }
 
 

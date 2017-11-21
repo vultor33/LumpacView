@@ -39,6 +39,31 @@ AllMolecularFormulas::AllMolecularFormulas()
 	elem[21] = "C04";
 	elem[22] = "C05";
 	elem[23] = "C06";
+	elemNew.resize(24);
+	elemNew[0] = "m01";
+	elemNew[1] = "m02";
+	elemNew[2] = "m03";
+	elemNew[3] = "m04";
+	elemNew[4] = "m05";
+	elemNew[5] = "m06";
+	elemNew[6] = "m07";
+	elemNew[7] = "m08";
+	elemNew[8] = "m09";
+	elemNew[9] = "m10";
+	elemNew[10] = "m11";
+	elemNew[11] = "m12";
+	elemNew[12] = "BS1";
+	elemNew[13] = "BS2";
+	elemNew[14] = "BS3";
+	elemNew[15] = "BS4";
+	elemNew[16] = "BS5";
+	elemNew[17] = "BS6";
+	elemNew[18] = "BA1";
+	elemNew[19] = "BA2";
+	elemNew[20] = "BA3";
+	elemNew[21] = "BA4";
+	elemNew[22] = "BA5";
+	elemNew[23] = "BA6";
 	coord.resize(24);
 	coord[0] = 1;
 	coord[1] = 1;
@@ -335,6 +360,29 @@ string AllMolecularFormulas::codeToString(vector < vector<int> > & codeLine)
 			for (int k = 0; k < codeLine[i][j]; k++)
 			{
 				name += elem[j + startCount];				
+			}
+		}
+	}
+	return name;
+}
+
+string AllMolecularFormulas::newCodeToString(vector < vector<int> > & codeLine)
+{
+	string name = "";
+	for (size_t i = 0; i < codeLine.size(); i++)
+	{
+		int startCount;
+		if (i == 0)
+			startCount = 0;
+		else if (i == 1)
+			startCount = 12;
+		else if (i == 2)
+			startCount = 18;
+		for (size_t j = 0; j < codeLine[i].size(); j++)
+		{
+			for (int k = 0; k < codeLine[i][j]; k++)
+			{
+				name += elemNew[j + startCount];
 			}
 		}
 	}

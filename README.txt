@@ -6,7 +6,8 @@ IMPORTANTE - PROGRAMA QUE ACHA O GRUPO PONTUAL http://www.ccp14.ac.uk/ccp/web-mi
 busca: find point group molecule software
  http://www.sciencedirect.com/science/article/pii/0097848576800046
 
-
+Funcao no main que troca o nome dos arquivos
+void changeNameOfFiles(string responseName)
 
 MODIFICACOES PROPOSTAS
 

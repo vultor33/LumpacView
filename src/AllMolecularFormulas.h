@@ -19,11 +19,16 @@ public:
 	// 3 entries: 0-mono ; 1-bisymmetric ; 2-biassymetric.
 	std::vector< std::vector<int> > stringToNumber(std::string entryString);
 
+	std::string codeToString(std::vector< std::vector<int> > & codeLine);
+
+	std::string newCodeToString(std::vector< std::vector<int> > & codeLine);
+
 private:
 	//data
 	int coordination;
 	std::ofstream printCombinations_;
 	std::vector< std::string > elem;
+	std::vector< std::string > elemNew;
 	std::vector<int> coord;
 	int printCoord;
 	int maxSize;
@@ -32,8 +37,6 @@ private:
 
 	//functions
 	void clearEqualCombinations(std::string combFile);
-
-	std::string codeToString(std::vector< std::vector<int> > & codeLine);
 
 	bool compareToAll(std::vector< std::vector< std::vector<int> > > & allCodes, std::vector< std::vector<int> > &actualCodes);
 

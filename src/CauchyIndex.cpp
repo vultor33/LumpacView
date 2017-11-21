@@ -32,18 +32,18 @@ CauchyIndex::CauchyIndex(int iSystem)
 	bidentateLabels[4] = "Xe";
 	bidentateLabels[5] = "Rn";
 	atomLabels.resize(12);
-	atomLabels[0] = "Li";
-	atomLabels[1] = "B";
-	atomLabels[2] = "C";
-	atomLabels[3] = "N";
-	atomLabels[4] = "O";
-	atomLabels[5] = "F";
+	atomLabels[0] = "Ca";
+	atomLabels[1] = "O";
+	atomLabels[2] = "H";
+	atomLabels[3] = "Mg";
+	atomLabels[4] = "Be";
+	atomLabels[5] = "I";
 	atomLabels[6] = "Cl";
 	atomLabels[7] = "Br";
-	atomLabels[8] = "I";
-	atomLabels[9] = "Ti";
-	atomLabels[10] = "Sc";
-	atomLabels[11] = "Au";
+	atomLabels[8] = "Na";
+	atomLabels[9] = "He";
+	atomLabels[10] = "N";
+	atomLabels[11] = "C";
 
 
 	calculateAllIndexes(iSystem);
@@ -344,7 +344,7 @@ void CauchyIndex::correctIndependentIsomers()
 		for (size_t i = 0; i < auxBlock.size(); i++)
 			out_ << auxBlock[i] << " ";
 		out_ << endl;
-	}	
+	}
 	openedFile_.close();
 	out_.close();
 }
@@ -393,8 +393,8 @@ void CauchyIndex::generateAllIndependentIsomers12(string blockFileName)
 
 
 void CauchyIndex::generateAllIndependentIsomersWithFlag(
-	string blockFileName, 
-	string flagsFile, 
+	string blockFileName,
+	string flagsFile,
 	string code)
 {
 	vector<int> atomTypes;
@@ -1183,7 +1183,7 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags(
                 convert << i;
                 system(("mkdir " + blockName + convert.str()).c_str());
                 system(("cp lumpacview.exe  " + blockName + convert.str()).c_str());
-		int indexBlock = (i-1) * bigBlockSize; 
+		int indexBlock = (i-1) * bigBlockSize;
                 int jSmallInit, jSmallEnd;
                 for (int j = 0; j < smallBlockNumber; j++)
                 {
@@ -1199,7 +1199,7 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags(
                                 fileSrm_ << "#SBATCH --hint=nomultithread" << endl;
                                 fileSrm_ << "RODADIR=" + workingDir + "/" + blockName + convert.str() << endl;
                                 fileSrm_ << "cd $RODADIR" << endl;
-                                fileSrm_ << "./lumpacview.exe  compositionBlockDeletion   " 
+                                fileSrm_ << "./lumpacview.exe  compositionBlockDeletion   "
 					<< deletionSystem << "  "
 					<< rawIsomersFile << "  "
 					<< compositionFile << "  "
@@ -1308,7 +1308,7 @@ void CauchyIndex::generateSlurmFilesToDeletionFlags(
 		isomers1_ << endl;
 	}
 	openedFile_.close();
-	isomers1_.close();	
+	isomers1_.close();
 
 }
 
@@ -1332,8 +1332,8 @@ void CauchyIndex::runall(int blockInit, int blockFinal,string machineType,string
 }
 
 void CauchyIndex::cleanBlocksAndGenerateIsomers(
-	int nProc, 
-	int systemSize, 
+	int nProc,
+	int systemSize,
 	string composition,
 	string workingDirectory,
 	string machineType)
@@ -1405,8 +1405,8 @@ void CauchyIndex::doBlockDeletion(
 			{
 				vector<int> auxPerm = applyRotation(permutation, j);
 				stringstream convert;
-				for(int i = 0; i < systemSize; i++)                
-					convert << auxPerm[i] << "-";          	
+				for(int i = 0; i < systemSize; i++)
+					convert << auxPerm[i] << "-";
 				permutName = convert.str();
 #ifdef UNIX
 				unlink(permutName.c_str());
@@ -1565,8 +1565,8 @@ void CauchyIndex::generateAtomTypesAndBidentateChosenFile(string complexCode)
 
 
 void CauchyIndex::readAtomTypesAndBidentateChosenFile(
-	std::string fileName, 
-	vector<int> & atomTypes, 
+	std::string fileName,
+	vector<int> & atomTypes,
 	vector<int> & bidentateChosen)
 {
 	ifstream in_(fileName.c_str());
@@ -1812,10 +1812,10 @@ void CauchyIndex::doBlockDeletionFlagsEnantiomers(
 
 
 void CauchyIndex::createEnantiomersFiles(
-	int nProc, 
-	int iMax, 
-	std::string skeletonFile, 
-	std::string workingDirectory, 
+	int nProc,
+	int iMax,
+	std::string skeletonFile,
+	std::string workingDirectory,
 	std::string machineType)
 {
 	for (int j = 1; j <= nProc; j++)
@@ -1841,10 +1841,10 @@ void CauchyIndex::createEnantiomersFiles(
 		}
 		while (i < iMax)
 		{
-			roda_ << "./lumpacview.exe enantiomerDeletion " 
+			roda_ << "./lumpacview.exe enantiomerDeletion "
 				<< mol0.size() << "  "
-				<< i << "  " 
-				<< iMax << "  " 
+				<< i << "  "
+				<< iMax << "  "
 				<< convert.str() << "  "
 				<< skeletonFile << endl;
 			i += nProc;
@@ -2520,7 +2520,7 @@ void CauchyIndex::printMoleculeMolFormat(
 
 	//lantanide
 	double zero = 0.0e0;
-	printFile_ << " 1 A1 " 
+	printFile_ << " 1 A1 "
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
@@ -2603,10 +2603,10 @@ void CauchyIndex::printAllMoleculesFromFile(string composition)
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
 	readAtomTypesAndBidentateChosenFile("results-" + composition, atomTypes, bidentateChosen);
-	
+
 	ifstream filePermutations_(("results-" + composition).c_str());
 	string line;
-	getline(filePermutations_,line);	
+	getline(filePermutations_,line);
 	while(true)
 	{
 		vector<int> permutation = readCauchyNotations(filePermutations_);
@@ -2615,7 +2615,7 @@ void CauchyIndex::printAllMoleculesFromFile(string composition)
 		string permtString = permutationToString(permutation);
 		ofstream fileXyz_((composition + "-" + permtString + ".xyz").c_str());
 		printMolecule(permutation,atomTypes,bidentateChosen,fileXyz_);
-		fileXyz_.close();	
+		fileXyz_.close();
 	}
 	filePermutations_.close();
 #ifdef UNIX
@@ -2775,7 +2775,7 @@ string CauchyIndex::permutationToString(vector<int> permutation)
 {
 	stringstream permt;
 	for(size_t i = 0; i < permutation.size(); i++)
-		permt << permutation[i] << "-";	
+		permt << permutation[i] << "-";
 	return permt.str();
 }
 
@@ -2893,7 +2893,7 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations[30] = mol0[3].z;
 		vectorRotations[31] = 4.0e0 * auxMath_._pi / 3.0e0;
 
-		auxReferenceAxis.resize(3);		
+		auxReferenceAxis.resize(3);
 		//c2 - 1
 		auxReferenceAxis[0] = 0.5e0 * (mol0[0].x + mol0[1].x);
 		auxReferenceAxis[1] = 0.5e0 * (mol0[0].y + mol0[1].y);
@@ -3456,7 +3456,7 @@ void CauchyIndex::setSystem(int system)
 		reflectionOperation.resize(10);
 		for (size_t i = 0; i < reflectionOperation.size(); i++)
 			reflectionOperation[i] = i;
-		
+
 		/*
 		reflectionOperation[2] = 8;
 		reflectionOperation[8] = 2;

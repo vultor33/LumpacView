@@ -66,19 +66,40 @@ string sizeToGeometryCode(int size);
 
 int main(int argc, char *argv[])
 {
+	/*
+	string line;
+	string responseName = "response-combinations4.txt";
+	ifstream resp_(responseName.c_str());
+	while (!resp_.eof())
+	{
+		getline(resp_, line);
+		if (line == "")
+			break;
+		stringstream convertLine;
+		convertLine << line;
+		string code;
+		convertLine >> code;
+		CauchyIndex ci123_(4);
+		ci123_.generateAtomTypesAndBidentateChosenFile(code);
+		ci123_.generateAllIndependentIsomersWithFlagEnantiomers("enatiomers-4.log", code + "---atomTypes.txt", code);
+	}
+	string code = "m01m02m03m04m05m06";
+	CauchyIndex ci123_(6);
+	ci123_.generateAtomTypesAndBidentateChosenFile(code);
+	ci123_.generateAllIndependentIsomersWithFlagEnantiomers("enantiomers-6.log", code + "---atomTypes.txt", code);
+	exit(0);
+	*/
+
+
 	string responseName;
 	cout << "type line: " << endl;
-	//cin >> responseName;
-	responseName = "response-combinations6.txt";
+	cin >> responseName;
+	//responseName = "response-combinations6.txt";
 	changeNameOfFiles(responseName);
 	return 0;
 
 	clock_t begin = clock();
 
-	CauchyIndex ci123_(6);
-	ci123_.printAllMoleculesFromFileEnantiomers("m01m01C01C01");
-	exit(0);
-	
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();
 	//return 0;
@@ -1026,7 +1047,6 @@ void changeNameOfFiles(string responseName)
 
 		}
 		counting_ << newCombinationName << " ; " << totalChiral << "; " << totalAchiral << endl;
-
 	}
 }
 

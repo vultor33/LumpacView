@@ -514,14 +514,9 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	int k = 0;
 	int kDupe = 0;
 	ofstream of_((code + "-" + blockFileName).c_str());
-	while (true)
+	while (!openedFile_.eof())
 	{
 		vector<int> auxBlock = readCauchyNotations(openedFile_);
-		if (openedFile_.eof())
-		{
-			openedFile_.close();
-			break;
-		}
 		if (auxBlock.size() == 0)
 		{
 			if (kDupe != 0)
@@ -565,7 +560,7 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	}
 	of_.close();
 
-
+	/*
 	string blockNum = blockFileName.substr(20,blockFileName.size());
 	stringstream convBlockNum;
 	convBlockNum << blockNum;
@@ -580,6 +575,9 @@ void CauchyIndex::generateAllIndependentIsomersWithFlagEnantiomers(
 	else if(iBlock < 1000)
 		blockNum = "0";
 	blockNum = blockNum + numberBackToString.str();//fredmudar
+	fredmudar*/
+
+	string blockNum = "0";
 
 	ofstream ofCsv_((code + "-" + blockNum + ".csv").c_str());
 	ifstream fileEnant_((code + "-" + blockFileName).c_str());
@@ -2921,6 +2919,15 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations[41] = auxReferenceAxis[1];
 		vectorRotations[42] = auxReferenceAxis[2];
 		vectorRotations[43] = auxMath_._pi;
+
+		// reflections
+		/*
+		reflectionOperation.resize(4);
+		for (size_t i = 0; i < reflectionOperation.size(); i++)
+			reflectionOperation[i] = i;
+		reflectionOperation[1] = 2;
+		reflectionOperation[2] = 1;
+		*/
 
 		//cut angle
 		cutAngle = 2.0e0 * auxMath_._pi;

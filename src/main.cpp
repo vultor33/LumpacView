@@ -7,9 +7,10 @@
 #include <sstream>
 #include <algorithm>
 #include <ctime>
-#include <time.h>
+#include <time.h>d
 #include <math.h>
 #include <sys/stat.h>
+#include <iomanip>
 #ifdef UNIX
 	#include <unistd.h>
 #endif
@@ -61,11 +62,14 @@ void buildCsvFile(int size, string skeletonName);
 
 void changeNameOfFiles(string name);
 
+string sizeToGeometryCode(int size);
+
 int main(int argc, char *argv[])
 {
 	string responseName;
 	cout << "type line: " << endl;
-	cin >> responseName;
+	//cin >> responseName;
+	responseName = "response-combinations6.txt";
 	changeNameOfFiles(responseName);
 	return 0;
 
@@ -898,9 +902,9 @@ void buildCsvFile(int size, string skeletonName)
 void changeNameOfFiles(string responseName)
 {
 	AllMolecularFormulas allMol_;
-	string newName = "Simas-Isomeros-";
 	ifstream response_(responseName.c_str());
 	string line;
+	ofstream counting_("counting.csv");
 	while (!response_.eof())
 	{
 		getline(response_, line);
@@ -910,22 +914,153 @@ void changeNameOfFiles(string responseName)
 		convert >> combination;
 		vector< vector<int> > combinationCode = allMol_.stringToNumber(combination);
 		string newCombinationName = allMol_.newCodeToString(combinationCode);
-
-		ofstream newFile_((newName + newCombinationName).c_str());
+		int systemSize = 0;
+		for (size_t i = 0; i < combinationCode.size(); i++)
+		{
+			for (size_t j = 0; j < combinationCode[i].size(); j++)
+			{
+				if(i > 0)
+					systemSize += 2 * combinationCode[i][j];
+				else
+					systemSize += combinationCode[i][j];
+			}
+		}
+		string geomName = sizeToGeometryCode(systemSize);
+		ofstream newFile_((geomName + "-" + newCombinationName + ".csv").c_str());
 		ifstream typesFile_((combination + "---atomTypes.txt").c_str());
 		string typeLine;
 		getline(typesFile_, typeLine);
 		newFile_ << typeLine << endl;
 		ifstream isomerFile_((("final-") + combination).c_str());
 		string isomerLine;
+
+		// sum up weights
+		int nWeights = 0;
 		while (!isomerFile_.eof())
 		{
 			getline(isomerFile_, isomerLine);
-			newFile_ << isomerLine << endl;
+			if (isomerLine == "")
+				continue;
+			stringstream convertWeights;
+			int auxWeight;
+			convertWeights << isomerLine;
+			convertWeights >> auxWeight;
+			nWeights += (auxWeight + 1);
 		}
+		isomerFile_.close();
+		isomerFile_.open((("final-") + combination).c_str());
+
+		int totalChiral = 0;
+		int totalAchiral = 0;
+
+		bool chiral;
+		CauchyIndex cauchy_(systemSize);
+		while (!isomerFile_.eof())
+		{
+			getline(isomerFile_, isomerLine);
+			if (isomerLine == "")
+			{
+				newFile_ << endl;
+				continue;
+			}
+
+			//check next to see if chiral
+			string isomerLine2;
+			if (isomerFile_.eof())
+				chiral = false;
+			else
+			{
+				getline(isomerFile_, isomerLine2);
+				if (isomerLine2 == "")
+					chiral = false;
+				else
+					chiral = true;
+			}
+			stringstream convertLine1;
+			int auxWeight;
+			string dummy1, dummy2, dummy3;
+			convertLine1 << isomerLine;
+			convertLine1 >> auxWeight;
+			convertLine1 >> dummy1 >> dummy2 >> dummy3;
+			vector<int> notation1(systemSize);
+			for (int i = 0; i < systemSize; i++)
+				convertLine1 >> notation1[i];
+			
+			newFile_ << (auxWeight + 1) << " ; "
+				<< "{" << geomName << " "
+				<< "[" << notation1[0];
+			for (size_t i = 1; i < notation1.size(); i++)
+				newFile_ << " " << notation1[i];
+			newFile_ << "] ";
+
+			newFile_ << fixed << setprecision(2)
+				<< (100.0e0 * (double)(auxWeight + 1) / (double)nWeights) << "% ";
+			if (!chiral)
+			{
+				newFile_ << "A}" << endl << endl;
+				totalAchiral++;
+			}
+			else
+			{
+				totalChiral++;
+				newFile_ << "C}" << endl;
+				stringstream convertLine2;
+				int auxWeight2;
+				convertLine2 << isomerLine2;
+				convertLine2 >> auxWeight2;
+				convertLine2 >> dummy1 >> dummy2 >> dummy3;
+				vector<int> notation2(systemSize);
+				for (int i = 0; i < systemSize; i++)
+					convertLine2 >> notation2[i];
+
+				newFile_ << (auxWeight2 + 1) << " ; "
+					<< "{" << geomName << " "
+					<< "[" << notation2[0];
+				for (size_t i = 1; i < notation2.size(); i++)
+					newFile_ << " " << notation2[i];
+				newFile_ << "] ";
+				newFile_ << fixed << setprecision(2)
+					<< (100.0e0 * (double)(auxWeight + 1) / (double)nWeights) << "% ";
+				newFile_ << "C}" << endl;
+			}
+
+		}
+		counting_ << newCombinationName << " ; " << totalChiral << "; " << totalAchiral << endl;
+
 	}
 }
 
+
+string sizeToGeometryCode(int size)
+{
+	switch (size)
+	{
+	case 4:
+		return "T-4";
+		break;
+	case 5:
+		return "TBPY-5";
+		break;
+	case 6:
+		return "OC-6";
+		break;
+	case 7:
+		return "COC-7";
+		break;
+	case 8:
+		return "SAPR-8";
+		break;
+	case 9:
+		return "JTCTPR-9";
+		break;
+	case 10:
+		return "JMBIC-10";
+		break;
+	default:
+		cout << "size not found" << endl;
+		exit(1);
+	}
+}
 
 
 

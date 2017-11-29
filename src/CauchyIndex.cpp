@@ -2561,17 +2561,27 @@ void CauchyIndex::indetifyIsomer(
 	IdentifyIsomers identIso_;
 	vector<double> distances;
 
-	vector<int> atomTypes2(atomTypes.size());
 	for (size_t i = 0; i < atomTypes.size(); i++)
-		atomTypes2[i] = atomTypes[permutation[i]];
+	{
+		atomTypes[i] = i;
+		permutation[i] = i;
+	}
+	atomTypes[0] = 0;
+	atomTypes[1] = 1;
+	atomTypes[2] = 3;
+	atomTypes[3] = 5;
+	atomTypes[4] = 4;
+	atomTypes[5] = 2;
+	vector<int> permutation0 = permutation;
+	permutation0[0] = 0;
+	permutation0[1] = 2;
+	permutation0[2] = 3;
+	permutation0[3] = 4;
+	permutation0[4] = 1;
+	permutation0[5] = 5;
+	identIso_.compareTwoPermutations(atomTypes, permutation, permutation0, mol0);
 
-	//	identIso_.calculateDistancesK(0, mol0, distances);
-	vector< vector<int> > allT1, allT2;
-	vector< vector<double> > allD1, allD2;
-	identIso_.sortAllDistances(atomTypes, mol0, allT1, allD1);
-	identIso_.sortAllDistances(atomTypes2, mol0, allT2, allD2);
-
-	identIso_.compareIsomers(atomTypes, allT1, allD1, atomTypes2, allT2, allD2);
+	//identIso_.compareIsomers(atomTypes, allT1, allD1, atomTypes2, allT2, allD2);
 
 	//defining bidentate bonds
 //	vector<int> bidentateAtomsChosenRotated = applyPermutationCoordinates(permutation, atoms, bidentateAtomsChosen);

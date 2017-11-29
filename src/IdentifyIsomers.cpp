@@ -12,16 +12,50 @@ IdentifyIsomers::IdentifyIsomers(){}
 
 IdentifyIsomers::~IdentifyIsomers(){}
 
-bool IdentifyIsomers::compareIsomers(
+void IdentifyIsomers::compareTwoPermutations(
+	vector<int> &atomTypes,
+	vector<int> &permutation1,
+	vector<int> &permutation2,
+	vector<CoordXYZ> &mol0)
+{
+	vector< vector<int> > allT1, allT2;
+	vector< vector<double> > allD1, allD2;
+	size_t size = atomTypes.size();
+	vector<int> atomTypes1(size);
+	vector<int> atomTypes2(size);
+	for (size_t i = 0; i < atomTypes.size(); i++)
+	{
+		atomTypes1[i] = atomTypes[permutation1[i]];
+		atomTypes2[i] = atomTypes[permutation2[i]];
+	}
+	sortAllDistances(atomTypes1, mol0, allT1, allD1);
+	sortAllDistances(atomTypes2, mol0, allT2, allD2);
+	vector<int> connect;
+	vector<double> dist;
+	compareIsomers(
+		atomTypes1, 
+		allT1, 
+		allD1, 
+		atomTypes2, 
+		allT2, 
+		allD2,
+		connect,
+		dist);
+
+
+}
+
+
+void IdentifyIsomers::compareIsomers(
 	std::vector<int> & atomTypes1,
 	std::vector< std::vector<int> > & allSortedTypes1,
 	std::vector< std::vector<double> > & allSortedDistances1,
 	std::vector<int> & atomTypes2,
 	std::vector< std::vector<int> > & allSortedTypes2,
-	std::vector< std::vector<double> > & allSortedDistances2)
+	std::vector< std::vector<double> > & allSortedDistances2,
+	std::vector<int> &connections,
+	std::vector<double> &conectDifference)
 {
-	vector<int> finalConections;
-	vector<double> finalDistances;
 	for (size_t i = 0; i < allSortedTypes1.size(); i++)
 	{
 		vector<int> aT1 = allSortedTypes1[i];
@@ -30,7 +64,7 @@ bool IdentifyIsomers::compareIsomers(
 		double difMin = 1.0e99;
 		for (size_t j = 0; j < allSortedTypes2.size(); j++)
 		{
-			if (find(finalConections.begin(), finalConections.end(), j) != finalConections.end())
+			if (find(connections.begin(), connections.end(), j) != connections.end())
 				continue;
 
 			vector<int> aT2 = allSortedTypes2[j];
@@ -42,11 +76,11 @@ bool IdentifyIsomers::compareIsomers(
 				difMin = difference;
 			}
 		}
-		finalConections.push_back(jMin);
-		finalDistances.push_back(difMin);
+		connections.push_back(jMin);
+		conectDifference.push_back(difMin);
 	}
-	return true;
 }
+
 
 double IdentifyIsomers::compareTwoAtoms(
 	std::vector<int> aT1,

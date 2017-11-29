@@ -51,6 +51,12 @@ public:
 		const std::vector<int> & bidentateAtomsChosen,
 		std::ofstream & printFile_);
 
+	void indetifyIsomer(
+		std::vector<int> & permutation,
+		std::vector<int> & atomTypes,
+		const std::vector<int> & bidentateAtomsChosen);
+
+
 	void printMoleculeFromFile(std::string fileName);
 
 	void printAllMoleculesFromFile(std::string composition);
@@ -272,6 +278,8 @@ private:
 	}
 
 	AuxMath auxMath_;
+
+
 };
 
 #endif

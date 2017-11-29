@@ -90,11 +90,26 @@ int main(int argc, char *argv[])
 	exit(0);
 	*/
 
+	CauchyIndex ci234(6);
+	vector<int> permutation(6);
+	vector<int> atomTypes(6);
+	for (int i = 0; i < 6; i++)
+	{
+		permutation[i] = i;
+		atomTypes[i] = i;
+	}
+	atomTypes[1] = 0;
+	atomTypes[2] = 0;
+	atomTypes[3] = 0;
+	permutation[4] = 1;
+	permutation[1] = 4;
+	vector<int> bidChosen;
+	ci234.indetifyIsomer(permutation, atomTypes, bidChosen);
 
 	string responseName;
 	cout << "type line: " << endl;
-	cin >> responseName;
-	//responseName = "response-combinations6.txt";
+	//cin >> responseName;
+	responseName = "response-combinations8.txt";
 	changeNameOfFiles(responseName);
 	return 0;
 
@@ -922,7 +937,6 @@ void buildCsvFile(int size, string skeletonName)
 
 void changeNameOfFiles(string responseName)
 {
-	AllMolecularFormulas allMol_;
 	ifstream response_(responseName.c_str());
 	string line;
 	ofstream counting_("counting.csv");
@@ -933,6 +947,7 @@ void changeNameOfFiles(string responseName)
 		stringstream convert;
 		convert << line;
 		convert >> combination;
+		AllMolecularFormulas allMol_;
 		vector< vector<int> > combinationCode = allMol_.stringToNumber(combination);
 		string newCombinationName = allMol_.newCodeToString(combinationCode);
 		int systemSize = 0;
@@ -1219,5 +1234,3 @@ double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
 cout << "demorou:  " << elapsed_secs << endl;
 */
-
-

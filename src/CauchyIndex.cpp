@@ -19,6 +19,7 @@
 #include "RootMeanSquareDeviation.h"
 #include "Coordstructs.h"
 #include "AuxMath.h"
+#include "IdentifyIsomers.h"
 
 using namespace std;
 
@@ -2548,6 +2549,35 @@ void CauchyIndex::printMoleculeMolFormat(
 	}
 	printFile_ << "M  END" << endl;
 }
+
+
+void CauchyIndex::indetifyIsomer(
+	vector<int> & permutation,
+	vector<int> & atomTypes,
+	const vector<int> & bidentateAtomsChosen)
+{
+	// calcular todas as distancias interatomicas
+	// do primeiro atomo.
+	IdentifyIsomers identIso_;
+	vector<double> distances;
+
+	vector<int> atomTypes2(atomTypes.size());
+	for (size_t i = 0; i < atomTypes.size(); i++)
+		atomTypes2[i] = atomTypes[permutation[i]];
+
+	//	identIso_.calculateDistancesK(0, mol0, distances);
+	vector< vector<int> > allT1, allT2;
+	vector< vector<double> > allD1, allD2;
+	identIso_.sortAllDistances(atomTypes, mol0, allT1, allD1);
+	identIso_.sortAllDistances(atomTypes2, mol0, allT2, allD2);
+
+	identIso_.compareIsomers(atomTypes, allT1, allD1, atomTypes2, allT2, allD2);
+
+	//defining bidentate bonds
+//	vector<int> bidentateAtomsChosenRotated = applyPermutationCoordinates(permutation, atoms, bidentateAtomsChosen);
+}
+
+
 
 
 void CauchyIndex::printMoleculeFromFile(string fileName)

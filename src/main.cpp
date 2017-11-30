@@ -51,6 +51,22 @@ void buildComplexWithALotOfIsomersAndDoWater(
 	bc_.runMopacAndPrint(options, mopacExecPath, allAtoms);
 }
 
+struct vultorGroup
+{
+	int chiralProb;
+	int chiralN;
+	int achiralProb;
+	int achiralN;
+	string blockName;
+};
+
+vector<vultorGroup> setVultorGroup(
+	vector<int> &probs,
+	vector<int> &number,
+	vector<bool> &chiral);
+
+string takeLetter(int nGroup);
+
 inline bool exist_file (const std::string& name) {
   struct stat buffer;
   return (stat (name.c_str(), &buffer) == 0);
@@ -90,6 +106,7 @@ int main(int argc, char *argv[])
 	exit(0);
 	*/
 
+	/*
 	int size = 6;
 	CauchyIndex ci234(size);
 	vector<int> permutation(size);
@@ -97,6 +114,7 @@ int main(int argc, char *argv[])
 	vector<int> bidChosen;
 	ci234.indetifyIsomer(permutation, atomTypes, bidChosen);
 	exit(1);
+	*/
 
 	string responseName;
 	cout << "type line: " << endl;
@@ -962,7 +980,86 @@ void changeNameOfFiles(string responseName)
 		ifstream isomerFile_((("final-") + combination).c_str());
 		string isomerLine;
 
-		// sum up weights
+		// sum up weights --- > get vultors groups
+		// o grupo de vultor e definido pelos de mesma provabilidade
+		// quando tem isomeros, tem q somar a probabilidade dos dois isomeros
+		vector<int> vultorGroupProbs;
+		vector<int> vultorGroupCounting;
+		vector<bool> vultorGroupChirality; // true is chiral
+		while (!isomerFile_.eof())
+		{
+			getline(isomerFile_, isomerLine);
+			if (isomerLine == "")
+				break;
+
+			stringstream convertWeights;
+			int auxWeight1, auxWeight2;
+			convertWeights << isomerLine;
+			convertWeights >> auxWeight1;
+			auxWeight1++;
+			getline(isomerFile_, isomerLine);
+			if (isomerLine == "")
+			{
+				// not chiral
+				// find value
+				bool found = false;
+				for (size_t i = 0; i < vultorGroupProbs.size(); i++)
+				{
+					if ((auxWeight1 == vultorGroupProbs[i]) && (!vultorGroupChirality[i]))
+					{
+						vultorGroupCounting[i]++;
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+				{
+					vultorGroupProbs.push_back(auxWeight1);
+					vultorGroupCounting.push_back(1);
+					vultorGroupChirality.push_back(false);
+				}
+			}
+			else
+			{
+				stringstream convertW2;
+				convertW2 << isomerLine;
+				convertW2 >> auxWeight2;
+				auxWeight2++;
+				//chiral
+				getline(isomerFile_, isomerLine);
+				if (isomerLine != "")
+				{
+					cout << "ERROR ON CHANGE NAMES - EMPTY LINE EXPECTED" << endl;
+					exit(1);
+				}
+
+				bool found = false;
+				int totalWeight = auxWeight1 + auxWeight2;
+				for (size_t i = 0; i < vultorGroupProbs.size(); i++)
+				{
+					if ((totalWeight == vultorGroupProbs[i]) && (!vultorGroupChirality[i]))
+					{
+						vultorGroupCounting[i]++;
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+				{
+					vultorGroupProbs.push_back(totalWeight);
+					vultorGroupCounting.push_back(1);
+					vultorGroupChirality.push_back(true);
+				}
+			}
+		}
+		isomerFile_.close();
+
+		vector<vultorGroup> groups = setVultorGroup(
+			vultorGroupProbs,
+			vultorGroupCounting,
+			vultorGroupChirality);
+
+		/*ANTIGO so conta os isomeros
 		int nWeights = 0;
 		while (!isomerFile_.eof())
 		{
@@ -976,6 +1073,8 @@ void changeNameOfFiles(string responseName)
 			nWeights += (auxWeight + 1);
 		}
 		isomerFile_.close();
+		*/
+
 		isomerFile_.open((("final-") + combination).c_str());
 
 		int totalChiral = 0;
@@ -1021,8 +1120,8 @@ void changeNameOfFiles(string responseName)
 				newFile_ << " " << notation1[i];
 			newFile_ << "] ";
 
-			newFile_ << fixed << setprecision(2)
-				<< (100.0e0 * (double)(auxWeight + 1) / (double)nWeights) << "% ";
+			//newFile_ << fixed << setprecision(2)
+			//	<< (100.0e0 * (double)(auxWeight + 1) / (double)nWeights) << "% ";
 			if (!chiral)
 			{
 				newFile_ << "A}" << endl << endl;
@@ -1047,8 +1146,8 @@ void changeNameOfFiles(string responseName)
 				for (size_t i = 1; i < notation2.size(); i++)
 					newFile_ << " " << notation2[i];
 				newFile_ << "] ";
-				newFile_ << fixed << setprecision(2)
-					<< (100.0e0 * (double)(auxWeight + 1) / (double)nWeights) << "% ";
+				//newFile_ << fixed << setprecision(2)
+				//	<< (100.0e0 * (double)(auxWeight + 1) / (double)nWeights) << "% ";
 				newFile_ << "C}" << endl;
 			}
 
@@ -1056,6 +1155,151 @@ void changeNameOfFiles(string responseName)
 		counting_ << newCombinationName << " ; " << totalChiral << "; " << totalAchiral << endl;
 	}
 }
+
+vector<vultorGroup> setVultorGroup(
+	vector<int> &probs,
+	vector<int> &number,
+	vector<bool> &chiral)
+{
+	vector<vultorGroup> wholeGroup;
+	AuxMath auxMath_;
+	vector<int> instruct = auxMath_.vector_ordering(probs);
+	auxMath_.vector_ordering_with_instructions(number, instruct);
+	auxMath_.vector_ordering_with_instructions(chiral, instruct);
+	int k = 0;
+	for (size_t i = 0; i < probs.size(); i++)
+	{
+		vultorGroup newLetter;
+		newLetter.blockName = takeLetter(k);
+		k++;
+		if (i + 1 == probs.size())
+		{
+			if (chiral[i])
+			{
+				newLetter.achiralN = 0;
+				newLetter.achiralProb = 0;
+				newLetter.chiralN = number[i];
+				newLetter.chiralProb = probs[i];
+			}
+			else
+			{
+				newLetter.achiralN = number[i];
+				newLetter.achiralProb = probs[i];
+				newLetter.chiralN = 0;
+				newLetter.chiralProb = 0;
+			}
+		}
+		else
+		{
+			//check next to see if probability is equal.
+			if (probs[i] == probs[i + 1])
+			{
+				if (chiral[i])
+				{
+					newLetter.achiralN = number[i+1];
+					newLetter.achiralProb = probs[i+1];
+					newLetter.chiralN = number[i];
+					newLetter.chiralProb = probs[i];
+					i++;
+				}
+				else
+				{
+					newLetter.achiralN = number[i];
+					newLetter.achiralProb = probs[i];
+					newLetter.chiralN = number[i + 1];
+					newLetter.chiralProb = probs[i + 1];
+					i++;
+				}				
+			}
+			else
+			{
+
+				if (chiral[i])
+				{
+					newLetter.achiralN = 0;
+					newLetter.achiralProb = 0;
+					newLetter.chiralN = number[i];
+					newLetter.chiralProb = probs[i];
+				}
+				else
+				{
+					newLetter.achiralN = number[i];
+					newLetter.achiralProb = probs[i];
+					newLetter.chiralN = 0;
+					newLetter.chiralProb = 0;
+				}
+			}
+		}
+		wholeGroup.push_back(newLetter);
+	}
+
+	return wholeGroup;
+}
+
+string takeLetter(int nGroup)
+{
+	switch(nGroup)
+	{
+	case 0:
+		return "A";
+	case 1:
+		return "B";
+	case 2:
+		return "C";
+	case 3:
+		return "D";
+	case 4:
+		return "E";
+	case 5:
+		return "F";
+	case 6:
+		return "G";
+	case 7:
+		return "H";
+	case 8:
+		return "I";
+	case 9:
+		return "J";
+	case 10:
+		return "K";
+	case 11:
+		return "L";
+	case 12:
+		return "M";
+	case 13:
+		return "N";
+	case 14:
+		return "O";
+	case 15:
+		return "P";
+	case 16:
+		return "Q";
+	case 17:
+		return "R";
+	case 18:
+		return "S";
+	case 19:
+		return "T";
+	case 20:
+		return "U";
+	case 21:
+		return "V";
+	case 22:
+		return "W";
+	case 23:
+		return "X";
+	case 24:
+		return "Y";
+	case 25:
+		return "Z";
+	default:
+		cout << "ERROR ON takeLetter" << endl;
+		exit(1);
+		break;
+	}
+	return "";
+}
+
 
 
 string sizeToGeometryCode(int size)

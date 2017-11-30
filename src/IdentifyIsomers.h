@@ -17,7 +17,8 @@ public:
 		std::vector<int> &atomTypes,
 		std::vector<int> &permutation,
 		std::vector<CoordXYZ> &mol0,
-		std::string fileName);
+		std::vector<int> &composition,
+		std::vector<CoordXYZ> & outGeometry);
 
 	void compareTwoPermutations(
 		std::vector<int> &atomTypes,

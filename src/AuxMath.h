@@ -21,8 +21,15 @@ public:
 	std::vector<double> normalVectorFrom3Points(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3);
 	std::vector<double> triangleCentroid(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3);
 	double angleFrom3Points(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3);
-
 	double escalarProduct(double x1, double y1, double z1, double x2, double y2, double z2);
+
+	// decrescent
+	std::vector<int> vector_ordering(std::vector<double> &vetor_entrada);
+	std::vector<int> vector_ordering(std::vector<int> &vetor_entrada);
+	void vector_ordering_with_instructions(std::vector<int> &vetor_entrada, const std::vector<int> &vetor_organiza);
+	void vector_ordering_with_instructions(std::vector<bool> &vetor_entrada, const std::vector<int> &vetor_organiza);
+	void vector_ordering_with_instructions(std::vector< std::vector<double> > &vetor_entrada, const std::vector<int> &vetor_organiza);
+
 
 };
 

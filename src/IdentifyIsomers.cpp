@@ -27,13 +27,61 @@ void IdentifyIsomers::test(vector<CoordXYZ> &mol0)
 	atomTypes[4] = 0;
 	atomTypes[5] = 1;
 
-	string p1 = "0 1 2 3 4 5";
 	string file = "test-identify.xyz";
+	vector<int> composition(atomTypes.size());
+	vector<CoordXYZ> outGeometry = readGeometry(file, composition);
+
+	string p1;
+	p1 = "0 1 2 3 4 5";
 	compareGeometryPermutation(
 		atomTypes,
 		stringToPermutation(p1,atomTypes.size()),
 		mol0,
-		file);
+		composition,
+		outGeometry);
+	p1 = "0 1 4 3 2 5";
+	compareGeometryPermutation(
+		atomTypes,
+		stringToPermutation(p1, atomTypes.size()),
+		mol0,
+		composition,
+		outGeometry);
+	p1 = "0 1 3 4 2 5";
+	compareGeometryPermutation(
+		atomTypes,
+		stringToPermutation(p1, atomTypes.size()),
+		mol0,
+		composition,
+		outGeometry);
+	p1 = "0 1 3 5 4 2";
+	compareGeometryPermutation(
+		atomTypes,
+		stringToPermutation(p1, atomTypes.size()),
+		mol0,
+		composition,
+		outGeometry);
+	p1 = "0 2 3 4 5 1";
+	compareGeometryPermutation(
+		atomTypes,
+		stringToPermutation(p1, atomTypes.size()),
+		mol0,
+		composition,
+		outGeometry);
+	p1 = "0 1 2 4 3 5";
+	compareGeometryPermutation(
+		atomTypes,
+		stringToPermutation(p1, atomTypes.size()),
+		mol0,
+		composition,
+		outGeometry);
+
+
+
+
+
+
+
+
 	/*
 	string p1 = "5 3 1 2 4 6 0";
 	string p2;
@@ -61,7 +109,8 @@ void IdentifyIsomers::compareGeometryPermutation(
 	vector<int> &atomTypes,
 	vector<int> &permutation,
 	vector<CoordXYZ> &mol0,
-	string fileName)
+	vector<int> &composition,
+	vector<CoordXYZ> &outGeometry)
 {
 	vector< vector<int> > allT1, allT2;
 	vector< vector<double> > allD1, allD2;
@@ -73,10 +122,7 @@ void IdentifyIsomers::compareGeometryPermutation(
 	}
 	sortAllDistances(atomTypes1, mol0, allT1, allD1);
 
-	// precisa do tipo e do mol0 MUDAR
-	vector<int> composition(atomTypes.size());
-	vector<CoordXYZ> geometry = readGeometry(fileName, composition);
-	sortAllDistances(composition, geometry, allT2, allD2);
+	sortAllDistances(composition, outGeometry, allT2, allD2);
 
 	vector<int> connect;
 	vector<double> dist;
@@ -398,6 +444,10 @@ std::vector<CoordXYZ> IdentifyIsomers::readGeometry(std::string fileName, std::v
 			(geometry[i].x * geometry[i].x)
 			+ (geometry[i].y * geometry[i].y)
 			+ (geometry[i].z * geometry[i].z));
+		geometry[i].x /= r;
+		geometry[i].y /= r;
+		geometry[i].z /= r;
+
 	}
 	readG_.close();
 	return geometry;

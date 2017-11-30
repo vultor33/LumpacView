@@ -141,3 +141,138 @@ double AuxMath::escalarProduct(double x1, double y1, double z1, double x2, doubl
 }
 
 
+vector<int> AuxMath::vector_ordering(vector<double> &vetor_entrada)
+{
+	int tamanho_vetor = vetor_entrada.size();
+	vector<int> operacoes_organizam;
+
+	double aux_menor;
+	int aux_pos_menor;
+	for (int i = 0; i < (tamanho_vetor - 1); i++)
+	{
+
+		aux_menor = vetor_entrada[i];
+		aux_pos_menor = i;
+		for (int j = i + 1; j < tamanho_vetor; j++)
+		{
+			if (aux_menor < vetor_entrada[j])
+			{
+				aux_menor = vetor_entrada[j];
+				aux_pos_menor = j;
+			}
+		}
+
+		// Se nao, nem precisa anotar a troca.
+		if (aux_pos_menor != i)
+		{
+			vetor_entrada[aux_pos_menor] = vetor_entrada[i];
+			vetor_entrada[i] = aux_menor;
+			operacoes_organizam.push_back(i);
+			operacoes_organizam.push_back(aux_pos_menor);
+		}
+
+	}
+
+	// Nessa saida esta gravado todas as informacoes que foram feitas para organizar
+	// o vetor;
+	return operacoes_organizam;
+}
+
+vector<int> AuxMath::vector_ordering(vector<int> &vetor_entrada)
+{
+	int tamanho_vetor = vetor_entrada.size();
+	vector<int> operacoes_organizam;
+
+	int aux_menor;
+	int aux_pos_menor;
+	for (int i = 0; i < (tamanho_vetor - 1); i++)
+	{
+		aux_menor = vetor_entrada[i];
+		aux_pos_menor = i;
+		for (int j = i + 1; j < tamanho_vetor; j++)
+		{
+			if (aux_menor < vetor_entrada[j])
+			{
+				aux_menor = vetor_entrada[j];
+				aux_pos_menor = j;
+			}
+		}
+
+		// Se nao, nem precisa anotar a troca.
+		if (aux_pos_menor != i)
+		{
+			vetor_entrada[aux_pos_menor] = vetor_entrada[i];
+			vetor_entrada[i] = aux_menor;
+			operacoes_organizam.push_back(i);
+			operacoes_organizam.push_back(aux_pos_menor);
+		}
+
+	}
+
+	// Nessa saida esta gravado todas as informacoes que foram feitas para organizar
+	// o vetor;
+	return operacoes_organizam;
+}
+
+
+
+// Rotina que organiza os autovetores em ordem crescente de autovalores.
+void AuxMath::vector_ordering_with_instructions(vector< vector<double> > &vetor_entrada, const vector<int> &vetor_organiza)
+{
+	int tamanho_vetor_organiza = vetor_organiza.size();
+	int tamanho_vetor_entrada = vetor_entrada.size();
+	int aux_pos1, aux_pos2;
+	double aux_primeiro;
+
+	for (int i = 0; i<tamanho_vetor_organiza; i += 2)
+	{
+		// o primeiro e igual ao segundo e o segundo e igual ao primeiro.
+		aux_pos1 = vetor_organiza[i];
+		aux_pos2 = vetor_organiza[i + 1];
+		for (int j = 0; j < tamanho_vetor_entrada; j++)
+		{
+			aux_primeiro = vetor_entrada[j][aux_pos1];
+			vetor_entrada[j][aux_pos1] = vetor_entrada[j][aux_pos2];
+			vetor_entrada[j][aux_pos2] = aux_primeiro;
+		}
+	}
+
+}
+
+void AuxMath::vector_ordering_with_instructions(vector<int> &vetor_entrada, const vector<int> &vetor_organiza)
+{
+	int tamanho_vetor_organiza = vetor_organiza.size();
+	int tamanho_vetor_entrada = vetor_entrada.size();
+	int aux_pos1, aux_pos2;
+	int aux_primeiro;
+
+	for (int i = 0; i<tamanho_vetor_organiza; i += 2)
+	{
+		// o primeiro e igual ao segundo e o segundo e igual ao primeiro.
+		aux_pos1 = vetor_organiza[i];
+		aux_pos2 = vetor_organiza[i + 1];
+		aux_primeiro = vetor_entrada[aux_pos1];
+		vetor_entrada[aux_pos1] = vetor_entrada[aux_pos2];
+		vetor_entrada[aux_pos2] = aux_primeiro;
+	}
+}
+
+void AuxMath::vector_ordering_with_instructions(vector<bool> &vetor_entrada, const vector<int> &vetor_organiza)
+{
+	int tamanho_vetor_organiza = vetor_organiza.size();
+	int tamanho_vetor_entrada = vetor_entrada.size();
+	int aux_pos1, aux_pos2;
+	bool aux_primeiro;
+
+	for (int i = 0; i<tamanho_vetor_organiza; i += 2)
+	{
+		// o primeiro e igual ao segundo e o segundo e igual ao primeiro.
+		aux_pos1 = vetor_organiza[i];
+		aux_pos2 = vetor_organiza[i + 1];
+		aux_primeiro = vetor_entrada[aux_pos1];
+		vetor_entrada[aux_pos1] = vetor_entrada[aux_pos2];
+		vetor_entrada[aux_pos2] = aux_primeiro;
+	}
+}
+
+

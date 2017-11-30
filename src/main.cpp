@@ -24,6 +24,7 @@
 #include "DoAllPermutations.h"
 #include "AllMolecularFormulas.h"
 #include "CauchyIndex.h"
+#include "ChangeNames.h"
 
 using namespace std;
 
@@ -51,7 +52,7 @@ void buildComplexWithALotOfIsomersAndDoWater(
 	bc_.runMopacAndPrint(options, mopacExecPath, allAtoms);
 }
 
-struct vultorGroup
+struct vultorGroup2
 {
 	int chiralProb;
 	int chiralN;
@@ -60,12 +61,14 @@ struct vultorGroup
 	string blockName;
 };
 
-vector<vultorGroup> setVultorGroup(
+vector<vultorGroup2> setVultorGroup(
 	vector<int> &probs,
 	vector<int> &number,
 	vector<bool> &chiral);
 
 string takeLetter(int nGroup);
+
+vultorGroup2 findVultorGroup(int prob, vector<vultorGroup2> &group);
 
 inline bool exist_file (const std::string& name) {
   struct stat buffer;
@@ -120,7 +123,9 @@ int main(int argc, char *argv[])
 	cout << "type line: " << endl;
 	//cin >> responseName;
 	responseName = "response-combinations8.txt";
-	changeNameOfFiles(responseName);
+	ChangeNames chNames_;
+	chNames_.changeNameOfFiles(responseName);
+	//changeNameOfFiles(responseName);
 	return 0;
 
 	clock_t begin = clock();
@@ -1054,7 +1059,7 @@ void changeNameOfFiles(string responseName)
 		}
 		isomerFile_.close();
 
-		vector<vultorGroup> groups = setVultorGroup(
+		vector<vultorGroup2> groups = setVultorGroup(
 			vultorGroupProbs,
 			vultorGroupCounting,
 			vultorGroupChirality);
@@ -1117,20 +1122,21 @@ void changeNameOfFiles(string responseName)
 				<< "{" << geomName << " "
 				<< "[" << notation1[0];
 			for (size_t i = 1; i < notation1.size(); i++)
-				newFile_ << " " << notation1[i];
+				newFile_ << " " << (notation1[i] + 1);
 			newFile_ << "] ";
 
-			//newFile_ << fixed << setprecision(2)
-			//	<< (100.0e0 * (double)(auxWeight + 1) / (double)nWeights) << "% ";
+
 			if (!chiral)
 			{
-				newFile_ << "A}" << endl << endl;
+				vultorGroup2 thisGroup = findVultorGroup(auxWeight + 1, groups);
+				newFile_ << thisGroup.blockName << "a}" << endl << endl;
 				totalAchiral++;
 			}
 			else
 			{
+				vultorGroup2 thisGroup = findVultorGroup(2 * (auxWeight + 1), groups);
 				totalChiral++;
-				newFile_ << "C}" << endl;
+				newFile_ << thisGroup.blockName << "c}" << endl;
 				stringstream convertLine2;
 				int auxWeight2;
 				convertLine2 << isomerLine2;
@@ -1144,24 +1150,34 @@ void changeNameOfFiles(string responseName)
 					<< "{" << geomName << " "
 					<< "[" << notation2[0];
 				for (size_t i = 1; i < notation2.size(); i++)
-					newFile_ << " " << notation2[i];
+					newFile_ << " " << (notation2[i] + 1);
 				newFile_ << "] ";
-				//newFile_ << fixed << setprecision(2)
-				//	<< (100.0e0 * (double)(auxWeight + 1) / (double)nWeights) << "% ";
-				newFile_ << "C}" << endl;
+				newFile_ << thisGroup.blockName << "c}" << endl;
 			}
-
 		}
 		counting_ << newCombinationName << " ; " << totalChiral << "; " << totalAchiral << endl;
+		counting_ << endl << endl;
+		for (size_t i = 0; i < groups.size(); i++)
+		{
+			counting_ << groups[i].blockName << "c ; "
+				<< groups[i].chiralN << " ; "
+				<< groups[i].chiralProb << " ; "
+				<< groups[i].blockName << "a ; "
+				<< groups[i].achiralN << " ; "
+				<< groups[i].achiralProb << endl;
+		}
 	}
+
+
+
 }
 
-vector<vultorGroup> setVultorGroup(
+vector<vultorGroup2> setVultorGroup(
 	vector<int> &probs,
 	vector<int> &number,
 	vector<bool> &chiral)
 {
-	vector<vultorGroup> wholeGroup;
+	vector<vultorGroup2> wholeGroup;
 	AuxMath auxMath_;
 	vector<int> instruct = auxMath_.vector_ordering(probs);
 	auxMath_.vector_ordering_with_instructions(number, instruct);
@@ -1169,7 +1185,7 @@ vector<vultorGroup> setVultorGroup(
 	int k = 0;
 	for (size_t i = 0; i < probs.size(); i++)
 	{
-		vultorGroup newLetter;
+		vultorGroup2 newLetter;
 		newLetter.blockName = takeLetter(k);
 		k++;
 		if (i + 1 == probs.size())
@@ -1298,6 +1314,22 @@ string takeLetter(int nGroup)
 		break;
 	}
 	return "";
+}
+
+vultorGroup2 findVultorGroup(int prob, vector<vultorGroup2> &group)
+{
+	for (size_t i = 0; i < group.size(); i++)
+	{
+		if (
+			(group[i].achiralProb == prob) ||
+			(group[i].chiralProb == prob))
+		{
+			return group[i];
+		}
+	}
+	cout << "findVultorGroup not found" << endl;
+	exit(1);
+	return group[0];
 }
 
 

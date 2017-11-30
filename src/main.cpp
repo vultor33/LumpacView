@@ -90,21 +90,13 @@ int main(int argc, char *argv[])
 	exit(0);
 	*/
 
-	CauchyIndex ci234(6);
-	vector<int> permutation(6);
-	vector<int> atomTypes(6);
-	for (int i = 0; i < 6; i++)
-	{
-		permutation[i] = i;
-		atomTypes[i] = i;
-	}
-	atomTypes[1] = 0;
-	atomTypes[2] = 0;
-	atomTypes[3] = 0;
-	permutation[4] = 1;
-	permutation[1] = 4;
+	int size = 6;
+	CauchyIndex ci234(size);
+	vector<int> permutation(size);
+	vector<int> atomTypes(size);
 	vector<int> bidChosen;
 	ci234.indetifyIsomer(permutation, atomTypes, bidChosen);
+	exit(1);
 
 	string responseName;
 	cout << "type line: " << endl;

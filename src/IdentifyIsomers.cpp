@@ -1,8 +1,12 @@
 #include "IdentifyIsomers.h"
 
+#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <string>
+#include <sstream>
+#include <fstream>
 
 #include "Coordstructs.h"
 
@@ -11,6 +15,107 @@ using namespace std;
 IdentifyIsomers::IdentifyIsomers(){}
 
 IdentifyIsomers::~IdentifyIsomers(){}
+
+void IdentifyIsomers::test(vector<CoordXYZ> &mol0)
+{
+	size_t size = mol0.size();
+	vector<int> atomTypes(size);
+	atomTypes[0] = 2;
+	atomTypes[1] = 0;
+	atomTypes[2] = 2;
+	atomTypes[3] = 1;
+	atomTypes[4] = 0;
+	atomTypes[5] = 1;
+
+	string p1 = "0 1 2 3 4 5";
+	string file = "test-identify.xyz";
+	compareGeometryPermutation(
+		atomTypes,
+		stringToPermutation(p1,atomTypes.size()),
+		mol0,
+		file);
+	/*
+	string p1 = "5 3 1 2 4 6 0";
+	string p2;
+	p2 = "0 1 2 3 4 5 6";
+	compareTwoPermutations(atomTypes, p1, p2, mol0);
+	p2 = "0 4 3 2 1 5 6";
+	compareTwoPermutations(atomTypes, p1, p2, mol0);
+	p2 = "0 2 6 1 4 5 3";
+	compareTwoPermutations(atomTypes, p1, p2, mol0);
+	p2 = "0 4 1 6 2 5 3";
+	compareTwoPermutations(atomTypes, p1, p2, mol0);
+	p2 = "3 1 5 4 2 6 0";
+	compareTwoPermutations(atomTypes, p1, p2, mol0);
+	p2 = "0 1 6 2 5 4 3";
+	compareTwoPermutations(atomTypes, p1, p2, mol0);
+	p2 = "0 2 6 1 5 4 3";
+	compareTwoPermutations(atomTypes, p1, p2, mol0);
+	p2 = "1 3 2 4 5 0 6";
+	compareTwoPermutations(atomTypes, p1, p2, mol0);
+	*/
+
+}
+
+void IdentifyIsomers::compareGeometryPermutation(
+	vector<int> &atomTypes,
+	vector<int> &permutation,
+	vector<CoordXYZ> &mol0,
+	string fileName)
+{
+	vector< vector<int> > allT1, allT2;
+	vector< vector<double> > allD1, allD2;
+	size_t size = atomTypes.size();
+	vector<int> atomTypes1(size);
+	for (size_t i = 0; i < atomTypes.size(); i++)
+	{
+		atomTypes1[i] = atomTypes[permutation[i]];
+	}
+	sortAllDistances(atomTypes1, mol0, allT1, allD1);
+
+	// precisa do tipo e do mol0 MUDAR
+	vector<int> composition(atomTypes.size());
+	vector<CoordXYZ> geometry = readGeometry(fileName, composition);
+	sortAllDistances(composition, geometry, allT2, allD2);
+
+	vector<int> connect;
+	vector<double> dist;
+	compareIsomers(
+		atomTypes1,
+		allT1,
+		allD1,
+		composition,
+		allT2,
+		allD2,
+		connect,
+		dist);
+
+	cout << "permutation: ";
+	double totalDist = 0.0e0;
+	for (size_t i = 0; i < permutation.size(); i++)
+	{
+		cout << permutation[i] << " ";
+		totalDist += dist[i];
+	}
+	cout << "dist: " << totalDist << endl;
+
+
+}
+
+
+void IdentifyIsomers::compareTwoPermutations(
+	std::vector<int> &atomTypes,
+	std::string &permutation1,
+	std::string &permutation2,
+	std::vector<CoordXYZ> &mol0)
+{
+	compareTwoPermutations(
+		atomTypes,
+		stringToPermutation(permutation1, mol0.size()),
+		stringToPermutation(permutation2, mol0.size()),
+		mol0);
+}
+
 
 void IdentifyIsomers::compareTwoPermutations(
 	vector<int> &atomTypes,
@@ -41,6 +146,15 @@ void IdentifyIsomers::compareTwoPermutations(
 		allD2,
 		connect,
 		dist);
+
+	cout << "permutation: ";
+	double totalDist = 0.0e0;
+	for (size_t i = 0; i < permutation2.size(); i++)
+	{
+		cout << permutation2[i] << " ";
+		totalDist += dist[i];
+	}
+	cout << "dist: " << totalDist << endl;
 
 
 }
@@ -190,12 +304,13 @@ void IdentifyIsomers::sortDistancesK(
 	{
 		int smallest = indexofSmallestElement(tempDistances);
 		//add to new vectors
+		int smallestType = reducedTypes[smallest];
 		sortedDistances.push_back(tempDistances[smallest]);
 		sortedTypes.push_back(reducedTypes[smallest]);
 		//erase
 		tempDistances.erase(tempDistances.begin() + smallest);
 		reducedTypes.erase(reducedTypes.begin() + smallest);
-		insertSortedType(atomTypes[smallest], reducedTypes, tempDistances, sortedTypes, sortedDistances);
+		insertSortedType(smallestType, reducedTypes, tempDistances, sortedTypes, sortedDistances);
 	}
 
 }
@@ -243,4 +358,50 @@ int IdentifyIsomers::indexofSmallestElement(vector<double> & vector)
 			index = i;
 	}
 	return index;
+}
+
+
+vector<int> IdentifyIsomers::stringToPermutation(string entryString, size_t size)
+{
+	stringstream convert;
+	convert << entryString;
+	vector<int> permutation(size);
+	for (size_t i = 0; i < size; i++)
+	{
+		convert >> permutation[i];
+	}
+	return permutation;
+
+
+
+
+}
+
+std::vector<CoordXYZ> IdentifyIsomers::readGeometry(std::string fileName, std::vector<int> &composition)
+{
+	ifstream readG_(fileName.c_str());
+	string line;
+	getline(readG_, line);
+	getline(readG_, line);
+	vector<CoordXYZ> geometry(composition.size());
+	for(size_t i = 0; i < composition.size(); i++)
+	{
+		getline(readG_, line);
+		stringstream convert;
+		convert << line;
+		convert >> composition[i]
+			>> geometry[i].x
+			>> geometry[i].y
+			>> geometry[i].z;
+
+		double r = sqrt(
+			(geometry[i].x * geometry[i].x)
+			+ (geometry[i].y * geometry[i].y)
+			+ (geometry[i].z * geometry[i].z));
+	}
+	readG_.close();
+	return geometry;
+
+
+
 }

@@ -2,6 +2,7 @@
 #define IDENTIFYISOMERS_H
 
 #include <vector>
+#include <string>
 #include "Coordstructs.h"
 
 class IdentifyIsomers
@@ -10,13 +11,27 @@ public:
 	IdentifyIsomers();
 	~IdentifyIsomers();
 
+	void test(std::vector<CoordXYZ> & mol0);
+
+	void compareGeometryPermutation(
+		std::vector<int> &atomTypes,
+		std::vector<int> &permutation,
+		std::vector<CoordXYZ> &mol0,
+		std::string fileName);
+
+	void compareTwoPermutations(
+		std::vector<int> &atomTypes,
+		std::string &permutation1,
+		std::string &permutation2,
+		std::vector<CoordXYZ> &mol0);
+
+private:
 	void compareTwoPermutations(
 		std::vector<int> &atomTypes,
 		std::vector<int> &permutation1,
 		std::vector<int> &permutation2,
 		std::vector<CoordXYZ> &mol0);
 
-private:
 	int indexofSmallestElement(std::vector<double> &vector);
 
 	void insertSortedType(
@@ -61,6 +76,10 @@ private:
 		std::vector<CoordXYZ> &mol0,
 		std::vector<int> &sortedTypes,
 		std::vector<double> &sortedDistances);
+
+	std::vector<int> stringToPermutation(std::string entryString, size_t size);
+
+	std::vector<CoordXYZ> readGeometry(std::string fileName, std::vector<int> &composition);
 
 };
 

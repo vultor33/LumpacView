@@ -2559,8 +2559,10 @@ void CauchyIndex::indetifyIsomer(
 	// calcular todas as distancias interatomicas
 	// do primeiro atomo.
 	IdentifyIsomers identIso_;
-	vector<double> distances;
+	identIso_.test(mol0);
 
+	/*
+	vector<double> distances;
 	for (size_t i = 0; i < atomTypes.size(); i++)
 	{
 		atomTypes[i] = i;
@@ -2572,14 +2574,19 @@ void CauchyIndex::indetifyIsomer(
 	atomTypes[3] = 5;
 	atomTypes[4] = 4;
 	atomTypes[5] = 2;
-	vector<int> permutation0 = permutation;
-	permutation0[0] = 0;
-	permutation0[1] = 2;
-	permutation0[2] = 3;
-	permutation0[3] = 4;
-	permutation0[4] = 1;
-	permutation0[5] = 5;
-	identIso_.compareTwoPermutations(atomTypes, permutation, permutation0, mol0);
+	string p1 = "0 1 2 3 4 5";
+	string p2 = "0 2 3 4 1 5";
+	// identIso_.compareTwoPermutations(atomTypes, p1, p2, mol0);
+	vector<string> atoms(6);
+	atoms[0] = "H";
+	atoms[1] = "Li";
+	atoms[2] = "Na";
+	atoms[3] = "C";
+	atoms[4] = "N";
+	atoms[5] = "O";
+	vector<int> bid;
+	rotationTest(atoms, bid);
+	*/
 
 	//identIso_.compareIsomers(atomTypes, allT1, allD1, atomTypes2, allT2, allD2);
 

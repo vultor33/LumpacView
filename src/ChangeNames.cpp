@@ -24,6 +24,8 @@ void ChangeNames::changeNameOfFiles(string responseName)
 	while (!response_.eof())
 	{
 		getline(response_, line);
+		if (line == "")
+			break;
 		string combination;
 		stringstream convert;
 		convert << line;
@@ -288,6 +290,7 @@ void ChangeNames::calculateVultorGroup(
 		}
 		else
 		{
+			//chiral
 			stringstream convertW2;
 			convertW2 << isomerLine;
 			convertW2 >> auxWeight2;
@@ -304,7 +307,7 @@ void ChangeNames::calculateVultorGroup(
 			int totalWeight = auxWeight1 + auxWeight2;
 			for (size_t i = 0; i < vultorGroupProbs.size(); i++)
 			{
-				if ((totalWeight == vultorGroupProbs[i]) && (!vultorGroupChirality[i]))
+				if ((totalWeight == vultorGroupProbs[i]) && (vultorGroupChirality[i]))
 				{
 					vultorGroupCounting[i]++;
 					found = true;
@@ -480,10 +483,13 @@ string ChangeNames::generateNewTypeLine(string &combination, int systemSize)
 	{
 		convert2 << composition[i] + 1  << "  ";
 	}
-	convert2 << "/  ";
-	for (int i = 0; i < bidentates.size(); i++)
+	if (bidentates.size() != 0)
 	{
-		convert2 << bidentates[i] + 1 << "  ";
+		convert2 << "/  ";
+		for (int i = 0; i < bidentates.size(); i++)
+		{
+			convert2 << bidentates[i] + 1 << "  ";
+		}
 	}
 	return convert2.str();
 }

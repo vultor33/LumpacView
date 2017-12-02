@@ -51,11 +51,9 @@ public:
 		const std::vector<int> & bidentateAtomsChosen,
 		std::ofstream & printFile_);
 
-	void indetifyIsomer(
-		std::vector<int> & permutation,
-		std::vector<int> & atomTypes,
-		const std::vector<int> & bidentateAtomsChosen);
-
+	void identifyIsomer(
+		std::string permutationsFile,
+		std::string coordinatesFile);
 
 	void printMoleculeFromFile(std::string fileName);
 

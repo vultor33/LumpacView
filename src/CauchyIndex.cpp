@@ -2551,15 +2551,17 @@ void CauchyIndex::printMoleculeMolFormat(
 }
 
 
-void CauchyIndex::indetifyIsomer(
-	vector<int> & permutation,
-	vector<int> & atomTypes,
-	const vector<int> & bidentateAtomsChosen)
+void CauchyIndex::identifyIsomer(
+	string permutationsFile,
+	string coordinatesFile)
 {
 	// calcular todas as distancias interatomicas
 	// do primeiro atomo.
 	IdentifyIsomers identIso_;
-	identIso_.test(mol0);
+	identIso_.coordinatesToPermutation(
+		mol0,
+		permutationsFile,
+		coordinatesFile);
 
 	/*
 	vector<double> distances;

@@ -82,16 +82,18 @@ int main(int argc, char *argv[])
 	exit(0);
 	*/
 
-	/*
-	int size = 6;
-	CauchyIndex ci234(size);
-	vector<int> permutation(size);
-	vector<int> atomTypes(size);
-	vector<int> bidChosen;
-	ci234.indetifyIsomer(permutation, atomTypes, bidChosen);
-	exit(1);
-	*/
+	// Na hora de realizar uma reacao quimica, os pesos deveriam ser levados em consideracao. Entropia, mais graus de liberdade. Graus de liberdade degenerados.
+	// Na quimica organica deveria ter pesos. 
 
+	int size = 8;
+	CauchyIndex ci234(size);
+	ci234.identifyIsomer(
+		"SAPR-8-M01M01M02M02M02M02M02M02.csv",
+		"GAKYUM.xyz");
+
+	return 0;
+
+	/*
 	string responseName;
 	cout << "type line: " << endl;
 	cin >> responseName;
@@ -99,7 +101,7 @@ int main(int argc, char *argv[])
 	ChangeNames chNames_;
 	chNames_.changeNameOfFiles(responseName);
 	return 0;
-
+	*/
 	clock_t begin = clock();
 
 	//CauchyIndex ci123_(10);

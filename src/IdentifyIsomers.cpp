@@ -7,8 +7,10 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 
 #include "Coordstructs.h"
+#include "IsomersToMol.h"
 
 using namespace std;
 
@@ -16,101 +18,65 @@ IdentifyIsomers::IdentifyIsomers(){}
 
 IdentifyIsomers::~IdentifyIsomers(){}
 
-void IdentifyIsomers::test(vector<CoordXYZ> &mol0)
+void IdentifyIsomers::coordinatesToPermutation(
+	vector<CoordXYZ> &mol0,
+	string permutationsFile,
+	string coordinatesFile)
 {
+	IsomersToMol isoMol_;
+	vector<int> atomTypes;
+	vector<int> bidentateChosen;
+	vector<string> allPerm = isoMol_.readAllPermutations(
+		permutationsFile, 
+		atomTypes,
+		bidentateChosen);
+
 	size_t size = mol0.size();
-	vector<int> atomTypes(size);
-	atomTypes[0] = 2;
-	atomTypes[1] = 0;
-	atomTypes[2] = 2;
-	atomTypes[3] = 1;
-	atomTypes[4] = 0;
-	atomTypes[5] = 1;
-
-	string file = "test-identify.xyz";
+	string file = coordinatesFile;
 	vector<int> composition(atomTypes.size());
-	vector<CoordXYZ> outGeometry = readGeometry(file, composition);
+	vector<int> bidentateGeometry;
+	vector<CoordXYZ> outGeometry = readGeometry(
+		file, 
+		composition, 
+		bidentateChosen.size(),
+		bidentateGeometry);
 
-	string p1;
-	p1 = "0 1 2 3 4 5";
-	compareGeometryPermutation(
+	double minimumDist = 1.0e99;
+	int minimumPermut = -1;
+	double auxDist;
+	for (size_t i = 0; i < allPerm.size(); i++)
+	{
+		double auxDist = compareGeometryPermutation(
+			atomTypes,
+			stringToPermutation(allPerm[i], atomTypes.size()),
+			mol0,
+			bidentateChosen,
+			composition,
+			outGeometry,
+			bidentateGeometry);
+		if (auxDist < minimumDist)
+		{
+			minimumDist = auxDist;
+			minimumPermut = i;
+		}
+	}
+
+	isoMol_.printSingleMol(
+		stringToPermutation(allPerm[minimumPermut], atomTypes.size()),
 		atomTypes,
-		stringToPermutation(p1,atomTypes.size()),
-		mol0,
-		composition,
-		outGeometry);
-	p1 = "0 1 4 3 2 5";
-	compareGeometryPermutation(
-		atomTypes,
-		stringToPermutation(p1, atomTypes.size()),
-		mol0,
-		composition,
-		outGeometry);
-	p1 = "0 1 3 4 2 5";
-	compareGeometryPermutation(
-		atomTypes,
-		stringToPermutation(p1, atomTypes.size()),
-		mol0,
-		composition,
-		outGeometry);
-	p1 = "0 1 3 5 4 2";
-	compareGeometryPermutation(
-		atomTypes,
-		stringToPermutation(p1, atomTypes.size()),
-		mol0,
-		composition,
-		outGeometry);
-	p1 = "0 2 3 4 5 1";
-	compareGeometryPermutation(
-		atomTypes,
-		stringToPermutation(p1, atomTypes.size()),
-		mol0,
-		composition,
-		outGeometry);
-	p1 = "0 1 2 4 3 5";
-	compareGeometryPermutation(
-		atomTypes,
-		stringToPermutation(p1, atomTypes.size()),
-		mol0,
-		composition,
-		outGeometry);
-
-
-
-
-
-
-
-
-	/*
-	string p1 = "5 3 1 2 4 6 0";
-	string p2;
-	p2 = "0 1 2 3 4 5 6";
-	compareTwoPermutations(atomTypes, p1, p2, mol0);
-	p2 = "0 4 3 2 1 5 6";
-	compareTwoPermutations(atomTypes, p1, p2, mol0);
-	p2 = "0 2 6 1 4 5 3";
-	compareTwoPermutations(atomTypes, p1, p2, mol0);
-	p2 = "0 4 1 6 2 5 3";
-	compareTwoPermutations(atomTypes, p1, p2, mol0);
-	p2 = "3 1 5 4 2 6 0";
-	compareTwoPermutations(atomTypes, p1, p2, mol0);
-	p2 = "0 1 6 2 5 4 3";
-	compareTwoPermutations(atomTypes, p1, p2, mol0);
-	p2 = "0 2 6 1 5 4 3";
-	compareTwoPermutations(atomTypes, p1, p2, mol0);
-	p2 = "1 3 2 4 5 0 6";
-	compareTwoPermutations(atomTypes, p1, p2, mol0);
-	*/
-
+		bidentateChosen,
+		coordinatesFile);
+	
 }
 
-void IdentifyIsomers::compareGeometryPermutation(
+double IdentifyIsomers::compareGeometryPermutation(
 	vector<int> &atomTypes,
 	vector<int> &permutation,
 	vector<CoordXYZ> &mol0,
+	vector<int> &bidentatePermutation,
 	vector<int> &composition,
-	vector<CoordXYZ> &outGeometry)
+	vector<CoordXYZ> &outGeometry,
+	vector<int> &bidentateGeometry)
 {
 	vector< vector<int> > allT1, allT2;
 	vector< vector<double> > allD1, allD2;
@@ -125,12 +91,16 @@ void IdentifyIsomers::compareGeometryPermutation(
 	sortAllDistances(composition, outGeometry, allT2, allD2);
 
 	vector<int> connect;
+	vector<int> bidentatePermutationRotated = bidentatePermutation;
+	applyPermutationBidentates(permutation, bidentatePermutationRotated);
 	vector<double> dist;
 	compareIsomers(
 		atomTypes1,
+		bidentatePermutationRotated,
 		allT1,
 		allD1,
 		composition,
+		bidentateGeometry,
 		allT2,
 		allD2,
 		connect,
@@ -141,9 +111,10 @@ void IdentifyIsomers::compareGeometryPermutation(
 	for (size_t i = 0; i < permutation.size(); i++)
 	{
 		cout << permutation[i] << " ";
-		totalDist += dist[i];
+	 	totalDist += dist[i];
 	}
-	cout << "dist: " << totalDist << endl;
+	cout << "dist: " << setprecision(16) << totalDist << endl;
+	return totalDist;
 
 
 }
@@ -183,6 +154,9 @@ void IdentifyIsomers::compareTwoPermutations(
 	sortAllDistances(atomTypes2, mol0, allT2, allD2);
 	vector<int> connect;
 	vector<double> dist;
+	cout << "not working, need bidentates" << endl;
+	exit(1);
+	/*
 	compareIsomers(
 		atomTypes1, 
 		allT1, 
@@ -192,7 +166,7 @@ void IdentifyIsomers::compareTwoPermutations(
 		allD2,
 		connect,
 		dist);
-
+	*/
 	cout << "permutation: ";
 	double totalDist = 0.0e0;
 	for (size_t i = 0; i < permutation2.size(); i++)
@@ -208,16 +182,25 @@ void IdentifyIsomers::compareTwoPermutations(
 
 void IdentifyIsomers::compareIsomers(
 	std::vector<int> & atomTypes1,
+	std::vector<int> & bidentates1,
 	std::vector< std::vector<int> > & allSortedTypes1,
 	std::vector< std::vector<double> > & allSortedDistances1,
 	std::vector<int> & atomTypes2,
+	std::vector<int> & bidentates2,
 	std::vector< std::vector<int> > & allSortedTypes2,
 	std::vector< std::vector<double> > & allSortedDistances2,
 	std::vector<int> &connections,
 	std::vector<double> &conectDifference)
 {
+	connections.resize(atomTypes1.size()); //fredmudar
+	conectDifference.resize(atomTypes1.size());
+	for (size_t i = 0; i < connections.size(); i++)
+		connections[i] = -1;
 	for (size_t i = 0; i < allSortedTypes1.size(); i++)
 	{
+		if (connections[i] != -1)
+			continue;
+
 		vector<int> aT1 = allSortedTypes1[i];
 		vector<double> aD1 = allSortedDistances1[i];
 		int jMin = -1;
@@ -236,8 +219,22 @@ void IdentifyIsomers::compareIsomers(
 				difMin = difference;
 			}
 		}
-		connections.push_back(jMin);
-		conectDifference.push_back(difMin);
+		// a pergunta e - o i tem um bidentado? se sim, qual e?
+		// i = 3;
+		// o j tambem tem um bidentado.
+		connections[i] = jMin;
+		conectDifference[i] = difMin;
+		if (find(bidentates1.begin(), bidentates1.end(), i) != bidentates1.end())
+		{
+			int bidI = searchBidentateMatch(bidentates1, i);
+			int bidJ = searchBidentateMatch(bidentates2, jMin);
+			connections[bidI] = bidJ;
+			vector<int> aT2n = allSortedTypes2[bidJ];
+			vector<double> aD2n = allSortedDistances2[bidJ];
+			vector<int> aT1n = allSortedTypes1[bidI];
+			vector<double> aD1n = allSortedDistances1[bidI];
+			conectDifference[bidI] = compareTwoAtoms(aT1n, aD1n, aT2n, aD2n);	
+		}
 	}
 }
 
@@ -423,35 +420,248 @@ vector<int> IdentifyIsomers::stringToPermutation(string entryString, size_t size
 
 }
 
-std::vector<CoordXYZ> IdentifyIsomers::readGeometry(std::string fileName, std::vector<int> &composition)
+std::vector<CoordXYZ> IdentifyIsomers::readGeometry(
+	std::string fileName, 
+	std::vector<int> &composition,
+	int bidSize,
+	std::vector<int> &bidentateGeometry)
 {
 	ifstream readG_(fileName.c_str());
 	string line;
 	getline(readG_, line);
 	getline(readG_, line);
 	vector<CoordXYZ> geometry(composition.size());
-	for(size_t i = 0; i < composition.size(); i++)
+	for (size_t i = 0; i < composition.size(); i++)
 	{
 		getline(readG_, line);
 		stringstream convert;
 		convert << line;
-		convert >> composition[i]
+		string comp;
+		convert >> comp
 			>> geometry[i].x
 			>> geometry[i].y
 			>> geometry[i].z;
-
-		double r = sqrt(
-			(geometry[i].x * geometry[i].x)
-			+ (geometry[i].y * geometry[i].y)
-			+ (geometry[i].z * geometry[i].z));
-		geometry[i].x /= r;
-		geometry[i].y /= r;
-		geometry[i].z /= r;
-
+		composition[i] = reverseComposition(comp);
 	}
+	for (int i = 0; i < bidSize; i++)
+	{
+		getline(readG_, line);
+		if (line == "")
+		{
+			cout << "Geometry bidentates not found" << endl;
+			exit(1);
+		}
+		stringstream convert;
+		convert << line;
+		int auxBid;
+		convert >> auxBid;
+		bidentateGeometry.push_back(auxBid);
+	}
+
+	translateToCenterOfMassAndReescale(geometry);
+
 	readG_.close();
 	return geometry;
-
-
-
 }
+
+int IdentifyIsomers::reverseComposition(string comp)
+{
+	if (comp == "Ca")
+		return 0;
+	else if (comp == "O")
+		return 1;
+	else if (comp == "H")
+		return 2;
+	else if (comp == "Mg")
+		return 3;
+	else if (comp == "Be")
+		return 4;
+	else if (comp == "I")
+		return 5;
+	else if (comp == "Cl")
+		return 6;
+	else if (comp == "Br")
+		return 7;
+	else if (comp == "Na")
+		return 8;
+	else if (comp == "He")
+		return 9;
+	else if (comp == "N")
+		return 10;
+	else if (comp == "C")
+		return 11;
+
+	return 100;
+}
+
+void IdentifyIsomers::translateToCenterOfMassAndReescale(vector<CoordXYZ> &coord)
+{
+	double cmx = 0.0e0;
+	double cmy = 0.0e0;
+	double cmz = 0.0e0;
+	for (size_t i = 0; i < coord.size(); i++)
+	{
+		cmx += coord[i].x;
+		cmy += coord[i].y;
+		cmz += coord[i].z;
+	}
+	cmx /= (double)coord.size();
+	cmy /= (double)coord.size();
+	cmz /= (double)coord.size();
+
+	for (size_t i = 0; i < coord.size(); i++)
+	{
+		coord[i].x -= cmx;
+		coord[i].y -= cmy;
+		coord[i].z -= cmz;
+		double r = sqrt(
+			(coord[i].x * coord[i].x)
+			+ (coord[i].y * coord[i].y)
+			+ (coord[i].z * coord[i].z));
+		coord[i].x /= r;
+		coord[i].y /= r;
+		coord[i].z /= r;
+	}
+}
+
+bool IdentifyIsomers::compareConnectBidentates(
+	std::vector<int> &connect,
+	std::vector<int> &bidPermut,
+	std::vector<int> &bidGeom)
+{
+	for (size_t i = 0; i < bidPermut.size(); i+=2)
+	{
+		int c1, c2;
+		c1 = connect[bidPermut[i]];
+		c2 = connect[bidPermut[i + 1]];
+
+		//c1 c2 are bidentates?
+		bool areBidentates = false; 
+		for (size_t j = 0; j < bidGeom.size(); j += 2)
+		{
+			if ((c1 == bidGeom[j]) && (c2 == bidGeom[j + 1]))
+			{
+				areBidentates = true;
+				break;
+			}
+			else if ((c2 == bidGeom[j]) && (c1 == bidGeom[j + 1]))
+			{
+				areBidentates = true;
+				break;
+			}
+		}
+		if (!areBidentates)
+			return false;
+	}
+	return true;
+}
+
+int IdentifyIsomers::searchBidentateMatch(
+	vector<int> &bidentate,
+	int j)
+{
+	for (size_t i = 0; i < bidentate.size(); i+= 2)
+	{
+		if (bidentate[i] == j)
+			return bidentate[i + 1];
+		else if (bidentate[i + 1] == j)
+			return bidentate[i];
+	}
+	cout << "On searchBidentateMatch, bidentate no found" << endl;
+	exit(1);
+	return -1;
+}
+
+void IdentifyIsomers::applyPermutationBidentates(
+	const std::vector<int>& permutation,
+	std::vector<int>& bidentateAtomsChosen)
+{
+	size_t size = permutation.size();
+	vector<int> bidentateAtomsChosenRotated = bidentateAtomsChosen;
+	for (size_t i = 0; i < bidentateAtomsChosenRotated.size(); i++)
+	{
+		for (size_t j = 0; j < size; j++)
+		{
+			if (permutation[j] == bidentateAtomsChosenRotated[i])
+			{
+				bidentateAtomsChosenRotated[i] = j;
+				break;
+			}
+		}
+	}
+	bidentateAtomsChosen = bidentateAtomsChosenRotated;
+}
+
+
+/*
+string p1;
+p1 = "0 1 2 3 4 5";
+compareGeometryPermutation(
+atomTypes,
+stringToPermutation(p1,atomTypes.size()),
+mol0,
+composition,
+outGeometry);
+p1 = "0 1 4 3 2 5";
+compareGeometryPermutation(
+atomTypes,
+stringToPermutation(p1, atomTypes.size()),
+mol0,
+composition,
+outGeometry);
+p1 = "0 1 3 4 2 5";
+compareGeometryPermutation(
+atomTypes,
+stringToPermutation(p1, atomTypes.size()),
+mol0,
+composition,
+outGeometry);
+p1 = "0 1 3 5 4 2";
+compareGeometryPermutation(
+atomTypes,
+stringToPermutation(p1, atomTypes.size()),
+mol0,
+composition,
+outGeometry);
+p1 = "0 2 3 4 5 1";
+compareGeometryPermutation(
+atomTypes,
+stringToPermutation(p1, atomTypes.size()),
+mol0,
+composition,
+outGeometry);
+p1 = "0 1 2 4 3 5";
+compareGeometryPermutation(
+atomTypes,
+stringToPermutation(p1, atomTypes.size()),
+mol0,
+composition,
+outGeometry);
+*/
+
+
+
+
+
+
+
+/*
+string p1 = "5 3 1 2 4 6 0";
+string p2;
+p2 = "0 1 2 3 4 5 6";
+compareTwoPermutations(atomTypes, p1, p2, mol0);
+p2 = "0 4 3 2 1 5 6";
+compareTwoPermutations(atomTypes, p1, p2, mol0);
+p2 = "0 2 6 1 4 5 3";
+compareTwoPermutations(atomTypes, p1, p2, mol0);
+p2 = "0 4 1 6 2 5 3";
+compareTwoPermutations(atomTypes, p1, p2, mol0);
+p2 = "3 1 5 4 2 6 0";
+compareTwoPermutations(atomTypes, p1, p2, mol0);
+p2 = "0 1 6 2 5 4 3";
+compareTwoPermutations(atomTypes, p1, p2, mol0);
+p2 = "0 2 6 1 5 4 3";
+compareTwoPermutations(atomTypes, p1, p2, mol0);
+p2 = "1 3 2 4 5 0 6";
+compareTwoPermutations(atomTypes, p1, p2, mol0);
+*/

@@ -276,8 +276,6 @@ private:
 	}
 
 	AuxMath auxMath_;
-
-
 };
 
 #endif

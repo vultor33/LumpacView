@@ -58,6 +58,14 @@ void buildCsvFile(int size, string skeletonName);
 
 int main(int argc, char *argv[])
 {
+	CauchyIndex ci21_(6);
+	vector<string> atoms;
+	vector<int> bid;
+	ci21_.rotationTest(atoms, bid);
+	return 0;
+
+
+
 	/*
 	string line;
 	string responseName = "response-combinations4.txt";
@@ -85,13 +93,14 @@ int main(int argc, char *argv[])
 	// Na hora de realizar uma reacao quimica, os pesos deveriam ser levados em consideracao. Entropia, mais graus de liberdade. Graus de liberdade degenerados.
 	// Na quimica organica deveria ter pesos. 
 
-	int size = 8;
+	/* IDENTIFY ISOMERS
+	int size = 9;
 	CauchyIndex ci234(size);
 	ci234.identifyIsomer(
-		"SAPR-8-M01M01M02M02M02M02M02M02.csv",
-		"GAKYUM.xyz");
-
+		"JTCTPR-9-M01M01M01Bs1Bs1Bs1.csv",
+		"YENHOO.xyz");
 	return 0;
+	*/
 
 	/*
 	string responseName;
@@ -102,7 +111,6 @@ int main(int argc, char *argv[])
 	chNames_.changeNameOfFiles(responseName);
 	return 0;
 	*/
-	clock_t begin = clock();
 
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();
@@ -555,11 +563,6 @@ int main(int argc, char *argv[])
 		permutationIsomer2);
 
 */
-
-	clock_t end = clock();
-	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-	cout << "demorou:  " << elapsed_secs << "  segundos" << endl;
-
 	// ATENCAO - CADASTRAR OS PONTOS HARDIN COM 12 CASAS
 
 	/*

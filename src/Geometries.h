@@ -75,7 +75,32 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
+	std::vector<double> geometry8TDD(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry8BTPR(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry8HBPY(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry8CU(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
 	std::vector<double> geometry9JTCTPR(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry9CSAPR(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);

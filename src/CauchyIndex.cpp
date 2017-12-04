@@ -2873,11 +2873,11 @@ string CauchyIndex::permutationToString(vector<int> permutation)
 
 
 
-// 5 - vOC  ;  TBPY (nossa) ; SPY
-// 6 - OC (nossa) ; TPR
-// 7 - PBPY ; COC (nossa) ; CTPR
-// 8 - SAPR (nossa) ; TDD ; BTPR  --- HBPY ; CU ; JBTPR ; JSD
-// 9 - CASPR ; JTCTPR ; TCTPR (nossa) ; MFF
+// 5 - vOC(y)  ;  TBPY (nossa) ; SPY(y)
+// 6 - OC (nossa) ; TPR(y)
+// 7 - PBPY(y) ; COC (nossa) ; CTPR(y)
+// 8 - SAPR (nossa) ; TDD(y - JSD!!!) ; BTPR(y - JBTP!!!) ; HBPY(y) ; CU(y)  
+// 9 - CSAPR(y) ; TCTPR (nossa - JTCTPR) ; MFF (cs)
 // 10 - JMBIC (nosso)
 // 11 - JCPAPR (nosso)
 // 12 - IC (nosso)
@@ -2904,10 +2904,10 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations = geo_.selectGeometry(72, mol0, cutAngle, reflectionOperation);
 		break;
 	case 8:
-		vectorRotations = geo_.selectGeometry(80, mol0, cutAngle, reflectionOperation);
+		vectorRotations = geo_.selectGeometry(84, mol0, cutAngle, reflectionOperation);
 		break;
 	case 9:
-		vectorRotations = geo_.selectGeometry(90, mol0, cutAngle, reflectionOperation);
+		vectorRotations = geo_.selectGeometry(91, mol0, cutAngle, reflectionOperation);
 		break;
 	case 10:
 		vectorRotations = geo_.selectGeometry(100, mol0, cutAngle, reflectionOperation);

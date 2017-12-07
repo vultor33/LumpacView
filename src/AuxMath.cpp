@@ -10,7 +10,7 @@ using namespace std;
 
 AuxMath::~AuxMath(){}
 
-AuxMath::AuxMath() 
+AuxMath::AuxMath()
 {
 	_pi = 3.14159265358979323846;
 }
@@ -81,8 +81,8 @@ vector< vector<double> > AuxMath::rotationMatrix(double x, double y, double z, d
 }
 
 std::vector<double> AuxMath::normalVectorFrom3Points(
-	double x1, double y1, double z1, 
-	double x2, double y2, double z2, 
+	double x1, double y1, double z1,
+	double x2, double y2, double z2,
 	double x3, double y3, double z3)
 {
 	double v1x, v1y, v1z, v2x, v2y, v2z;
@@ -137,7 +137,7 @@ double AuxMath::angleFrom3Points(double x1, double y1, double z1, double x2, dou
 
 double AuxMath::escalarProduct(double x1, double y1, double z1, double x2, double y2, double z2)
 {
-	return x1*x2 + y1*y2 + z2*z2;
+	return x1*x2 + y1*y2 + z1*z2;
 }
 
 

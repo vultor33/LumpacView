@@ -94,24 +94,23 @@ int main(int argc, char *argv[])
 	// Na hora de realizar uma reacao quimica, os pesos deveriam ser levados em consideracao. Entropia, mais graus de liberdade. Graus de liberdade degenerados.
 	// Na quimica organica deveria ter pesos. 
 
-	/* IDENTIFY ISOMERS
+	/* IDENTIFY ISOMERS 
 	int size = 9;
 	CauchyIndex ci234(size);
 	ci234.identifyIsomer(
 		"JTCTPR-9-M01M01M01Bs1Bs1Bs1.csv",
-		"YENHOO.xyz");
+		"VUSGUL.xyz");
 	return 0;
 	*/
 
-	/*
+	/*	*/
 	string responseName;
 	cout << "type line: " << endl;
-	cin >> responseName;
-	//responseName = "response-combinations8.txt";
+	//cin >> responseName;
+	responseName = "response.txt";
 	ChangeNames chNames_;
 	chNames_.changeNameOfFiles(responseName);
 	return 0;
-	*/
 
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();

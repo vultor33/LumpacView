@@ -324,10 +324,22 @@ void ChangeNames::calculateVultorGroup(
 	}
 	isomerFile_.close();
 
-	vGroup = setVultorGroup(
+	vector<vultorGroup> auxVGroup = setVultorGroup(
 		vultorGroupProbs,
 		vultorGroupCounting,
 		vultorGroupChirality);
+
+	for (size_t i = 0; i < auxVGroup.size(); i++)
+	{
+		double entropyValue = auxVGroup[i].achiralN * auxVGroup[i].achiralProb
+			+ 2 * auxVGroup[i].chiralN * auxVGroup[i].chiralProb;
+
+
+	}
+
+
+
+
 }
 
 

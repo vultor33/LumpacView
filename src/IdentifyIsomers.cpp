@@ -66,6 +66,13 @@ void IdentifyIsomers::coordinatesToPermutation(
 		atomTypes,
 		bidentateChosen,
 		coordinatesFile);
+
+	isoMol_.printSingleMol(
+		stringToPermutation("4 3 2 8 1 5 7 0 6",atomTypes.size()),
+		atomTypes,
+		bidentateChosen,
+		coordinatesFile);
+
 	
 }
 

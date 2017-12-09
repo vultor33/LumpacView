@@ -51,6 +51,47 @@ std::vector<std::string> IsomersToMol::readAllPermutations(
 	return allPermut;
 }
 
+vector<int> IsomersToMol::findEnantiomerPair(
+	std::string fileName,
+	vector<int> guessPermutation)
+{
+	for (size_t i = 0; i < guessPermutation.size(); i++)
+		guessPermutation[i]++;
+	vector<int> pair;
+	ifstream fileIsomers_(fileName.c_str());
+	string line;
+	getline(fileIsomers_, line);
+	vector<string> allPermut;
+	bool first = true;
+	while (!fileIsomers_.eof())
+	{
+		vector<int> permutation = readCauchyNotationsEnantiomers(fileIsomers_);
+		if ((first) && (permutation == guessPermutation))
+		{
+			pair = readCauchyNotationsEnantiomers(fileIsomers_);
+			break;
+		}
+		else if (first)
+		{
+			pair = permutation;
+			first = false;
+		}
+		else if ((!first) && (permutation == guessPermutation))
+		{
+			break;
+		}
+		else if (permutation.size() == 0)
+		{
+			first = true;
+			continue;
+		}
+	}
+	fileIsomers_.close();
+	for (size_t i = 0; i < pair.size(); i++)
+		pair[i]--;
+	return pair;
+}
+
 
 void IsomersToMol::printAllMol(string fileName)
 {

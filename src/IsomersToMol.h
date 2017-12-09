@@ -21,6 +21,10 @@ public:
 		std::vector<int> &atomTypes,
 		std::vector<int> &bidentateChosen);
 
+	std::vector<int> findEnantiomerPair(
+		std::string fileName,
+		std::vector<int> guessPermutation);
+
 	void IsomersToMol::printSingleMol(
 		std::vector<int> &permutation,
 		std::vector<int> &atomTypes,

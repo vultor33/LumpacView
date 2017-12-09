@@ -122,6 +122,18 @@ private:
 		const std::vector<int>& permutation,
 		std::vector<int>& bidentateAtomsChosen);
 
+	double differenceConnect(
+		std::vector<int> & connect,
+		std::vector<int> & atomTypes1,
+		std::vector<int> & bidentates1,
+		std::vector< std::vector<int> > & allSortedTypes1,
+		std::vector< std::vector<double> > & allSortedDistances1,
+		std::vector<int> & atomTypes2,
+		std::vector<int> & bidentates2,
+		std::vector< std::vector<int> > & allSortedTypes2,
+		std::vector< std::vector<double> > & allSortedDistances2);
+
+
 };
 
 #endif

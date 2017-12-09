@@ -380,11 +380,20 @@ string AllMolecularFormulas::newCodeToString(vector < vector<int> > & codeLine)
 			startCount = 18;
 		for (size_t j = 0; j < codeLine[i].size(); j++)
 		{
+			stringstream convert;
+			convert << elemNew[j+startCount] << "("
+				<< codeLine[i][j] << ")";
+			name += convert.str();
+		}
+		/*
+		for (size_t j = 0; j < codeLine[i].size(); j++)
+		{
 			for (int k = 0; k < codeLine[i][j]; k++)
 			{
 				name += elemNew[j + startCount];
 			}
 		}
+		*/
 	}
 	return name;
 }

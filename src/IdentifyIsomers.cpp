@@ -72,24 +72,31 @@ void IdentifyIsomers::coordinatesToPermutation(
 	vector<int> enantiomerPermut = isoMol_.findEnantiomerPair(
 		permutationsFile,
 		stringToPermutation(allPerm[minimumPermut], atomTypes.size()));
+	if (enantiomerPermut.size() != 0)
+	{
+		vector<int> finalPermut = enant_.finalIsomer(
+			mol0,
+			atomTypes,
+			bidentateChosen,
+			stringToPermutation(allPerm[minimumPermut], atomTypes.size()),
+			enantiomerPermut,
+			outGeometry,
+			composition,
+			bidentateGeometry);
+		isoMol_.printSingleMol(
+			enantiomerPermut,
+			atomTypes,
+			bidentateChosen,
+			coordinatesFile);
+		cout << "final:  ";
+		for (size_t i = 0; i < finalPermut.size(); i++)
+			cout << finalPermut[i] << "  ";
+		cout << endl;
+	}
 
-	vector<int> finalPermut = enant_.finalIsomer(
-		mol0,
-		atomTypes,
-		bidentateChosen,
-		stringToPermutation(allPerm[minimumPermut], atomTypes.size()),
-		enantiomerPermut,
-		outGeometry,
-		composition,
-		bidentateGeometry);
 
 	isoMol_.printSingleMol(
 		stringToPermutation(allPerm[minimumPermut], atomTypes.size()),
-		atomTypes,
-		bidentateChosen,
-		coordinatesFile);
-	isoMol_.printSingleMol(
-		enantiomerPermut,
 		atomTypes,
 		bidentateChosen,
 		coordinatesFile);

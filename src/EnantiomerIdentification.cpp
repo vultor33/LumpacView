@@ -9,6 +9,7 @@
 
 #include "Coordstructs.h"
 #include "AuxMath.h"
+#include "IsomersToMol.h"
 
 
 using namespace std;
@@ -44,11 +45,14 @@ std::vector<int> EnantiomerIdentification::finalIsomer(
 
 	int minCount = chooseBestCompareType(composition);
 	vector<int> mapping = mapNeededPermutation(minCount, composition, atomTypes1);
+	IsomersToMol iso_;
 	vector<CoordXYZ> rotGeometry = rotateVectorToZ(mapping[0], crystalGeom);
 	double minDist1 = 1.0e99;
 	for (size_t i = 1; i < mapping.size(); i++)
 	{
+		iso_.printCoordXyz(mol0);
 		vector<CoordXYZ> rotPermutation = rotateVectorToZ(mapping[i], mol0);
+		iso_.printCoordXyz(rotPermutation);
 		double auxDist = compareEnantiomersThroughRotation(
 			mapping[0],
 			mapping[i],
@@ -58,6 +62,7 @@ std::vector<int> EnantiomerIdentification::finalIsomer(
 			rotPermutation,
 			atomTypes1,
 			bidentate1);
+		cout << "mpa1 " << auxDist << endl;
 		if (auxDist < minDist1)
 			minDist1 = auxDist;
 	}
@@ -65,7 +70,7 @@ std::vector<int> EnantiomerIdentification::finalIsomer(
 	double minDist2 = 1.0e99;
 	for (size_t i = 1; i < mapping2.size(); i++)
 	{
-		vector<CoordXYZ> rotPermutation = rotateVectorToZ(mapping2[1], mol0);
+		vector<CoordXYZ> rotPermutation = rotateVectorToZ(mapping2[i], mol0);
 		double auxDist = compareEnantiomersThroughRotation(
 			mapping2[0],
 			mapping2[i],
@@ -75,6 +80,7 @@ std::vector<int> EnantiomerIdentification::finalIsomer(
 			rotPermutation,
 			atomTypes2,
 			bidentate2);
+		cout << "mpa2 " << auxDist << endl;
 		if (auxDist < minDist2)
 			minDist2 = auxDist;
 	}
@@ -189,22 +195,55 @@ double EnantiomerIdentification::compareEnantiomersThroughRotation(
 	std::vector<int> &bidentate2)
 {
 	double minDist = 1.0e99;
-	for (double angle = 0.05e0; angle < 6.9e0; angle += 0.05e0)
+	IsomersToMol iso_;//fredmudar
+	vector<CoordXYZ> bestCoord;//fredmudar
+	vector<int> bestConnect;
+	for (int i = 0; i < 63; i++)
 	{
 		rotateCoordOnChosen(chosen2, coord2, 0.1e0);
+		iso_.printCoordXyz(coord2);
 		vector< vector<double> > matrDist = generateDistanceMatrix(coord1, coord2);
+		vector<int> connect;
 		double dist = totalDist(
 			chosen1,
 			chosen2,
+			coord1,
+			coord2,
 			matrDist,
 			atomTypes1,
 			bidentate1,
 			atomTypes2,
-			bidentate2);
+			bidentate2,
+			connect);
 
 		if (minDist > dist)
+		{
+			bestCoord = coord2;//fredmudar
+			bestConnect = connect;
 			minDist = dist;
+		}
 	}
+	ofstream debug_;
+	debug_.open("debug.txt", std::ofstream::out | std::ofstream::app);
+	debug_ << "min dist:  " << minDist << endl;
+	vector< vector<double> > matrDist = generateDistanceMatrix(coord1, bestCoord);
+	debug_ << "connect: ";
+	for (size_t i = 0; i < bestConnect.size(); i++)
+	{
+		debug_ << bestConnect[i] << " ";
+	}
+	debug_ << endl;
+
+	for (int i = 0; i < matrDist.size(); i++)
+	{
+		for (int j = 0; j < matrDist.size(); j++)
+		{
+			debug_ << matrDist[i][j] << "  ";
+		}
+		debug_ << endl;
+	}
+	debug_ << endl;
+	debug_.close();
 
 	return minDist;
 }
@@ -212,13 +251,16 @@ double EnantiomerIdentification::compareEnantiomersThroughRotation(
 double EnantiomerIdentification::totalDist(
 	int chosen1,
 	int chosen2,
+	std::vector<CoordXYZ> &coord1,
+	std::vector<CoordXYZ> &coord2,
 	std::vector< std::vector<double> > &matrDist,
 	std::vector<int> atomTypes1,
 	std::vector<int> bidentate1,
 	std::vector<int> atomTypes2,
-	std::vector<int> bidentate2)
+	std::vector<int> bidentate2,
+	std::vector<int> &connect)
 {
-	vector<int> connect(atomTypes1.size());
+	connect.resize(atomTypes1.size());
 	for (size_t i = 0; i < connect.size(); i++)
 		connect[i] = -1;
 	double totalDist = 0.0e0;
@@ -231,6 +273,13 @@ double EnantiomerIdentification::totalDist(
 		int bidJ = searchBidentateMatch(bidentate2, chosen2);
 		connect[bidI] = bidJ;
 		totalDist += matrDist[bidI][bidJ];
+		totalDist += auxMath_.norm(
+			0.5e0*(coord1[chosen1].x + coord1[bidI].x)
+			- 0.5e0*(coord2[chosen2].x + coord2[bidJ].x),
+			0.5e0*(coord1[chosen1].y + coord1[bidI].y)
+			- 0.5e0*(coord2[chosen2].y + coord2[bidJ].y),
+			0.5e0*(coord1[chosen1].z + coord1[bidI].z)
+			- 0.5e0*(coord2[chosen2].z + coord2[bidJ].z));
 	}
 
 	for (size_t i = 0; i < atomTypes1.size(); i++)
@@ -260,6 +309,13 @@ double EnantiomerIdentification::totalDist(
 			int bidJ = searchBidentateMatch(bidentate2, jMinDist);
 			connect[bidI] = bidJ;
 			totalDist += matrDist[bidI][bidJ];
+			totalDist += auxMath_.norm(
+				0.5e0*(coord1[i].x + coord1[bidI].x)
+				- 0.5e0*(coord2[jMinDist].x + coord2[bidJ].x),
+				0.5e0*(coord1[i].y + coord1[bidI].y)
+				- 0.5e0*(coord2[jMinDist].y + coord2[bidJ].y),
+				0.5e0*(coord1[i].z + coord1[bidI].z)
+				- 0.5e0*(coord2[jMinDist].z + coord2[bidJ].z));
 		}
 	}
 	return totalDist;

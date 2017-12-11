@@ -26,7 +26,7 @@ public:
 	~IdentifyIsomers();
 
 	void coordinatesToPermutation(
-		std::vector<CoordXYZ> & mol0,
+		std::vector<CoordXYZ> mol0,
 		std::string permutationsFile,
 		std::string coordinatesFile);
 
@@ -46,6 +46,8 @@ public:
 		std::vector<CoordXYZ> &mol0);
 
 private:
+	double scaleFactor;
+
 	void compareTwoPermutations(
 		std::vector<int> &atomTypes,
 		std::vector<int> &permutation1,
@@ -132,6 +134,8 @@ private:
 		std::vector<int> & bidentates2,
 		std::vector< std::vector<int> > & allSortedTypes2,
 		std::vector< std::vector<double> > & allSortedDistances2);
+
+	std::string takeAllVultorsGroup(std::string permutationsFile);
 
 
 };

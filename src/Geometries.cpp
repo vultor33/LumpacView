@@ -69,7 +69,7 @@ std::vector<double> Geometries::selectGeometry(
 		break;
 
 	case 82:
-		return geometry8TDD(mol0, cutAngle, reflectionOperation);
+		return geometry8BTPR(mol0, cutAngle, reflectionOperation);
 		break;
 
 	case 83:
@@ -81,7 +81,7 @@ std::vector<double> Geometries::selectGeometry(
 		break;
 
 	case 90:
-		return geometry9JTCTPR(mol0, cutAngle, reflectionOperation);
+		return geometry9TCTPR(mol0, cutAngle, reflectionOperation);
 		break;
 
 	case 91:
@@ -887,44 +887,40 @@ std::vector<double> Geometries::geometry7CTPR(
 	vector<double> vectorRotations(4);
 	vector<double> auxReferenceAxis(3);
 
-	mol0[0].x = -0.654653670708;
-	mol0[0].y = -0.377964473009;
-	mol0[0].z = 0.654653670708;
-	mol0[1].x = -0.654653670708;
-	mol0[1].y = -0.377964473009;
-	mol0[1].z = -0.654653670708;
-	mol0[2].x = 0.654653670708;
-	mol0[2].y = -0.377964473009;
-	mol0[2].z = 0.654653670708;
-	mol0[3].x = 0.654653670708;
-	mol0[3].y = -0.377964473009;
-	mol0[3].z = -0.654653670708;
-	mol0[4].x = 0.000000000000;
-	mol0[4].y = 0.755928946018;
-	mol0[4].z = 0.654653670708;
-	mol0[5].x = 0.000000000000;
-	mol0[5].y = 0.755928946018;
-	mol0[5].z = -0.654653670708;
-	mol0[6].x = -0.866025403784;
-	mol0[6].y = 0.500000000000;
-	mol0[6].z = 0.000000000000;
+	mol0[0].x = 0.0000;
+	mol0[0].y = 0.0000;
+	mol0[0].z = 1.0000;
+	mol0[1].x = 0.6869;
+	mol0[1].y = 0.6869;
+	mol0[1].z = 0.2374;
+	mol0[2].x = -0.6869;
+	mol0[2].y = 0.6869;
+	mol0[2].z = 0.2374;
+	mol0[3].x = 0.6869;
+	mol0[3].y = -0.6869;
+	mol0[3].z = 0.2374;
+	mol0[4].x = -0.6869;
+	mol0[4].y = -0.6869;
+	mol0[4].z = 0.2374;
+	mol0[5].x = 0.6175;
+	mol0[5].y = 0.0000;
+	mol0[5].z = -0.7866;
+	mol0[6].x = -0.6175;
+	mol0[6].y = 0.0000;
+	mol0[6].z = -0.7866;
 
 	//c2-1
-	auxReferenceAxis[0] = 0.5e0 * (mol0[2].x + mol0[3].x);
-	auxReferenceAxis[1] = 0.5e0 * (mol0[2].y + mol0[3].y);
-	auxReferenceAxis[2] = 0.5e0 * (mol0[2].z + mol0[3].z);
-	auxMath_.normalize(auxReferenceAxis);
-	vectorRotations[0] = auxReferenceAxis[0];
-	vectorRotations[1] = auxReferenceAxis[1];
-	vectorRotations[2] = auxReferenceAxis[2];
+	vectorRotations[0] = mol0[0].x;
+	vectorRotations[1] = mol0[0].y;
+	vectorRotations[2] = mol0[0].z;
 	vectorRotations[3] = auxMath_._pi;
 
 	for (size_t i = 0; i < reflectionOperation.size(); i++)
 		reflectionOperation[i] = i;
-	reflectionOperation[0] = 4;
-	reflectionOperation[4] = 0;
-	reflectionOperation[1] = 5;
-	reflectionOperation[5] = 1;
+	reflectionOperation[1] = 3;
+	reflectionOperation[3] = 1;
+	reflectionOperation[2] = 4;
+	reflectionOperation[4] = 2;
 
 	return vectorRotations;
 }
@@ -1066,53 +1062,53 @@ std::vector<double> Geometries::geometry8TDD(
 	vector<double> vectorRotations(12);
 	vector<double> auxReferenceAxis(3);
 
-	mol0[0].x = 0.952733417938;	
-	mol0[0].y = 0.303807561367;
-	mol0[0].z = 0.000000000000;
-	mol0[1].x = -0.952733417938;	
-	mol0[1].y = 0.303807561367;	
-	mol0[1].z = 0.000000000000;
-	mol0[2].x = 0.000000000000; 
-	mol0[2].y = -0.303807561367;	
-	mol0[2].z = 0.952733417938;
-	mol0[3].x = 0.000000000000;
-	mol0[3].y = -0.303807561367; 
-	mol0[3].z = -0.952733417938;
-	mol0[4].x = 0.537734640110; 
-	mol0[4].y = -0.843114142229;	
-	mol0[4].z = 0.000000000000;
-	mol0[5].x = -0.537734640110; 
-	mol0[5].y = -0.843114142229;
-	mol0[5].z = 0.000000000000;
-	mol0[6].x = 0.000000000000;	
-	mol0[6].y = 0.843114142229;	
-	mol0[6].z = 0.537734640110;
-	mol0[7].x = 0.000000000000;	
-	mol0[7].y = 0.843114142229; 
-	mol0[7].z = -0.537734640110;
+	mol0[0].x = -0.599725;
+	mol0[0].y = 0.000000;
+	mol0[0].z = 0.800200;
+	mol0[1].x = -0.000025;
+	mol0[1].y = -0.936400;
+	mol0[1].z = 0.350900;
+	mol0[2].x = 0.599775;
+	mol0[2].y = 0.000000;
+	mol0[2].z = 0.800200;
+	mol0[3].x = -0.000025;
+	mol0[3].y = 0.936400;
+	mol0[3].z = 0.350900;
+	mol0[4].x = -0.936425;
+	mol0[4].y = 0.000000;
+	mol0[4].z = -0.350900;
+	mol0[5].x = -0.000025;
+	mol0[5].y = -0.599700;
+	mol0[5].z = -0.800200;
+	mol0[6].x = 0.936475;
+	mol0[6].y = 0.000000;
+	mol0[6].z = -0.350900;
+	mol0[7].x = -0.000025;
+	mol0[7].y = 0.599700;
+	mol0[7].z = -0.800200;
 
 	// c2 -z
-	auxReferenceAxis[0] = 0.5e0 *(mol0[6].x + mol0[7].x);
-	auxReferenceAxis[1] = 0.5e0 *(mol0[6].y + mol0[7].y);
-	auxReferenceAxis[2] = 0.5e0 *(mol0[6].z + mol0[7].z);
+	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[2].x);
+	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[2].y);
+	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[2].z);
 	auxMath_.normalize(auxReferenceAxis);
 	vectorRotations[0] = auxReferenceAxis[0];
 	vectorRotations[1] = auxReferenceAxis[1];
 	vectorRotations[2] = auxReferenceAxis[2];
 	vectorRotations[3] = auxMath_._pi;
 	// c2 -1
-	auxReferenceAxis[0] = 0.5e0 *(mol0[5].x + mol0[7].x);
-	auxReferenceAxis[1] = 0.5e0 *(mol0[5].y + mol0[7].y);
-	auxReferenceAxis[2] = 0.5e0 *(mol0[5].z + mol0[7].z);
+	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[5].x);
+	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[5].y);
+	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[5].z);
 	auxMath_.normalize(auxReferenceAxis);
 	vectorRotations[4] = auxReferenceAxis[0];
 	vectorRotations[5] = auxReferenceAxis[1];
 	vectorRotations[6] = auxReferenceAxis[2];
 	vectorRotations[7] = auxMath_._pi;
 	// c2 -2
-	auxReferenceAxis[0] = 0.5e0 *(mol0[4].x + mol0[7].x);
-	auxReferenceAxis[1] = 0.5e0 *(mol0[4].y + mol0[7].y);
-	auxReferenceAxis[2] = 0.5e0 *(mol0[4].z + mol0[7].z);
+	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[7].x);
+	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[7].y);
+	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[7].z);
 	auxMath_.normalize(auxReferenceAxis);
 	vectorRotations[8] = auxReferenceAxis[0];
 	vectorRotations[9] = auxReferenceAxis[1];
@@ -1121,10 +1117,10 @@ std::vector<double> Geometries::geometry8TDD(
 
 	for (size_t i = 0; i < reflectionOperation.size(); i++)
 		reflectionOperation[i] = i;
-	reflectionOperation[2] = 3;
-	reflectionOperation[3] = 2;
-	reflectionOperation[6] = 7;
-	reflectionOperation[7] = 6;
+	reflectionOperation[0] = 2;
+	reflectionOperation[2] = 0;
+	reflectionOperation[4] = 6;
+	reflectionOperation[6] = 4;
 
 	return vectorRotations;
 }
@@ -1533,7 +1529,7 @@ std::vector<double> Geometries::geometry8CU(
 
 
 
-std::vector<double> Geometries::geometry9JTCTPR(
+std::vector<double> Geometries::geometry9TCTPR(
 	std::vector<CoordXYZ> &mol0,
 	double & cutAngle,
 	std::vector<int> &reflectionOperation)
@@ -1630,59 +1626,58 @@ std::vector<double> Geometries::geometry9CSAPR(
 	vector<double> vectorRotations(12);
 	vector<double> auxReferenceAxis(3);
 
-
-	mol0[0].x = 0.000000000000;
-	mol0[0].x = 0.000000000000;
-	mol0[0].x = 1.000000000000;
-	mol0[1].x = 0.965283660000;
-	mol0[1].x = 0.000000000000;
-	mol0[1].x = 0.261203880000;
-	mol0[2].x = -0.565450070000;
-	mol0[2].x = 0.782329050000;
-	mol0[2].x = 0.261203880000;
-	mol0[3].x = -0.882475410000;
-	mol0[3].x = -0.391164530000;
-	mol0[3].x = 0.261203870000;
-	mol0[4].x = 0.199916790000;
-	mol0[4].x = -0.944354710000;
-	mol0[4].x = 0.261203870000;
-	mol0[5].x = 0.399833580000;
-	mol0[5].x = 0.782329050000;
-	mol0[5].x = -0.477592250000;
-	mol0[6].x = -0.599750370000;
-	mol0[6].x = 0.162025650000;
-	mol0[6].x = -0.783611620000;
-	mol0[7].x = 0.482641830000;
-	mol0[7].x = -0.391164530000;
-	mol0[7].x = -0.783611620000;
-	mol0[8].x = 0.391164527230;
-	mol0[8].x = 0.765366863337;
-	mol0[8].x = 0.511081086661;
+	mol0[0].x = 0.0000;
+	mol0[0].y = 0.0000;
+	mol0[0].z = 1.0000;
+	mol0[1].x = 0.9322;
+	mol0[1].y = 0.0000;
+	mol0[1].z = 0.3619;
+	mol0[2].x = 0.0000;
+	mol0[2].y = 0.9322;
+	mol0[2].z = 0.3619;
+	mol0[3].x = -0.9322;
+	mol0[3].y = 0.0000;
+	mol0[3].z = 0.3619;
+	mol0[4].x = 0.0000;
+	mol0[4].y = -0.9322;
+	mol0[4].z = 0.3619;
+	mol0[5].x = 0.5606;
+	mol0[5].y = 0.5606;
+	mol0[5].z = -0.6095;
+	mol0[6].x = -0.5606;
+	mol0[6].y = 0.5606;
+	mol0[6].z = -0.6095;
+	mol0[7].x = -0.5606;
+	mol0[7].y = -0.5606;
+	mol0[7].z = -0.6095;
+	mol0[8].x = 0.5606;
+	mol0[8].y = -0.5606;
+	mol0[8].z = -0.6095;
 
 	//c4 - 1
-	vectorRotations[0] = mol0[8].x;
-	vectorRotations[1] = mol0[8].y;
-	vectorRotations[2] = mol0[8].z;
+	vectorRotations[0] = mol0[0].x;
+	vectorRotations[1] = mol0[0].y;
+	vectorRotations[2] = mol0[0].z;
 	vectorRotations[3] = auxMath_._pi / 2.0e0;
 	//c4 - 2
-	vectorRotations[4] = mol0[8].x;
-	vectorRotations[5] = mol0[8].y;
-	vectorRotations[6] = mol0[8].z;
+	vectorRotations[4] = mol0[0].x;
+	vectorRotations[5] = mol0[0].y;
+	vectorRotations[6] = mol0[0].z;
 	vectorRotations[7] = auxMath_._pi;
 	//c4 - 3
-	vectorRotations[8] = mol0[8].x;
-	vectorRotations[9] = mol0[8].y;
-	vectorRotations[10] = mol0[8].z;
+	vectorRotations[8] = mol0[0].x;
+	vectorRotations[9] = mol0[0].y;
+	vectorRotations[10] = mol0[0].z;
 	vectorRotations[11] = -auxMath_._pi / 2.0e0;
 
 	for (size_t i = 0; i < reflectionOperation.size(); i++)
 		reflectionOperation[i] = i;
-	reflectionOperation[5] = 0;
-	reflectionOperation[0] = 5;
-	reflectionOperation[3] = 6;
-	reflectionOperation[6] = 3;
-	reflectionOperation[4] = 7;
-	reflectionOperation[7] = 4;
+	reflectionOperation[1] = 4;
+	reflectionOperation[4] = 1;
+	reflectionOperation[2] = 3;
+	reflectionOperation[3] = 2;
+	reflectionOperation[5] = 7;
+	reflectionOperation[7] = 5;
 
 	return vectorRotations;
 }

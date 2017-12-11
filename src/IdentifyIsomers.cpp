@@ -8,6 +8,7 @@
 #include <sstream>
 #include <fstream>
 #include <iomanip>
+#include <stdlib.h>
 
 #include "Coordstructs.h"
 #include "IsomersToMol.h"
@@ -15,7 +16,10 @@
 
 using namespace std;
 
-IdentifyIsomers::IdentifyIsomers(){}
+IdentifyIsomers::IdentifyIsomers()
+{
+	scaleFactor = 1.0e0;
+}
 
 IdentifyIsomers::~IdentifyIsomers(){}
 
@@ -26,10 +30,17 @@ IdentifyIsomers::~IdentifyIsomers(){}
 // ATENCAO
 // ATENCAO
 void IdentifyIsomers::coordinatesToPermutation(
-	vector<CoordXYZ> &mol0,
+	vector<CoordXYZ> mol0,
 	string permutationsFile,
 	string coordinatesFile)
 {
+	for (size_t i = 0; i < mol0.size(); i++)
+	{
+		mol0[i].x *= scaleFactor;
+		mol0[i].y *= scaleFactor;
+		mol0[i].z *= scaleFactor;
+	}
+
 	IsomersToMol isoMol_;
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
@@ -69,9 +80,17 @@ void IdentifyIsomers::coordinatesToPermutation(
 	}
 
 	EnantiomerIdentification enant_;
+	vector<string> pairCodes;
 	vector<int> enantiomerPermut = isoMol_.findEnantiomerPair(
 		permutationsFile,
-		stringToPermutation(allPerm[minimumPermut], atomTypes.size()));
+		stringToPermutation(
+			allPerm[minimumPermut], 
+			atomTypes.size()),
+			pairCodes);
+	string composCode = takeAllVultorsGroup(permutationsFile);
+
+	ofstream ident_;
+	ident_.open("identifyingX.csv", std::ofstream::out | std::ofstream::app);
 	if (enantiomerPermut.size() != 0)
 	{
 		vector<int> finalPermut = enant_.finalIsomer(
@@ -88,12 +107,34 @@ void IdentifyIsomers::coordinatesToPermutation(
 			atomTypes,
 			bidentateChosen,
 			coordinatesFile);
+		if (finalPermut == enantiomerPermut)
+		{
+			ident_ << pairCodes[3] << " ; "
+				<< pairCodes[2] << " ; "
+				<< coordinatesFile << " ; "
+				<< composCode << endl;
+		}
+		else
+		{
+			ident_ << pairCodes[1] << " ; "
+				<< pairCodes[0] << " ; "
+				<< coordinatesFile << " ; "
+				<< composCode << endl;
+		}
+
 		cout << "final:  ";
 		for (size_t i = 0; i < finalPermut.size(); i++)
 			cout << finalPermut[i] << "  ";
 		cout << endl;
 	}
-
+	else
+	{
+		ident_ << pairCodes[1] << " ; "
+			<< pairCodes[0] << " ; "
+			<< coordinatesFile << " ; "
+			<< composCode << endl;
+	}
+	ident_.close();
 
 	isoMol_.printSingleMol(
 		stringToPermutation(allPerm[minimumPermut], atomTypes.size()),
@@ -552,9 +593,9 @@ void IdentifyIsomers::translateToCenterOfMassAndReescale(vector<CoordXYZ> &coord
 			(coord[i].x * coord[i].x)
 			+ (coord[i].y * coord[i].y)
 			+ (coord[i].z * coord[i].z));
-		coord[i].x /= r;
-		coord[i].y /= r;
-		coord[i].z /= r;
+		coord[i].x *= scaleFactor / r;
+		coord[i].y *= scaleFactor / r;
+		coord[i].z *= scaleFactor / r;
 	}
 }
 
@@ -658,6 +699,36 @@ double IdentifyIsomers::differenceConnect(
 	}
 	return totalDiff;
 }
+
+string IdentifyIsomers::takeAllVultorsGroup(string permutationsFile)
+{
+	size_t hyfen = permutationsFile.find("-");
+	size_t hyfen2 = permutationsFile.find("-",hyfen + 1);
+	size_t point = permutationsFile.find(".");
+	string compositionCode = permutationsFile.substr(hyfen2 + 1, point - hyfen2 - 1);
+	ifstream count_("counting.csv");
+	string line;
+	while (getline(count_, line))
+	{
+		stringstream convert;
+		convert << line;
+		string comp;
+		convert >> comp;
+		if (comp == compositionCode)
+			return line;
+	}
+
+	cout << "ON IdentifyIsomers::takeAllVultorsGroup COMPOSITION CODE NOT FOUND" << endl;
+	exit(1);
+}
+
+
+
+
+
+
+
+
 
 /*
 string p1;

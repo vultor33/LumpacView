@@ -95,7 +95,7 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
-	std::vector<double> geometry9JTCTPR(
+	std::vector<double> geometry9TCTPR(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);

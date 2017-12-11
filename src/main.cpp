@@ -58,13 +58,13 @@ void buildCsvFile(int size, string skeletonName);
 
 int main(int argc, char *argv[])
 {
-	/*
+	
 	CauchyIndex ci21_(8);
 	vector<string> atoms;
 	vector<int> bid;
 	ci21_.rotationTest(atoms, bid);
 	return 0;
-	*/
+	
 
 
 	/*
@@ -98,8 +98,8 @@ int main(int argc, char *argv[])
 	int size = 6;
 	CauchyIndex ci234(size);
 	ci234.identifyIsomer(
-		"OC-6-Ba1Ba1Ba1.csv",
-		"OFOPII.xyz");
+		"OC-6-Bs1Bs1Bs1.csv",
+		"ZAXSAS.xyz");
 	return 0;
 	
 

@@ -51,9 +51,12 @@ std::vector<std::string> IsomersToMol::readAllPermutations(
 	return allPermut;
 }
 
+
+//salvar codigo e grupo vultor dois dois
 vector<int> IsomersToMol::findEnantiomerPair(
 	std::string fileName,
-	vector<int> guessPermutation)
+	vector<int> guessPermutation,
+	vector<string> &pairCodes)
 {
 	for (size_t i = 0; i < guessPermutation.size(); i++)
 		guessPermutation[i]++;
@@ -63,32 +66,52 @@ vector<int> IsomersToMol::findEnantiomerPair(
 	getline(fileIsomers_, line);
 	vector<string> allPermut;
 	bool first = true;
+	vector<string> auxCode;
+	vector<int> dummy;
 	while (!fileIsomers_.eof())
 	{
-		vector<int> permutation = readCauchyNotationsEnantiomers(fileIsomers_);
+		vector<string> code1;
+		vector<int> permutation = readCauchyNotationsEnantiomersAndTakeCode(fileIsomers_,code1);
 		if ((first) && (permutation == guessPermutation))
 		{
-			pair = readCauchyNotationsEnantiomers(fileIsomers_);
+			vector<string> code2;
+			pair = readCauchyNotationsEnantiomersAndTakeCode(fileIsomers_, code2);
+			pairCodes.push_back(code1[0]);
+			pairCodes.push_back(code1[1]);
+			if (pair.size() != 0)
+			{
+				pairCodes.push_back(code2[0]);
+				pairCodes.push_back(code2[1]);
+			}
 			break;
 		}
 		else if (first)
 		{
 			pair = permutation;
+			auxCode = code1;
 			first = false;
 		}
 		else if ((!first) && (permutation == guessPermutation))
 		{
+			pairCodes.push_back(code1[0]);
+			pairCodes.push_back(code1[1]);
+			pairCodes.push_back(auxCode[0]);
+			pairCodes.push_back(auxCode[1]);
 			break;
 		}
 		else if (permutation.size() == 0)
 		{
+			pair = dummy;
 			first = true;
 			continue;
 		}
 	}
 	fileIsomers_.close();
-	for (size_t i = 0; i < pair.size(); i++)
-		pair[i]--;
+	if (pair.size() != 0)
+	{
+		for (size_t i = 0; i < pair.size(); i++)
+			pair[i]--;
+	}
 	return pair;
 }
 
@@ -203,6 +226,41 @@ vector<int> IsomersToMol::readCauchyNotationsEnantiomers(ifstream & openendFile_
 	}
 	return notation;
 }
+
+vector<int> IsomersToMol::readCauchyNotationsEnantiomersAndTakeCode(
+	ifstream & openendFile_,
+	vector<string> &permutCodes)
+{
+	int size = complex.size();
+	vector<int> notation;
+	if (openendFile_.eof())
+		return notation;
+
+	string auxline;
+	getline(openendFile_, auxline);
+	if (auxline == "")
+		return notation;
+	notation.resize(size);
+
+	size_t brack1 = auxline.find("[");
+	size_t brack2 = auxline.find("]");
+	string permString = auxline.substr(brack1 + 1, brack2 - brack1 - 1);
+	string vultorGroup = auxline.substr(brack2 + 2, 2);
+	size_t key1 = auxline.find("{");
+	string allCode = auxline.substr(key1, allCode.size() - key1);
+	permutCodes.push_back(vultorGroup);
+	permutCodes.push_back(allCode);
+
+	stringstream line;
+	line << permString;
+	for (size_t i = 0; i < size; i++)
+	{
+		line >> notation[i];
+	}
+	return notation;
+}
+
+
 
 string IsomersToMol::permutationToString0Correction(vector<int> &permutation)
 {
@@ -706,4 +764,20 @@ void IsomersToMol::setParameters(int coordination)
 		exit(1);
 		break;
 	}
+}
+
+void IsomersToMol::printCoordXyz(vector<CoordXYZ> &coord)
+{
+	ofstream xyz_("teste.xyz");
+	xyz_ << coord.size() << endl
+		<< "titulo" << endl;
+	for (size_t i = 0; i < coord.size(); i++)
+	{
+		xyz_ << "H " << "  "
+			<< coord[i].x << "  "
+			<< coord[i].y << "  "
+			<< coord[i].z << endl;
+	}
+
+
 }

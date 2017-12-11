@@ -59,11 +59,14 @@ private:
 	double totalDist(
 		int chosen1,
 		int chosen2,
+		std::vector<CoordXYZ> &coord1,
+		std::vector<CoordXYZ> &coord2,
 		std::vector< std::vector<double> > &matrDist,
 		std::vector<int> atomTypes1,
 		std::vector<int> bidentate1,
 		std::vector<int> atomTypes2,
-		std::vector<int> bidentate2);
+		std::vector<int> bidentate2,
+		std::vector<int> &connect);
 
 	void rotateCoordOnChosen(
 		int chosen,

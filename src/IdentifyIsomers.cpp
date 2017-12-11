@@ -46,9 +46,10 @@ void IdentifyIsomers::coordinatesToPermutation(
 	double auxDist;
 	for (size_t i = 0; i < allPerm.size(); i++)
 	{
+		vector<int> permutationI = stringToPermutation(allPerm[i], atomTypes.size());
 		double auxDist = compareGeometryPermutation(
 			atomTypes,
-			stringToPermutation(allPerm[i], atomTypes.size()),
+			permutationI,
 			mol0,
 			bidentateChosen,
 			composition,
@@ -61,11 +62,13 @@ void IdentifyIsomers::coordinatesToPermutation(
 		}
 	}
 
+	vector<int> permutationF = stringToPermutation(allPerm[minimumPermut], atomTypes.size());
 	isoMol_.printSingleMol(
-		stringToPermutation(allPerm[minimumPermut], atomTypes.size()),
+		permutationF,
 		atomTypes,
 		bidentateChosen,
 		coordinatesFile);
+
 	
 }
 
@@ -126,10 +129,12 @@ void IdentifyIsomers::compareTwoPermutations(
 	std::string &permutation2,
 	std::vector<CoordXYZ> &mol0)
 {
+	vector<int> permut1 = stringToPermutation(permutation1, mol0.size());
+	vector<int> permut2 = stringToPermutation(permutation2, mol0.size());
 	compareTwoPermutations(
 		atomTypes,
-		stringToPermutation(permutation1, mol0.size()),
-		stringToPermutation(permutation2, mol0.size()),
+		permut1,
+		permut2,
 		mol0);
 }
 

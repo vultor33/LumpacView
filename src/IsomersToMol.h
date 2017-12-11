@@ -21,7 +21,7 @@ public:
 		std::vector<int> &atomTypes,
 		std::vector<int> &bidentateChosen);
 
-	void IsomersToMol::printSingleMol(
+	void printSingleMol(
 		std::vector<int> &permutation,
 		std::vector<int> &atomTypes,
 		std::vector<int> &bidentateChosen,

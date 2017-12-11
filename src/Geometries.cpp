@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include <stdlib.h>
 
 #include "Coordstructs.h"
 #include "AuxMath.h"
@@ -53,7 +54,7 @@ std::vector<double> Geometries::selectGeometry(
 		break;
 
 	case 71:
-		return geometry7COC(mol0, cutAngle, reflectionOperation);
+		return geometry7PBPY(mol0, cutAngle, reflectionOperation);
 		break;
 
 	case 72:
@@ -69,7 +70,7 @@ std::vector<double> Geometries::selectGeometry(
 		break;
 
 	case 82:
-		return geometry8TDD(mol0, cutAngle, reflectionOperation);
+		return geometry8BTPR(mol0, cutAngle, reflectionOperation);
 		break;
 
 	case 83:
@@ -1522,7 +1523,7 @@ std::vector<double> Geometries::geometry8CU(
 	for (size_t i = 0; i < reflectionOperation.size(); i++)
 		reflectionOperation[i] = i;
 	reflectionOperation[3] = 1;
-	reflectionOperation[1] = 1;
+	reflectionOperation[1] = 3;
 	reflectionOperation[4] = 6;
 	reflectionOperation[6] = 4;
 

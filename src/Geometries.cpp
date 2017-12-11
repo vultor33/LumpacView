@@ -53,7 +53,7 @@ std::vector<double> Geometries::selectGeometry(
 		break;
 
 	case 71:
-		return geometry7COC(mol0, cutAngle, reflectionOperation);
+		return geometry7PBPY(mol0, cutAngle, reflectionOperation);
 		break;
 
 	case 72:
@@ -824,7 +824,7 @@ std::vector<double> Geometries::geometry7PBPY(
 	vectorRotations[0] = mol0[0].x;
 	vectorRotations[1] = mol0[0].y;
 	vectorRotations[2] = mol0[0].z;
-	vectorRotations[3] = auxMath_._pi / 5.0e0;
+	vectorRotations[3] = 2.0e0 * auxMath_._pi / 5.0e0;
 	//c5 - 2
 	vectorRotations[4] = mol0[0].x;
 	vectorRotations[5] = mol0[0].y;

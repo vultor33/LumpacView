@@ -2898,13 +2898,13 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations = geo_.selectGeometry(50, mol0, cutAngle, reflectionOperation);
 		break;
 	case 6:
-		vectorRotations = geo_.selectGeometry(60, mol0, cutAngle, reflectionOperation);
+		vectorRotations = geo_.selectGeometry(61, mol0, cutAngle, reflectionOperation);
 		break;
 	case 7:
 		vectorRotations = geo_.selectGeometry(72, mol0, cutAngle, reflectionOperation);
 		break;
 	case 8:
-		vectorRotations = geo_.selectGeometry(81, mol0, cutAngle, reflectionOperation);
+		vectorRotations = geo_.selectGeometry(84, mol0, cutAngle, reflectionOperation);
 		break;
 	case 9:
 		vectorRotations = geo_.selectGeometry(91, mol0, cutAngle, reflectionOperation);

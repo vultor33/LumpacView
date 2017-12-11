@@ -59,7 +59,7 @@ void buildCsvFile(int size, string skeletonName);
 int main(int argc, char *argv[])
 {
 	
-	CauchyIndex ci21_(8);
+	CauchyIndex ci21_(9);
 	vector<string> atoms;
 	vector<int> bid;
 	ci21_.rotationTest(atoms, bid);

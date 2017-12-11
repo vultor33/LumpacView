@@ -21,11 +21,19 @@ public:
 		std::vector<int> &atomTypes,
 		std::vector<int> &bidentateChosen);
 
+	std::vector<int> findEnantiomerPair(
+		std::string fileName,
+		std::vector<int> guessPermutation,
+		std::vector<std::string> &pairCodes);
+
 	void printSingleMol(
 		std::vector<int> &permutation,
 		std::vector<int> &atomTypes,
 		std::vector<int> &bidentateChosen,
 		std::string name);
+
+	void printCoordXyz(std::vector<CoordXYZ> &coord);
+	
 
 private:
 
@@ -39,6 +47,10 @@ private:
 	std::string permutationToString0Correction(std::vector<int> &permutation);
 	std::string permutationToString(std::vector<int> &permutation);
 	std::vector<int> readCauchyNotationsEnantiomers(std::ifstream & openendFile_);
+	std::vector<int> readCauchyNotationsEnantiomersAndTakeCode(
+		std::ifstream & openendFile_,
+		std::vector<std::string> &permutCodes);
+
 	void printMoleculeMolFormat(
 		std::vector<int> & permutation,
 		std::vector<int> & atomTypes,

@@ -58,8 +58,9 @@ void buildCsvFile(int size, string skeletonName);
 
 int main(int argc, char *argv[])
 {
-	/*
-	CauchyIndex ci21_(8);
+
+	/*	
+	CauchyIndex ci21_(9);
 	vector<string> atoms;
 	vector<int> bid;
 	ci21_.rotationTest(atoms, bid);
@@ -95,24 +96,23 @@ int main(int argc, char *argv[])
 	// Na quimica organica deveria ter pesos. 
 
 	/* IDENTIFY ISOMERS
-	int size = 9;
+	int size = 6;
 	CauchyIndex ci234(size);
 	ci234.identifyIsomer(
-		"JTCTPR-9-M01M01M01Bs1Bs1Bs1.csv",
-		"YENHOO.xyz");
+		"OC-6-Bs1Bs1Bs1.csv",
+		"ZAXSAS.xyz");
 	return 0;
 	*/
 
 	/*
 	string responseName;
 	cout << "type line: " << endl;
-	cin >> responseName;
-	//responseName = "response-combinations8.txt";
+	//cin >> responseName;
+	responseName = "response-combinations9.txt";
 	ChangeNames chNames_;
 	chNames_.changeNameOfFiles(responseName);
 	return 0;
 	*/
-
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();
 	//return 0;

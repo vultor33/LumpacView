@@ -8,21 +8,40 @@
 #include <sstream>
 #include <fstream>
 #include <iomanip>
+#include <stdlib.h>
 
 #include "Coordstructs.h"
 #include "IsomersToMol.h"
+#include "EnantiomerIdentification.h"
 
 using namespace std;
 
-IdentifyIsomers::IdentifyIsomers(){}
+IdentifyIsomers::IdentifyIsomers()
+{
+	scaleFactor = 1.0e0;
+}
 
 IdentifyIsomers::~IdentifyIsomers(){}
 
+
+// ATENCAO
+// ATENCAO
+// ATENCAO  - nao tenho certeza se ele esta encontrando o minimo no metodo de distancias
+// ATENCAO
+// ATENCAO
 void IdentifyIsomers::coordinatesToPermutation(
-	vector<CoordXYZ> &mol0,
+	vector<CoordXYZ> mol0,
 	string permutationsFile,
 	string coordinatesFile)
+
 {
+	for (size_t i = 0; i < mol0.size(); i++)
+	{
+		mol0[i].x *= scaleFactor;
+		mol0[i].y *= scaleFactor;
+		mol0[i].z *= scaleFactor;
+	}
+
 	IsomersToMol isoMol_;
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
@@ -63,13 +82,69 @@ void IdentifyIsomers::coordinatesToPermutation(
 	}
 
 	vector<int> permutationF = stringToPermutation(allPerm[minimumPermut], atomTypes.size());
+	EnantiomerIdentification enant_;
+	vector<string> pairCodes;
+	vector<int> enantiomerPermut = isoMol_.findEnantiomerPair(
+		permutationsFile,
+		stringToPermutation(
+			allPerm[minimumPermut], 
+			atomTypes.size()),
+			pairCodes);
+	string composCode = takeAllVultorsGroup(permutationsFile);
+
+	ofstream ident_;
+	ident_.open("identifyingX.csv", std::ofstream::out | std::ofstream::app);
+	if (enantiomerPermut.size() != 0)
+	{
+		vector<int> permutMinimum = stringToPermutation(allPerm[minimumPermut], atomTypes.size());
+		vector<int> finalPermut = enant_.finalIsomer(
+			mol0,
+			atomTypes,
+			bidentateChosen,
+			permutMinimum,
+			enantiomerPermut,
+			outGeometry,
+			composition,
+			bidentateGeometry);
+		isoMol_.printSingleMol(
+			enantiomerPermut,
+			atomTypes,
+			bidentateChosen,
+			coordinatesFile);
+		if (finalPermut == enantiomerPermut)
+		{
+			ident_ << pairCodes[3] << " ; "
+				<< pairCodes[2] << " ; "
+				<< coordinatesFile << " ; "
+				<< composCode << endl;
+		}
+		else
+		{
+			ident_ << pairCodes[1] << " ; "
+				<< pairCodes[0] << " ; "
+				<< coordinatesFile << " ; "
+				<< composCode << endl;
+		}
+
+		cout << "final:  ";
+		for (size_t i = 0; i < finalPermut.size(); i++)
+			cout << finalPermut[i] << "  ";
+		cout << endl;
+	}
+	else
+	{
+		ident_ << pairCodes[1] << " ; "
+			<< pairCodes[0] << " ; "
+			<< coordinatesFile << " ; "
+			<< composCode << endl;
+	}
+	ident_.close();
+
 	isoMol_.printSingleMol(
 		permutationF,
 		atomTypes,
 		bidentateChosen,
 		coordinatesFile);
-
-	
 }
 
 double IdentifyIsomers::compareGeometryPermutation(
@@ -91,7 +166,7 @@ double IdentifyIsomers::compareGeometryPermutation(
 	}
 	sortAllDistances(atomTypes1, mol0, allT1, allD1);
 
-	sortAllDistances(composition, outGeometry, allT2, allD2);
+	sortAllDistances(composition, outGeometry, allT2, allD2);//fredmudar e o mesmo o tempo inteiro, colocar pra calcular so uma vez
 
 	vector<int> connect;
 	vector<int> bidentatePermutationRotated = bidentatePermutation;
@@ -269,7 +344,8 @@ double IdentifyIsomers::compareTwoAtoms(
 					kShift = 0;
 				if (aT1[j] == aT2[j + kShift])
 				{
-					difference += abs(aD1[j] - aD2[j + kShift]);
+					//difference += abs(aD1[j] - aD2[j + kShift]); fredmudar
+					difference += (aD1[j] - aD2[j + kShift]) * (aD1[j] - aD2[j + kShift]);
 					aT1.erase(aT1.begin() + j);
 					aD1.erase(aD1.begin() + j);
 					aT2.erase(aT2.begin() + j + kShift);
@@ -523,9 +599,9 @@ void IdentifyIsomers::translateToCenterOfMassAndReescale(vector<CoordXYZ> &coord
 			(coord[i].x * coord[i].x)
 			+ (coord[i].y * coord[i].y)
 			+ (coord[i].z * coord[i].z));
-		coord[i].x /= r;
-		coord[i].y /= r;
-		coord[i].z /= r;
+		coord[i].x *= scaleFactor / r;
+		coord[i].y *= scaleFactor / r;
+		coord[i].z *= scaleFactor / r;
 	}
 }
 
@@ -596,6 +672,68 @@ void IdentifyIsomers::applyPermutationBidentates(
 	}
 	bidentateAtomsChosen = bidentateAtomsChosenRotated;
 }
+
+
+double IdentifyIsomers::differenceConnect(
+	std::vector<int> & connect,
+	std::vector<int> & atomTypes1,
+	std::vector<int> & bidentates1,
+	std::vector< std::vector<int> > & allSortedTypes1,
+	std::vector< std::vector<double> > & allSortedDistances1,
+	std::vector<int> & atomTypes2,
+	std::vector<int> & bidentates2,
+	std::vector< std::vector<int> > & allSortedTypes2,
+	std::vector< std::vector<double> > & allSortedDistances2)
+{
+	for (int i = 0; i < connect.size(); i++)
+	{
+		if (connect[i] < 0)
+			continue;
+		int bidI = searchBidentateMatch(bidentates1, i);
+		int bidJ = searchBidentateMatch(bidentates2, connect[i]);
+		connect[bidI] = bidJ;
+	}
+
+	double totalDiff = 0.0e0;
+	for (size_t i = 0; i < connect.size(); i++)
+	{
+		vector<int> aT1 = allSortedTypes1[i];
+		vector<double> aD1 = allSortedDistances1[i];
+		vector<int> aT2 = allSortedTypes2[connect[i]];
+		vector<double> aD2 = allSortedDistances2[connect[i]];
+		totalDiff += compareTwoAtoms(aT1, aD1, aT2, aD2);
+	}
+	return totalDiff;
+}
+
+string IdentifyIsomers::takeAllVultorsGroup(string permutationsFile)
+{
+	size_t hyfen = permutationsFile.find("-");
+	size_t hyfen2 = permutationsFile.find("-",hyfen + 1);
+	size_t point = permutationsFile.find(".");
+	string compositionCode = permutationsFile.substr(hyfen2 + 1, point - hyfen2 - 1);
+	ifstream count_("counting.csv");
+	string line;
+	while (getline(count_, line))
+	{
+		stringstream convert;
+		convert << line;
+		string comp;
+		convert >> comp;
+		if (comp == compositionCode)
+			return line;
+	}
+
+	cout << "ON IdentifyIsomers::takeAllVultorsGroup COMPOSITION CODE NOT FOUND" << endl;
+	exit(1);
+}
+
+
+
+
+
+
+
 
 
 /*

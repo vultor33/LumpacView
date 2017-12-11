@@ -237,7 +237,7 @@ string ChangeNames::sizeToGeometryCode(int size)
 		return "SAPR-8";
 		break;
 	case 9:
-		return "JTCTPR-9";
+		return "TCTPR-9";
 		break;
 	case 10:
 		return "JMBIC-10";
@@ -325,10 +325,27 @@ void ChangeNames::calculateVultorGroup(
 	}
 	isomerFile_.close();
 
-	vGroup = setVultorGroup(
+	vector<vultorGroup> auxVGroup = setVultorGroup(
 		vultorGroupProbs,
 		vultorGroupCounting,
 		vultorGroupChirality);
+	vGroup = auxVGroup;
+
+	vector<double> entropyOrdering(auxVGroup.size());
+	for (size_t i = 0; i < auxVGroup.size(); i++)
+	{
+		entropyOrdering[i] = auxVGroup[i].achiralN * auxVGroup[i].achiralProb
+			+ 2 * auxVGroup[i].chiralN * auxVGroup[i].chiralProb;
+	}
+	AuxMath auxMath_;
+	vector<int> instructions = auxMath_.vector_ordering(entropyOrdering);
+	// ORDER VECTOR WITH INSTRUCTIONS
+	for (int i = 0; i < instructions.size(); i += 2)
+	{
+		cout << "inversion" << endl;
+		vGroup[instructions[i]] = auxVGroup[instructions[i + 1]];
+		vGroup[instructions[i + 1]] = auxVGroup[instructions[i]];
+	}
 }
 
 

@@ -42,6 +42,8 @@ void IdentifyIsomers::coordinatesToPermutation(
 		mol0[i].z *= scaleFactor;
 	}
 
+	// colocar ponto medio nos bidentados
+
 	IsomersToMol isoMol_;
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
@@ -82,6 +84,7 @@ void IdentifyIsomers::coordinatesToPermutation(
 	}
 
 	vector<int> permutationF = stringToPermutation(allPerm[minimumPermut], atomTypes.size());
+	/* IDENTIFICACAO DE ENANTIOMEROS
 	EnantiomerIdentification enant_;
 	vector<string> pairCodes;
 	vector<int> enantiomerPermut = isoMol_.findEnantiomerPair(
@@ -91,7 +94,6 @@ void IdentifyIsomers::coordinatesToPermutation(
 			atomTypes.size()),
 			pairCodes);
 	string composCode = takeAllVultorsGroup(permutationsFile);
-
 	ofstream ident_;
 	ident_.open("identifyingX.csv", std::ofstream::out | std::ofstream::app);
 	if (enantiomerPermut.size() != 0)
@@ -139,6 +141,7 @@ void IdentifyIsomers::coordinatesToPermutation(
 			<< composCode << endl;
 	}
 	ident_.close();
+	*/
 
 	isoMol_.printSingleMol(
 		permutationF,

@@ -1,4 +1,4 @@
-#define UNIX
+//#define UNIX
 
 #include <utility>
 #include <iostream>
@@ -95,14 +95,13 @@ int main(int argc, char *argv[])
 	// Na hora de realizar uma reacao quimica, os pesos deveriam ser levados em consideracao. Entropia, mais graus de liberdade. Graus de liberdade degenerados.
 	// Na quimica organica deveria ter pesos. 
 
-	/* IDENTIFY ISOMERS
-	int size = 6;
+	/* IDENTIFY ISOMERS */
+	int size = 8;
 	CauchyIndex ci234(size);
 	ci234.identifyIsomer(
-		"OC-6-Bs1Bs1Bs1.csv",
-		"ZAXSAS.xyz");
+		"SAPR-8-Ba1Ba1Ba1Ba1.csv",
+		"NOJTAH-PARTE-1-IDENTIFICACAO.xyz");
 	return 0;
-	*/
 
 	/*
 	string responseName;

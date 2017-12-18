@@ -488,6 +488,10 @@ void IsomersToMol::addDifferent(
 	}
 }
 
+string IsomersToMol::getAtomLabelI(int I)
+{
+	return atomLabels[I];
+}
 
 void IsomersToMol::setParameters(int coordination)
 {

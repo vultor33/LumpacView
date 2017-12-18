@@ -13,6 +13,7 @@
 #include "Coordstructs.h"
 #include "IsomersToMol.h"
 #include "EnantiomerIdentification.h"
+#include "MarquesEnantiomers.h"
 
 using namespace std;
 
@@ -52,6 +53,7 @@ void IdentifyIsomers::coordinatesToPermutation(
 		atomTypes,
 		bidentateChosen);
 
+
 	size_t size = mol0.size();
 	string file = coordinatesFile;
 	vector<int> composition(atomTypes.size());
@@ -61,12 +63,30 @@ void IdentifyIsomers::coordinatesToPermutation(
 		composition, 
 		bidentateChosen.size(),
 		bidentateGeometry);
+	applyBidentatesOnCoord(outGeometry, bidentateGeometry);
+
+	for (size_t i = 0; i < mol0.size(); i++)
+	{
+		mol0[i].atomlabel = "H";
+	}
 
 	double minimumDist = 1.0e99;
 	int minimumPermut = -1;
 	double auxDist;
+	MarquesEnantiomers mqRmsd_;
 	for (size_t i = 0; i < allPerm.size(); i++)
 	{
+		vector<int> bidentatePermutationRotated = bidentateChosen;
+		vector<int> permutationI = stringToPermutation(allPerm[i], atomTypes.size());
+		applyPermutationBidentates(permutationI, bidentatePermutationRotated);
+		vector<CoordXYZ> molI = mol0;
+		for (size_t i = 0; i < molI.size(); i++)
+			molI[i].atomlabel = isoMol_.getAtomLabelI(atomTypes[permutationI[i]]);
+
+		applyBidentatesOnCoord(molI, bidentatePermutationRotated);
+		auxDist = mqRmsd_.marquesRmsd(outGeometry, molI);
+
+		/*
 		vector<int> permutationI = stringToPermutation(allPerm[i], atomTypes.size());
 		double auxDist = compareGeometryPermutation(
 			atomTypes,
@@ -76,6 +96,10 @@ void IdentifyIsomers::coordinatesToPermutation(
 			composition,
 			outGeometry,
 			bidentateGeometry);
+		*/
+
+		cout << "rmsd " << auxDist << endl;
+		
 		if (auxDist < minimumDist)
 		{
 			minimumDist = auxDist;
@@ -520,12 +544,11 @@ std::vector<CoordXYZ> IdentifyIsomers::readGeometry(
 		getline(readG_, line);
 		stringstream convert;
 		convert << line;
-		string comp;
-		convert >> comp
+		convert >> geometry[i].atomlabel
 			>> geometry[i].x
 			>> geometry[i].y
 			>> geometry[i].z;
-		composition[i] = reverseComposition(comp);
+		composition[i] = reverseComposition(geometry[i].atomlabel);
 	}
 	for (int i = 0; i < bidSize; i++)
 	{
@@ -731,6 +754,23 @@ string IdentifyIsomers::takeAllVultorsGroup(string permutationsFile)
 	exit(1);
 }
 
+void IdentifyIsomers::applyBidentatesOnCoord(
+	vector<CoordXYZ> &mol,
+	vector<int> &bidentate)
+{
+	for (size_t i = 0; i < bidentate.size(); i += 2)
+	{
+		double xBI = 0.5e0*(mol[bidentate[i]].x + mol[bidentate[i + 1]].x);
+		double yBI = 0.5e0*(mol[bidentate[i]].y + mol[bidentate[i + 1]].y);
+		double zBI = 0.5e0*(mol[bidentate[i]].z + mol[bidentate[i + 1]].z);
+		CoordXYZ bidPos;
+		bidPos.x = xBI;
+		bidPos.y = yBI;
+		bidPos.z = zBI;
+		bidPos.atomlabel = "He";
+		mol.push_back(bidPos);
+	}
+}
 
 
 

@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 	CauchyIndex ci234(size);
 	ci234.identifyIsomer(
 		"SAPR-8-Ba1Ba1Ba1Ba1.csv",
-		"NOJTAH-PARTE-1-IDENTIFICACAO.xyz");
+		"NOJTAH-PARTE-2-IDENTIFICACAO.xyz");
 	return 0;
 
 	/*

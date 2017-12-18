@@ -8,6 +8,7 @@ struct CoordXYZ
 {
 	std::string atomlabel;
 	double x, y, z;
+	double mass;
 };
 
 struct MopacParams

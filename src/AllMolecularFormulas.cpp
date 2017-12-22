@@ -40,30 +40,30 @@ AllMolecularFormulas::AllMolecularFormulas()
 	elem[22] = "C05";
 	elem[23] = "C06";
 	elemNew.resize(24);
-	elemNew[0] = "M01";
-	elemNew[1] = "M02";
-	elemNew[2] = "M03";
-	elemNew[3] = "M04";
-	elemNew[4] = "M05";
-	elemNew[5] = "M06";
-	elemNew[6] = "M07";
-	elemNew[7] = "M08";
-	elemNew[8] = "M09";
-	elemNew[9] = "M10";
-	elemNew[10] = "M11";
-	elemNew[11] = "M12";
-	elemNew[12] = "Bs1";
-	elemNew[13] = "Bs2";
-	elemNew[14] = "Bs3";
-	elemNew[15] = "Bs4";
-	elemNew[16] = "Bs5";
-	elemNew[17] = "Bs6";
-	elemNew[18] = "Ba1";
-	elemNew[19] = "Ba2";
-	elemNew[20] = "Ba3";
-	elemNew[21] = "Ba4";
-	elemNew[22] = "Ba5";
-	elemNew[23] = "Ba6";
+	elemNew[0] = "a";
+	elemNew[1] = "b";
+	elemNew[2] = "c";
+	elemNew[3] = "d";
+	elemNew[4] = "e";
+	elemNew[5] = "f";
+	elemNew[6] = "g";
+	elemNew[7] = "h";
+	elemNew[8] = "i";
+	elemNew[9] = "j";
+	elemNew[10] = "k";
+	elemNew[11] = "l";
+	elemNew[12] = "(AA)";
+	elemNew[13] = "(BB)";
+	elemNew[14] = "(CC)";
+	elemNew[15] = "(DD)";
+	elemNew[16] = "(EE)";
+	elemNew[17] = "(FF)";
+	elemNew[18] = "(AB)";
+	elemNew[19] = "(CD)";
+	elemNew[20] = "(EF)";
+	elemNew[21] = "(GH)";
+	elemNew[22] = "(IJ)";
+	elemNew[23] = "(KL)";
 	coord.resize(24);
 	coord[0] = 1;
 	coord[1] = 1;
@@ -381,8 +381,15 @@ string AllMolecularFormulas::newCodeToString(vector < vector<int> > & codeLine)
 		for (size_t j = 0; j < codeLine[i].size(); j++)
 		{
 			stringstream convert;
-			convert << elemNew[j+startCount] << "("
-				<< codeLine[i][j] << ")";
+			if (codeLine[i][j] > 1)
+			{
+				convert << elemNew[j + startCount]
+					<< codeLine[i][j];
+			}
+			else
+			{
+				convert << elemNew[j + startCount];
+			}
 			name += convert.str();
 		}
 		/*

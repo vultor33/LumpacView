@@ -36,6 +36,7 @@ void IdentifyIsomers::coordinatesToPermutation(
 	string coordinatesFile)
 
 {
+	translateToCenterOfMassAndReescale(mol0);
 	for (size_t i = 0; i < mol0.size(); i++)
 	{
 		mol0[i].x *= scaleFactor;
@@ -43,21 +44,17 @@ void IdentifyIsomers::coordinatesToPermutation(
 		mol0[i].z *= scaleFactor;
 	}
 
-	// colocar ponto medio nos bidentados
-
+	size_t size = mol0.size();
+	string file = coordinatesFile;
+	vector<int> bidentateGeometry;
 	IsomersToMol isoMol_;
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
+	vector<int> composition(size);
 	vector<string> allPerm = isoMol_.readAllPermutations(
-		permutationsFile, 
+		permutationsFile,
 		atomTypes,
 		bidentateChosen);
-
-
-	size_t size = mol0.size();
-	string file = coordinatesFile;
-	vector<int> composition(atomTypes.size());
-	vector<int> bidentateGeometry;
 	vector<CoordXYZ> outGeometry = readGeometry(
 		file, 
 		composition, 
@@ -108,63 +105,32 @@ void IdentifyIsomers::coordinatesToPermutation(
 	}
 
 	vector<int> permutationF = stringToPermutation(allPerm[minimumPermut], atomTypes.size());
-	/* IDENTIFICACAO DE ENANTIOMEROS
+	ofstream ident_;
+	ident_.open("identifyingX.csv", std::ofstream::out | std::ofstream::app);
+	string composCode = takeAllVultorsGroup(permutationsFile);
 	EnantiomerIdentification enant_;
 	vector<string> pairCodes;
 	vector<int> enantiomerPermut = isoMol_.findEnantiomerPair(
 		permutationsFile,
 		stringToPermutation(
-			allPerm[minimumPermut], 
+			allPerm[minimumPermut],
 			atomTypes.size()),
-			pairCodes);
-	string composCode = takeAllVultorsGroup(permutationsFile);
-	ofstream ident_;
-	ident_.open("identifyingX.csv", std::ofstream::out | std::ofstream::app);
-	if (enantiomerPermut.size() != 0)
+		pairCodes);
+	ident_ << pairCodes[1] << " ; "
+		<< pairCodes[0] << " ; "
+		<< coordinatesFile << " ; "
+		<< composCode << endl;
+	ident_.close();
+
+	/* PRINTING ALL 
+	for (size_t i = 0; i < allPerm.size(); i++)
 	{
-		vector<int> permutMinimum = stringToPermutation(allPerm[minimumPermut], atomTypes.size());
-		vector<int> finalPermut = enant_.finalIsomer(
-			mol0,
-			atomTypes,
-			bidentateChosen,
-			permutMinimum,
-			enantiomerPermut,
-			outGeometry,
-			composition,
-			bidentateGeometry);
 		isoMol_.printSingleMol(
-			enantiomerPermut,
+			stringToPermutation(allPerm[i], atomTypes.size()),
 			atomTypes,
 			bidentateChosen,
 			coordinatesFile);
-		if (finalPermut == enantiomerPermut)
-		{
-			ident_ << pairCodes[3] << " ; "
-				<< pairCodes[2] << " ; "
-				<< coordinatesFile << " ; "
-				<< composCode << endl;
-		}
-		else
-		{
-			ident_ << pairCodes[1] << " ; "
-				<< pairCodes[0] << " ; "
-				<< coordinatesFile << " ; "
-				<< composCode << endl;
-		}
-
-		cout << "final:  ";
-		for (size_t i = 0; i < finalPermut.size(); i++)
-			cout << finalPermut[i] << "  ";
-		cout << endl;
 	}
-	else
-	{
-		ident_ << pairCodes[1] << " ; "
-			<< pairCodes[0] << " ; "
-			<< coordinatesFile << " ; "
-			<< composCode << endl;
-	}
-	ident_.close();
 	*/
 
 	isoMol_.printSingleMol(
@@ -172,6 +138,7 @@ void IdentifyIsomers::coordinatesToPermutation(
 		atomTypes,
 		bidentateChosen,
 		coordinatesFile);
+
 }
 
 double IdentifyIsomers::compareGeometryPermutation(
@@ -408,7 +375,7 @@ void IdentifyIsomers::sortAllDistances(
 	std::vector< std::vector<int> > &allSortedTypes,
 	std::vector< std::vector<double> > &allSortedDistances)
 {
-	for (int k = 0; k < mol0.size(); k++)
+	for (size_t k = 0; k < mol0.size(); k++)
 	{
 		vector<int> tempTypes;
 		vector<double> tempDistance;
@@ -711,7 +678,7 @@ double IdentifyIsomers::differenceConnect(
 	std::vector< std::vector<int> > & allSortedTypes2,
 	std::vector< std::vector<double> > & allSortedDistances2)
 {
-	for (int i = 0; i < connect.size(); i++)
+	for (size_t i = 0; i < connect.size(); i++)
 	{
 		if (connect[i] < 0)
 			continue;

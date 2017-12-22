@@ -13,7 +13,7 @@ using namespace zerg;
 namespace zerg{
 void AuxMathGa::set_seed(int seed)
 {
-	srand(seed);
+	//srand(seed);
 }
 
 double AuxMathGa::randomNumber(double fMin, double fMax)

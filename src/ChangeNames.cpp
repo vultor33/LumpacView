@@ -225,19 +225,19 @@ string ChangeNames::sizeToGeometryCode(int size)
 		return "T-4";
 		break;
 	case 5:
-		return "TBPY-5";
+		return "SPY-5";
 		break;
 	case 6:
-		return "OC-6";
+		return "TPR-6";
 		break;
 	case 7:
-		return "COC-7";
+		return "PBPY-7";
 		break;
 	case 8:
-		return "SAPR-8";
+		return "TDD-8";
 		break;
 	case 9:
-		return "TCTPR-9";
+		return "CSAPR-9";
 		break;
 	case 10:
 		return "JMBIC-10";
@@ -335,16 +335,20 @@ void ChangeNames::calculateVultorGroup(
 	for (size_t i = 0; i < auxVGroup.size(); i++)
 	{
 		entropyOrdering[i] = auxVGroup[i].achiralN * auxVGroup[i].achiralProb
-			+ 2 * auxVGroup[i].chiralN * auxVGroup[i].chiralProb;
+			+ auxVGroup[i].chiralN * auxVGroup[i].chiralProb;
 	}
 	AuxMath auxMath_;
 	vector<int> instructions = auxMath_.vector_ordering(entropyOrdering);
 	// ORDER VECTOR WITH INSTRUCTIONS
-	for (int i = 0; i < instructions.size(); i += 2)
+	for (size_t i = 0; i < instructions.size(); i += 2)
 	{
 		cout << "inversion" << endl;
 		vGroup[instructions[i]] = auxVGroup[instructions[i + 1]];
 		vGroup[instructions[i + 1]] = auxVGroup[instructions[i]];
+	}
+	for (size_t i = 0; i < vGroup.size(); i++)
+	{
+		vGroup[i].blockName[0] = takeLetter(i)[0];
 	}
 }
 
@@ -432,11 +436,30 @@ void ChangeNames::changeFormat(
 			newFile_ << thisGroup.blockName << "c}" << endl;
 		}
 	}
+
+
+
 	counting_ << newCombinationName << " ; "
+		<< 2 * totalChiral + totalAchiral << " ; "
 		<< totalChiral << " ; "
 		<< totalAchiral << " ; ";
 	for (size_t i = 0; i < vGroup.size(); i++)
 	{
+		int vGroupProb;
+		if (vGroup[i].achiralProb == 0)
+			vGroupProb = vGroup[i].chiralProb;
+		else
+			vGroupProb = vGroup[i].achiralProb;
+		int totalRce = 
+			vGroup[i].chiralN * vGroup[i].chiralProb + 
+			vGroup[i].achiralN * vGroup[i].achiralProb;
+
+		counting_ << vGroup[i].chiralN << " ; "
+			<< vGroup[i].achiralN << " ; "
+			<< vGroupProb << " ; "
+			<< totalRce << " ; ";
+
+		/*
 		if (vGroup[i].chiralN != 0)
 		{
 			counting_ << vGroup[i].blockName << "c ; "
@@ -449,6 +472,7 @@ void ChangeNames::changeFormat(
 				<< vGroup[i].achiralN << " ; "
 				<< vGroup[i].achiralProb << " ; ";
 		}
+		*/
 	}
 	counting_ << endl;
 }
@@ -504,7 +528,7 @@ string ChangeNames::generateNewTypeLine(string &combination, int systemSize)
 	if (bidentates.size() != 0)
 	{
 		convert2 << "/  ";
-		for (int i = 0; i < bidentates.size(); i++)
+		for (size_t i = 0; i < bidentates.size(); i++)
 		{
 			convert2 << bidentates[i] + 1 << "  ";
 		}

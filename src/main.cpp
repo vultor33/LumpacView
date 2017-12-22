@@ -25,6 +25,8 @@
 #include "AllMolecularFormulas.h"
 #include "CauchyIndex.h"
 #include "ChangeNames.h"
+#include "IsomersToMol.h"
+#include "MarquesEnantiomers.h"
 
 using namespace std;
 
@@ -99,19 +101,36 @@ int main(int argc, char *argv[])
 	int size = 8;
 	CauchyIndex ci234(size);
 	ci234.identifyIsomer(
-		"SAPR-8-Ba1Ba1Ba1Ba1.csv",
-		"NOJTAH-PARTE-2-IDENTIFICACAO.xyz");
+		"TDD-8-a4(AA)2.csv",
+		"YAVSOD.xyz");
 	return 0;
+	
+	
+	/* CALCULATING SQUARE 
+	string composition = "C01C02";
+	CauchyIndex ci1221_(4);
+	ci1221_.generateAtomTypesAndBidentateChosenFile(composition);
+	vector<int> atomTypes;
+	vector<int> bidentate;
+	ci1221_.generateAllIndependentIsomersWithFlagEnantiomers(
+		"isomers-4-SQ-enantiomers.txt",
+		composition + "---atomTypes.txt",
+		composition);
+	return 0;
+	*/
 
-	/*
+
+	/* CHANGING NAMES
 	string responseName;
 	cout << "type line: " << endl;
 	//cin >> responseName;
-	responseName = "response-combinations9.txt";
+	responseName = "response-combinations5.txt";
 	ChangeNames chNames_;
 	chNames_.changeNameOfFiles(responseName);
 	return 0;
-	*/
+	 */
+	
+	
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();
 	//return 0;

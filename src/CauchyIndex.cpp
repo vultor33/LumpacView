@@ -2318,6 +2318,7 @@ void CauchyIndex::calculateBidentateMap()
 			yj = mol0[j].y;
 			zj = mol0[j].z;
 
+
 			double angle = auxMath_.angleFrom3Points(xi, yi, zi, 0.0e0, 0.0e0, 0.0e0, xj, yj, zj);
 
 			if (angle < cutAngle)
@@ -2890,19 +2891,19 @@ void CauchyIndex::setSystem(int system)
 		vectorRotations = geo_.selectGeometry(41, mol0, cutAngle, reflectionOperation);
 		break;
 	case 5:
-		vectorRotations = geo_.selectGeometry(52, mol0, cutAngle, reflectionOperation);
+		vectorRotations = geo_.selectGeometry(51, mol0, cutAngle, reflectionOperation);
 		break;
 	case 6:
 		vectorRotations = geo_.selectGeometry(61, mol0, cutAngle, reflectionOperation);
 		break;
 	case 7:
-		vectorRotations = geo_.selectGeometry(72, mol0, cutAngle, reflectionOperation);
+		vectorRotations = geo_.selectGeometry(71, mol0, cutAngle, reflectionOperation);
 		break;
 	case 8:
 		vectorRotations = geo_.selectGeometry(84, mol0, cutAngle, reflectionOperation);
 		break;
 	case 9:
-		vectorRotations = geo_.selectGeometry(91, mol0, cutAngle, reflectionOperation);
+		vectorRotations = geo_.selectGeometry(92, mol0, cutAngle, reflectionOperation);
 		break;
 	case 10:
 		vectorRotations = geo_.selectGeometry(100, mol0, cutAngle, reflectionOperation);

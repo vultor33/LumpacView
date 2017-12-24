@@ -89,6 +89,10 @@ std::vector<double> Geometries::selectGeometry(
 		return geometry9CSAPR(mol0, cutAngle, reflectionOperation);
 		break;
 
+	case 92:
+		return geometry9MFF(mol0, cutAngle, reflectionOperation);
+		break;
+
 	case 100:
 		return geometry10JMBIC(mol0, cutAngle, reflectionOperation);
 		break;
@@ -338,7 +342,7 @@ std::vector<double> Geometries::geometry5SPY(
 	int size = 5;
 	mol0.resize(size);
 	reflectionOperation.resize(size);
-	cutAngle = 0.9 * auxMath_._pi;
+	cutAngle = 0.75 * auxMath_._pi;
 	vector<double> vectorRotations(12);
 
 
@@ -1462,54 +1466,54 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[66] = mol0[4].z;
 	vectorRotations[67] = 4.0e0 * auxMath_._pi / 3.0e0;
 	// c2 - aresta - 1
-	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[2].x);
-	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[2].y);
-	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[2].z);
+	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[1].x);
+	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[1].y);
+	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[1].z);
 	auxMath_.normalize(auxReferenceAxis);
 	vectorRotations[68] = auxReferenceAxis[0];
 	vectorRotations[69] = auxReferenceAxis[1];
 	vectorRotations[70] = auxReferenceAxis[2];
 	vectorRotations[71] = auxMath_._pi;
 	// c2 - aresta - 2
-	auxReferenceAxis[0] = 0.5e0 *(mol0[1].x + mol0[4].x);
-	auxReferenceAxis[1] = 0.5e0 *(mol0[1].y + mol0[4].y);
-	auxReferenceAxis[2] = 0.5e0 *(mol0[1].z + mol0[4].z);
+	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[2].x);
+	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[2].y);
+	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[2].z);
 	auxMath_.normalize(auxReferenceAxis);
 	vectorRotations[72] = auxReferenceAxis[0];
 	vectorRotations[73] = auxReferenceAxis[1];
 	vectorRotations[74] = auxReferenceAxis[2];
 	vectorRotations[75] = auxMath_._pi;
 	// c2 - aresta - 3
-	auxReferenceAxis[0] = 0.5e0 *(mol0[5].x + mol0[7].x);
-	auxReferenceAxis[1] = 0.5e0 *(mol0[5].y + mol0[7].y);
-	auxReferenceAxis[2] = 0.5e0 *(mol0[5].z + mol0[7].z);
+	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[3].x);
+	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[3].y);
+	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[3].z);
 	auxMath_.normalize(auxReferenceAxis);
 	vectorRotations[76] = auxReferenceAxis[0];
 	vectorRotations[77] = auxReferenceAxis[1];
 	vectorRotations[78] = auxReferenceAxis[2];
 	vectorRotations[79] = auxMath_._pi;
 	// c2 - aresta - 4
-	auxReferenceAxis[0] = 0.5e0 *(mol0[5].x + mol0[1].x);
-	auxReferenceAxis[1] = 0.5e0 *(mol0[5].y + mol0[1].y);
-	auxReferenceAxis[2] = 0.5e0 *(mol0[5].z + mol0[1].z);
+	auxReferenceAxis[0] = 0.5e0 *(mol0[2].x + mol0[4].x);
+	auxReferenceAxis[1] = 0.5e0 *(mol0[2].y + mol0[4].y);
+	auxReferenceAxis[2] = 0.5e0 *(mol0[2].z + mol0[4].z);
 	auxMath_.normalize(auxReferenceAxis);
 	vectorRotations[80] = auxReferenceAxis[0];
 	vectorRotations[81] = auxReferenceAxis[1];
 	vectorRotations[82] = auxReferenceAxis[2];
 	vectorRotations[83] = auxMath_._pi;
 	// c2 - aresta - 5
-	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[3].x);
-	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[3].y);
-	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[3].z);
+	auxReferenceAxis[0] = 0.5e0 *(mol0[1].x + mol0[4].x);
+	auxReferenceAxis[1] = 0.5e0 *(mol0[1].y + mol0[4].y);
+	auxReferenceAxis[2] = 0.5e0 *(mol0[1].z + mol0[4].z);
 	auxMath_.normalize(auxReferenceAxis);
 	vectorRotations[84] = auxReferenceAxis[0];
 	vectorRotations[85] = auxReferenceAxis[1];
 	vectorRotations[86] = auxReferenceAxis[2];
 	vectorRotations[87] = auxMath_._pi;
 	// c2 - aresta - 6
-	auxReferenceAxis[0] = 0.5e0 *(mol0[6].x + mol0[2].x);
-	auxReferenceAxis[1] = 0.5e0 *(mol0[6].y + mol0[2].y);
-	auxReferenceAxis[2] = 0.5e0 *(mol0[6].z + mol0[2].z);
+	auxReferenceAxis[0] = 0.5e0 *(mol0[1].x + mol0[5].x);
+	auxReferenceAxis[1] = 0.5e0 *(mol0[1].y + mol0[5].y);
+	auxReferenceAxis[2] = 0.5e0 *(mol0[1].z + mol0[5].z);
 	auxMath_.normalize(auxReferenceAxis);
 	vectorRotations[88] = auxReferenceAxis[0];
 	vectorRotations[89] = auxReferenceAxis[1];
@@ -1679,6 +1683,57 @@ std::vector<double> Geometries::geometry9CSAPR(
 	reflectionOperation[3] = 2;
 	reflectionOperation[5] = 7;
 	reflectionOperation[7] = 5;
+
+	return vectorRotations;
+}
+
+
+std::vector<double> Geometries::geometry9MFF(
+	std::vector<CoordXYZ> &mol0,
+	double & cutAngle,
+	std::vector<int> &reflectionOperation)
+{
+	int size = 9;
+	mol0.resize(size);
+	reflectionOperation.resize(size);
+	cutAngle = auxMath_._pi / 2.0e0;;
+	vector<double> vectorRotations;
+	vector<double> auxReferenceAxis(3);
+
+	mol0[0].x = 0.00000000;
+	mol0[0].y = 0.98769232;
+	mol0[0].z = 0.20656801;
+	mol0[1].x = 0.93914925;
+	mol0[1].y = 0.30531271;
+	mol0[1].z = 0.20656540;
+	mol0[2].x = 0.58040926;
+	mol0[2].y = -0.79864099;
+	mol0[2].z = 0.20655749;
+	mol0[3].x = -0.58040926;
+	mol0[3].y = -0.79864099;
+	mol0[3].z = 0.20655749;
+	mol0[4].x = -0.93914925;
+	mol0[4].y = 0.30531271;
+	mol0[4].z = 0.20656540;
+	mol0[5].x = -0.57992608;
+	mol0[5].y = -0.33542691;
+	mol0[5].z = -0.69361921;
+	mol0[6].x = 0.57992608;
+	mol0[6].y = -0.33542691;
+	mol0[6].z = -0.69361921;
+	mol0[7].x = 0.00000000;
+	mol0[7].y = 0.66958376;
+	mol0[7].z = -0.69426154;
+	mol0[8].x = 0.00000000;
+	mol0[8].y = 0.00023431;
+	mol0[8].z = 1.04868617;
+
+	for (size_t i = 0; i < reflectionOperation.size(); i++)
+		reflectionOperation[i] = i;
+	reflectionOperation[1] = 4;
+	reflectionOperation[4] = 1;
+	reflectionOperation[2] = 3;
+	reflectionOperation[3] = 2;
 
 	return vectorRotations;
 }

@@ -334,6 +334,8 @@ int main(int argc, char *argv[])
 	
 		string compositionFile = workingDirectory + "/" + composition + "---atomTypes.txt";
 
+		exit(1);// atomTypes
+
 		ci_.generateSlurmFilesToDeletionFlags(
 			systemSize,
 			total,

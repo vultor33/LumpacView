@@ -105,6 +105,11 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
+	std::vector<double> geometry9MFF(
+        	std::vector<CoordXYZ> &mol0,
+        	double & cutAngle,
+        	std::vector<int> &reflectionOperation);
+
 	std::vector<double> geometry10JMBIC(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,

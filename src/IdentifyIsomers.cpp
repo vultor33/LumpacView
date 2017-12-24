@@ -24,12 +24,6 @@ IdentifyIsomers::IdentifyIsomers()
 
 IdentifyIsomers::~IdentifyIsomers(){}
 
-
-// ATENCAO
-// ATENCAO
-// ATENCAO  - nao tenho certeza se ele esta encontrando o minimo no metodo de distancias
-// ATENCAO
-// ATENCAO
 void IdentifyIsomers::coordinatesToPermutation(
 	vector<CoordXYZ> mol0,
 	string permutationsFile,

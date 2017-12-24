@@ -110,10 +110,26 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
-	std::vector<double> geometry10JMBIC(
+	std::vector<double> geometry10PointSphere(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry10TD(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry10JSPC(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry10JBCSAPR(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
 
 	std::vector<double> geometry11JCPAPR(
 		std::vector<CoordXYZ> &mol0,

@@ -2550,45 +2550,11 @@ void CauchyIndex::identifyIsomer(
 	string permutationsFile,
 	string coordinatesFile)
 {
-	// calcular todas as distancias interatomicas
-	// do primeiro atomo.
 	IdentifyIsomers identIso_;
 	identIso_.coordinatesToPermutation(
 		mol0,
 		permutationsFile,
 		coordinatesFile);
-
-	/*
-	vector<double> distances;
-	for (size_t i = 0; i < atomTypes.size(); i++)
-	{
-		atomTypes[i] = i;
-		permutation[i] = i;
-	}
-	atomTypes[0] = 0;
-	atomTypes[1] = 1;
-	atomTypes[2] = 3;
-	atomTypes[3] = 5;
-	atomTypes[4] = 4;
-	atomTypes[5] = 2;
-	string p1 = "0 1 2 3 4 5";
-	string p2 = "0 2 3 4 1 5";
-	// identIso_.compareTwoPermutations(atomTypes, p1, p2, mol0);
-	vector<string> atoms(6);
-	atoms[0] = "H";
-	atoms[1] = "Li";
-	atoms[2] = "Na";
-	atoms[3] = "C";
-	atoms[4] = "N";
-	atoms[5] = "O";
-	vector<int> bid;
-	rotationTest(atoms, bid);
-	*/
-
-	//identIso_.compareIsomers(atomTypes, allT1, allD1, atomTypes2, allT2, allD2);
-
-	//defining bidentate bonds
-//	vector<int> bidentateAtomsChosenRotated = applyPermutationCoordinates(permutation, atoms, bidentateAtomsChosen);
 }
 
 
@@ -2874,52 +2840,16 @@ string CauchyIndex::permutationToString(vector<int> permutation)
 // 7 - PBPY(y) ; COC (nossa) ; CTPR(y)
 // 8 - SAPR (nossa) ; TDD(y - JSD!!!) ; BTPR(y - JBTP!!!) ; HBPY(y) ; CU(y)  
 // 9 - CSAPR(y) ; TCTPR (nossa - JTCTPR) ; MFF (cs)
-// 10 - JMBIC (nosso)
+// 10 - JMBIC (nosso) 
 // 11 - JCPAPR (nosso)
 // 12 - IC (nosso)
-
-
 void CauchyIndex::setSystem(int system)
 {
 	vector<double> vectorRotations;
 	Geometries geo_;
 
-	switch (system)
-	{
-	case 4:
-		vectorRotations = geo_.selectGeometry(41, mol0, cutAngle, reflectionOperation);
-		break;
-	case 5:
-		vectorRotations = geo_.selectGeometry(51, mol0, cutAngle, reflectionOperation);
-		break;
-	case 6:
-		vectorRotations = geo_.selectGeometry(60, mol0, cutAngle, reflectionOperation);
-		break;
-	case 7:
-		vectorRotations = geo_.selectGeometry(71, mol0, cutAngle, reflectionOperation);
-		break;
-	case 8:
-		vectorRotations = geo_.selectGeometry(81, mol0, cutAngle, reflectionOperation);
-		break;
-	case 9:
-		vectorRotations = geo_.selectGeometry(90, mol0, cutAngle, reflectionOperation);
-		break;
-	case 10:
-		vectorRotations = geo_.selectGeometry(100, mol0, cutAngle, reflectionOperation);
-		break;
-	case 11:
-		vectorRotations = geo_.selectGeometry(110, mol0, cutAngle, reflectionOperation);
-		break;
-	case 12:
-		vectorRotations = geo_.selectGeometry(120, mol0, cutAngle, reflectionOperation);
-		break;
-		
+	vectorRotations = geo_.selectGeometry(system, mol0, cutAngle, reflectionOperation);
 
-	default:
-		cout << "CauchyIndex::setSystem - system not found" << endl;
-		exit(1);
-		break;
-	}
 	setAllRotations(vectorRotations);
 }
 

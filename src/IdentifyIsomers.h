@@ -137,6 +137,9 @@ private:
 
 	std::string takeAllVultorsGroup(std::string permutationsFile);
 
+	void applyBidentatesOnCoord(
+		std::vector<CoordXYZ> &mol,
+		std::vector<int> &bidentate);
 
 };
 

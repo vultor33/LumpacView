@@ -9,6 +9,7 @@
 #include <algorithm>
 
 #include "Coordstructs.h"
+#include "Geometries.h"
 
 using namespace std;
 
@@ -145,6 +146,8 @@ void IsomersToMol::printAllMol(string fileName)
 			continue;
 		string permtString = permutationToString0Correction(permutation);
 		ofstream fileXyz_((composition + "-" + permtString + ".mol2").c_str());
+		for (size_t i = 0; i < permutation.size(); i++)
+			permutation[i]--;
 		printMoleculeMolFormat(permutation, atomTypes, bidentateChosen, fileXyz_);
 		fileXyz_.close();
 	}
@@ -368,6 +371,52 @@ int IsomersToMol::stringToNumber(string entryString, int & nBidentates)
 {
 	// cut ligands codes
 	vector<string> allCodes;
+	int coordination = 0;
+	nBidentates = 0;
+	bool bidentate;
+	for (size_t i = 0; i < entryString.size();i++)
+	{
+		char codeI = entryString[i];
+		bidentate = false;
+		if (codeI == '(')
+		{
+			i += 4;
+			bidentate = true;
+		}
+		else
+			i += 1;
+		if ((i == entryString.size())||
+			(!isdigit(entryString[i])))
+		{
+			i--;
+			if (bidentate)
+			{
+				nBidentates += 1;
+				coordination += 2;
+			}
+			else
+				coordination++;
+		}
+		else
+		{
+			stringstream convertI;
+			convertI << entryString[i];
+			int nTimes;
+			convertI >> nTimes;
+			if (bidentate)
+			{
+				nBidentates += nTimes;
+				coordination += 2 * nTimes;
+			}
+			else
+			{
+				coordination += nTimes;
+			}
+		}
+	}
+	return coordination;
+
+
 	string code;
 	for (size_t i = 0; i < entryString.size(); i++)
 	{
@@ -417,7 +466,7 @@ int IsomersToMol::stringToNumber(string entryString, int & nBidentates)
 	types.push_back(typeCode2);
 	types.push_back(typeCode3);
 
-	int coordination = 0;
+	coordination = 0;
 	nBidentates = 0;
 	for (size_t i = 0; i < typeCode1.size(); i++)
 		coordination += typeCode1[i];
@@ -488,6 +537,10 @@ void IsomersToMol::addDifferent(
 	}
 }
 
+string IsomersToMol::getAtomLabelI(int I)
+{
+	return atomLabels[I];
+}
 
 void IsomersToMol::setParameters(int coordination)
 {
@@ -505,258 +558,46 @@ void IsomersToMol::setParameters(int coordination)
 	atomLabels[10] = "N";
 	atomLabels[11] = "C";
 
+	Geometries geo_;
+	double cutAngle;
+	vector<int> reflection;
+
 	switch (coordination)
 	{
 	case 4:
-		complex.resize(4);
-		complex[0].x = 0.0000000;
-		complex[0].y = 0.0000000;
-		complex[0].z = 1.0000000;
-		complex[1].x = 0.81649658;
-		complex[1].y = 0.47140452;
-		complex[1].z = -0.33333333;
-		complex[2].x = -0.81649658;
-		complex[2].y = 0.47140452;
-		complex[2].z = -0.33333333;
-		complex[3].x = 0.00000000;
-		complex[3].y = -0.94280904;
-		complex[3].z = -0.33333333;
+		geo_.selectGeometry(40, complex, cutAngle, reflection);
 		break;
 
 	case 5:
-		complex.resize(5);
-		complex[0].x = 0.000e0;
-		complex[0].y = 0.000e0;
-		complex[0].z = 1.000e0;
-		complex[1].x = 1.000e0;
-		complex[1].y = 0.000e0;
-		complex[1].z = 0.000e0;
-		complex[2].x = -1.000e0;
-		complex[2].y = 0.000e0;
-		complex[2].z = 0.000e0;
-		complex[3].x = 0.000e0;
-		complex[3].y = 0.86602540;
-		complex[3].z = -0.50000000;
-		complex[4].x = 0.000e0;
-		complex[4].y = -0.86602540;
-		complex[4].z = -0.50000000;
+		geo_.selectGeometry(51, complex, cutAngle, reflection);
 		break;
 
 	case 6:
-		complex.resize(6);
-		complex[0].x = 0.00000000;
-		complex[0].y = 0.00000000;
-		complex[0].z = 1.00000000;
-		complex[1].x = 1.00000000;
-		complex[1].y = 0.00000000;
-		complex[1].z = 0.00000000;
-		complex[2].x = 0.00000000;
-		complex[2].y = 1.00000000;
-		complex[2].z = 0.00000000;
-		complex[3].x = -1.00000000;
-		complex[3].y = 0.00000000;
-		complex[3].z = 0.00000000;
-		complex[4].x = 0.00000000;
-		complex[4].y = -1.00000000;
-		complex[4].z = 0.00000000;
-		complex[5].x = 0.00000000;
-		complex[5].y = 0.00000000;
-		complex[5].z = -1.00000000;
+		geo_.selectGeometry(60, complex, cutAngle, reflection);
 		break;
 
 	case 7:
-		complex.resize(7);
-		complex[0].x = 0.00000000;
-		complex[0].y = 0.00000000;
-		complex[0].z = 1.00000000;
-		complex[1].x = 0.97767167;
-		complex[1].y = 0.00000000;
-		complex[1].z = 0.21013831;
-		complex[2].x = 0.16977090;
-		complex[2].y = 0.96281864;
-		complex[2].z = 0.21013831;
-		complex[3].x = -0.91871085;
-		complex[3].y = 0.33438340;
-		complex[3].z = 0.21013831;
-		complex[4].x = -0.48883583;
-		complex[4].y = -0.84668850;
-		complex[4].z = 0.21013831;
-		complex[5].x = 0.36282725;
-		complex[5].y = -0.62843523;
-		complex[5].z = -0.68805926;
-		complex[6].x = -0.26010411;
-		complex[6].y = 0.45051354;
-		complex[6].z = -0.85403946;
+		geo_.selectGeometry(71, complex, cutAngle, reflection);
 		break;
 
 	case 8:
-		complex.resize(8);
-		complex[0].x = 0.000000;
-		complex[0].y = 0.000000;
-		complex[0].z = 1.00000000;
-		complex[1].x = 0.96528366;
-		complex[1].y = 0.000000;
-		complex[1].z = 0.26120388;
-		complex[2].x = -0.56545007;
-		complex[2].y = 0.78232905;
-		complex[2].z = 0.26120388;
-		complex[3].x = -0.88247541;
-		complex[3].y = -0.39116453;
-		complex[3].z = 0.26120387;
-		complex[4].x = 0.19991679;
-		complex[4].y = -0.94435471;
-		complex[4].z = 0.26120387;
-		complex[5].x = 0.39983358;
-		complex[5].y = 0.78232905;
-		complex[5].z = -0.47759225;
-		complex[6].x = -0.59975037;
-		complex[6].y = 0.16202565;
-		complex[6].z = -0.78361162;
-		complex[7].x = 0.48264183;
-		complex[7].y = -0.39116453;
-		complex[7].z = -0.78361162;
+		geo_.selectGeometry(81, complex, cutAngle, reflection);
 		break;
 
 	case 9:
-		complex.resize(9);
-		complex[0].x = 0.000000;
-		complex[0].y = 0.000000;
-		complex[0].z = 1.000000;
-		complex[1].x = -0.23570226;
-		complex[1].y = 0.91287093;
-		complex[1].z = 0.33333333;
-		complex[2].x = -0.94280904;
-		complex[2].y = 0.00000000;
-		complex[2].z = 0.33333333;
-		complex[3].x = 0.23570226;
-		complex[3].y = -0.91287093;
-		complex[3].z = 0.33333333;
-		complex[4].x = 0.94280904;
-		complex[4].y = 0.00000000;
-		complex[4].z = 0.33333333;
-		complex[5].x = 0.53033009;
-		complex[5].y = 0.68465320;
-		complex[5].z = -0.50000000;
-		complex[6].x = -0.53033009;
-		complex[6].y = -0.68465320;
-		complex[6].z = -0.50000000;
-		complex[7].x = -0.58925565;
-		complex[7].y = 0.45643546;
-		complex[7].z = -0.66666667;
-		complex[8].x = 0.58925565;
-		complex[8].y = -0.45643546;
-		complex[8].z = -0.66666667;
+		geo_.selectGeometry(90, complex, cutAngle, reflection);
 		break;
 
 	case 10:
-		complex.resize(10);
-		complex[0].x = 0.000000;
-		complex[0].y = 0.000000;
-		complex[0].z = 1.000000;
-		complex[1].x = 0.91458473;
-		complex[1].y = 0.00000000;
-		complex[1].z = 0.40439433;
-		complex[2].x = 0.26335401;
-		complex[2].y = 0.87584810;
-		complex[2].z = 0.40439432;
-		complex[3].x = -0.76291954;
-		complex[3].y = 0.50439965;
-		complex[3].z = 0.40439433;
-		complex[4].x = -0.38787671;
-		complex[4].y = -0.82826136;
-		complex[4].z = 0.40439433;
-		complex[5].x = 0.52670802;
-		complex[5].y = -0.82826136;
-		complex[5].z = -0.19121135;
-		complex[6].x = -0.89351054;
-		complex[6].y = -0.25145533;
-		complex[6].z = -0.37203377;
-		complex[7].x = 0.67837321;
-		complex[7].y = 0.50439965;
-		complex[7].z = -0.53421979;
-		complex[8].x = -0.39464230;
-		complex[8].y = 0.69067213;
-		complex[8].z = -0.60599460;
-		complex[9].x = 0.02107419;
-		complex[9].y = -0.25145533;
-		complex[9].z = -0.96763944;
+		geo_.selectGeometry(100, complex, cutAngle, reflection);
 		break;
 
 	case 11:
-		complex.resize(11);
-		complex[0].x = 0.000000;
-		complex[0].y = 0.000000;
-		complex[0].z = 1.000000;
-		complex[1].x = 0.89442719;
-		complex[1].y = 0.00000000;
-		complex[1].z = 0.44721360;
-		complex[2].x = 0.27639320;
-		complex[2].y = 0.85065081;
-		complex[2].z = 0.44721360;
-		complex[3].x = -0.72360680;
-		complex[3].y = 0.52573111;
-		complex[3].z = 0.44721360;
-		complex[4].x = -0.72360680;
-		complex[4].y = -0.52573111;
-		complex[4].z = 0.44721360;
-		complex[5].x = 0.27639320;
-		complex[5].y = -0.85065081;
-		complex[5].z = 0.44721360;
-		complex[6].x = 0.72360680;
-		complex[6].y = 0.52573111;
-		complex[6].z = -0.44721360;
-		complex[7].x = -0.27639320;
-		complex[7].y = 0.85065081;
-		complex[7].z = -0.44721360;
-		complex[8].x = -0.89442719;
-		complex[8].y = 0.00000000;
-		complex[8].z = -0.44721360;
-		complex[9].x = -0.27639320;
-		complex[9].y = -0.85065081;
-		complex[9].z = -0.44721360;
-		complex[10].x = 0.00000000;
-		complex[10].y = 0.00000000;
-		complex[10].z = -1.00000000;
+		geo_.selectGeometry(110, complex, cutAngle, reflection);
 		break;
 
 	case 12:
-		complex.resize(12);
-		complex[0].x = 0.00000000;
-		complex[0].y = 0.00000000;
-		complex[0].z = 1.00000000;
-		complex[1].x = 0.89442719;
-		complex[1].y = 0.00000000;
-		complex[1].z = 0.44721360;
-		complex[2].x = 0.27639320;
-		complex[2].y = 0.85065081;
-		complex[2].z = 0.44721360;
-		complex[3].x = -0.72360680;
-		complex[3].y = 0.52573111;
-		complex[3].z = 0.44721360;
-		complex[4].x = -0.72360680;
-		complex[4].y = -0.52573111;
-		complex[4].z = 0.44721360;
-		complex[5].x = 0.27639320;
-		complex[5].y = -0.85065081;
-		complex[5].z = 0.44721360;
-		complex[6].x = 0.72360680;
-		complex[6].y = 0.52573111;
-		complex[6].z = -0.44721360;
-		complex[7].x = -0.27639320;
-		complex[7].y = 0.85065081;
-		complex[7].z = -0.44721360;
-		complex[8].x = -0.89442719;
-		complex[8].y = 0.00000000;
-		complex[8].z = -0.44721360;
-		complex[9].x = -0.27639320;
-		complex[9].y = -0.85065081;
-		complex[9].z = -0.44721360;
-		complex[10].x = 0.72360680;
-		complex[10].y = -0.52573111;
-		complex[10].z = -0.44721360;
-		complex[11].x = 0.00000000;
-		complex[11].y = 0.00000000;
-		complex[11].z = -1.00000000;
+		geo_.selectGeometry(120, complex, cutAngle, reflection);
 		break;
 
 	default:

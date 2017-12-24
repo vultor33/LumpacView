@@ -185,6 +185,7 @@ public:
 		int ramFinal);
 
 	void createEnantiomersFiles(
+		int nSystem,
 		int nProc,
 		int iMax,
 		std::string skeletonFile,

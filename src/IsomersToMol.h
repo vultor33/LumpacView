@@ -33,6 +33,8 @@ public:
 		std::string name);
 
 	void printCoordXyz(std::vector<CoordXYZ> &coord);
+
+	std::string getAtomLabelI(int I);
 	
 
 private:

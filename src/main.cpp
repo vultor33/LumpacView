@@ -25,6 +25,8 @@
 #include "AllMolecularFormulas.h"
 #include "CauchyIndex.h"
 #include "ChangeNames.h"
+#include "IsomersToMol.h"
+#include "MarquesEnantiomers.h"
 
 using namespace std;
 
@@ -96,15 +98,29 @@ int main(int argc, char *argv[])
 	// Na quimica organica deveria ter pesos. 
 
 	/* IDENTIFY ISOMERS
-	int size = 6;
+	int size = 8;
 	CauchyIndex ci234(size);
 	ci234.identifyIsomer(
-		"OC-6-Bs1Bs1Bs1.csv",
-		"ZAXSAS.xyz");
+		"TDD-8-a4(AA)2.csv",
+		"YAVSOD.xyz");
+	return 0;
+	 */
+	
+	/* CALCULATING SQUARE 
+	string composition = "C01C02";
+	CauchyIndex ci1221_(4);
+	ci1221_.generateAtomTypesAndBidentateChosenFile(composition);
+	vector<int> atomTypes;
+	vector<int> bidentate;
+	ci1221_.generateAllIndependentIsomersWithFlagEnantiomers(
+		"isomers-4-SQ-enantiomers.txt",
+		composition + "---atomTypes.txt",
+		composition);
 	return 0;
 	*/
 
-	/*
+
+	/* CHANGING NAMES 
 	string responseName;
 	cout << "type line: " << endl;
 	//cin >> responseName;
@@ -112,7 +128,9 @@ int main(int argc, char *argv[])
 	ChangeNames chNames_;
 	chNames_.changeNameOfFiles(responseName);
 	return 0;
-	*/
+	 */
+	
+	
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();
 	//return 0;
@@ -334,7 +352,7 @@ int main(int argc, char *argv[])
 	
 		string compositionFile = workingDirectory + "/" + composition + "---atomTypes.txt";
 
-		exit(1);// atomTypes
+		//exit(1);// atomTypes
 
 		ci_.generateSlurmFilesToDeletionFlags(
 			systemSize,
@@ -379,6 +397,7 @@ int main(int argc, char *argv[])
                 cGen >> systemSize >> nProc >> iMax >> skeletonFile >> machineType;
                 CauchyIndex ci_(systemSize);
         	ci_.createEnantiomersFiles(
+			systemSize,
                 	nProc,
                 	iMax,
                 	skeletonFile,

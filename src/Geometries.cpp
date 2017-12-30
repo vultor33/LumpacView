@@ -243,71 +243,96 @@ std::vector<double> Geometries::geometry4Tetrahedron(
 	mol0.resize(size);
 	reflectionOperation.resize(size);
 	cutAngle = 2.0e0 * auxMath_._pi / 3.0e0;
-	vector<double> vectorRotations(28);
+	vector<double> vectorRotations(44);
 
-	mol0[0].x = 1.000000000000000;
-	mol0[0].y = 0.000000000000000;
-	mol0[0].z = 0.000000000000000;
-	mol0[1].x = 0.000000000000000;
-	mol0[1].y = 1.000000000000000;
-	mol0[1].z = 0.000000000000000;
-	mol0[2].x = -1.000000000000000;
-	mol0[2].y = 0.000000000000000;
-	mol0[2].z = 0.000000000000000;
-	mol0[3].x = 0.000000000000000;
-	mol0[3].y = -1.000000000000000;
-	mol0[3].z = 0.000000000000000;
+	mol0[0].x = 0.000000;
+	mol0[0].y = 0.816300;
+	mol0[0].z = -0.577200;
+	mol0[1].x = 0.000000;
+	mol0[1].y = -0.816300;
+	mol0[1].z = -0.577200;
+	mol0[2].x = 0.816300;
+	mol0[2].y = 0.000000;
+	mol0[2].z = 0.577200;
+	mol0[3].x = -0.816300;
+	mol0[3].y = 0.000000;
+	mol0[3].z = 0.577200;
 
 	vector<double> auxReferenceAxis(3);
 	// ROTATIONS
-	//c2-0
+	//c3-0-1
 	vectorRotations[0] = mol0[0].x;
 	vectorRotations[1] = mol0[0].y;
 	vectorRotations[2] = mol0[0].z;
-	vectorRotations[3] = auxMath_._pi;
-	// c2-1
-	auxReferenceAxis[0] = 0.5e0 * (mol0[0].x + mol0[1].x);
-	auxReferenceAxis[1] = 0.5e0 * (mol0[0].y + mol0[1].y);
-	auxReferenceAxis[2] = 0.5e0 * (mol0[0].z + mol0[1].z);
-	auxMath_.normalize(auxReferenceAxis);
-	vectorRotations[4] = auxReferenceAxis[0];
-	vectorRotations[5] = auxReferenceAxis[1];
-	vectorRotations[6] = auxReferenceAxis[2];
-	vectorRotations[7] = auxMath_._pi;
-	// c2-2
+	vectorRotations[3] = 2.0e0 * auxMath_._pi / 3.0e0;
+	//c3-0-2
+	vectorRotations[4] = mol0[0].x;
+	vectorRotations[5] = mol0[0].y;
+	vectorRotations[6] = mol0[0].z;
+	vectorRotations[7] = -2.0e0 * auxMath_._pi / 3.0e0;
+	//c3-1-1
 	vectorRotations[8] = mol0[1].x;
 	vectorRotations[9] = mol0[1].y;
 	vectorRotations[10] = mol0[1].z;
-	vectorRotations[11] = auxMath_._pi;
-	// c2-3
-	auxReferenceAxis[0] = 0.5e0 * (mol0[1].x + mol0[2].x);
-	auxReferenceAxis[1] = 0.5e0 * (mol0[1].y + mol0[2].y);
-	auxReferenceAxis[2] = 0.5e0 * (mol0[1].z + mol0[2].z);
+	vectorRotations[11] = 2.0e0 * auxMath_._pi / 3.0e0;
+	//c3-1-2
+	vectorRotations[12] = mol0[1].x;
+	vectorRotations[13] = mol0[1].y;
+	vectorRotations[14] = mol0[1].z;
+	vectorRotations[15] = -2.0e0 * auxMath_._pi / 3.0e0;
+	//c3-2-1
+	vectorRotations[16] = mol0[2].x;
+	vectorRotations[17] = mol0[2].y;
+	vectorRotations[18] = mol0[2].z;
+	vectorRotations[19] = 2.0e0 * auxMath_._pi / 3.0e0;
+	//c3-2-2
+	vectorRotations[20] = mol0[2].x;
+	vectorRotations[21] = mol0[2].y;
+	vectorRotations[22] = mol0[2].z;
+	vectorRotations[23] = -2.0e0 * auxMath_._pi / 3.0e0;
+	//c3-3-1
+	vectorRotations[24] = mol0[3].x;
+	vectorRotations[25] = mol0[3].y;
+	vectorRotations[26] = mol0[3].z;
+	vectorRotations[27] = 2.0e0 * auxMath_._pi / 3.0e0;
+	//c3-3-2
+	vectorRotations[28] = mol0[3].x;
+	vectorRotations[29] = mol0[3].y;
+	vectorRotations[30] = mol0[3].z;
+	vectorRotations[31] = -2.0e0 * auxMath_._pi / 3.0e0;
+
+	// c2-1
+	auxReferenceAxis[0] = 0.5e0 * (mol0[0].x + mol0[2].x);
+	auxReferenceAxis[1] = 0.5e0 * (mol0[0].y + mol0[2].y);
+	auxReferenceAxis[2] = 0.5e0 * (mol0[0].z + mol0[2].z);
 	auxMath_.normalize(auxReferenceAxis);
-	vectorRotations[12] = auxReferenceAxis[0];
-	vectorRotations[13] = auxReferenceAxis[1];
-	vectorRotations[14] = auxReferenceAxis[2];
-	vectorRotations[15] = auxMath_._pi;
-	// c4-1
-	vectorRotations[16] = 0.00000000000000000;
-	vectorRotations[17] = 0.00000000000000000;
-	vectorRotations[18] = 1.00000000000000000;
-	vectorRotations[19] = auxMath_._pi / 2.0e0;
-	// c4-2
-	vectorRotations[20] = 0.00000000000000000;
-	vectorRotations[21] = 0.00000000000000000;
-	vectorRotations[22] = 1.00000000000000000;
-	vectorRotations[23] = auxMath_._pi;
-	// c4-3
-	vectorRotations[24] = 0.00000000000000000;
-	vectorRotations[25] = 0.00000000000000000;
-	vectorRotations[26] = 1.00000000000000000;
-	vectorRotations[27] = 3.0e0 * auxMath_._pi / 2.0e0;
+	vectorRotations[32] = auxReferenceAxis[0];
+	vectorRotations[33] = auxReferenceAxis[1];
+	vectorRotations[34] = auxReferenceAxis[2];
+	vectorRotations[35] = auxMath_._pi;
+	// c2-2
+	auxReferenceAxis[0] = 0.5e0 * (mol0[0].x + mol0[3].x);
+	auxReferenceAxis[1] = 0.5e0 * (mol0[0].y + mol0[3].y);
+	auxReferenceAxis[2] = 0.5e0 * (mol0[0].z + mol0[3].z);
+	auxMath_.normalize(auxReferenceAxis);
+	vectorRotations[36] = auxReferenceAxis[0];
+	vectorRotations[37] = auxReferenceAxis[1];
+	vectorRotations[38] = auxReferenceAxis[2];
+	vectorRotations[39] = auxMath_._pi;
+	// c2-3
+	auxReferenceAxis[0] = 0.5e0 * (mol0[3].x + mol0[2].x);
+	auxReferenceAxis[1] = 0.5e0 * (mol0[3].y + mol0[2].y);
+	auxReferenceAxis[2] = 0.5e0 * (mol0[3].z + mol0[2].z);
+	auxMath_.normalize(auxReferenceAxis);
+	vectorRotations[40] = auxReferenceAxis[0];
+	vectorRotations[41] = auxReferenceAxis[1];
+	vectorRotations[42] = auxReferenceAxis[2];
+	vectorRotations[43] = auxMath_._pi;
 
 	for (size_t i = 0; i < reflectionOperation.size(); i++)
 		reflectionOperation[i] = i;
-	reflectionOperation[0] = 2;
-	reflectionOperation[2] = 0;
+	reflectionOperation[2] = 3;
+	reflectionOperation[3] = 2;
 
 	return vectorRotations;
 }
@@ -400,7 +425,7 @@ std::vector<double> Geometries::geometry5TBPY(
 	int size = 5;
 	mol0.resize(size);
 	reflectionOperation.resize(size);
-	cutAngle = 0.9 * auxMath_._pi;
+	cutAngle = auxMath_._pi / 1.9e0;
 	vector<double> vectorRotations(20);
 
 	mol0[0].x = 0.0000000000;
@@ -1934,7 +1959,7 @@ std::vector<double> Geometries::geometry10TD(
 	int size = 10;
 	mol0.resize(size);
 	reflectionOperation.resize(size);
-	cutAngle = auxMath_._pi / 2.0e0;;
+	cutAngle = auxMath_._pi / 1.9e0;;
 	vector<double> vectorRotations(4);
 	vector<double> auxReferenceAxis(3);
 
@@ -2010,35 +2035,35 @@ std::vector<double> Geometries::geometry10JSPC(
 	vector<double> auxReferenceAxis(3);
 
 	mol0[0].x = -1.72281000;
-	mol0[0].x = -0.14410000;
-	mol0[0].x = -0.99934000;
+	mol0[0].y = -0.14410000;
+	mol0[0].z = -0.99934000;
 	mol0[1].x = -1.72311000;
-	mol0[1].x = -0.13180000;
-	mol0[1].x = 1.00056000;
+	mol0[1].y = -0.13180000;
+	mol0[1].z = 1.00056000;
 	mol0[2].x = -0.88791000;
-	mol0[2].x = 1.37940000;
-	mol0[2].x = -0.00864000;
+	mol0[2].y = 1.37940000;
+	mol0[2].z = -0.00864000;
 	mol0[3].x = 0.04939000;
-	mol0[3].x = 0.57650000;
-	mol0[3].x = -1.58244000;
+	mol0[3].y = 0.57650000;
+	mol0[3].z = -1.58244000;
 	mol0[4].x = -0.11061000;
-	mol0[4].x = -1.32760000;
-	mol0[4].x = -0.99184000;
+	mol0[4].y = -1.32760000;
+	mol0[4].z = -0.99184000;
 	mol0[5].x = -0.11091000;
-	mol0[5].x = -1.31520000;
-	mol0[5].x = 1.00816000;
+	mol0[5].y = -1.31520000;
+	mol0[5].z = 1.00816000;
 	mol0[6].x = 0.04889000;
-	mol0[6].x = 0.59600000;
-	mol0[6].x = 1.57516000;
+	mol0[6].y = 0.59600000;
+	mol0[6].z = 1.57516000;
 	mol0[7].x = 1.10509000;
-	mol0[7].x = 1.21240000;
-	mol0[7].x = -0.00734000;
+	mol0[7].y = 1.21240000;
+	mol0[7].z = -0.00734000;
 	mol0[8].x = 1.67609000;
-	mol0[8].x = -0.42900000;
-	mol0[8].x = -0.99714000;
+	mol0[8].y = -0.42900000;
+	mol0[8].z = -0.99714000;
 	mol0[9].x = 1.67589000;
-	mol0[9].x = -0.41660000;
-	mol0[9].x = 1.00286000;
+	mol0[9].y = -0.41660000;
+	mol0[9].z = 1.00286000;
 
 	//c2 - 1
 	auxReferenceAxis.resize(3);
@@ -2072,39 +2097,39 @@ std::vector<double> Geometries::geometry10JBCSAPR(
 	mol0.resize(size);
 	reflectionOperation.resize(size);
 	cutAngle = auxMath_._pi / 2.0e0;;
-	vector<double> vectorRotations(4);
-	vector<double> auxReferenceAxis(28);
+	vector<double> vectorRotations(28);
+	vector<double> auxReferenceAxis(3);
 
 	mol0[0].x = 1.00000000;
-	mol0[0].x = 0.00000000;
-	mol0[0].x = 0.59460000;
+	mol0[0].y = 0.00000000;
+	mol0[0].z = 0.59460000;
 	mol0[1].x = 0.70710000;
-	mol0[1].x = 0.70710000;
-	mol0[1].x = -0.59460000;
+	mol0[1].y = 0.70710000;
+	mol0[1].z = -0.59460000;
 	mol0[2].x = 0.00000000;
-	mol0[2].x = 1.00000000;
-	mol0[2].x = 0.59460000;
+	mol0[2].y = 1.00000000;
+	mol0[2].z = 0.59460000;
 	mol0[3].x = -0.70710000;
-	mol0[3].x = 0.70710000;
-	mol0[3].x = -0.59460000;
+	mol0[3].y = 0.70710000;
+	mol0[3].z = -0.59460000;
 	mol0[4].x = -1.00000000;
-	mol0[4].x = 0.00000000;
-	mol0[4].x = 0.59460000;
+	mol0[4].y = 0.00000000;
+	mol0[4].z = 0.59460000;
 	mol0[5].x = -0.70710000;
-	mol0[5].x = -0.70710000;
-	mol0[5].x = -0.59460000;
+	mol0[5].y = -0.70710000;
+	mol0[5].z = -0.59460000;
 	mol0[6].x = 0.00000000;
-	mol0[6].x = -1.00000000;
-	mol0[6].x = 0.59460000;
+	mol0[6].y = -1.00000000;
+	mol0[6].z = 0.59460000;
 	mol0[7].x = 0.70710000;
-	mol0[7].x = -0.70710000;
-	mol0[7].x = -0.59460000;
+	mol0[7].y = -0.70710000;
+	mol0[7].z = -0.59460000;
 	mol0[8].x = 0.00000000;
-	mol0[8].x = 0.00000000;
-	mol0[8].x = 1.59460000;
+	mol0[8].y = 0.00000000;
+	mol0[8].z = 1.59460000;
 	mol0[9].x = 0.00000000;
-	mol0[9].x = 0.00000000;
-	mol0[9].x = -1.59460000;
+	mol0[9].y = 0.00000000;
+	mol0[9].z = -1.59460000;
 
 	//C4 - 1
 	vectorRotations[0] = mol0[9].x;

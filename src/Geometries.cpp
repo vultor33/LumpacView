@@ -462,7 +462,7 @@ std::vector<double> Geometries::geometry5SPY(
 	int size = 5;
 	mol0.resize(size);
 	reflectionOperation.resize(size);
-	cutAngle = 0.75 * auxMath_._pi;
+	cutAngle = auxMath_._pi / 2.0e0;
 	vector<double> vectorRotations(12);
 
 
@@ -862,7 +862,7 @@ std::vector<double> Geometries::geometry7COC(
 	int size = 7;
 	mol0.resize(size);
 	reflectionOperation.resize(size);
-	cutAngle = auxMath_._pi / 2.0e0;;
+	cutAngle = auxMath_._pi / 2.0e0;
 	vector<double> vectorRotations(8);
 	vector<double> auxReferenceAxis(3);
 
@@ -1183,7 +1183,7 @@ std::vector<double> Geometries::geometry8TDD(
 	int size = 8;
 	mol0.resize(size);
 	reflectionOperation.resize(size);
-	cutAngle = 2.0e0 * auxMath_._pi / 3.0e0;;
+	cutAngle = auxMath_._pi / 2.0e0;
 	vector<double> vectorRotations(12);
 	vector<double> auxReferenceAxis(3);
 

@@ -371,6 +371,37 @@ string AllMolecularFormulas::newCodeToString(vector < vector<int> > & codeLine)
 	string name = "";
 	for (size_t i = 0; i < codeLine.size(); i++)
 	{
+		int k = 0;
+		int startCount;
+		if (i == 0)
+			startCount = 0;
+		else if (i == 1)
+			startCount = 12;
+		else if (i == 2)
+			startCount = 18;
+		for (int j = (int)codeLine[i].size() - 1; j > -1; j--)
+		{
+			stringstream convert;
+			if (codeLine[i][j] > 1)
+			{
+				convert << elemNew[k + startCount]
+					<< codeLine[i][j];
+				k++;
+			}
+			else
+			{
+				convert << elemNew[k + startCount];
+				k++;
+			}
+			name += convert.str();
+		}
+	}
+
+
+
+	/*
+	for (size_t i = 0; i < codeLine.size(); i++)
+	{
 		int startCount;
 		if (i == 0)
 			startCount = 0;
@@ -392,16 +423,8 @@ string AllMolecularFormulas::newCodeToString(vector < vector<int> > & codeLine)
 			}
 			name += convert.str();
 		}
-		/*
-		for (size_t j = 0; j < codeLine[i].size(); j++)
-		{
-			for (int k = 0; k < codeLine[i][j]; k++)
-			{
-				name += elemNew[j + startCount];
-			}
-		}
-		*/
 	}
+	*/
 	return name;
 }
 

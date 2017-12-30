@@ -4,11 +4,13 @@
 #include <vector>
 #include <string>
 
+#include "Coordstructs.h"
 #include "Ligand.h"
 
 class ComplexCreator
 {
 public:
+
 	ComplexCreator(std::vector<Ligand> &allLigands_in);
 
 	ComplexCreator(
@@ -24,7 +26,7 @@ public:
 
 	~ComplexCreator();
 
-	void calculateAllAngles(int nPoints);
+	void calculateAllAngles(std::vector<CoordXYZ> &points);
 
 	bool start();
 

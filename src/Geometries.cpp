@@ -122,9 +122,117 @@ std::vector<double> Geometries::selectGeometry(
 		exit(1);
 		break;
 	}
+}
+
+string Geometries::sizeToGeometryCode(int geoCode)
+{
+	switch (geoCode)
+	{
+	case 40:
+		return "T-4";
+		break;
+
+	case 41:
+		return "SP-4";
+		break;
+
+	case 50:
+		return "TBPY-5";
+		break;
+
+	case 51:
+		return "SPY-5";
+		break;
+
+	case 52:
+		return "vOC-5";
+		break;
+
+	case 60:
+		return "OC-6";
+		break;
+
+	case 61:
+		return "TPR-6";
+		break;
+
+	case 70:
+		return "COC-7";
+		break;
+
+	case 71:
+		return "PBPY-7";
+		break;
+
+	case 72:
+		return "CTPR-7";
+		break;
+
+	case 80:
+		return "SAPR-8";
+		break;
+
+	case 81:
+		return "TDD-8";
+		break;
+
+	case 82:
+		return "BTPR-8";
+		break;
+
+	case 83:
+		return "HBPY-8";
+		break;
+
+	case 84:
+		return "CU-8";
+		break;
+
+	case 90:
+		return "TCTPR-9";
+		break;
+
+	case 91:
+		return "CSAPR-9";
+		break;
+
+	case 92:
+		return "MFF-9";
+		break;
+
+	case 100:
+		return "PointSphere-10";
+		break;
+
+	case 101:
+		return "TD-10";
+		break;
+
+	case 102:
+		return "JSPC-10";
+		break;
+
+	case 103:
+		return "JBCSAPR-10";
+		break;
+
+	case 110:
+		return "JCPAPR-11";
+		break;
+
+	case 120:
+		return "IC-12";
+		break;
+
+	default:
+		cout << "Geometry not found" << endl;
+		exit(1);
+		break;
+	}
 
 
 }
+
 
 std::vector<double> Geometries::geometry4Tetrahedron(
 	std::vector<CoordXYZ> &mol0,
@@ -1643,30 +1751,30 @@ std::vector<double> Geometries::geometry9MFF(
 	mol0[0].x = 0.00000000;
 	mol0[0].y = 0.98769232;
 	mol0[0].z = 0.20656801;
-	mol0[0].x = 0.93914925;
-	mol0[0].y = 0.30531271;
-	mol0[0].z = 0.20656540;
-	mol0[0].x = 0.58040926;
-	mol0[0].y = -0.79864099;
-	mol0[0].z = 0.20655749;
-	mol0[0].x = -0.58040926;
-	mol0[0].y = -0.79864099;
-	mol0[0].z = 0.20655749;
-	mol0[0].x = -0.93914925;
-	mol0[0].y = 0.30531271;
-	mol0[0].z = 0.20656540;
-	mol0[0].x = -0.57992608;
-	mol0[0].y = -0.33542691;
-	mol0[0].z = -0.69361921;
-	mol0[0].x = 0.57992608;
-	mol0[0].y = -0.33542691;
-	mol0[0].z = -0.69361921;
-	mol0[0].x = 0.00000000;
-	mol0[0].y = 0.66958376;
-	mol0[0].z = -0.69426154;
-	mol0[0].x = 0.00000000;
-	mol0[0].y = 0.00023431;
-	mol0[0].z = 1.04868617;
+	mol0[1].x = 0.93914925;
+	mol0[1].y = 0.30531271;
+	mol0[1].z = 0.20656540;
+	mol0[2].x = 0.58040926;
+	mol0[2].y = -0.79864099;
+	mol0[2].z = 0.20655749;
+	mol0[3].x = -0.58040926;
+	mol0[3].y = -0.79864099;
+	mol0[3].z = 0.20655749;
+	mol0[4].x = -0.93914925;
+	mol0[4].y = 0.30531271;
+	mol0[4].z = 0.20656540;
+	mol0[5].x = -0.57992608;
+	mol0[5].y = -0.33542691;
+	mol0[5].z = -0.69361921;
+	mol0[6].x = 0.57992608;
+	mol0[6].y = -0.33542691;
+	mol0[6].z = -0.69361921;
+	mol0[7].x = 0.00000000;
+	mol0[7].y = 0.66958376;
+	mol0[7].z = -0.69426154;
+	mol0[8].x = 0.00000000;
+	mol0[8].y = 0.00023431;
+	mol0[8].z = 1.04868617;
 
 	for (size_t i = 0; i < reflectionOperation.size(); i++)
 		reflectionOperation[i] = i;

@@ -9,7 +9,7 @@
 
 #include "AllMolecularFormulas.h"
 #include "AuxMath.h"
-#include "CauchyIndex.h"
+#include "Geometries.h"
 
 using namespace std;
 
@@ -17,8 +17,11 @@ ChangeNames::ChangeNames(){}
 
 ChangeNames::~ChangeNames(){}
 
-void ChangeNames::changeNameOfFiles(string responseName)
+void ChangeNames::changeNameOfFiles(
+	string responseName,
+	int geoCode)
 {
+	Geometries geo_;
 	ifstream response_(responseName.c_str());
 	string line;
 	ofstream counting_("counting.csv");
@@ -35,7 +38,7 @@ void ChangeNames::changeNameOfFiles(string responseName)
 		vector< vector<int> > combinationCode = allMol_.stringToNumber(combination);
 		string newCombinationName = allMol_.newCodeToString(combinationCode);
 		int systemSize = calculateSystemSize(combinationCode);
-		string geomName = sizeToGeometryCode(systemSize);
+		string geomName = geo_.sizeToGeometryCode(geoCode);
 		ofstream newFile_((geomName + "-" + newCombinationName + ".csv").c_str());
 		string typeLine = generateNewTypeLine(combination, systemSize);
 		newFile_ << typeLine << endl;
@@ -217,37 +220,6 @@ vultorGroup ChangeNames::findVultorGroup(int prob, vector<vultorGroup> &group)
 	return group[0];
 }
 
-string ChangeNames::sizeToGeometryCode(int size)
-{
-	switch (size)
-	{
-	case 4:
-		return "T-4";
-		break;
-	case 5:
-		return "SPY-5";
-		break;
-	case 6:
-		return "TPR-6";
-		break;
-	case 7:
-		return "PBPY-7";
-		break;
-	case 8:
-		return "TDD-8";
-		break;
-	case 9:
-		return "MFF-9";
-		break;
-	case 10:
-		return "JMBIC-10";
-		break;
-	default:
-		cout << "size not found" << endl;
-		exit(1);
-	}
-}
-
 void ChangeNames::calculateVultorGroup(
 	std::ifstream & isomerFile_,
 	vector<vultorGroup> &vGroup)
@@ -367,7 +339,6 @@ void ChangeNames::changeFormat(
 	int totalChiral = 0;
 	int totalAchiral = 0;
 	bool chiral;
-	CauchyIndex cauchy_(systemSize);
 	while (!isomerFile_.eof())
 	{
 		getline(isomerFile_, isomerLine);
@@ -497,7 +468,7 @@ int ChangeNames::calculateSystemSize(std::vector< std::vector<int> > & combinati
 
 string ChangeNames::generateNewTypeLine(string &combination, int systemSize)
 {
-	ifstream typesFile_((combination + "---atomTypes.txt").c_str());
+	ifstream typesFile_(("final-" + combination + "-atomTypes").c_str());
 	string typeLine;
 	getline(typesFile_, typeLine);
 	stringstream convert;

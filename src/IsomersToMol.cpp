@@ -577,15 +577,15 @@ void IsomersToMol::setParameters(int coordination)
 		break;
 
 	case 7:
-		geo_.selectGeometry(71, complex, cutAngle, reflection);
+		geo_.selectGeometry(70, complex, cutAngle, reflection);
 		break;
 
 	case 8:
-		geo_.selectGeometry(81, complex, cutAngle, reflection);
+		geo_.selectGeometry(82, complex, cutAngle, reflection);
 		break;
 
 	case 9:
-		geo_.selectGeometry(90, complex, cutAngle, reflection);
+		geo_.selectGeometry(92, complex, cutAngle, reflection);
 		break;
 
 	case 10:

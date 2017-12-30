@@ -20,7 +20,9 @@ public:
 	ChangeNames();
 	~ChangeNames();
 
-	void changeNameOfFiles(std::string name);
+	void changeNameOfFiles(
+		std::string name,
+		int geoCode);
 
 private:
 	std::vector<vultorGroup> setVultorGroup(
@@ -31,8 +33,6 @@ private:
 	std::string takeLetter(int nGroup);
 
 	vultorGroup findVultorGroup(int prob, std::vector<vultorGroup> &group);
-
-	std::string sizeToGeometryCode(int size);
 
 	void calculateVultorGroup(
 		std::ifstream & isomerFile_,

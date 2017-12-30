@@ -1,4 +1,4 @@
-#define UNIX
+//#define UNIX
 
 #include <utility>
 #include <iostream>
@@ -27,6 +27,8 @@
 #include "ChangeNames.h"
 #include "IsomersToMol.h"
 #include "MarquesEnantiomers.h"
+#include "Geometries.h"
+#include "UtilityRun.h"
 
 using namespace std;
 
@@ -97,14 +99,15 @@ int main(int argc, char *argv[])
 	// Na hora de realizar uma reacao quimica, os pesos deveriam ser levados em consideracao. Entropia, mais graus de liberdade. Graus de liberdade degenerados.
 	// Na quimica organica deveria ter pesos. 
 
-	/* IDENTIFY ISOMERS
-	int size = 8;
+	/* IDENTIFY ISOMERS 
+	int size = 92;
 	CauchyIndex ci234(size);
 	ci234.identifyIsomer(
-		"TDD-8-a4(AA)2.csv",
-		"YAVSOD.xyz");
+		"MFF-9-a3(AA)3.csv",
+		"QALFAK.xyz");
 	return 0;
-	 */
+	*/
+	  
 	
 	/* CALCULATING SQUARE 
 	string composition = "C01C02";
@@ -119,14 +122,34 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
+	//IsomersToMol ismol_;
+	//ismol_.printAllMol("COC-7-a5(AA).csv");
 
-	/* CHANGING NAMES 
+	/*
+	vector<Ligand> allLig;
+	ComplexCreator cp_(allLig);
+	Geometries geo_;
+	int select;
+	vector<CoordXYZ> mol0;
+	double cutAngle;
+	vector<int> reflectionOperation;
+	geo_.selectGeometry(41, mol0, cutAngle, reflectionOperation);
+	cp_.calculateAllAngles(mol0);
+	return 0;
+	*/
+
+	UtilityRun utRun_;
+	utRun_.renameAtomTypes("response-combinations4.txt");
+	return 0;
+
+
+	/* CHANGING NAMES  
 	string responseName;
 	cout << "type line: " << endl;
 	//cin >> responseName;
-	responseName = "response-combinations9.txt";
+	responseName = "response-combinations7.txt";
 	ChangeNames chNames_;
-	chNames_.changeNameOfFiles(responseName);
+	chNames_.changeNameOfFiles(responseName,70);
 	return 0;
 	 */
 	

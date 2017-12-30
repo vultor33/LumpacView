@@ -43,23 +43,22 @@ ComplexCreator::ComplexCreator(
 
 ComplexCreator::~ComplexCreator(){}
 
-void ComplexCreator::calculateAllAngles(int nPoints)
+void ComplexCreator::calculateAllAngles(vector<CoordXYZ> &points)
 {
 	AuxMath auxMath_;
-	vector<double> points = getPoints(nPoints);
 	double xi, yi, zi, xj, yj, zj;
 	ofstream of_("todosangulos.csv");
-	for (int i = 0; i < nPoints - 1; i++)
+	for (int i = 0; i < points.size() - 1; i++)
 	{
-		for (int j = i + 1; j < nPoints; j++)
+		for (int j = i + 1; j < points.size(); j++)
 		{
-			xi = points[i];
-			yi = points[i + nPoints];
-			zi = points[i + 2 * nPoints];
+			xi = points[i].x;
+			yi = points[i].y;
+			zi = points[i].z;
 
-			xj = points[j];
-			yj = points[j + nPoints];
-			zj = points[j + 2 * nPoints];
+			xj = points[j].x;
+			yj = points[j].y;
+			zj = points[j].z;
 
 			double angle = auxMath_.angleFrom3Points(xi, yi, zi, 0.0e0, 0.0e0, 0.0e0, xj, yj, zj);
 			of_ << "i: " << i << " j: " << j << " angle:     ;  " << angle*(180/auxMath_._pi) << endl;

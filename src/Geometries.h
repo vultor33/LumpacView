@@ -2,6 +2,7 @@
 #define GEOMETRIES_H
 
 #include <vector>
+#include <string>
 
 #include "Coordstructs.h"
 #include "AuxMath.h"
@@ -17,7 +18,8 @@ public:
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
-
+	
+	std::string sizeToGeometryCode(int size);
 
 private:
 	std::vector<double> geometry4Tetrahedron(

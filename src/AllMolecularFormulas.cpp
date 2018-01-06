@@ -399,7 +399,7 @@ string AllMolecularFormulas::newCodeToString(vector < vector<int> > & codeLine)
 
 
 
-	/*
+	/* ORDEM CRESCENTE
 	for (size_t i = 0; i < codeLine.size(); i++)
 	{
 		int startCount;

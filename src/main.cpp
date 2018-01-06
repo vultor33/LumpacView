@@ -29,6 +29,7 @@
 #include "MarquesEnantiomers.h"
 #include "Geometries.h"
 #include "UtilityRun.h"
+#include "IdentifyIsomers.h"
 
 using namespace std;
 
@@ -99,14 +100,15 @@ int main(int argc, char *argv[])
 	// Na hora de realizar uma reacao quimica, os pesos deveriam ser levados em consideracao. Entropia, mais graus de liberdade. Graus de liberdade degenerados.
 	// Na quimica organica deveria ter pesos. 
 
-	/* IDENTIFY ISOMERS 
-	int size = 92;
-	CauchyIndex ci234(size);
-	ci234.identifyIsomer(
-		"MFF-9-a3(AA)3.csv",
-		"QALFAK.xyz");
-	return 0;
-	*/
+	//UtilityRun util_;
+	//util_.identifyAll();
+	//return 0;
+
+	/* IDENTIFY ISOMERS */
+	//UtilityRun util_;
+	//util_.identifyOne();
+	//return 0;
+	
 	  
 	
 	/* CALCULATING SQUARE 
@@ -123,9 +125,14 @@ int main(int argc, char *argv[])
 	*/
 
 	//IsomersToMol ismol_;
-	//ismol_.printAllMol("COC-7-a5(AA).csv");
+	//ismol_.printAllMol("CSAPR-9-Ma8b.csv");
+	//return 0;
 
-	/* CALCULATING ANGLES 	*/
+	CauchyIndex ci13_(60);
+	ci13_.findMissedRotations();
+	return 0;
+
+	/* CALCULATING ANGLES 
 	vector<Ligand> allLig;
 	ComplexCreator cp_(allLig);
 	Geometries geo_;
@@ -136,21 +143,31 @@ int main(int argc, char *argv[])
 	geo_.selectGeometry(50, mol0, cutAngle, reflectionOperation);
 	cp_.calculateAllAngles(mol0);
 	return 0;
+	*/
 
 //	UtilityRun utRun_;
 //	utRun_.renameAtomTypes("response-combinations4.txt");
 //	return 0;
 
 
-	/* CHANGING NAMES  
+	//UtilityRun util_;
+	//util_.formatIsomersFiles();
+	//return 0;
+
+	/* CHANGING NAMES   
 	string responseName;
 	cout << "type line: " << endl;
 	//cin >> responseName;
-	responseName = "response-combinations7.txt";
+	responseName = "response-combinations5.txt";
 	ChangeNames chNames_;
-	chNames_.changeNameOfFiles(responseName,70);
+	chNames_.changeNameOfFiles(
+		responseName,
+		50,
+		"",
+		"");
 	return 0;
-	 */
+	*/
+	
 	
 	
 	//CauchyIndex ci123_(10);

@@ -12,6 +12,16 @@ public:
 
 	void renameAtomTypes(std::string responseName);
 
+	void formatIsomersFiles();
+
+	void identifyOne();
+
+	void identifyAll();
+
+private:
+
+	std::string getCountingPath(int geoCode);
+
 
 };
 

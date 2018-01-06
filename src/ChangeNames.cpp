@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdlib.h>
+#include <iomanip>
 
 #include "AllMolecularFormulas.h"
 #include "AuxMath.h"
@@ -19,12 +20,22 @@ ChangeNames::~ChangeNames(){}
 
 void ChangeNames::changeNameOfFiles(
 	string responseName,
-	int geoCode)
+	int geoCode,
+	string pathRead,
+	string pathWrite)
 {
 	Geometries geo_;
-	ifstream response_(responseName.c_str());
+	string geomName = geo_.sizeToGeometryCode(geoCode);
+	ifstream response_((pathRead + responseName).c_str());
 	string line;
-	ofstream counting_("counting.csv");
+	string countingName = pathWrite + geomName + "-counting.csv";
+	ofstream counting_(countingName.c_str());
+
+	int systemSize = 0;
+	vector<string> allTypeLinesTemp;
+	vector<string> oldCombinationNamesTemp;
+	vector<string> allNewCombinationNamesTemp;
+	vector < vector< vector<int> > > allCombCodes;
 	while (!response_.eof())
 	{
 		getline(response_, line);
@@ -37,26 +48,55 @@ void ChangeNames::changeNameOfFiles(
 		AllMolecularFormulas allMol_;
 		vector< vector<int> > combinationCode = allMol_.stringToNumber(combination);
 		string newCombinationName = allMol_.newCodeToString(combinationCode);
-		int systemSize = calculateSystemSize(combinationCode);
-		string geomName = geo_.sizeToGeometryCode(geoCode);
-		ofstream newFile_((geomName + "-" + newCombinationName + ".csv").c_str());
-		string typeLine = generateNewTypeLine(combination, systemSize);
-		newFile_ << typeLine << endl;
+		newCombinationName = "M" + newCombinationName;
+		if (systemSize == 0)
+			systemSize = calculateSystemSize(combinationCode);
+		string typeLine = generateNewTypeLine(pathRead, combination, systemSize);
+		allTypeLinesTemp.push_back(typeLine);
+		oldCombinationNamesTemp.push_back(combination);
+		allNewCombinationNamesTemp.push_back(newCombinationName);
+		allCombCodes.push_back(combinationCode);
+	}
 
-		ifstream isomerFile_((("final-") + combination).c_str());
+	//order combCodes
+	size_t totalAcceptSize = 0;
+	vector<string> allTypeLines;
+	vector<string> oldCombinationNames;
+	vector<string> allNewCombinationNames;
+	for (size_t k = 0; k < 6; k++)
+	{
+		for (int i = 0; i < (int)allCombCodes.size(); i++)
+		{
+			if ((allCombCodes[i][1].size() + allCombCodes[i][2].size()) == k)
+			{
+				allTypeLines.push_back(allTypeLinesTemp[i]);
+				oldCombinationNames.push_back(oldCombinationNamesTemp[i]);
+				allNewCombinationNames.push_back(allNewCombinationNamesTemp[i]);
+			}
+		}
+	}
+
+	for(size_t i = 0; i < oldCombinationNames.size(); i++)
+	{
+		ifstream isomerFile_((pathRead + "final-" + oldCombinationNames[i]).c_str());
 		vector<vultorGroup> vGroup;
 		calculateVultorGroup(isomerFile_, vGroup);
-
-		isomerFile_.open((("final-") + combination).c_str());
+		isomerFile_.close();
+		isomerFile_.open((pathRead + "final-" + oldCombinationNames[i]).c_str());
+		string geomCombName = geomName + " [" + allNewCombinationNames[i] + "]";
+		ofstream newFile_((pathWrite + geomName + "-" + allNewCombinationNames[i] + ".csv").c_str());
+		newFile_ << allTypeLines[i] << endl;
 		changeFormat(
 			isomerFile_,
 			counting_,
 			newFile_,
 			vGroup,
-			geomName,
-			newCombinationName,
+			geomCombName,
+			allNewCombinationNames[i],
 			systemSize);
 	}
+
+
 }
 
 
@@ -295,7 +335,6 @@ void ChangeNames::calculateVultorGroup(
 			}
 		}
 	}
-	isomerFile_.close();
 
 	vector<vultorGroup> auxVGroup = setVultorGroup(
 		vultorGroupProbs,
@@ -414,6 +453,20 @@ void ChangeNames::changeFormat(
 		<< 2 * totalChiral + totalAchiral << " ; "
 		<< totalChiral << " ; "
 		<< totalAchiral << " ; ";
+
+
+	int lastRce = vGroup[vGroup.size()-1].achiralN * vGroup[vGroup.size()-1].achiralProb
+		+ vGroup[vGroup.size()-1].chiralN * vGroup[vGroup.size()-1].chiralProb;
+	for (size_t i = 0; i < vGroup.size() - 1; i++)
+	{
+		int rce = vGroup[i].achiralN * vGroup[i].achiralProb + vGroup[i].chiralN * vGroup[i].chiralProb;
+		if(rce % lastRce != 0)
+			counting_ << fixed << setprecision(1) << (double)rce / (double)lastRce << ":";		
+		else
+			counting_ << rce / lastRce << ":";
+	}
+	counting_ << "1" << " ; ";
+
 	for (size_t i = 0; i < vGroup.size(); i++)
 	{
 		int vGroupProb;
@@ -421,14 +474,14 @@ void ChangeNames::changeFormat(
 			vGroupProb = vGroup[i].chiralProb;
 		else
 			vGroupProb = vGroup[i].achiralProb;
-		int totalRce = 
-			vGroup[i].chiralN * vGroup[i].chiralProb + 
-			vGroup[i].achiralN * vGroup[i].achiralProb;
+		//int totalRce = 
+		//	vGroup[i].chiralN * vGroup[i].chiralProb + 
+		//	vGroup[i].achiralN * vGroup[i].achiralProb;
 
 		counting_ << vGroup[i].chiralN << " ; "
 			<< vGroup[i].achiralN << " ; "
-			<< vGroupProb << " ; "
-			<< totalRce << " ; ";
+			<< vGroupProb << " ; ";
+			//<< totalRce << " ; ";
 
 		/*
 		if (vGroup[i].chiralN != 0)
@@ -466,9 +519,9 @@ int ChangeNames::calculateSystemSize(std::vector< std::vector<int> > & combinati
 }
 
 
-string ChangeNames::generateNewTypeLine(string &combination, int systemSize)
+string ChangeNames::generateNewTypeLine(string pathRead, string &combination, int systemSize)
 {
-	ifstream typesFile_(("final-" + combination + "-atomTypes").c_str());
+	ifstream typesFile_((pathRead + "final-" + combination + "-atomTypes").c_str());
 	string typeLine;
 	getline(typesFile_, typeLine);
 	stringstream convert;
@@ -482,7 +535,7 @@ string ChangeNames::generateNewTypeLine(string &combination, int systemSize)
 	convert >> dummy;
 	convert >> dummy;
 	vector<int> bidentates;
-	int readingBid;
+	int readingBid = -1;
 	while (true)
 	{
 		convert >> readingBid;

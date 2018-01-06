@@ -18,7 +18,8 @@ IsomersToMol::IsomersToMol(){}
 IsomersToMol::~IsomersToMol(){}
 
 std::vector<std::string> IsomersToMol::readAllPermutations(
-	std::string fileName, 
+	std::string fileName,
+	std::string fileFolder,
 	vector<int> &atomTypes, 
 	vector<int> &bidentateChosen)
 {
@@ -30,7 +31,7 @@ std::vector<std::string> IsomersToMol::readAllPermutations(
 	int nBidentates;
 	int coordination = stringToNumber(composition, nBidentates);
 	setParameters(coordination);
-	ifstream fileIsomers_(fileName.c_str());
+	ifstream fileIsomers_((fileFolder + fileName).c_str());
 
 	readAtomTypesAndBidentateChosenFile(
 		fileIsomers_,
@@ -56,13 +57,14 @@ std::vector<std::string> IsomersToMol::readAllPermutations(
 //salvar codigo e grupo vultor dois dois
 vector<int> IsomersToMol::findEnantiomerPair(
 	std::string fileName,
+	std::string fileFolder,
 	vector<int> guessPermutation,
 	vector<string> &pairCodes)
 {
 	for (size_t i = 0; i < guessPermutation.size(); i++)
 		guessPermutation[i]++;
 	vector<int> pair;
-	ifstream fileIsomers_(fileName.c_str());
+	ifstream fileIsomers_((fileFolder + fileName).c_str());
 	string line;
 	getline(fileIsomers_, line);
 	vector<string> allPermut;
@@ -119,7 +121,6 @@ vector<int> IsomersToMol::findEnantiomerPair(
 
 void IsomersToMol::printAllMol(string fileName)
 {
-
 	// read input
 	size_t found = fileName.find("-");
 	size_t foundSecond = fileName.find("-", found + 1, 1);
@@ -129,7 +130,6 @@ void IsomersToMol::printAllMol(string fileName)
 	int coordination = stringToNumber(composition, nBidentates);
 	setParameters(coordination);
 	ifstream fileIsomers_(fileName.c_str());
-
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
 	readAtomTypesAndBidentateChosenFile(
@@ -144,7 +144,8 @@ void IsomersToMol::printAllMol(string fileName)
 		vector<int> permutation = readCauchyNotationsEnantiomers(fileIsomers_);
 		if (permutation.size() == 0)
 			continue;
-		string permtString = permutationToString0Correction(permutation);
+		vector<int> permutationStringTransfer = permutation;
+		string permtString = permutationToString(permutationStringTransfer);
 		ofstream fileXyz_((composition + "-" + permtString + ".mol2").c_str());
 		for (size_t i = 0; i < permutation.size(); i++)
 			permutation[i]--;
@@ -166,7 +167,10 @@ void IsomersToMol::printSingleMol(
 	string name)
 {
 	name += "-";
-	name += permutationToString(permutation);
+	vector<int> permutation2 = permutation;
+	for (size_t i = 0; i < permutation2.size(); i++)
+		permutation2[i] += 1;
+	name += permutationToString(permutation2);	
 	name += ".mol2";
 	ofstream fileXyz_(name.c_str());
 	printMoleculeMolFormat(permutation, atomTypes, bidentateChosen, fileXyz_);
@@ -218,8 +222,9 @@ vector<int> IsomersToMol::readCauchyNotationsEnantiomers(ifstream & openendFile_
 		return notation;
 	notation.resize(size);
 
-	size_t brack1 = auxline.find("[");
-	size_t brack2 = auxline.find("]");
+	size_t brack1Temp = auxline.find("]");
+	size_t brack1 = auxline.find("[", brack1Temp + 1, 1);
+	size_t brack2 = auxline.find("]", brack1Temp + 1, 1);
 	string permString = auxline.substr(brack1 + 1, brack2 - brack1 - 1);
 	stringstream line;
 	line << permString;
@@ -245,8 +250,9 @@ vector<int> IsomersToMol::readCauchyNotationsEnantiomersAndTakeCode(
 		return notation;
 	notation.resize(size);
 
-	size_t brack1 = auxline.find("[");
-	size_t brack2 = auxline.find("]");
+	size_t brack1Temp = auxline.find("]");
+	size_t brack1 = auxline.find("[", brack1Temp + 1, 1);
+	size_t brack2 = auxline.find("]", brack1Temp + 1, 1);
 	string permString = auxline.substr(brack1 + 1, brack2 - brack1 - 1);
 	string vultorGroup = auxline.substr(brack2 + 2, 2);
 	size_t key1 = auxline.find("{");
@@ -374,7 +380,7 @@ int IsomersToMol::stringToNumber(string entryString, int & nBidentates)
 	int coordination = 0;
 	nBidentates = 0;
 	bool bidentate;
-	for (size_t i = 0; i < entryString.size();i++)
+	for (size_t i = 1; i < entryString.size();i++)
 	{
 		char codeI = entryString[i];
 		bidentate = false;
@@ -585,7 +591,7 @@ void IsomersToMol::setParameters(int coordination)
 		break;
 
 	case 9:
-		geo_.selectGeometry(92, complex, cutAngle, reflection);
+		geo_.selectGeometry(91, complex, cutAngle, reflection);
 		break;
 
 	case 10:

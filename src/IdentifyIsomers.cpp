@@ -27,7 +27,9 @@ IdentifyIsomers::~IdentifyIsomers(){}
 void IdentifyIsomers::coordinatesToPermutation(
 	vector<CoordXYZ> mol0,
 	string permutationsFile,
-	string coordinatesFile)
+	string filePath,
+	string coordinatesFile,
+	string countingFile)
 
 {
 	translateToCenterOfMassAndReescale(mol0);
@@ -39,7 +41,6 @@ void IdentifyIsomers::coordinatesToPermutation(
 	}
 
 	size_t size = mol0.size();
-	string file = coordinatesFile;
 	vector<int> bidentateGeometry;
 	IsomersToMol isoMol_;
 	vector<int> atomTypes;
@@ -47,10 +48,11 @@ void IdentifyIsomers::coordinatesToPermutation(
 	vector<int> composition(size);
 	vector<string> allPerm = isoMol_.readAllPermutations(
 		permutationsFile,
+		filePath,
 		atomTypes,
 		bidentateChosen);
 	vector<CoordXYZ> outGeometry = readGeometry(
-		file, 
+		filePath + coordinatesFile, 
 		composition, 
 		bidentateChosen.size(),
 		bidentateGeometry);
@@ -101,11 +103,12 @@ void IdentifyIsomers::coordinatesToPermutation(
 	vector<int> permutationF = stringToPermutation(allPerm[minimumPermut], atomTypes.size());
 	ofstream ident_;
 	ident_.open("identifyingX.csv", std::ofstream::out | std::ofstream::app);
-	string composCode = takeAllVultorsGroup(permutationsFile);
+	string composCode = takeAllVultorsGroup(permutationsFile, countingFile);
 	EnantiomerIdentification enant_;
 	vector<string> pairCodes;
 	vector<int> enantiomerPermut = isoMol_.findEnantiomerPair(
 		permutationsFile,
+		filePath,
 		stringToPermutation(
 			allPerm[minimumPermut],
 			atomTypes.size()),
@@ -131,7 +134,7 @@ void IdentifyIsomers::coordinatesToPermutation(
 		permutationF,
 		atomTypes,
 		bidentateChosen,
-		coordinatesFile);
+		filePath + coordinatesFile);
 
 }
 
@@ -693,13 +696,15 @@ double IdentifyIsomers::differenceConnect(
 	return totalDiff;
 }
 
-string IdentifyIsomers::takeAllVultorsGroup(string permutationsFile)
+string IdentifyIsomers::takeAllVultorsGroup(
+	string permutationsFile,
+	string countingFile)
 {
 	size_t hyfen = permutationsFile.find("-");
 	size_t hyfen2 = permutationsFile.find("-",hyfen + 1);
 	size_t point = permutationsFile.find(".");
 	string compositionCode = permutationsFile.substr(hyfen2 + 1, point - hyfen2 - 1);
-	ifstream count_("counting.csv");
+	ifstream count_(countingFile.c_str());
 	string line;
 	while (getline(count_, line))
 	{

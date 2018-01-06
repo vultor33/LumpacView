@@ -18,11 +18,13 @@ public:
 
 	std::vector<std::string> readAllPermutations(
 		std::string fileName, 
+		std::string fileFolder,
 		std::vector<int> &atomTypes,
 		std::vector<int> &bidentateChosen);
 
 	std::vector<int> findEnantiomerPair(
 		std::string fileName,
+		std::string fileFolder,
 		std::vector<int> guessPermutation,
 		std::vector<std::string> &pairCodes);
 
@@ -36,19 +38,20 @@ public:
 
 	std::string getAtomLabelI(int I);
 	
-
-private:
-
-	// Functions
 	void readAtomTypesAndBidentateChosenFile(
 		std::ifstream & file_,
 		std::vector<int> & atomTypes,
 		std::vector<int> & bidentateChosen,
 		int systemSize,
 		int nBidentates);
+
+	std::vector<int> readCauchyNotationsEnantiomers(std::ifstream & openendFile_);
+
+private:
+
+	// Functions
 	std::string permutationToString0Correction(std::vector<int> &permutation);
 	std::string permutationToString(std::vector<int> &permutation);
-	std::vector<int> readCauchyNotationsEnantiomers(std::ifstream & openendFile_);
 	std::vector<int> readCauchyNotationsEnantiomersAndTakeCode(
 		std::ifstream & openendFile_,
 		std::vector<std::string> &permutCodes);

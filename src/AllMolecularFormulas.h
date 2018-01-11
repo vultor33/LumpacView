@@ -70,7 +70,7 @@ private:
 		std::string newLigand,
 		int coordination);
 
-	int angleBidentateCut(size_t coordination);
+	//int angleBidentateCut(size_t coordination);
 
 };
 

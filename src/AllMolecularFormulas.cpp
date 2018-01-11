@@ -601,6 +601,9 @@ void AllMolecularFormulas::addDifferent(
 
 int AllMolecularFormulas::angleBidentateCut(size_t coordination)
 {
+	cout << "On AllMolecularFormulas::angleBidentateCut need to have caution" << endl;
+	exit(1);
+
 	switch (coordination)
 	{
 	case 4:

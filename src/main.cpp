@@ -30,6 +30,7 @@
 #include "Geometries.h"
 #include "UtilityRun.h"
 #include "IdentifyIsomers.h"
+#include "ReadWriteFormats.h"
 
 using namespace std;
 
@@ -63,6 +64,19 @@ void buildCsvFile(int size, string skeletonName);
 
 int main(int argc, char *argv[])
 {
+	/* APAGAR 
+	ReadWriteFormats rwf_;
+	vector<int> t1, b1;
+	string names = rwf_.typeLineToLetters("3  1  4  3  2  4 / 2  5  4  6  1  3 ", t1, b1);
+	vector<int> atomTypes, bidentatChosen, a2, b2;
+	rwf_.typeLineToNumberCodes(
+		names,
+		atomTypes,
+		bidentatChosen);
+	return 0;
+	*/
+
+
 
 	/*	
 	CauchyIndex ci21_(9);
@@ -124,13 +138,21 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-	//IsomersToMol ismol_;
-	//ismol_.printAllMol("CSAPR-9-Ma8b.csv");
-	//return 0;
+	// tenho que ler o response transformar no codigo novo
+	// depois entrar no arquivo e pronto, montar a arvore de diretorios
+	IsomersToMol ismol_;
+	int geomPrintAllCode = 90;
+	ismol_.printAllMol(
+		"TCTPR-9-Ma3(AB)3.csv",
+		"",
+		geomPrintAllCode);
+	return 0;
 
+	/* ENCONTRAR GRUPO PONTUAL
 	CauchyIndex ci13_(60);
 	ci13_.findMissedRotations();
 	return 0;
+	*/
 
 	/* CALCULATING ANGLES 
 	vector<Ligand> allLig;
@@ -154,15 +176,13 @@ int main(int argc, char *argv[])
 	//util_.formatIsomersFiles();
 	//return 0;
 
-	/* CHANGING NAMES   
+	/* CHANGING NAMES  
 	string responseName;
-	cout << "type line: " << endl;
-	//cin >> responseName;
-	responseName = "response-combinations5.txt";
+	responseName = "response-combinations6.txt";
 	ChangeNames chNames_;
 	chNames_.changeNameOfFiles(
 		responseName,
-		50,
+		60,
 		"",
 		"");
 	return 0;

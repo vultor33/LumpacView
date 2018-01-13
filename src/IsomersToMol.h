@@ -14,7 +14,10 @@ public:
 
 	~IsomersToMol();
 
-	void printAllMol(std::string fileName);
+	void printAllMol(
+		std::string fileName,
+		std::string filePath,
+		int geoCode);
 
 	std::vector<std::string> readAllPermutations(
 		std::string fileName, 
@@ -38,12 +41,14 @@ public:
 
 	std::string getAtomLabelI(int I);
 	
+	/* fredapagar
 	void readAtomTypesAndBidentateChosenFile(
 		std::ifstream & file_,
 		std::vector<int> & atomTypes,
 		std::vector<int> & bidentateChosen,
 		int systemSize,
 		int nBidentates);
+	*/
 
 	std::vector<int> readCauchyNotationsEnantiomers(std::ifstream & openendFile_);
 
@@ -67,6 +72,7 @@ private:
 		const std::vector<int> & bidentateAtomsChosen);
 
 	// read composition
+	/* fredapagar
 	int stringToNumber(std::string entryString, int &nBidentates);
 	int codeToType(std::string code);
 	void addEqual(
@@ -79,8 +85,13 @@ private:
 		std::vector<int> & typeCode1,
 		std::vector<int> & typeCode2,
 		std::vector<int> & typeCode3);
+	*/
 
+	// raswin parameters
 	void setParameters(int coordination);
+
+	// molekel parameters
+	void setParameters(int coordination, int geoCode);
 
 	std::vector<std::string> atomLabels;
 

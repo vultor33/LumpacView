@@ -7,6 +7,8 @@
 #include <sstream>
 #include <algorithm>
 
+#include "AuxMath.h"
+
 using namespace std;
 
 ReadWriteFormats::~ReadWriteFormats(){}
@@ -132,7 +134,7 @@ string ReadWriteFormats::newCodeToString(vector < vector<int> > & codeLine)
 
 
 // (m, B e C)  versao do allMolecular
-vector< vector<int> > ReadWriteFormats::stringToNumber(string entryString)
+vector< vector<int> > ReadWriteFormats::compositionToNumberOld(string entryString)
 {
 	vector<string> allCodes;
 	string code;
@@ -241,7 +243,7 @@ void ReadWriteFormats::addDifferent(
 }
 
 // {a (AA) (AB)}  versao do isomers to mol
-int ReadWriteFormats::CompositionToNumbers(
+int ReadWriteFormats::compositionToNumbers(
 	string entryString, 
 	int & nBidentates)
 {
@@ -294,6 +296,297 @@ int ReadWriteFormats::CompositionToNumbers(
 }
 
 
+string ReadWriteFormats::typeLineToLetters(
+	string typeLines,
+	std::vector<int> & atomTypes,
+	std::vector<int> & bidentateChosen)
+{
+	vector<int> numberCodes;
+	stringstream bidLine;
+	int bidNumber = 0;
+	for (size_t i = 0; i < typeLines.size(); i++)
+	{
+		if (typeLines[i] == '/')
+		{
+			for (size_t j = i + 1; j < typeLines.size(); j++)
+			{
+				if (typeLines[j] != ' ')
+				{
+					bidLine << typeLines[j] << " ";
+					bidNumber++;
+				}
+			}
+			break;
+		}
+		if (typeLines[i] != ' ')
+		{
+			stringstream convert;
+			convert << typeLines[i];
+			int auxNumberCodes;
+			convert >> auxNumberCodes;
+			auxNumberCodes--;
+			numberCodes.push_back(auxNumberCodes);
+		}
+	}
+	for (int i = 0; i < bidNumber; i++)
+	{
+		int auxBid;
+		bidLine >> auxBid;
+		auxBid--;
+		bidentateChosen.push_back(auxBid);
+	}
+
+	string bidAssNames = "ABCDEFGHIJKL";
+	string bidSSNames = "ABCDEF";
+	string monoNames = "abcdefghijkl";
+	vector<string> atomsCodesLetters(numberCodes.size());
+	int k = 0;
+	int oldNumberCode = 0;
+	int firstBid, secondBid;
+	bool haveBidentate = false;
+	vector<int> bidAssymetricOrdered;
+	vector<int> bidAssymetricType;
+	for (size_t i = 0; i < bidentateChosen.size(); i += 2)
+	{
+		int bidI1 = bidentateChosen[i];
+		int bidI2 = bidentateChosen[i + 1];
+		if (numberCodes[bidI1] != numberCodes[bidI2])
+		{
+			haveBidentate = true;
+			if(numberCodes[bidI1] < numberCodes[bidI2])
+			{
+				firstBid = bidI1;
+				secondBid = bidI2;
+			}
+			else
+			{
+				firstBid = bidI2;
+				secondBid = bidI1;
+			}
+			bidAssymetricOrdered.push_back(firstBid);
+			bidAssymetricOrdered.push_back(secondBid);
+			if (oldNumberCode != numberCodes[firstBid])
+			{
+				k += 2;
+				oldNumberCode = numberCodes[firstBid];
+			}
+			bidAssymetricType.push_back(k);
+//			atomsCodesLetters[firstBid] = bidAssNames[k];
+//			atomsCodesLetters[secondBid] = bidAssNames[k+1];
+		}
+	}
+	if (haveBidentate)
+	{
+		oldNumberCode += 2;
+		int assOld = bidAssymetricType[bidAssymetricType.size() - 1];
+		int assCount = 0;
+		int bidPosCount = 0;
+		for (int i = (int)bidAssymetricType.size() - 1; i >= 0; i--)
+		{
+			if (bidAssymetricType[i] != assOld)
+			{
+				assOld = bidAssymetricType[i];
+				assCount += 2;
+			}
+			int bidPos1 = bidAssymetricOrdered[bidPosCount];
+			int bidPos2 = bidAssymetricOrdered[bidPosCount + 1];
+			bidPosCount += 2;
+			atomsCodesLetters[bidPos1] = bidAssNames[assCount];
+			atomsCodesLetters[bidPos2] = bidAssNames[assCount + 1];
+		}
+	}
+
+	k = 0;
+	haveBidentate = false;
+	vector<int> bidSymmetricType, bidSymmetricOrdered;
+	for (size_t i = 0; i < bidentateChosen.size(); i += 2)
+	{
+		int bidI1 = bidentateChosen[i];
+		int bidI2 = bidentateChosen[i + 1];
+		if (numberCodes[bidI1] == numberCodes[bidI2])
+		{
+			haveBidentate = true;
+			if (numberCodes[bidI1] != oldNumberCode)
+			{
+				k++;
+				oldNumberCode = numberCodes[bidI1];
+			}
+			bidSymmetricType.push_back(k);
+			bidSymmetricOrdered.push_back(bidI1);
+			bidSymmetricOrdered.push_back(bidI2);
+//			atomsCodesLetters[bidI1] = bidSSNames[k];
+//			atomsCodesLetters[bidI2] = bidSSNames[k];
+		}
+	}
+	if (haveBidentate)
+	{
+		oldNumberCode++;
+		int symOld = bidSymmetricType[bidSymmetricType.size() - 1];
+		int symCount = 0;
+		int bidPosCount = 0;
+		for (int i = (int)bidSymmetricType.size() - 1; i >= 0; i--)
+		{
+			if (bidSymmetricType[i] != symOld)
+			{
+				symOld = bidSymmetricType[i];
+				symCount++;
+			}
+			int bidPos1 = bidSymmetricOrdered[bidPosCount];
+			int bidPos2 = bidSymmetricOrdered[bidPosCount + 1];
+			bidPosCount += 2;
+//			atomsCodesLetters[bidPos1] = bidSSNames[symCount];
+//			atomsCodesLetters[bidPos2] = bidSSNames[symCount];
+		}
+	}
+	vector<int> monoTypes, monoPos;
+	for (size_t i = 0; i < numberCodes.size(); i++)
+	{
+		if (numberCodes[i] >= oldNumberCode)
+		{
+			monoTypes.push_back(numberCodes[i] - oldNumberCode);
+			monoPos.push_back(i);
+//			atomsCodesLetters[i] = monoNames[numberCodes[i] - oldNumberCode];
+		}
+	}
+	if (monoTypes.size() != 0) // ordenar esse cara junto com as posicoes
+	{
+		AuxMath auxMath_;
+		vector<int> instructions = auxMath_.vector_ordering(monoTypes);
+		auxMath_.vector_ordering_with_instructions(monoPos, instructions);
+		int monoOld = monoTypes[0];
+		int monoCount = 0;
+		int monoPosCount = 0;
+		for (int i = 0; i < (int)monoTypes.size(); i++)
+		{
+			if (monoTypes[i] != monoOld)
+			{
+				monoOld = monoTypes[i];
+				monoCount++;
+			}
+			int monoPosI = monoPos[monoPosCount];
+			monoPosCount++;
+			atomsCodesLetters[monoPosI] = monoNames[monoCount];
+		}
+	}
+
+	stringstream finalCode;
+	for (size_t i = 0; i < atomsCodesLetters.size(); i++)
+		finalCode << atomsCodesLetters[i] << " ";
+	if (bidentateChosen.size() > 0)
+	{
+		finalCode << " / ";
+		for (size_t i = 0; i < bidentateChosen.size(); i++)
+			finalCode << (bidentateChosen[i] + 1) << " ";
+	}
+	atomTypes = numberCodes;
+	for (size_t i = 0; i < atomTypes.size(); i++)
+		atomTypes[i]++;
+	for (size_t i = 0; i < bidentateChosen.size(); i++)
+		bidentateChosen[i]++;
+
+	return finalCode.str();
+}
+
+void ReadWriteFormats::typeLineToNumberCodes(
+	string typeLines,
+	std::vector<int> & atomTypes,
+	std::vector<int> & bidentateChosen)
+{
+	string elemFirst = "ACEGIK";
+	string monoStrings = "abcdefghijkl";
+	string atomsCodes;
+	stringstream bidLine;
+	int bidNumber = 0;
+	for (size_t i = 0; i < typeLines.size(); i++)
+	{
+		if (typeLines[i] == '/')
+		{
+			for (size_t j = i + 1; j < typeLines.size(); j++)
+			{
+				if (typeLines[j] != ' ')
+				{
+					bidLine << typeLines[j] << " ";
+					bidNumber++;
+				}
+			}
+			break;
+		}
+		if (typeLines[i] != ' ')
+			atomsCodes.push_back(typeLines[i]);
+	}
+	for (int i = 0; i < bidNumber; i++)
+	{
+		int auxBid;
+		bidLine >> auxBid;
+		auxBid--;
+		bidentateChosen.push_back(auxBid);
+	}
+	int k = 1;
+	bool haveBidentate = false;
+	vector<int> atomsCodesNumbers(atomsCodes.size());
+	char oldCode = 'A';
+	for (size_t i = 0; i < bidentateChosen.size(); i += 2)
+	{
+		int bidI1 = bidentateChosen[i];
+		int bidI2 = bidentateChosen[i + 1];
+		if (atomsCodes[bidI1] != atomsCodes[bidI2])
+		{
+			haveBidentate = true;
+			size_t found = elemFirst.find(atomsCodes[bidI1]);
+			int firstBid, secondBid;
+			if (found != std::string::npos)
+			{
+				firstBid = bidI1;
+				secondBid = bidI2;
+			}
+			else
+			{
+				firstBid = bidI2;
+				secondBid = bidI1;
+			}
+			if (oldCode != atomsCodes[firstBid])
+			{
+				k += 2;
+				oldCode = atomsCodes[firstBid];
+			}
+			atomsCodesNumbers[firstBid] = k;
+			atomsCodesNumbers[secondBid] = k + 1;
+		}
+	}
+	oldCode = 'A';
+	if (haveBidentate)
+		k += 2;
+	haveBidentate = false;
+	for (size_t i = 0; i < bidentateChosen.size(); i += 2)
+	{
+		int bidI1 = bidentateChosen[i];
+		int bidI2 = bidentateChosen[i + 1];
+		if (atomsCodes[bidI1] == atomsCodes[bidI2])
+		{
+			haveBidentate = true;
+			if (!(atomsCodes[bidI1] == oldCode))
+			{
+				k++;
+				oldCode = atomsCodes[bidI1];
+			}
+			atomsCodesNumbers[bidI1] = k;
+			atomsCodesNumbers[bidI2] = k;
+		}
+	}
+	if (haveBidentate)
+		k++;
+	for (size_t i = 0; i < atomsCodes.size(); i++)
+	{
+		size_t found = monoStrings.find(atomsCodes[i]);
+		if (found != std::string::npos)
+		{
+			atomsCodesNumbers[i] = k + found;
+		}
+	}
+	atomTypes = atomsCodesNumbers;
+	for (size_t i = 0; i < bidentateChosen.size(); i++)
+		bidentateChosen[i]++;
+}
 
 
 

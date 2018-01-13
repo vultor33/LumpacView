@@ -178,6 +178,9 @@ vector<int> AuxMath::vector_ordering(vector<double> &vetor_entrada)
 	return operacoes_organizam;
 }
 
+// USING
+//vector<int> instructions = auxMath_.vector_ordering(vectorExemple);
+//auxMath_.vector_ordering_with_instructions(otherVector, instructions);
 vector<int> AuxMath::vector_ordering(vector<int> &vetor_entrada)
 {
 	int tamanho_vetor = vetor_entrada.size();

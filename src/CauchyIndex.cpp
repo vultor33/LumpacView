@@ -15,13 +15,13 @@
 	#include <unistd.h>
 #endif
 
-#include "AllMolecularFormulas.h"
 #include "RootMeanSquareDeviation.h"
 #include "Coordstructs.h"
 #include "AuxMath.h"
 #include "IdentifyIsomers.h"
 #include "Geometries.h"
 #include "IsomersToMol.h"
+#include "ReadWriteFormats.h"
 
 using namespace std;
 
@@ -655,9 +655,9 @@ void CauchyIndex::molecularFormulaToCauchyCode(
 	vector<int> & atomTypes,
 	vector<int> & bidentateAtomsChosen)
 {
-	AllMolecularFormulas allMolecular_;
 	atomTypes.resize(mol0.size());
-	vector< vector<int> > molecularCode = allMolecular_.stringToNumber(code);
+	ReadWriteFormats rwf_;
+	vector< vector<int> > molecularCode = rwf_.compositionToNumberOld(code);
 	int kType = 0;
 
 	int bidentateProblem;
@@ -2824,7 +2824,11 @@ vector<int> CauchyIndex::readNewCauchyNotationsEnantiomers(ifstream & openendFil
 
 void CauchyIndex::findMissedRotations()
 {
+	cout << "trocar tudo para o ReadWriteFormats" << endl;
+	exit(1);
 	string fileName = "OC-6-Ma2b2c2.csv";
+
+	ReadWriteFormats rwf_;
 
 	IsomersToMol isoMol_;
 	size_t found = fileName.find("-");
@@ -2837,7 +2841,7 @@ void CauchyIndex::findMissedRotations()
 	vector<int> atomTypes;
 	vector<int> bidentateAtomsChosen;
 
-	isoMol_.readAtomTypesAndBidentateChosenFile(
+	rwf_.readAtomTypesAndBidentateChosenFile(
 		fileIsomers_,
 		atomTypes,
 		bidentateAtomsChosen,

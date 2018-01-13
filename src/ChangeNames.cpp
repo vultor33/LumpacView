@@ -11,6 +11,7 @@
 #include "AllMolecularFormulas.h"
 #include "AuxMath.h"
 #include "Geometries.h"
+#include "ReadWriteFormats.h"
 
 using namespace std;
 
@@ -45,9 +46,9 @@ void ChangeNames::changeNameOfFiles(
 		stringstream convert;
 		convert << line;
 		convert >> combination;
-		AllMolecularFormulas allMol_;
-		vector< vector<int> > combinationCode = allMol_.stringToNumber(combination);
-		string newCombinationName = allMol_.newCodeToString(combinationCode);
+		ReadWriteFormats rwf_;
+		vector< vector<int> > combinationCode = rwf_.compositionToNumberOld(combination);
+		string newCombinationName = rwf_.newCodeToString(combinationCode);
 		newCombinationName = "M" + newCombinationName;
 		if (systemSize == 0)
 			systemSize = calculateSystemSize(combinationCode);
@@ -75,6 +76,41 @@ void ChangeNames::changeNameOfFiles(
 			}
 		}
 	}
+
+	// allTypeLines
+	// tem bidentados?
+	// os bidentados sao iguais ou diferentes?
+	// se forem diferentes,
+	// pegue o menor numero, coloque A / B / C / D e etc.
+	// ande em tudo, o mesmo numero e o mesmo código.
+	// ande no codigo dos assimétricos.
+	// se forem iguais acabou o assimétricos. comece o codigo dos simetricos.
+	// e assim por diante.
+
+	// allTypeLines reverse.
+	// 
+	/* E POSSIVEL FAZER A REVERSAO MAS ELE MUDA A COMPOSICAO DA PARADA
+	ReadWriteFormats rwf_;
+	for (int i = 0; i < allTypeLines.size(); i++)
+	{
+		vector<int> types1, types2, bid1, bid2;
+		string newName = rwf_.typeLineToLetters(
+			allTypeLines[i],
+			types1,
+			bid1);
+		rwf_.typeLineToNumberCodes(
+			newName,
+			types2,
+			bid2);
+		if ((types1 != types2) || (bid1 != bid2))
+		{
+			cout << "ChangeNames::changeNameOfFiles crytographic error" << endl;
+			exit(1);
+		}
+		allTypeLines[i] = newName;
+	}
+	*/
+
 
 	for(size_t i = 0; i < oldCombinationNames.size(); i++)
 	{
@@ -521,7 +557,8 @@ int ChangeNames::calculateSystemSize(std::vector< std::vector<int> > & combinati
 
 string ChangeNames::generateNewTypeLine(string pathRead, string &combination, int systemSize)
 {
-	ifstream typesFile_((pathRead + "final-" + combination + "-atomTypes").c_str());
+	string typeLineFileName = pathRead + "final-" + combination + "-atomTypes";
+	ifstream typesFile_(typeLineFileName.c_str());
 	string typeLine;
 	getline(typesFile_, typeLine);
 	stringstream convert;

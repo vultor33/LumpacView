@@ -22,7 +22,9 @@ public:
 
 	void changeNameOfFiles(
 		std::string name,
-		int geoCode);
+		int geoCode,
+		std::string pathRead,
+		std::string pathWrite);
 
 private:
 	std::vector<vultorGroup> setVultorGroup(
@@ -50,7 +52,10 @@ private:
 
 	int calculateSystemSize(std::vector< std::vector<int> > & combinationCode);
 
-	std::string generateNewTypeLine(std::string &combination, int systemSize);
+	std::string generateNewTypeLine(
+		std::string pathRead,
+		std::string &combination, 
+		int systemSize);
 
 };
 

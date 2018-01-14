@@ -21,6 +21,13 @@ public:
 	
 	std::string sizeToGeometryCode(int size);
 
+	//TESTANDO REFLEXOES
+	std::vector<double> geometry6OCReflections(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector< std::vector<int> > &allReflections);
+
+
 private:
 	std::vector<double> geometry4Tetrahedron(
 		std::vector<CoordXYZ> &mol0,

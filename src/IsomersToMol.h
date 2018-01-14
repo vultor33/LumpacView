@@ -14,15 +14,20 @@ public:
 
 	~IsomersToMol();
 
-	void printAllMol(std::string fileName);
+	void printAllMolFromSpecifiedGeometry(
+		int geoCode,
+		std::string pathRead,
+		std::string responseName);
 
 	std::vector<std::string> readAllPermutations(
 		std::string fileName, 
+		std::string fileFolder,
 		std::vector<int> &atomTypes,
 		std::vector<int> &bidentateChosen);
 
 	std::vector<int> findEnantiomerPair(
 		std::string fileName,
+		std::string fileFolder,
 		std::vector<int> guessPermutation,
 		std::vector<std::string> &pairCodes);
 
@@ -36,19 +41,26 @@ public:
 
 	std::string getAtomLabelI(int I);
 	
-
-private:
-
-	// Functions
+	/* fredapagar
 	void readAtomTypesAndBidentateChosenFile(
 		std::ifstream & file_,
 		std::vector<int> & atomTypes,
 		std::vector<int> & bidentateChosen,
 		int systemSize,
 		int nBidentates);
+	*/
+
+	std::vector<int> readCauchyNotationsEnantiomers(std::ifstream & openendFile_);
+
+private:
+	void printAllMol(
+		std::string fileName,
+		std::string filePath,
+		int geoCode);
+
+	// Functions
 	std::string permutationToString0Correction(std::vector<int> &permutation);
 	std::string permutationToString(std::vector<int> &permutation);
-	std::vector<int> readCauchyNotationsEnantiomers(std::ifstream & openendFile_);
 	std::vector<int> readCauchyNotationsEnantiomersAndTakeCode(
 		std::ifstream & openendFile_,
 		std::vector<std::string> &permutCodes);
@@ -64,6 +76,7 @@ private:
 		const std::vector<int> & bidentateAtomsChosen);
 
 	// read composition
+	/* fredapagar
 	int stringToNumber(std::string entryString, int &nBidentates);
 	int codeToType(std::string code);
 	void addEqual(
@@ -76,8 +89,13 @@ private:
 		std::vector<int> & typeCode1,
 		std::vector<int> & typeCode2,
 		std::vector<int> & typeCode3);
+	*/
 
+	// raswin parameters
 	void setParameters(int coordination);
+
+	// molekel parameters
+	void setParameters(int coordination, int geoCode);
 
 	std::vector<std::string> atomLabels;
 

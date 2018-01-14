@@ -10,6 +10,7 @@
 
 #include "Coordstructs.h"
 #include "Geometries.h"
+#include "ReadWriteFormats.h"
 
 using namespace std;
 
@@ -18,21 +19,24 @@ IsomersToMol::IsomersToMol(){}
 IsomersToMol::~IsomersToMol(){}
 
 std::vector<std::string> IsomersToMol::readAllPermutations(
-	std::string fileName, 
+	std::string fileName,
+	std::string fileFolder,
 	vector<int> &atomTypes, 
 	vector<int> &bidentateChosen)
 {
+
 	// read input
+	ReadWriteFormats rwf_;
 	size_t found = fileName.find("-");
 	size_t foundSecond = fileName.find("-", found + 1, 1);
 	size_t pointChar = fileName.find(".");
 	string composition = fileName.substr(foundSecond + 1, pointChar - foundSecond - 1);
 	int nBidentates;
-	int coordination = stringToNumber(composition, nBidentates);
+	int coordination = rwf_.compositionToNumbers(composition, nBidentates);
 	setParameters(coordination);
-	ifstream fileIsomers_(fileName.c_str());
+	ifstream fileIsomers_((fileFolder + fileName).c_str());
 
-	readAtomTypesAndBidentateChosenFile(
+	rwf_.readAtomTypesAndBidentateChosenFile(
 		fileIsomers_,
 		atomTypes,
 		bidentateChosen,
@@ -56,13 +60,14 @@ std::vector<std::string> IsomersToMol::readAllPermutations(
 //salvar codigo e grupo vultor dois dois
 vector<int> IsomersToMol::findEnantiomerPair(
 	std::string fileName,
+	std::string fileFolder,
 	vector<int> guessPermutation,
 	vector<string> &pairCodes)
 {
 	for (size_t i = 0; i < guessPermutation.size(); i++)
 		guessPermutation[i]++;
 	vector<int> pair;
-	ifstream fileIsomers_(fileName.c_str());
+	ifstream fileIsomers_((fileFolder + fileName).c_str());
 	string line;
 	getline(fileIsomers_, line);
 	vector<string> allPermut;
@@ -116,47 +121,85 @@ vector<int> IsomersToMol::findEnantiomerPair(
 	return pair;
 }
 
-
-void IsomersToMol::printAllMol(string fileName)
+void IsomersToMol::printAllMolFromSpecifiedGeometry(
+	int geoCode,
+	std::string pathRead,
+	std::string responseName)
 {
+	cout << "WARNING --- WORKS ONLY ON WINDOWS" << endl;
 
+	Geometries geo_;
+	ReadWriteFormats rwf_;
+	string geomName = geo_.sizeToGeometryCode(geoCode);
+	ifstream response_((pathRead + responseName).c_str());
+	string line;
+	string folder = geo_.sizeToGeometryCode(geoCode);
+	system(("md " + folder).c_str());
+	while (!response_.eof())
+	{
+		getline(response_, line);
+		if (line == "")
+			break;
+		string combination;
+		stringstream convert;
+		convert << line;
+		convert >> combination;
+		vector< vector<int> > combinationCode = rwf_.compositionToNumberOld(combination);
+		string newCombinationName = rwf_.newCodeToString(combinationCode);
+		newCombinationName = "M" + newCombinationName;
+		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
+		IsomersToMol ismol_;
+		ismol_.printAllMol(allIsomersCombinationFile,
+			pathRead,
+			geoCode);
+	}
+}
+
+// need geo code folder
+void IsomersToMol::printAllMol(
+	string fileName,
+	string filePath,
+	int geoCode)
+{
 	// read input
 	size_t found = fileName.find("-");
 	size_t foundSecond = fileName.find("-", found + 1, 1);
 	size_t pointChar = fileName.find(".");
 	string composition = fileName.substr(foundSecond + 1, pointChar - foundSecond - 1);
 	int nBidentates;
-	int coordination = stringToNumber(composition, nBidentates);
-	setParameters(coordination);
-	ifstream fileIsomers_(fileName.c_str());
-
+	ReadWriteFormats rwf_;
+	int coordination = rwf_.compositionToNumbers(composition, nBidentates);
+	setParameters(coordination, geoCode);
+	ifstream fileIsomers_((filePath + fileName).c_str());
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
-	readAtomTypesAndBidentateChosenFile(
+	rwf_.readAtomTypesAndBidentateChosenFile(
 		fileIsomers_, 
 		atomTypes, 
 		bidentateChosen, 
 		coordination,
 		nBidentates);
 	string line;
+
+	Geometries geo_;
+	string folder = geo_.sizeToGeometryCode(geoCode);
+	string folderComposition = folder + "\\" + composition;
+	system(("md " + folderComposition).c_str());
+
 	while (!fileIsomers_.eof())
 	{
 		vector<int> permutation = readCauchyNotationsEnantiomers(fileIsomers_);
 		if (permutation.size() == 0)
 			continue;
-		string permtString = permutationToString0Correction(permutation);
-		ofstream fileXyz_((composition + "-" + permtString + ".mol2").c_str());
+		vector<int> permutationStringTransfer = permutation;
+		string permtString = permutationToString(permutationStringTransfer);
+		ofstream fileXyz_((folderComposition + "//" + composition + "-" + permtString + ".mol2").c_str());
 		for (size_t i = 0; i < permutation.size(); i++)
 			permutation[i]--;
 		printMoleculeMolFormat(permutation, atomTypes, bidentateChosen, fileXyz_);
 		fileXyz_.close();
 	}
 	fileIsomers_.close();
-
-	cout << "FileToIsomers ended normally" << endl
-		<< "Press enter to exit" << endl;
-	string dummy;
-	getline(cin, dummy);
 }
 
 void IsomersToMol::printSingleMol(
@@ -166,7 +209,10 @@ void IsomersToMol::printSingleMol(
 	string name)
 {
 	name += "-";
-	name += permutationToString(permutation);
+	vector<int> permutation2 = permutation;
+	for (size_t i = 0; i < permutation2.size(); i++)
+		permutation2[i] += 1;
+	name += permutationToString(permutation2);	
 	name += ".mol2";
 	ofstream fileXyz_(name.c_str());
 	printMoleculeMolFormat(permutation, atomTypes, bidentateChosen, fileXyz_);
@@ -175,6 +221,7 @@ void IsomersToMol::printSingleMol(
 }
 
 
+/* 
 void IsomersToMol::readAtomTypesAndBidentateChosenFile(
 	ifstream & file_,
 	vector<int> & atomTypes,
@@ -204,6 +251,7 @@ void IsomersToMol::readAtomTypesAndBidentateChosenFile(
 		}
 	}
 }
+*/
 
 vector<int> IsomersToMol::readCauchyNotationsEnantiomers(ifstream & openendFile_)
 {
@@ -218,8 +266,9 @@ vector<int> IsomersToMol::readCauchyNotationsEnantiomers(ifstream & openendFile_
 		return notation;
 	notation.resize(size);
 
-	size_t brack1 = auxline.find("[");
-	size_t brack2 = auxline.find("]");
+	size_t brack1Temp = auxline.find("]");
+	size_t brack1 = auxline.find("[", brack1Temp + 1, 1);
+	size_t brack2 = auxline.find("]", brack1Temp + 1, 1);
 	string permString = auxline.substr(brack1 + 1, brack2 - brack1 - 1);
 	stringstream line;
 	line << permString;
@@ -245,8 +294,9 @@ vector<int> IsomersToMol::readCauchyNotationsEnantiomersAndTakeCode(
 		return notation;
 	notation.resize(size);
 
-	size_t brack1 = auxline.find("[");
-	size_t brack2 = auxline.find("]");
+	size_t brack1Temp = auxline.find("]");
+	size_t brack1 = auxline.find("[", brack1Temp + 1, 1);
+	size_t brack2 = auxline.find("]", brack1Temp + 1, 1);
 	string permString = auxline.substr(brack1 + 1, brack2 - brack1 - 1);
 	string vultorGroup = auxline.substr(brack2 + 2, 2);
 	size_t key1 = auxline.find("{");
@@ -329,14 +379,14 @@ void IsomersToMol::printMoleculeMolFormat(
 	int k = 1;
 	for (size_t i = 0; i < nAtoms; i++)
 	{
-		printFile_ << " " << k << " 1  " << i + 2 << endl;
+		printFile_ << " " << k << " 1  " << i + 2 << " 1 " << endl;
 		k++;
 	}
 	for (size_t i = 0; i < bidentateAtomsChosen.size(); i += 2)
 	{
 		printFile_ << " " << k << " " << bidentateAtomsChosenRotated[i] + 2 << "  "
 			<< bidentateAtomsChosenRotated[i + 1] + 2
-			<< endl;
+			<< " 1 " << endl;
 		k++;
 	}
 	printFile_ << "M  END" << endl;
@@ -367,6 +417,7 @@ std::vector<int> IsomersToMol::applyPermutationCoordinates(
 	return bidentateAtomsChosenRotated;
 }
 
+/* fredapagar
 int IsomersToMol::stringToNumber(string entryString, int & nBidentates)
 {
 	// cut ligands codes
@@ -374,7 +425,7 @@ int IsomersToMol::stringToNumber(string entryString, int & nBidentates)
 	int coordination = 0;
 	nBidentates = 0;
 	bool bidentate;
-	for (size_t i = 0; i < entryString.size();i++)
+	for (size_t i = 1; i < entryString.size();i++)
 	{
 		char codeI = entryString[i];
 		bidentate = false;
@@ -536,14 +587,48 @@ void IsomersToMol::addDifferent(
 		typeCode3.push_back(newCode);
 	}
 }
+*/
+
 
 string IsomersToMol::getAtomLabelI(int I)
 {
 	return atomLabels[I];
 }
 
-void IsomersToMol::setParameters(int coordination)
+// molekel parameters
+void IsomersToMol::setParameters(
+	int coordination, 
+	int geoCode)
 {
+	//molekel
+	atomLabels.resize(12);
+	atomLabels[0] = "O";// red
+	atomLabels[1] = "P";// green
+	atomLabels[2] = "N";// dark blue
+	atomLabels[3] = "I";// purple
+	atomLabels[4] = "Na";// brown
+	atomLabels[5] = "B";// light blue
+	atomLabels[6] = "Se";// dark green
+	atomLabels[7] = "C";// grey
+	atomLabels[8] = "He";// white
+	atomLabels[9] = "Ca";// light green
+	atomLabels[10] = "Ti";// gold
+	atomLabels[11] = "Sc";// gold
+
+	Geometries geo_;
+	double cutAngle;
+	vector<int> reflection;
+	geo_.selectGeometry(geoCode, complex, cutAngle, reflection);
+
+}
+
+// raswin parameters
+void IsomersToMol::setParameters(
+	int coordination)
+{
+	cout << "IsomersToMol::setParameters need attention - RASWIN format" << endl;
+	exit(1);
+
 	atomLabels.resize(12);
 	atomLabels[0] = "Ca";
 	atomLabels[1] = "O";
@@ -585,7 +670,7 @@ void IsomersToMol::setParameters(int coordination)
 		break;
 
 	case 9:
-		geo_.selectGeometry(92, complex, cutAngle, reflection);
+		geo_.selectGeometry(90, complex, cutAngle, reflection);
 		break;
 
 	case 10:
@@ -606,6 +691,7 @@ void IsomersToMol::setParameters(int coordination)
 		break;
 	}
 }
+
 
 void IsomersToMol::printCoordXyz(vector<CoordXYZ> &coord)
 {

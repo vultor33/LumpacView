@@ -17,11 +17,11 @@ public:
 	void findAllIsomersOnCombinations(std::string combinationFile);
 
 	// 3 entries: 0-mono ; 1-bisymmetric ; 2-biassymetric.
-	std::vector< std::vector<int> > stringToNumber(std::string entryString);
+	//std::vector< std::vector<int> > stringToNumber(std::string entryString);
 
-	std::string codeToString(std::vector< std::vector<int> > & codeLine);
+//	std::string codeToString(std::vector< std::vector<int> > & codeLine);
 
-	std::string newCodeToString(std::vector< std::vector<int> > & codeLine);
+//	std::string newCodeToString(std::vector< std::vector<int> > & codeLine);
 
 private:
 	//data
@@ -40,7 +40,7 @@ private:
 
 	bool compareToAll(std::vector< std::vector< std::vector<int> > > & allCodes, std::vector< std::vector<int> > &actualCodes);
 
-	int codeToType(std::string code);
+//	int codeToType(std::string code);
 
 	void printInputWithCode(std::string code);
 
@@ -49,6 +49,7 @@ private:
 		std::vector< std::string > & ligandNames,
 		std::vector<int> & denticity);
 
+	/*
 	void addEqual(
 		int codeNumber,
 		std::vector<int> & typeCode1,
@@ -62,6 +63,7 @@ private:
 		std::vector<int> & typeCode2,
 		std::vector<int> & typeCode3
 		);
+	*/
 
 	void sumUpNameAndPrint(
 		std::vector< std::string > & name,

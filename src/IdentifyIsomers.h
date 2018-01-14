@@ -28,7 +28,9 @@ public:
 	void coordinatesToPermutation(
 		std::vector<CoordXYZ> mol0,
 		std::string permutationsFile,
-		std::string coordinatesFile);
+		std::string filePath,
+		std::string coordinatesFile,
+		std::string countingFile);
 
 	double compareGeometryPermutation(
 		std::vector<int> &atomTypes,
@@ -135,7 +137,9 @@ private:
 		std::vector< std::vector<int> > & allSortedTypes2,
 		std::vector< std::vector<double> > & allSortedDistances2);
 
-	std::string takeAllVultorsGroup(std::string permutationsFile);
+	std::string takeAllVultorsGroup(
+		std::string permutationsFile,
+		std::string countingFile);
 
 	void applyBidentatesOnCoord(
 		std::vector<CoordXYZ> &mol,

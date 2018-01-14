@@ -53,7 +53,9 @@ public:
 
 	void identifyIsomer(
 		std::string permutationsFile,
-		std::string coordinatesFile);
+		std::string filePath,
+		std::string coordinatesFile,
+		std::string countingFile);
 
 	void printMoleculeFromFile(std::string fileName);
 
@@ -205,6 +207,11 @@ public:
 // os flags precisam ser os mesmos sempre - vou ter que gerar um arquivo na pasta para todos lerem.
 
 	void temporario();
+
+	std::vector<int> readNewCauchyNotationsEnantiomers(std::ifstream & openendFile_);
+	void findMissedRotations();
+
+	std::string rotationString(int iRot);
 
 private:
 	//data rotations

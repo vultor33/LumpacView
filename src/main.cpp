@@ -29,6 +29,8 @@
 #include "MarquesEnantiomers.h"
 #include "Geometries.h"
 #include "UtilityRun.h"
+#include "IdentifyIsomers.h"
+#include "ReadWriteFormats.h"
 
 using namespace std;
 
@@ -62,6 +64,22 @@ void buildCsvFile(int size, string skeletonName);
 
 int main(int argc, char *argv[])
 {
+	/* APAGAR 
+	ReadWriteFormats rwf_;
+	vector<int> t1, b1;
+	string names = rwf_.typeLineToLetters("3  1  4  3  2  4 / 2  5  4  6  1  3 ", t1, b1);
+	vector<int> atomTypes, bidentatChosen, a2, b2;
+	rwf_.typeLineToNumberCodes(
+		names,
+		atomTypes,
+		bidentatChosen);
+	return 0;
+	*/
+
+	/* Generate coordinates
+	UtilityRun util_;
+	util_.generateAllIsomersMol2Files();
+	*/
 
 	/*	
 	CauchyIndex ci21_(9);
@@ -99,14 +117,15 @@ int main(int argc, char *argv[])
 	// Na hora de realizar uma reacao quimica, os pesos deveriam ser levados em consideracao. Entropia, mais graus de liberdade. Graus de liberdade degenerados.
 	// Na quimica organica deveria ter pesos. 
 
-	/* IDENTIFY ISOMERS 
-	int size = 92;
-	CauchyIndex ci234(size);
-	ci234.identifyIsomer(
-		"MFF-9-a3(AA)3.csv",
-		"QALFAK.xyz");
-	return 0;
-	*/
+	//UtilityRun util_;
+	//util_.identifyAll();
+	//return 0;
+
+	/* IDENTIFY ISOMERS */
+	//UtilityRun util_;
+	//util_.identifyOne();
+	//return 0;
+	
 	  
 	
 	/* CALCULATING SQUARE 
@@ -122,10 +141,27 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-	//IsomersToMol ismol_;
-	//ismol_.printAllMol("COC-7-a5(AA).csv");
+	// tenho que ler o response transformar no codigo novo
+	// depois entrar no arquivo e pronto, montar a arvore de diretorios
 
-	/* CALCULATING ANGLES 	
+	/* EXEMPLO DE PRINT ALL MOL
+	int geoCode = 60;
+	string response = "response-combinations6.txt";
+	string path = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\OC\\";
+	IsomersToMol ismol_;
+	ismol_.printAllMolFromSpecifiedGeometry(geoCode,
+		path,
+		response);
+	return 0;
+	*/
+
+	/* ENCONTRAR GRUPO PONTUAL
+	CauchyIndex ci13_(60);
+	ci13_.findMissedRotations();
+	return 0;
+	*/
+
+	/* CALCULATING ANGLES 
 	vector<Ligand> allLig;
 	ComplexCreator cp_(allLig);
 	Geometries geo_;
@@ -143,15 +179,22 @@ int main(int argc, char *argv[])
 //	return 0;
 
 
+	//UtilityRun util_;
+	//util_.formatIsomersFiles();
+	//return 0;
+
 	/* CHANGING NAMES  
 	string responseName;
-	cout << "type line: " << endl;
-	//cin >> responseName;
-	responseName = "response-combinations7.txt";
+	responseName = "response-combinations6.txt";
 	ChangeNames chNames_;
-	chNames_.changeNameOfFiles(responseName,70);
+	chNames_.changeNameOfFiles(
+		responseName,
+		60,
+		"",
+		"");
 	return 0;
-	 */
+	*/
+	
 	
 	
 	//CauchyIndex ci123_(10);

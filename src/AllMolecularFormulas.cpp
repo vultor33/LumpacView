@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "FindIsomers.h"
+#include "ReadWriteFormats.h"
 
 using namespace std;
 
@@ -276,7 +277,8 @@ void AllMolecularFormulas::codeToLigands(
 	std::vector< std::string > & ligandNames,
 	std::vector<int> & denticity)
 {
-	vector< vector<int> > codeLine = stringToNumber(code);
+	ReadWriteFormats rwf_;
+	vector< vector<int> > codeLine = rwf_.compositionToNumberOld(code);
 	int l = 0;
 	int m = 0;
 	for (size_t i = 0; i < codeLine.size(); i++)
@@ -321,13 +323,14 @@ void AllMolecularFormulas::clearEqualCombinations(string combFile)
 
 	string auxline;
 	getline(combFile_, auxline);
-	vector< vector<int> > code0 = stringToNumber(auxline);
+	ReadWriteFormats rwf_;
+	vector< vector<int> > code0 = rwf_.compositionToNumberOld(auxline);
 	allCodes.push_back(code0);
 	while (getline(combFile_, auxline))
 	{
 		if (auxline == "") break;
 
-		vector< vector<int> > codeLine = stringToNumber(auxline);
+		vector< vector<int> > codeLine = rwf_.compositionToNumberOld(auxline);
 
 		if (compareToAll(allCodes, codeLine))
 			allCodes.push_back(codeLine);
@@ -338,11 +341,12 @@ void AllMolecularFormulas::clearEqualCombinations(string combFile)
 	ofstream out_(outFileName.c_str());
 
 	for (size_t i = 0; i < allCodes.size(); i++)
-		out_ << codeToString(allCodes[i]) << endl;
+		out_ << rwf_.codeToString(allCodes[i]) << endl;
 
 	out_.close();
 }
 
+/*
 string AllMolecularFormulas::codeToString(vector < vector<int> > & codeLine)
 {
 	string name = "";
@@ -396,37 +400,9 @@ string AllMolecularFormulas::newCodeToString(vector < vector<int> > & codeLine)
 			name += convert.str();
 		}
 	}
-
-
-
-	/*
-	for (size_t i = 0; i < codeLine.size(); i++)
-	{
-		int startCount;
-		if (i == 0)
-			startCount = 0;
-		else if (i == 1)
-			startCount = 12;
-		else if (i == 2)
-			startCount = 18;
-		for (size_t j = 0; j < codeLine[i].size(); j++)
-		{
-			stringstream convert;
-			if (codeLine[i][j] > 1)
-			{
-				convert << elemNew[j + startCount]
-					<< codeLine[i][j];
-			}
-			else
-			{
-				convert << elemNew[j + startCount];
-			}
-			name += convert.str();
-		}
-	}
-	*/
 	return name;
 }
+*/
 
 bool AllMolecularFormulas::compareToAll(std::vector< std::vector< std::vector<int> > > & allCodes, std::vector< std::vector<int> > &actualCodes)
 {
@@ -484,6 +460,7 @@ void AllMolecularFormulas::sumUpNameAndPrint(
 }
 
 
+/*fredapagar
 vector< vector<int> > AllMolecularFormulas::stringToNumber(string entryString)
 {
 	//cortar os codigos
@@ -598,9 +575,14 @@ void AllMolecularFormulas::addDifferent(
 		typeCode3.push_back(newCode);
 	}
 }
+*/
+
 
 int AllMolecularFormulas::angleBidentateCut(size_t coordination)
 {
+	cout << "On AllMolecularFormulas::angleBidentateCut need to have caution" << endl;
+	exit(1);
+
 	switch (coordination)
 	{
 	case 4:

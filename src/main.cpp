@@ -1,4 +1,4 @@
-//#define UNIX
+#define UNIX
 
 #include <utility>
 #include <iostream>
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 	//IsomersToMol ismol_;
 	//ismol_.printAllMol("COC-7-a5(AA).csv");
 
-	/* CALCULATING ANGLES 	*/
+	/* CALCULATING ANGLES 	
 	vector<Ligand> allLig;
 	ComplexCreator cp_(allLig);
 	Geometries geo_;
@@ -136,6 +136,7 @@ int main(int argc, char *argv[])
 	geo_.selectGeometry(50, mol0, cutAngle, reflectionOperation);
 	cp_.calculateAllAngles(mol0);
 	return 0;
+	*/
 
 //	UtilityRun utRun_;
 //	utRun_.renameAtomTypes("response-combinations4.txt");

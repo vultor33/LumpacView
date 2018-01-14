@@ -1,6 +1,6 @@
 #include "CauchyIndex.h"
 
-//#define UNIX
+#define UNIX
 
 #include <vector>
 #include <string>

@@ -12,6 +12,7 @@
 #include "IdentifyIsomers.h"
 #include "Geometries.h"
 #include "Coordstructs.h"
+#include "IsomersToMol.h"
 
 using namespace std;
 
@@ -1463,6 +1464,101 @@ void UtilityRun::identifyAll()
 
 }
 
+void UtilityRun::generateAllIsomersMol2Files()
+{
+	IsomersToMol ismol40_;
+	string responseName = "response-combinations4.txt";
+	ismol40_.printAllMolFromSpecifiedGeometry(40,
+		getResultsPath(40),
+		responseName);
+	IsomersToMol ismol41_;
+	responseName = "response-combinations4.txt";
+	ismol41_.printAllMolFromSpecifiedGeometry(41,
+		getResultsPath(41),
+		responseName);
+
+	IsomersToMol ismol50_;
+	responseName = "response-combinations5.txt";
+	ismol50_.printAllMolFromSpecifiedGeometry(50,
+		getResultsPath(50),
+		responseName);
+	IsomersToMol ismol51_;
+	responseName = "response-combinations5.txt";
+	ismol51_.printAllMolFromSpecifiedGeometry(51,
+		getResultsPath(51),
+		responseName);
+
+	IsomersToMol ismol60_;
+	responseName = "response-combinations6.txt";
+	ismol60_.printAllMolFromSpecifiedGeometry(60,
+		getResultsPath(60),
+		responseName);
+	IsomersToMol ismol61_;
+	responseName = "response-combinations6.txt";
+	ismol61_.printAllMolFromSpecifiedGeometry(61,
+		getResultsPath(61),
+		responseName);
+
+	IsomersToMol ismol70_;
+	responseName = "response-combinations7.txt";
+	ismol70_.printAllMolFromSpecifiedGeometry(70,
+		getResultsPath(70),
+		responseName);
+	IsomersToMol ismol71_;
+	responseName = "response-combinations7.txt";
+	ismol71_.printAllMolFromSpecifiedGeometry(71,
+		getResultsPath(71),
+		responseName);
+	IsomersToMol ismol72_;
+	responseName = "response-combinations7.txt";
+	ismol72_.printAllMolFromSpecifiedGeometry(72,
+		getResultsPath(72),
+		responseName);
+
+	IsomersToMol ismol80_;
+	responseName = "response-combinations8.txt";
+	ismol80_.printAllMolFromSpecifiedGeometry(80,
+		getResultsPath(80),
+		responseName);
+	IsomersToMol ismol81_;
+	responseName = "response-combinations8.txt";
+	ismol81_.printAllMolFromSpecifiedGeometry(81,
+		getResultsPath(81),
+		responseName);
+	IsomersToMol ismol82_;
+	responseName = "response-combinations8.txt";
+	ismol82_.printAllMolFromSpecifiedGeometry(82,
+		getResultsPath(82),
+		responseName);
+	IsomersToMol ismol83_;
+	responseName = "response-combinations8.txt";
+	ismol83_.printAllMolFromSpecifiedGeometry(83,
+		getResultsPath(83),
+		responseName);
+	IsomersToMol ismol84_;
+	responseName = "response-combinations8.txt";
+	ismol84_.printAllMolFromSpecifiedGeometry(84,
+		getResultsPath(84),
+		responseName);
+
+	IsomersToMol ismol90_;
+	responseName = "response-combinations9.txt";
+	ismol90_.printAllMolFromSpecifiedGeometry(90,
+		getResultsPath(90),
+		responseName);
+	IsomersToMol ismol91_;
+	responseName = "response-combinations9.txt";
+	ismol91_.printAllMolFromSpecifiedGeometry(91,
+		getResultsPath(91),
+		responseName);
+	IsomersToMol ismol92_;
+	responseName = "response-combinations9.txt";
+	ismol92_.printAllMolFromSpecifiedGeometry(92,
+		getResultsPath(92),
+		responseName);
+}
+
+
 
 string UtilityRun::getCountingPath(int geoCode)
 {
@@ -1543,4 +1639,83 @@ string UtilityRun::getCountingPath(int geoCode)
 	}
 }
 
+
+std::string UtilityRun::getResultsPath(int geoCode)
+{
+	switch (geoCode)
+	{
+	case(40):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#4\\T\\";
+		break;
+
+	case(41):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#4\\SP\\";
+		break;
+
+	case(50):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#5\\TBPY\\";
+		break;
+
+	case(51):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#5\\SPY\\";
+		break;
+
+	case(60):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\OC\\";
+		break;
+
+	case(61):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\TPR\\";
+		break;
+
+	case(70):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#7\\COC\\";
+		break;
+
+	case(71):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#7\\PBPY\\";
+		break;
+
+	case(72):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#7\\CTPR\\";
+		break;
+
+	case(80):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\SAPR\\";
+		break;
+
+	case(81):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\TDD\\";
+		break;
+
+	case(82):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\BTPR\\";
+		break;
+
+	case(83):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\HBPY\\";
+		break;
+
+	case(84):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\CU\\";
+		break;
+
+	case(90):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\TCTPR\\";
+		break;
+
+	case(91):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\CSAPR\\";
+		break;
+
+	case(92):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\MFF\\";
+		break;
+
+	default:
+		cout << "UtilityRun::getCountingPath geoCode not found" << endl;
+		exit(1);
+		break;
+	}
+}
 

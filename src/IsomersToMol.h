@@ -14,10 +14,10 @@ public:
 
 	~IsomersToMol();
 
-	void printAllMol(
-		std::string fileName,
-		std::string filePath,
-		int geoCode);
+	void printAllMolFromSpecifiedGeometry(
+		int geoCode,
+		std::string pathRead,
+		std::string responseName);
 
 	std::vector<std::string> readAllPermutations(
 		std::string fileName, 
@@ -53,6 +53,10 @@ public:
 	std::vector<int> readCauchyNotationsEnantiomers(std::ifstream & openendFile_);
 
 private:
+	void printAllMol(
+		std::string fileName,
+		std::string filePath,
+		int geoCode);
 
 	// Functions
 	std::string permutationToString0Correction(std::vector<int> &permutation);

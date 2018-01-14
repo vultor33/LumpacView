@@ -121,6 +121,40 @@ vector<int> IsomersToMol::findEnantiomerPair(
 	return pair;
 }
 
+void IsomersToMol::printAllMolFromSpecifiedGeometry(
+	int geoCode,
+	std::string pathRead,
+	std::string responseName)
+{
+	cout << "WARNING --- WORKS ONLY ON WINDOWS" << endl;
+
+	Geometries geo_;
+	ReadWriteFormats rwf_;
+	string geomName = geo_.sizeToGeometryCode(geoCode);
+	ifstream response_((pathRead + responseName).c_str());
+	string line;
+	string folder = geo_.sizeToGeometryCode(geoCode);
+	system(("md " + folder).c_str());
+	while (!response_.eof())
+	{
+		getline(response_, line);
+		if (line == "")
+			break;
+		string combination;
+		stringstream convert;
+		convert << line;
+		convert >> combination;
+		vector< vector<int> > combinationCode = rwf_.compositionToNumberOld(combination);
+		string newCombinationName = rwf_.newCodeToString(combinationCode);
+		newCombinationName = "M" + newCombinationName;
+		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
+		IsomersToMol ismol_;
+		ismol_.printAllMol(allIsomersCombinationFile,
+			pathRead,
+			geoCode);
+	}
+}
+
 // need geo code folder
 void IsomersToMol::printAllMol(
 	string fileName,
@@ -166,11 +200,6 @@ void IsomersToMol::printAllMol(
 		fileXyz_.close();
 	}
 	fileIsomers_.close();
-
-	cout << "FileToIsomers ended normally" << endl
-		<< "Press enter to exit" << endl;
-	string dummy;
-	getline(cin, dummy);
 }
 
 void IsomersToMol::printSingleMol(

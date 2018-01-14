@@ -76,7 +76,8 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-
+	UtilityRun util_;
+	util_.generateAllIsomersMol2Files();
 
 	/*	
 	CauchyIndex ci21_(9);
@@ -140,13 +141,17 @@ int main(int argc, char *argv[])
 
 	// tenho que ler o response transformar no codigo novo
 	// depois entrar no arquivo e pronto, montar a arvore de diretorios
+
+	/* EXEMPLO DE PRINT ALL MOL
+	int geoCode = 60;
+	string response = "response-combinations6.txt";
+	string path = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\OC\\";
 	IsomersToMol ismol_;
-	int geomPrintAllCode = 90;
-	ismol_.printAllMol(
-		"TCTPR-9-Ma3(AB)3.csv",
-		"",
-		geomPrintAllCode);
+	ismol_.printAllMolFromSpecifiedGeometry(geoCode,
+		path,
+		response);
 	return 0;
+	*/
 
 	/* ENCONTRAR GRUPO PONTUAL
 	CauchyIndex ci13_(60);

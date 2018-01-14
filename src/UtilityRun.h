@@ -14,15 +14,19 @@ public:
 
 	void formatIsomersFiles();
 
+	void identifyAll();
+
+	void generateAllIsomersMol2Files();
+
+	//testing
 	void identifyOne();
 
-	void identifyAll();
 
 private:
 
 	std::string getCountingPath(int geoCode);
 
-
+	std::string getResultsPath(int geoCode);
 };
 
 

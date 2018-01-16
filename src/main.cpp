@@ -1,4 +1,4 @@
-#define UNIX
+//#define UNIX
 
 #include <utility>
 #include <iostream>
@@ -64,6 +64,43 @@ void buildCsvFile(int size, string skeletonName);
 
 int main(int argc, char *argv[])
 {
+
+	/*
+	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\OC\\";
+	string responseName = "response-combinations6.txt";
+	int geoCode = 60;
+	Geometries geo_;
+	ReadWriteFormats rwf_;
+	string geomName = geo_.sizeToGeometryCode(geoCode);
+	ifstream response_((pathRead + responseName).c_str());
+	string line;
+	while (!response_.eof())
+	{
+		getline(response_, line);
+		if (line == "")
+			break;
+		string combination;
+		stringstream convert;
+		convert << line;
+		convert >> combination;
+		vector< vector<int> > combinationCode = rwf_.compositionToNumberOld(combination);
+		string newCombinationName = rwf_.newCodeToString(combinationCode);
+		newCombinationName = "M" + newCombinationName;
+		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
+		CauchyIndex ciSymmetry_(geoCode);
+		ciSymmetry_.findAllSymmetryOperations(
+			allIsomersCombinationFile,
+			pathRead);
+	}
+	return 0;
+	*/
+
+	
+	//CauchyIndex cif3f_(60);
+	//cif3f_.findAllSymmetryOperations("OC-6-Ma2(AB)2.csv","");
+	//return 0;
+
+
 	/* APAGAR 
 	ReadWriteFormats rwf_;
 	vector<int> t1, b1;
@@ -76,10 +113,10 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-	/* Generate coordinates
+	/* Generate coordinates */
 	UtilityRun util_;
 	util_.generateAllIsomersMol2Files();
-	*/
+	return 0;
 
 	/*	
 	CauchyIndex ci21_(9);

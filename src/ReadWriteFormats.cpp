@@ -50,6 +50,12 @@ vector<int> ReadWriteFormats::readCauchyNotationsEnantiomers(
 	ifstream & openendFile_,
 	int size)
 {
+	int rcw;
+	string vGroup, code;
+	return readCauchyNotation(openendFile_, size, vGroup, rcw, code);
+
+
+	/*
 	vector<int> notation;
 	if (openendFile_.eof())
 		return notation;
@@ -72,7 +78,49 @@ vector<int> ReadWriteFormats::readCauchyNotationsEnantiomers(
 		//notation[i]--; --- observar isso aqui
 	}
 	return notation;
+	*/
 }
+
+std::vector<int> ReadWriteFormats::readCauchyNotation(
+	std::ifstream & openendFile_,
+	int size,
+	string & vultorGroup,
+	int & rcw,
+	string & allCode)
+{
+	vector<int> notation;
+	if (openendFile_.eof())
+		return notation;
+
+	string auxline;
+	getline(openendFile_, auxline);
+	if (auxline == "")
+		return notation;
+	notation.resize(size);
+
+	stringstream convert;
+	convert << auxline;
+	string dummy;
+	convert >> rcw >> dummy;
+
+	size_t brack1Temp = auxline.find("]");
+	size_t brack1 = auxline.find("[", brack1Temp + 1, 1);
+	size_t brack2 = auxline.find("]", brack1Temp + 1, 1);
+	string permString = auxline.substr(brack1 + 1, brack2 - brack1 - 1);
+	vultorGroup = auxline.substr(brack2 + 2, 2);
+	size_t key1 = auxline.find("{");
+	allCode = auxline.substr(key1, allCode.size() - key1);
+
+	stringstream line;
+	line << permString;
+	for (size_t i = 0; i < size; i++)
+	{
+		line >> notation[i];
+		notation[i]--;
+	}
+	return notation;
+}
+
 
 // 3 vec (mono, bsym and bass) --> m01m02m03m04m06B01C01 
 string ReadWriteFormats::codeToString(std::vector < std::vector<int> > & codeLine)

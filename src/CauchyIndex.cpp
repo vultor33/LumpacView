@@ -1,6 +1,6 @@
 #include "CauchyIndex.h"
 
-#define UNIX
+//#define UNIX
 
 #include <vector>
 #include <string>
@@ -2421,6 +2421,19 @@ vector<int> CauchyIndex::applyZAxisReflection(vector<int> permutation)
 	return permutReflected;
 }
 
+vector<int> CauchyIndex::applyReflection(
+	const vector<int> & permutation,
+	const vector<int> & reflectionOp)
+{
+	vector<int> permutReflected = permutation;
+
+	for (size_t i = 0; i < permutation.size(); i++)
+	{
+		permutReflected[reflectionOp[i]] = permutation[i];
+	}
+	return permutReflected;
+}
+
 
 void CauchyIndex::printMolecule(
 	vector<int> & permutation,
@@ -2794,50 +2807,20 @@ string CauchyIndex::permutationToString(vector<int> permutation)
 	return permt.str();
 }
 
-vector<int> CauchyIndex::readNewCauchyNotationsEnantiomers(ifstream & openendFile_)
+
+void CauchyIndex::findAllSymmetryOperations(
+	string fileName,
+	string filePath)
 {
-	int size = mol0.size();
-	vector<int> notation;
-	if (openendFile_.eof())
-		return notation;
-
-	string auxline;
-	getline(openendFile_, auxline);
-	if (auxline == "")
-		return notation;
-	notation.resize(size);
-
-	size_t brack1Temp = auxline.find("]");
-	size_t brack1 = auxline.find("[", brack1Temp + 1, 1);
-	size_t brack2 = auxline.find("]", brack1Temp + 1, 1);
-	string permString = auxline.substr(brack1 + 1, brack2 - brack1 - 1);
-	stringstream line;
-	line << permString;
-	for (size_t i = 0; i < size; i++)
-	{
-		line >> notation[i];
-		notation[i]--;
-	}
-	return notation;
-}
-
-
-void CauchyIndex::findMissedRotations()
-{
-	cout << "trocar tudo para o ReadWriteFormats" << endl;
-	exit(1);
-	string fileName = "OC-6-Ma2b2c2.csv";
 
 	ReadWriteFormats rwf_;
-
-	IsomersToMol isoMol_;
 	size_t found = fileName.find("-");
 	size_t foundSecond = fileName.find("-", found + 1, 1);
 	size_t pointChar = fileName.find(".");
 	string composition = fileName.substr(foundSecond + 1, pointChar - foundSecond - 1);
-	int nBidentates = 0;
-	int coordination = 6;
-	ifstream fileIsomers_(fileName.c_str());
+	int nBidentates;
+	int coordination = rwf_.compositionToNumbers(composition, nBidentates);
+	ifstream fileIsomers_((filePath + fileName).c_str());
 	vector<int> atomTypes;
 	vector<int> bidentateAtomsChosen;
 
@@ -2848,20 +2831,19 @@ void CauchyIndex::findMissedRotations()
 		coordination,
 		nBidentates);
 
+	// poder escolher a geometria com o codigo.
 	Geometries geomet_;
-	double cutAngle;
-	vector< vector<int> > allReflections;
-	vector<CoordXYZ> molDummy;
-	geomet_.geometry6OCReflections(molDummy, cutAngle, allReflections);
-	// apply this with bidentates
-	// generate S operations by composing reflections with rotations
+	vector< vector<int> > otherSymmetryOperations;
+	geomet_.geometry6OCotherSymmetries(otherSymmetryOperations);
 
 	ofstream rotations_((fileName + "-rotations.csv").c_str());
 	string line;
 	rotations_ << "Permutation ; Rotations ";
 	while (!fileIsomers_.eof())
 	{
-		vector<int> permutation = readNewCauchyNotationsEnantiomers(fileIsomers_);
+		int rcw;
+		string vGroup, vCode;
+		vector<int> permutation = rwf_.readCauchyNotation(fileIsomers_, mol0.size(), vGroup, rcw, vCode);
 		if (permutation.size() == 0)
 		{
 			rotations_ << endl;
@@ -2869,10 +2851,7 @@ void CauchyIndex::findMissedRotations()
 		}
 		rotations_ << endl;
 
-		for (size_t i = 0; i < permutation.size(); i++)
-			rotations_ << permutation[i] << " ";
-		rotations_ << " ; ";
-
+		rotations_ << rcw << " ; " << vCode << " ; ";
 		size_t size = mol0.size();
 		vector<int> types1(size);
 		vector<int> types2(size);
@@ -2921,11 +2900,35 @@ void CauchyIndex::findMissedRotations()
 				}
 				if (bidPos1 == bidPos2)
 				{
-					rotations_ << rotationString(j) << " ; ";
+					rotations_ << geomet_.geometry6OCSymmetryFlags(j, 0) << " ; ";
 					//cout << "rotation " << rotationString(j) << " preserved" << endl;
+				}
+			}
+		}
 
-					// rotacao preservada
-					//return;
+		for (size_t j = 0; j < otherSymmetryOperations.size(); j++)
+		{
+			vector<int> auxPerm = applyReflection(
+				permutation, 
+				otherSymmetryOperations[j]);
+			for (size_t i = 0; i < size; i++)
+			{
+				types2[i] = atomTypes[auxPerm[i]];
+			}
+			if (types1 == types2)
+			{
+				vector<int> bidPos2 = applyPermutationBidentates(auxPerm, bidentateAtomsChosen);
+				sort(bidPos2.begin(), bidPos2.end());
+				if (bidPos2.size() == 0 && bidentateAtomsChosen.size() != 0)
+				{
+					//fred apagar -- rotacoes nunca levam bidentados a posicoes proibidas.
+					cout << "CauchyIndex::compareTwoIsomersWithLabels( stop" << endl;
+					exit(1);
+				}
+				if (bidPos1 == bidPos2)
+				{
+					rotations_ << geomet_.geometry6OCSymmetryFlags(j, 1) << " ; ";
+					//cout << "rotation " << rotationString(j) << " preserved" << endl;
 				}
 			}
 		}
@@ -2933,64 +2936,6 @@ void CauchyIndex::findMissedRotations()
 	fileIsomers_.close();
 }
 
-string CauchyIndex::rotationString(int iRot)
-{
-	switch (iRot)
-	{
-	case 0:
-		return "C4(0)";
-	case 1:
-		return "C4-2(0)";
-	case 2:
-		return "C4-3(0)";
-	case 3:
-		return "C4(1)";
-	case 4:
-		return "C4-2(1)";
-	case 5:
-		return "C4-3(1)";
-	case 6:
-		return "C4(2)";
-	case 7:
-		return "C4-2(2)";
-	case 8:
-		return "C4-3(2)";
-	case 9:
-		return "C2(0-1)";
-	case 10:
-		return "C2(0-2)";
-	case 11:
-		return "C2(0-3)";
-	case 12:
-		return "C2(0-4)";
-	case 13:
-		return "C2(1-2)";
-	case 14:
-		return "C2(1-4)";
-	case 15:
-		return "C3(0-1-2)";
-	case 16:
-		return "C3-2(0-1-2)";
-	case 17:
-		return "C3(0-2-3)";
-	case 18:
-		return "C3-2(0-2-3)";
-	case 19:
-		return "C3(0-3-4)";
-	case 20:
-		return "C3-2(0-3-4)";
-	case 21:
-		return "C3(0-4-1)";
-	case 22:
-		return "C3-2(0-4-1)";
-	default:
-		cout << "rotation on CauchyIndex::rotationString not found" << endl;
-		exit(1);
-		break;
-	}
-
-	return "ERROR";
-}
 
 
 

@@ -49,6 +49,14 @@ public:
 		std::vector<int> & atomTypes,
 		std::vector<int> & bidentateChosen);
 
+	std::vector<int> readCauchyNotation(
+		std::ifstream & openendFile_,
+		int size,
+		std::string & vultorGroup,
+		int & rcw,
+		std::string & allCode);
+
+
 
 private:
 	std::vector< std::string > elem;

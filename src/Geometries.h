@@ -22,11 +22,12 @@ public:
 	std::string sizeToGeometryCode(int size);
 
 	//TESTANDO REFLEXOES
-	std::vector<double> geometry6OCReflections(
-		std::vector<CoordXYZ> &mol0,
-		double & cutAngle,
+	void geometry6OCotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
 
+	std::string geometry6OCSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
 
 private:
 	std::vector<double> geometry4Tetrahedron(

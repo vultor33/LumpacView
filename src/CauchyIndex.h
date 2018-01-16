@@ -208,11 +208,9 @@ public:
 
 	void temporario();
 
-	std::vector<int> readNewCauchyNotationsEnantiomers(std::ifstream & openendFile_);
-	void findMissedRotations();
-
-	std::string rotationString(int iRot);
-
+	void findAllSymmetryOperations(
+		std::string fileName,
+		std::string filePath);
 private:
 	//data rotations
 	std::vector<CoordXYZ> mol0;
@@ -246,6 +244,10 @@ private:
 		const std::vector<int> & bidentateAtomsChosen);
 
 	std::vector<int> applyZAxisReflection(std::vector<int> permutation);
+	
+	std::vector<int> applyReflection(
+		const std::vector<int> & permutation,
+		const std::vector<int> & reflectionOp);
 
 	unsigned int factorial(unsigned int n);
 

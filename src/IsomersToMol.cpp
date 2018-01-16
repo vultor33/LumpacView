@@ -185,17 +185,16 @@ void IsomersToMol::printAllMol(
 	string folder = geo_.sizeToGeometryCode(geoCode);
 	string folderComposition = folder + "\\" + composition;
 	system(("md " + folderComposition).c_str());
+	system(("copy " + filePath + fileName + "  " + folderComposition).c_str());
 
 	while (!fileIsomers_.eof())
 	{
-		vector<int> permutation = readCauchyNotationsEnantiomers(fileIsomers_);
+		string vGroup, vCode;
+		int rcw;
+		vector<int> permutation = rwf_.readCauchyNotation(fileIsomers_, coordination, vGroup, rcw, vCode);
 		if (permutation.size() == 0)
 			continue;
-		vector<int> permutationStringTransfer = permutation;
-		string permtString = permutationToString(permutationStringTransfer);
-		ofstream fileXyz_((folderComposition + "//" + composition + "-" + permtString + ".mol2").c_str());
-		for (size_t i = 0; i < permutation.size(); i++)
-			permutation[i]--;
+		ofstream fileXyz_((folderComposition + "//" + vCode + ".mol2").c_str());
 		printMoleculeMolFormat(permutation, atomTypes, bidentateChosen, fileXyz_);
 		fileXyz_.close();
 	}

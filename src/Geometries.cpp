@@ -2792,47 +2792,55 @@ void Geometries::geometry6OCotherSymmetries(
 		}
 	}
 
-	// sigH-0-5
+	//P-1 ( C4-1-p C4-1-m C2-1 ) [h-0-5]
 	allReflections[0][0] = 5;
 	allReflections[0][5] = 0;
-	//sigV(1)-0-5
+
+	//P-2  ( C2-8 )  [v(1)-0-5]
 	allReflections[1][1] = 4;
 	allReflections[1][4] = 1;
 	allReflections[1][2] = 3;
 	allReflections[1][3] = 2;
-	//sigV(2)-0-5
+
+	//P-3  ( C2-9 )  [v(2)-0-5]
 	allReflections[2][1] = 2;
 	allReflections[2][2] = 1;
 	allReflections[2][3] = 4;
 	allReflections[2][4] = 3;
-	// sigH-1-3
+
+	//P-4  ( C4-2-p C4-2-m C2-2 )  [h-1-3]
 	allReflections[3][1] = 3;
 	allReflections[3][3] = 1;
-	//sigV(1)-1-3
+
+	//P-5  ( C2-5 )  [v(1)-1-3]
 	allReflections[4][2] = 5;
 	allReflections[4][5] = 2;
 	allReflections[4][0] = 4;
 	allReflections[4][4] = 0;
-	//sigV(2)-1-3
+
+	//P-6  ( C2-7 )  [v(2)-1-3]
 	allReflections[5][0] = 2;
 	allReflections[5][2] = 0;
 	allReflections[5][4] = 5;
 	allReflections[5][5] = 4;
-	// sigH-2-4
+
+	//P-7  ( C4-3-p C4-3-m C2-3 )  [h-2-4]
 	allReflections[6][2] = 4;
 	allReflections[6][4] = 2;
-	//sigV(1)-2-4
+
+	//P-8  ( C2-6 )  [v(1)-2-4]
 	allReflections[7][0] = 1;
 	allReflections[7][1] = 0;
 	allReflections[7][3] = 5;
 	allReflections[7][5] = 3;
-	//sigV(2)-2-4
+
+	//P-9  ( C2-4 )  [v(2)-2-4]
 	allReflections[8][0] = 3;
 	allReflections[8][3] = 0;
 	allReflections[8][1] = 5;
 	allReflections[8][5] = 1;
 
-	// inversion
+	//Inv
 	allReflections[9][0] = 5;
 	allReflections[9][5] = 0;
 	allReflections[9][1] = 3;
@@ -2840,14 +2848,14 @@ void Geometries::geometry6OCotherSymmetries(
 	allReflections[9][2] = 4;
 	allReflections[9][4] = 2;
 
-	//S6-1-(0 1 2)
+	//S6-1-p  [0 1 2]
 	allReflections[10][0] = 3;
 	allReflections[10][3] = 2;
 	allReflections[10][2] = 5;
 	allReflections[10][5] = 1;
 	allReflections[10][1] = 4;
 	allReflections[10][4] = 0;
-	//S6-2-(0 1 2)
+	//S6-1-m  [0 1 2]
 	allReflections[11][0] = 4;
 	allReflections[11][4] = 1;
 	allReflections[11][1] = 5;
@@ -2855,14 +2863,14 @@ void Geometries::geometry6OCotherSymmetries(
 	allReflections[11][2] = 3;
 	allReflections[11][3] = 1;
 
-	//S6-1-(0 3 4)
+	//S6-2-p  [0 3 4]
 	allReflections[12][0] = 1;
 	allReflections[12][1] = 4;
 	allReflections[12][4] = 5;
 	allReflections[12][5] = 3;
 	allReflections[12][3] = 2;
 	allReflections[12][2] = 0;
-	//S6-2-(0 3 4)
+	//S6-2-m  [0 3 4]
 	allReflections[13][0] = 2;
 	allReflections[13][2] = 3;
 	allReflections[13][3] = 5;
@@ -2870,14 +2878,14 @@ void Geometries::geometry6OCotherSymmetries(
 	allReflections[13][4] = 1;
 	allReflections[13][1] = 0;
 
-	//S6-1-(0 2 3)
+	//S6-3-p  [0 2 3]
 	allReflections[14][0] = 4;
 	allReflections[14][4] = 3;
 	allReflections[14][3] = 5;
 	allReflections[14][5] = 2;
 	allReflections[14][2] = 1;
 	allReflections[14][1] = 4;
-	//S6-2-(0 2 3)
+	//S6-3-m  [0 2 3]
 	allReflections[15][0] = 1;
 	allReflections[15][1] = 2;
 	allReflections[15][2] = 5;
@@ -2885,14 +2893,14 @@ void Geometries::geometry6OCotherSymmetries(
 	allReflections[15][3] = 4;
 	allReflections[15][4] = 0;
 
-	//S6-1-(0 1 4)
+	//S6-4-p  [0 1 4]
 	allReflections[16][0] = 2;
 	allReflections[16][2] = 1;
 	allReflections[16][1] = 5;
 	allReflections[16][5] = 4;
 	allReflections[16][4] = 3;
 	allReflections[16][3] = 0;
-	//S6-2-(0 1 4)
+	//S6-4-m  [0 1 4]
 	allReflections[17][0] = 3;
 	allReflections[17][3] = 4;
 	allReflections[17][4] = 5;
@@ -2900,14 +2908,14 @@ void Geometries::geometry6OCotherSymmetries(
 	allReflections[17][1] = 2;
 	allReflections[17][2] = 0;
 
-	//S4-1-(0 5)
+	//S4-1-p  [0 5]
 	allReflections[18][0] = 5;
 	allReflections[18][5] = 0;
 	allReflections[18][2] = 1;
 	allReflections[18][1] = 4;
 	allReflections[18][4] = 3;
 	allReflections[18][3] = 2;
-	//S4-2-(0 5)
+	//S4-1-m  [0 5]
 	allReflections[19][0] = 5;
 	allReflections[19][5] = 0;
 	allReflections[19][2] = 3;
@@ -2915,14 +2923,14 @@ void Geometries::geometry6OCotherSymmetries(
 	allReflections[19][4] = 1;
 	allReflections[19][1] = 2;
 
-	//S4-1-(1 3)
+	//S4-2-p  [1 3]
 	allReflections[20][3] = 1;
 	allReflections[20][1] = 3;
 	allReflections[20][0] = 4;
 	allReflections[20][4] = 5;
 	allReflections[20][5] = 2;
 	allReflections[20][2] = 0;
-	//S4-2-(1 3)
+	//S4-2-m  [1 3]
 	allReflections[21][3] = 1;
 	allReflections[21][1] = 3;
 	allReflections[21][0] = 2;
@@ -2930,15 +2938,14 @@ void Geometries::geometry6OCotherSymmetries(
 	allReflections[21][5] = 4;
 	allReflections[21][4] = 0;
 
-
-	//S4-1-(2 4)
+	//S4-3-p  [2 4]
 	allReflections[22][2] = 4;
 	allReflections[22][4] = 2;
 	allReflections[22][0] = 1;
 	allReflections[22][1] = 5;
 	allReflections[22][5] = 3;
 	allReflections[22][3] = 0;
-	//S4-2-(2 4)
+	//S4-3-m  [2 4]
 	allReflections[23][2] = 4;
 	allReflections[23][4] = 2;
 	allReflections[23][0] = 3;
@@ -3013,54 +3020,53 @@ string Geometries::geometry6OCSymmetryFlags(
 		switch (iSymmetry)
 		{
 		case 0:
-			return "sigH-0-5";
+			return "P-1 ( C4-1-p C4-1-m C2-1 )";
 		case 1:
-			return "sigV(1)-0-5";
+			return "P-2  ( C2-8 )";
 		case 2:
-			return "sigV(2)-0-5";
+			return "P-3  ( C2-9 )";
 		case 3:
-			return "sigH-1-3";
+			return "P-4  ( C4-2-p C4-2-m C2-2 )";
 		case 4:
-			return "sigV(1)-1-3";
+			return "P-5  ( C2-5 )";
 		case 5:
-			return "sigV(2)-1-3";
+			return "P-6  ( C2-7 )";
 		case 6:
-			return "sigH-2-4";
+			return "P-7  ( C4-3-p C4-3-m C2-3 )";
 		case 7:
-			return "sigV(1)-2-4";
+			return "P-8  ( C2-6 )";
 		case 8:
-			return "sigV(2)-2-4";
+			return "P-9  ( C2-4 )";
 		case 9:
-			return "Inversion";
+			return "Inv";
 		case 10:
-			return "S6-1-(0 1 2)";
+			return "S6-1-p";
 		case 11:
-			return "S6-2-(0 1 2)";
+			return "S6-1-m";
 		case 12:
-			return "S6-1-(0 3 4)";
+			return "S6-2-p";
 		case 13:
-			return "S6-2-(0 3 4)";
+			return "S6-2-m";
 		case 14:
-			return "S6-1-(0 2 3)";
+			return "S6-3-p";
 		case 15:
-			return "S6-2-(0 2 3)";
+			return "S6-3-m";
 		case 16:
-			return "S6-1-(0 1 4)";
+			return "S6-4-p";
 		case 17:
-			return "S6-2-(0 1 4)";
+			return "S6-4-m";
 		case 18:
-			return "S4-1-(0 5)";
+			return "S4-1-p";
 		case 19:
-			return "S4-2-(0 5)";
+			return "S4-1-m";
 		case 20:
-			return "S4-1-(1 3)";
+			return "S4-2-p";
 		case 21:
-			return "S4-2-(1 3)";
+			return "S4-2-m";
 		case 22:
-			return "S4-1-(2 4)";
+			return "S4-3-p";
 		case 23:
-			return "S4-2-(2 4)";
-
+			return "S4-3-m";
 		default:
 			cout << "rotation on CauchyIndex::rotationString not found" << endl;
 			exit(1);

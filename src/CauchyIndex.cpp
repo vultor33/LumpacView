@@ -22,6 +22,7 @@
 #include "Geometries.h"
 #include "IsomersToMol.h"
 #include "ReadWriteFormats.h"
+#include "GroupPointIdentify.h"
 
 using namespace std;
 
@@ -2836,6 +2837,7 @@ void CauchyIndex::findAllSymmetryOperations(
 	vector< vector<int> > otherSymmetryOperations;
 	geomet_.geometry6OCotherSymmetries(otherSymmetryOperations);
 
+	GroupPointIdentify groupPoint_;
 	ofstream rotations_((fileName + "-rotations.csv").c_str());
 	string line;
 	rotations_ << "Permutation ; Rotations ";
@@ -2850,6 +2852,7 @@ void CauchyIndex::findAllSymmetryOperations(
 			continue;
 		}
 		rotations_ << endl;
+		vector<string> allSymmetryOperations;
 
 		rotations_ << rcw << " ; " << vCode << " ; ";
 		size_t size = mol0.size();
@@ -2878,7 +2881,8 @@ void CauchyIndex::findAllSymmetryOperations(
 		{
 			if (bidPos1 == bidPos2)
 			{
-				rotations_ << " E ; ";
+				allSymmetryOperations.push_back("E");
+				//rotations_ << " E ; ";
 			}
 		}
 		for (size_t j = 0; j < allRotationTransforms.size(); j++)
@@ -2900,7 +2904,8 @@ void CauchyIndex::findAllSymmetryOperations(
 				}
 				if (bidPos1 == bidPos2)
 				{
-					rotations_ << geomet_.geometry6OCSymmetryFlags(j, 0) << " ; ";
+					allSymmetryOperations.push_back(geomet_.geometry6OCSymmetryFlags(j, 0));
+					//rotations_ << geomet_.geometry6OCSymmetryFlags(j, 0) << " ; ";
 					//cout << "rotation " << rotationString(j) << " preserved" << endl;
 				}
 			}
@@ -2909,7 +2914,7 @@ void CauchyIndex::findAllSymmetryOperations(
 		for (size_t j = 0; j < otherSymmetryOperations.size(); j++)
 		{
 			vector<int> auxPerm = applyReflection(
-				permutation, 
+				permutation,
 				otherSymmetryOperations[j]);
 			for (size_t i = 0; i < size; i++)
 			{
@@ -2927,10 +2932,19 @@ void CauchyIndex::findAllSymmetryOperations(
 				}
 				if (bidPos1 == bidPos2)
 				{
-					rotations_ << geomet_.geometry6OCSymmetryFlags(j, 1) << " ; ";
+					allSymmetryOperations.push_back(geomet_.geometry6OCSymmetryFlags(j, 1));
+					//rotations_ << geomet_.geometry6OCSymmetryFlags(j, 1) << " ; ";
 					//cout << "rotation " << rotationString(j) << " preserved" << endl;
 				}
 			}
+		}
+
+		string group = groupPoint_.findGroupPoint(allSymmetryOperations);
+
+		rotations_ << group << " ; ";
+		for(size_t i = 0; i < allSymmetryOperations.size(); i++)
+		{
+			rotations_ << groupPoint_.codeOnly(allSymmetryOperations[i]) << " ; ";		
 		}
 	}
 	fileIsomers_.close();

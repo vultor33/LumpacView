@@ -31,6 +31,7 @@
 #include "UtilityRun.h"
 #include "IdentifyIsomers.h"
 #include "ReadWriteFormats.h"
+#include "GroupPointIdentify.h"
 
 using namespace std;
 
@@ -65,7 +66,7 @@ void buildCsvFile(int size, string skeletonName);
 int main(int argc, char *argv[])
 {
 
-	/*
+	/* GRUPO PONTUAL */
 	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\OC\\";
 	string responseName = "response-combinations6.txt";
 	int geoCode = 60;
@@ -93,7 +94,7 @@ int main(int argc, char *argv[])
 			pathRead);
 	}
 	return 0;
-	*/
+	
 
 	
 	//CauchyIndex cif3f_(60);
@@ -113,10 +114,11 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-	/* Generate coordinates */
+	/* Generate coordinates   -- falta muffin
 	UtilityRun util_;
 	util_.generateAllIsomersMol2Files();
 	return 0;
+	*/
 
 	/*	
 	CauchyIndex ci21_(9);
@@ -192,7 +194,7 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-	/* ENCONTRAR GRUPO PONTUAL
+	/* ENCONTRAR GRUPO PONTUAL 
 	CauchyIndex ci13_(60);
 	ci13_.findMissedRotations();
 	return 0;

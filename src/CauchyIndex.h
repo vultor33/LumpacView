@@ -209,6 +209,7 @@ public:
 	void temporario();
 
 	void findAllSymmetryOperations(
+		int geoCode,
 		std::string fileName,
 		std::string filePath);
 private:

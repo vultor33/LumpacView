@@ -2810,6 +2810,7 @@ string CauchyIndex::permutationToString(vector<int> permutation)
 
 
 void CauchyIndex::findAllSymmetryOperations(
+	int geoCode,
 	string fileName,
 	string filePath)
 {
@@ -2832,10 +2833,9 @@ void CauchyIndex::findAllSymmetryOperations(
 		coordination,
 		nBidentates);
 
-	// poder escolher a geometria com o codigo.
 	Geometries geomet_;
 	vector< vector<int> > otherSymmetryOperations;
-	geomet_.geometry6OCotherSymmetries(otherSymmetryOperations);
+	geomet_.selectGeometrySymmetries(geoCode, otherSymmetryOperations);
 
 	GroupPointIdentify groupPoint_;
 	ofstream rotations_((fileName + "-rotations.csv").c_str());
@@ -2904,7 +2904,7 @@ void CauchyIndex::findAllSymmetryOperations(
 				}
 				if (bidPos1 == bidPos2)
 				{
-					allSymmetryOperations.push_back(geomet_.geometry6OCSymmetryFlags(j, 0));
+					allSymmetryOperations.push_back(geomet_.selectGeometrySymmetriesFlag(geoCode, j, 0));
 					//rotations_ << geomet_.geometry6OCSymmetryFlags(j, 0) << " ; ";
 					//cout << "rotation " << rotationString(j) << " preserved" << endl;
 				}
@@ -2932,7 +2932,7 @@ void CauchyIndex::findAllSymmetryOperations(
 				}
 				if (bidPos1 == bidPos2)
 				{
-					allSymmetryOperations.push_back(geomet_.geometry6OCSymmetryFlags(j, 1));
+					allSymmetryOperations.push_back(geomet_.selectGeometrySymmetriesFlag(geoCode, j, 1));
 					//rotations_ << geomet_.geometry6OCSymmetryFlags(j, 1) << " ; ";
 					//cout << "rotation " << rotationString(j) << " preserved" << endl;
 				}

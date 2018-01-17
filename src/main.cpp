@@ -67,9 +67,9 @@ int main(int argc, char *argv[])
 {
 
 	/* GRUPO PONTUAL */
-	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\OC\\";
+	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\TPR\\";
 	string responseName = "response-combinations6.txt";
-	int geoCode = 60;
+	int geoCode = 61;
 	Geometries geo_;
 	ReadWriteFormats rwf_;
 	string geomName = geo_.sizeToGeometryCode(geoCode);
@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
 		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
 		CauchyIndex ciSymmetry_(geoCode);
 		ciSymmetry_.findAllSymmetryOperations(
+			geoCode,
 			allIsomersCombinationFile,
 			pathRead);
 	}

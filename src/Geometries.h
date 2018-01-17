@@ -19,15 +19,18 @@ public:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 	
-	std::string sizeToGeometryCode(int size);
-
-	//TESTANDO REFLEXOES
-	void geometry6OCotherSymmetries(
+	void selectGeometrySymmetries(
+		int select,
 		std::vector< std::vector<int> > &allReflections);
 
-	std::string geometry6OCSymmetryFlags(
+	std::string selectGeometrySymmetriesFlag(
+		int select,
 		int iSymmetry,
 		int symmetryType);
+
+	std::string sizeToGeometryCode(int size);
+
+
 
 private:
 	std::vector<double> geometry4Tetrahedron(
@@ -152,6 +155,66 @@ private:
 		std::vector<int> &reflectionOperation);
 
 
+
+
+	///////////////////////////////////
+	////////// REFLECTIONS ////////////
+	///////////////////////////////////
+	void geometry5SPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry5SPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry5TBPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry5TBPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+
+	void geometry6OCotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry6OCSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry6TPRotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry6TPRSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+
+	void geometry7COCotherSymmetries(std::vector< std::vector<int> > &allReflections);
+	std::string geometry7COCSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry7CTPRotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry7CTPRSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry8BTPRotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry8BTPRSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+
+	void geometry9CSAPRotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9CSAPRSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry9MFFotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9MFFSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
 
 
 	AuxMath auxMath_;

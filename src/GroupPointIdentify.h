@@ -6,6 +6,7 @@
 
 /*format
 rot     - "C2-9  ( C4-1-p C4-1-m C2-1 C3-1-p C3-1-m C3-3-p C3-3-m C2-8 )" - perpendicular in parentheses
+        - se nao tiver perpendicularidade tem q colocar um espaco no fim do C2
 rot     - "C3-1-p"  (only C2 have to show perpendicular)
 plane   -  "P-9  ( C2-4 )"  -> rotations perpendicular in parentheses
 inv     -  "Inv"

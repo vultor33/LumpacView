@@ -2899,7 +2899,7 @@ void CauchyIndex::findAllSymmetryOperations(
 				if (bidPos2.size() == 0 && bidentateAtomsChosen.size() != 0)
 				{
 					//fred apagar -- rotacoes nunca levam bidentados a posicoes proibidas.
-					cout << "CauchyIndex::compareTwoIsomersWithLabels( stop" << endl;
+					cout << "CauchyIndex::compareTwoIsomersWithLabels( stop )" << endl;
 					exit(1);
 				}
 				if (bidPos1 == bidPos2)

@@ -163,7 +163,7 @@ void Geometries::selectGeometrySymmetries(
 		break;
 
 	case 71:
-		//return geometry7PBPY(mol0, cutAngle, reflectionOperation);
+		geometry7PBPYotherSymmetries(allReflections);
 		break;
 
 	case 72:
@@ -171,11 +171,11 @@ void Geometries::selectGeometrySymmetries(
 		break;
 
 	case 80:
-		//return geometry8SAPR(mol0, cutAngle, reflectionOperation);
+		geometry8SAPRotherSymmetries(allReflections);
 		break;
 
 	case 81:
-		//return geometry8TDD(mol0, cutAngle, reflectionOperation);
+		geometry8TDDotherSymmetries(allReflections);
 		break;
 
 	case 82:
@@ -183,7 +183,7 @@ void Geometries::selectGeometrySymmetries(
 		break;
 
 	case 83:
-		//return geometry8HBPY(mol0, cutAngle, reflectionOperation);
+		geometry8HBPYotherSymmetries(allReflections);
 		break;
 
 	case 84:
@@ -191,7 +191,7 @@ void Geometries::selectGeometrySymmetries(
 		break;
 
 	case 90:
-		//return geometry9TCTPR(mol0, cutAngle, reflectionOperation);
+		geometry9TCTPRotherSymmetries(allReflections);
 		break;
 
 	case 91:
@@ -274,7 +274,7 @@ std::string Geometries::selectGeometrySymmetriesFlag(
 		break;
 
 	case 71:
-		//return geometry7PBPY(mol0, cutAngle, reflectionOperation);
+		return geometry7PBPYSymmetryFlags(iSymmetry, symmetryType);
 		break;
 
 	case 72:
@@ -282,11 +282,11 @@ std::string Geometries::selectGeometrySymmetriesFlag(
 		break;
 
 	case 80:
-		//return geometry8SAPR(mol0, cutAngle, reflectionOperation);
+		return geometry8SAPRSymmetryFlags(iSymmetry, symmetryType);
 		break;
 
 	case 81:
-		//return geometry8TDD(mol0, cutAngle, reflectionOperation);
+		return geometry8TDDSymmetryFlags(iSymmetry, symmetryType);
 		break;
 
 	case 82:
@@ -294,7 +294,7 @@ std::string Geometries::selectGeometrySymmetriesFlag(
 		break;
 
 	case 83:
-		//return geometry8HBPY(mol0, cutAngle, reflectionOperation);
+		return geometry8HBPYSymmetryFlags(iSymmetry, symmetryType);
 		break;
 
 	case 84:
@@ -302,7 +302,7 @@ std::string Geometries::selectGeometrySymmetriesFlag(
 		break;
 
 	case 90:
-		//return geometry9TCTPR(mol0, cutAngle, reflectionOperation);
+		return geometry9TCTPRSymmetryFlags(iSymmetry, symmetryType);
 		break;
 
 	case 91:
@@ -1190,48 +1190,48 @@ std::vector<double> Geometries::geometry7PBPY(
 	mol0[6].y = -0.951056516295;
 	mol0[6].z = 0.000000000000;
 
-	//c5 - 1
+	//C5-1-p
 	vectorRotations[0] = mol0[0].x;
 	vectorRotations[1] = mol0[0].y;
 	vectorRotations[2] = mol0[0].z;
 	vectorRotations[3] = 2.0e0 * auxMath_._pi / 5.0e0;
-	//c5 - 2
+	//C5-1-pp
 	vectorRotations[4] = mol0[0].x;
 	vectorRotations[5] = mol0[0].y;
 	vectorRotations[6] = mol0[0].z;
 	vectorRotations[7] = 4.0e0 * auxMath_._pi / 5.0e0;
-	//c5 - 3
+	//C5-1-m
 	vectorRotations[8] = mol0[0].x;
 	vectorRotations[9] = mol0[0].y;
 	vectorRotations[10] = mol0[0].z;
 	vectorRotations[11] = 6.0e0 * auxMath_._pi / 5.0e0;
-	//c5 - 4
+	//C5-1-mm
 	vectorRotations[12] = mol0[0].x;
 	vectorRotations[13] = mol0[0].y;
 	vectorRotations[14] = mol0[0].z;
 	vectorRotations[15] = 8.0e0 * auxMath_._pi / 5.0e0;
 
-	//c2 - 1
+	//C2-1 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )
 	vectorRotations[16] = mol0[2].x;
 	vectorRotations[17] = mol0[2].y;
 	vectorRotations[18] = mol0[2].z;
 	vectorRotations[19] = auxMath_._pi;
-	//c2 - 2
+	//C2-2 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )
 	vectorRotations[20] = mol0[3].x;
 	vectorRotations[21] = mol0[3].y;
 	vectorRotations[22] = mol0[3].z;
 	vectorRotations[23] = auxMath_._pi;
-	//c2 - 3
+	//C2-3 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )
 	vectorRotations[24] = mol0[4].x;
 	vectorRotations[25] = mol0[4].y;
 	vectorRotations[26] = mol0[4].z;
 	vectorRotations[27] = auxMath_._pi;
-	//c2 - 4
+	//C2-4 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )
 	vectorRotations[28] = mol0[5].x;
 	vectorRotations[29] = mol0[5].y;
 	vectorRotations[30] = mol0[5].z;
 	vectorRotations[31] = auxMath_._pi;
-	//c2 - 5
+	//C2-5 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )
 	vectorRotations[32] = mol0[6].x;
 	vectorRotations[33] = mol0[6].y;
 	vectorRotations[34] = mol0[6].z;
@@ -1343,22 +1343,22 @@ std::vector<double> Geometries::geometry8SAPR(
 	auxReferenceAxis[2] = 0.25e0 *
 		(mol0[3].z + mol0[4].z + mol0[6].z + mol0[7].z);
 	auxMath_.normalize(auxReferenceAxis);
-	//c4 - 1
+	//C4-1-p
 	vectorRotations[0] = auxReferenceAxis[0];
 	vectorRotations[1] = auxReferenceAxis[1];
 	vectorRotations[2] = auxReferenceAxis[2];
 	vectorRotations[3] = auxMath_._pi / 2.0e0;
-	//c4 - 2 (c2)
+	//C2-1 
 	vectorRotations[4] = auxReferenceAxis[0];
 	vectorRotations[5] = auxReferenceAxis[1];
 	vectorRotations[6] = auxReferenceAxis[2];
 	vectorRotations[7] = auxMath_._pi;
-	//c4 - 3
+	//C4-1-m
 	vectorRotations[8] = auxReferenceAxis[0];
 	vectorRotations[9] = auxReferenceAxis[1];
 	vectorRotations[10] = auxReferenceAxis[2];
 	vectorRotations[11] = 3.0e0 * auxMath_._pi / 2.0e0;
-	// c2 - 1 e 7
+	//C2-2 ( C4-1-p C2-1 C4-1-m )
 	auxReferenceAxis[0] = 0.5e0 *
 		(mol0[1].x + mol0[7].x);
 	auxReferenceAxis[1] = 0.5e0 *
@@ -1370,7 +1370,7 @@ std::vector<double> Geometries::geometry8SAPR(
 	vectorRotations[13] = auxReferenceAxis[1];
 	vectorRotations[14] = auxReferenceAxis[2];
 	vectorRotations[15] = auxMath_._pi;
-	// c2 - 7 e 5
+	//C2-3 ( C4-1-p C2-1 C4-1-m )
 	auxReferenceAxis[0] = 0.5e0 *
 		(mol0[7].x + mol0[5].x);
 	auxReferenceAxis[1] = 0.5e0 *
@@ -1382,7 +1382,7 @@ std::vector<double> Geometries::geometry8SAPR(
 	vectorRotations[17] = auxReferenceAxis[1];
 	vectorRotations[18] = auxReferenceAxis[2];
 	vectorRotations[19] = auxMath_._pi;
-	// c2 - 5 e 6
+	// C2-4 ( C4-1-p C2-1 C4-1-m )
 	auxReferenceAxis[0] = 0.5e0 *
 		(mol0[5].x + mol0[6].x);
 	auxReferenceAxis[1] = 0.5e0 *
@@ -1394,7 +1394,7 @@ std::vector<double> Geometries::geometry8SAPR(
 	vectorRotations[21] = auxReferenceAxis[1];
 	vectorRotations[22] = auxReferenceAxis[2];
 	vectorRotations[23] = auxMath_._pi;
-	// c2 - 6 e 2
+	//C2-5 ( C4-1-p C2-1 C4-1-m )
 	auxReferenceAxis[0] = 0.5e0 *
 		(mol0[6].x + mol0[2].x);
 	auxReferenceAxis[1] = 0.5e0 *
@@ -1457,7 +1457,7 @@ std::vector<double> Geometries::geometry8TDD(
 	mol0[7].y = 0.599700;
 	mol0[7].z = -0.800200;
 
-	// c2 -z
+	//C2-1 ( C2-2 C2-3 )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[2].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[2].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[2].z);
@@ -1466,7 +1466,7 @@ std::vector<double> Geometries::geometry8TDD(
 	vectorRotations[1] = auxReferenceAxis[1];
 	vectorRotations[2] = auxReferenceAxis[2];
 	vectorRotations[3] = auxMath_._pi;
-	// c2 -1
+	//C2-2 ( C2-1 C2-3 ) 
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[5].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[5].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[5].z);
@@ -1475,7 +1475,7 @@ std::vector<double> Geometries::geometry8TDD(
 	vectorRotations[5] = auxReferenceAxis[1];
 	vectorRotations[6] = auxReferenceAxis[2];
 	vectorRotations[7] = auxMath_._pi;
-	// c2 -2
+	//C2-3 ( C2-1 C2-2 )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[7].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[7].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[7].z);
@@ -1594,47 +1594,47 @@ std::vector<double> Geometries::geometry8HBPY(
 	mol0[7].y = -0.500000000000;	
 	mol0[7].z = 0.000000000000;
 
-	//c6 - 1
+	//C6-1-p
 	vectorRotations[0] = mol0[0].x;
 	vectorRotations[1] = mol0[0].y;
 	vectorRotations[2] = mol0[0].z;
 	vectorRotations[3] = auxMath_._pi / 3.0e0;
-	//c6 - 2
+	//C3-1-p
 	vectorRotations[4] = mol0[0].x;
 	vectorRotations[5] = mol0[0].y;
 	vectorRotations[6] = mol0[0].z;
 	vectorRotations[7] = 2.0e0 * auxMath_._pi / 3.0e0;
-	//c6 - 3
+	//C2-1
 	vectorRotations[8] = mol0[0].x;
 	vectorRotations[9] = mol0[0].y;
 	vectorRotations[10] = mol0[0].z;
 	vectorRotations[11] = auxMath_._pi;
-	//c6 - 4
+	//C3-1-m
 	vectorRotations[12] = mol0[0].x;
 	vectorRotations[13] = mol0[0].y;
 	vectorRotations[14] = mol0[0].z;
 	vectorRotations[15] = -2.0e0 * auxMath_._pi / 3.0e0;
-	//c6 - 5
+	//C6-1-m
 	vectorRotations[16] = mol0[0].x;
 	vectorRotations[17] = mol0[0].y;
 	vectorRotations[18] = mol0[0].z;
 	vectorRotations[19] = -auxMath_._pi / 3.0e0;
-	//c2 - 1
+	//C2-2 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )
 	vectorRotations[20] = mol0[2].x;
 	vectorRotations[21] = mol0[2].y;
 	vectorRotations[22] = mol0[2].z;
 	vectorRotations[23] = auxMath_._pi;
-	//c2 - 2
+	//C2-3 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )
 	vectorRotations[24] = mol0[3].x;
 	vectorRotations[25] = mol0[3].y;
 	vectorRotations[26] = mol0[3].z;
 	vectorRotations[27] = auxMath_._pi;
-	//c2 - 3
+	//C2-4 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )
 	vectorRotations[28] = mol0[4].x;
 	vectorRotations[29] = mol0[4].y;
 	vectorRotations[30] = mol0[4].z;
 	vectorRotations[31] = auxMath_._pi;
-	//c2l - 1
+	//C2-5 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[4].x + mol0[5].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[4].y + mol0[5].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[4].z + mol0[5].z);
@@ -1643,7 +1643,7 @@ std::vector<double> Geometries::geometry8HBPY(
 	vectorRotations[33] = auxReferenceAxis[1];
 	vectorRotations[34] = auxReferenceAxis[2];
 	vectorRotations[35] = auxMath_._pi;
-	//c2l - 2
+	//C2-6 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[2].x + mol0[3].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[2].y + mol0[3].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[2].z + mol0[3].z);
@@ -1652,7 +1652,7 @@ std::vector<double> Geometries::geometry8HBPY(
 	vectorRotations[37] = auxReferenceAxis[1];
 	vectorRotations[38] = auxReferenceAxis[2];
 	vectorRotations[39] = auxMath_._pi;
-	//c2l - 3
+	//C2-7 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[3].x + mol0[4].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[3].y + mol0[4].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[3].z + mol0[4].z);
@@ -1708,8 +1708,7 @@ std::vector<double> Geometries::geometry8CU(
 	mol0[7].y = -0.577350269190;
 	mol0[7].z = -0.577350269190;
 
-	// C4s
-	// c4f1 - 0-6 - 1
+	//C4-1-p [0-6]
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[6].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[6].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[6].z);
@@ -1718,7 +1717,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[1] = auxReferenceAxis[1];
 	vectorRotations[2] = auxReferenceAxis[2];
 	vectorRotations[3] = auxMath_._pi / 2.0e0;
-	// c4f1 - 0-6 - 2
+	//C2-1 ( C4-2-p C2-2 C4-2-m C4-3-p C2-3 C4-3-m C2-4 C2-7 ) [0-6]
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[6].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[6].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[6].z);
@@ -1727,7 +1726,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[5] = auxReferenceAxis[1];
 	vectorRotations[6] = auxReferenceAxis[2];
 	vectorRotations[7] = auxMath_._pi;
-	// c4f1 - 0-6 - 3
+	//C4-1-m
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[6].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[6].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[6].z);
@@ -1736,7 +1735,8 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[9] = auxReferenceAxis[1];
 	vectorRotations[10] = auxReferenceAxis[2];
 	vectorRotations[11] = -auxMath_._pi / 2.0e0;
-	// c4f2 - 0-5 - 1
+
+	//C4-2-p
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[5].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[5].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[5].z);
@@ -1745,7 +1745,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[13] = auxReferenceAxis[1];
 	vectorRotations[14] = auxReferenceAxis[2];
 	vectorRotations[15] = auxMath_._pi / 2.0e0;
-	// c4f2 - 0-5 - 2
+	//C2-2 ( C4-1-p C2-1 C4-1-m C4-3-p C2-3 C4-3-m C2-5 C2-8 )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[5].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[5].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[5].z);
@@ -1754,7 +1754,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[17] = auxReferenceAxis[1];
 	vectorRotations[18] = auxReferenceAxis[2];
 	vectorRotations[19] = auxMath_._pi;
-	// c4f2 - 0-5 - 3
+	//C4-2-m
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[5].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[5].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[5].z);
@@ -1763,7 +1763,8 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[21] = auxReferenceAxis[1];
 	vectorRotations[22] = auxReferenceAxis[2];
 	vectorRotations[23] = -auxMath_._pi / 2.0e0;
-	// c4f3 - 0-4 - 1
+
+	//C4-3-p
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[4].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[4].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[4].z);
@@ -1772,7 +1773,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[25] = auxReferenceAxis[1];
 	vectorRotations[26] = auxReferenceAxis[2];
 	vectorRotations[27] = auxMath_._pi / 2.0e0;
-	// c4f3 - 0-4 - 2
+	//C2-3 ( C4-1-p C2-1 C4-1-m C4-2-p C2-2 C4-2-m C2-6 C2-9 )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[4].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[4].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[4].z);
@@ -1781,7 +1782,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[29] = auxReferenceAxis[1];
 	vectorRotations[30] = auxReferenceAxis[2];
 	vectorRotations[31] = auxMath_._pi;
-	// c4f3 - 0-4 - 3
+	//C4-3-m
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[4].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[4].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[4].z);
@@ -1790,47 +1791,52 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[33] = auxReferenceAxis[1];
 	vectorRotations[34] = auxReferenceAxis[2];
 	vectorRotations[35] = -auxMath_._pi / 2.0e0;
-	//c3 - 0 - 1
+
+	//C3-1-p
 	vectorRotations[36] = mol0[0].x;
 	vectorRotations[37] = mol0[0].y;
 	vectorRotations[38] = mol0[0].z;
 	vectorRotations[39] = 2.0e0 * auxMath_._pi / 3.0e0;
-	//c3 - 0 - 2
+	//C3-1-m
 	vectorRotations[40] = mol0[0].x;
 	vectorRotations[41] = mol0[0].y;
 	vectorRotations[42] = mol0[0].z;
 	vectorRotations[43] = 4.0e0 * auxMath_._pi / 3.0e0;
-	//c3 - 1 - 1
+
+	//C3-2-p
 	vectorRotations[44] = mol0[1].x;
 	vectorRotations[45] = mol0[1].y;
 	vectorRotations[46] = mol0[1].z;
 	vectorRotations[47] = 2.0e0 * auxMath_._pi / 3.0e0;
-	//c3 - 1 - 2
+	//C3-2-m
 	vectorRotations[48] = mol0[1].x;
 	vectorRotations[49] = mol0[1].y;
 	vectorRotations[50] = mol0[1].z;
 	vectorRotations[51] = 4.0e0 * auxMath_._pi / 3.0e0;
-	//c3 - 2 - 1
+
+	//C3-3-p
 	vectorRotations[52] = mol0[2].x;
 	vectorRotations[53] = mol0[2].y;
 	vectorRotations[54] = mol0[2].z;
 	vectorRotations[55] = 2.0e0 * auxMath_._pi / 3.0e0;
-	//c3 - 2 - 2
+	//C3-3-m
 	vectorRotations[56] = mol0[2].x;
 	vectorRotations[57] = mol0[2].y;
 	vectorRotations[58] = mol0[2].z;
 	vectorRotations[59] = 4.0e0 * auxMath_._pi / 3.0e0;
-	//c3 - 4 - 1
+
+	//C3-4-p
 	vectorRotations[60] = mol0[4].x;
 	vectorRotations[61] = mol0[4].y;
 	vectorRotations[62] = mol0[4].z;
 	vectorRotations[63] = 2.0e0 * auxMath_._pi / 3.0e0;
-	//c3 - 4 - 2
+	//C3-4-m
 	vectorRotations[64] = mol0[4].x;
 	vectorRotations[65] = mol0[4].y;
 	vectorRotations[66] = mol0[4].z;
 	vectorRotations[67] = 4.0e0 * auxMath_._pi / 3.0e0;
-	// c2 - aresta - 1
+
+	//C2-4 ( C3-3-p C3-3-m C3-4-p C3-4-m C4-1-p C2-1 C4-1-m )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[1].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[1].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[1].z);
@@ -1839,7 +1845,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[69] = auxReferenceAxis[1];
 	vectorRotations[70] = auxReferenceAxis[2];
 	vectorRotations[71] = auxMath_._pi;
-	// c2 - aresta - 2
+	//C2-5 ( C3-2-p C3-2-m C3-4-p C4-4-m C4-2-p C2-2 C4-2-m )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[2].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[2].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[2].z);
@@ -1848,7 +1854,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[73] = auxReferenceAxis[1];
 	vectorRotations[74] = auxReferenceAxis[2];
 	vectorRotations[75] = auxMath_._pi;
-	// c2 - aresta - 3
+	//C2-6 ( C3-2-p C3-2-m C3-3-p C3-3-m C4-3-p C2-3 C4-3-m )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[3].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[3].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[3].z);
@@ -1857,7 +1863,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[77] = auxReferenceAxis[1];
 	vectorRotations[78] = auxReferenceAxis[2];
 	vectorRotations[79] = auxMath_._pi;
-	// c2 - aresta - 4
+	//C2-7 ( C3-1-p C3-1-m C3-2-p C3-2-m C4-1-p C2-1 C4-1-m )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[2].x + mol0[4].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[2].y + mol0[4].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[2].z + mol0[4].z);
@@ -1866,7 +1872,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[81] = auxReferenceAxis[1];
 	vectorRotations[82] = auxReferenceAxis[2];
 	vectorRotations[83] = auxMath_._pi;
-	// c2 - aresta - 5
+	//C2-8 ( C3-1-p C3-1-m C3-3-p C3-3-m C4-2-p C2-2 C4-2-m )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[1].x + mol0[4].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[1].y + mol0[4].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[1].z + mol0[4].z);
@@ -1875,7 +1881,7 @@ std::vector<double> Geometries::geometry8CU(
 	vectorRotations[85] = auxReferenceAxis[1];
 	vectorRotations[86] = auxReferenceAxis[2];
 	vectorRotations[87] = auxMath_._pi;
-	// c2 - aresta - 6
+	//C2-9 ( C3-1-p C3-1-m C3-4-p C3-4-m C4-3-p C2-3 C4-3-m )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[1].x + mol0[5].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[1].y + mol0[5].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[1].z + mol0[5].z);
@@ -1937,17 +1943,17 @@ std::vector<double> Geometries::geometry9TCTPR(
 	mol0[8].y = -0.45643546;
 	mol0[8].z = -0.66666667;
 
-	//c2 - 1
+	//C2-1 ( C3-1-p C3-1-m )
 	vectorRotations[0] = mol0[0].x;
 	vectorRotations[1] = mol0[0].y;
 	vectorRotations[2] = mol0[0].z;
 	vectorRotations[3] = auxMath_._pi;
-	//c2 - 2
+	//C2-2 ( C3-1-p C3-1-m )
 	vectorRotations[4] = mol0[6].x;
 	vectorRotations[5] = mol0[6].y;
 	vectorRotations[6] = mol0[6].z;
 	vectorRotations[7] = auxMath_._pi;
-	//c2 - 3
+	//C2-3 ( C3-1-p C3-1-m )
 	vectorRotations[8] = mol0[5].x;
 	vectorRotations[9] = mol0[5].y;
 	vectorRotations[10] = mol0[5].z;
@@ -1957,12 +1963,12 @@ std::vector<double> Geometries::geometry9TCTPR(
 		mol0[0].x, mol0[0].y, mol0[0].z,
 		mol0[6].x, mol0[6].y, mol0[6].z);
 	auxMath_.normalize(auxReferenceAxis);
-	//c3 - 1
+	//C3-1-p
 	vectorRotations[12] = auxReferenceAxis[0];
 	vectorRotations[13] = auxReferenceAxis[1];
 	vectorRotations[14] = auxReferenceAxis[2];
 	vectorRotations[15] = 2.0e0 * auxMath_._pi / 3.0e0;
-	//c3 - 2
+	//C3-1-m
 	vectorRotations[16] = auxReferenceAxis[0];
 	vectorRotations[17] = auxReferenceAxis[1];
 	vectorRotations[18] = auxReferenceAxis[2];
@@ -3442,6 +3448,343 @@ string Geometries::geometry7CTPRSymmetryFlags(
 }
 
 
+void Geometries::geometry7PBPYotherSymmetries(
+	std::vector< std::vector<int> > &allReflections)
+{
+	int size = 7;
+	allReflections.resize(10);
+	for (size_t i = 0; i < allReflections.size(); i++)
+	{
+		allReflections[i].resize(size);
+		for (size_t j = 0; j < allReflections[i].size(); j++)
+		{
+			allReflections[i][j] = j;
+		}
+	}
+	//P-1 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )
+	allReflections[0][0] = 1;
+	allReflections[0][1] = 0;
+
+	//P-2
+	allReflections[1][2] = 4;
+	allReflections[1][4] = 2;
+	allReflections[1][6] = 5;
+	allReflections[1][5] = 6;
+
+	//P-3
+	allReflections[2][2] = 6;
+	allReflections[2][6] = 2;
+	allReflections[2][3] = 5;
+	allReflections[2][5] = 3;
+
+	//P-4
+	allReflections[3][2] = 3;
+	allReflections[3][3] = 2;
+	allReflections[3][6] = 4;
+	allReflections[3][4] = 6;
+
+	//P-5
+	allReflections[4][3] = 4;
+	allReflections[4][4] = 3;
+	allReflections[4][2] = 5;
+	allReflections[4][5] = 2;
+
+	//P-6
+	allReflections[5][4] = 5;
+	allReflections[5][5] = 4;
+	allReflections[5][3] = 6;
+	allReflections[5][6] = 3;
+
+	//S5-1-p
+	allReflections[6][0] = 1;
+	allReflections[6][1] = 0;
+	allReflections[6][2] = 3;
+	allReflections[6][3] = 4;
+	allReflections[6][4] = 5;
+	allReflections[6][5] = 6;
+	allReflections[6][6] = 2;
+
+	//S5-1-pp
+	allReflections[7][0] = 1;
+	allReflections[7][1] = 0;
+	allReflections[7][2] = 4;
+	allReflections[7][4] = 6;
+	allReflections[7][6] = 3;
+	allReflections[7][3] = 5;
+	allReflections[7][5] = 2;
+
+	//S5-1-m
+	allReflections[8][0] = 1;
+	allReflections[8][1] = 0;
+	allReflections[8][2] = 6;
+	allReflections[8][6] = 5;
+	allReflections[8][5] = 4;
+	allReflections[8][4] = 3;
+	allReflections[8][3] = 2;
+
+	//S5-1-mm
+	allReflections[9][0] = 1;
+	allReflections[9][1] = 0;
+	allReflections[9][2] = 5;
+	allReflections[9][5] = 3;
+	allReflections[9][3] = 6;
+	allReflections[9][6] = 4;
+	allReflections[9][4] = 2;
+}
+
+string Geometries::geometry7PBPYSymmetryFlags(
+	int iSymmetry,
+	int symmetryType)
+{
+	if (symmetryType == 0)
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "C5-1-p";
+		case 1:
+			return "C5-1-pp";
+		case 2:
+			return "C5-1-m";
+		case 3:
+			return "C5-1-mm";
+		case 4:
+			return "C2-1 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )";
+		case 5:
+			return "C2-2 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )";
+		case 6:
+			return "C2-3 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )";
+		case 7:
+			return "C2-4 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )";
+		case 8:
+			return "C2-5 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )";
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	else
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "P-1 ( C5-1-p C5-1-pp C5-1-m C5-1-mm )";
+		case 1:
+			return "P-2 ";
+		case 2:
+			return "P-3 ";
+		case 3:
+			return "P-4 ";
+		case 4:
+			return "P-5 ";
+		case 5:
+			return "P-6 ";
+		case 6:
+			return "S5-1-p";
+		case 7:
+			return "S5-1-pp";
+		case 8:
+			return "S5-1-m";
+		case 9:
+			return "S5-1-mm";
+
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	return "ERROR";
+}
+
+void Geometries::geometry8HBPYotherSymmetries(
+	std::vector< std::vector<int> > &allReflections)
+{
+	int size = 8;
+	allReflections.resize(12);
+	for (size_t i = 0; i < allReflections.size(); i++)
+	{
+		allReflections[i].resize(size);
+		for (size_t j = 0; j < allReflections[i].size(); j++)
+		{
+			allReflections[i][j] = j;
+		}
+	}
+	//P-1 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )
+	allReflections[0][0] = 1;
+	allReflections[0][1] = 0;
+
+	//P-2
+	allReflections[1][2] = 7;
+	allReflections[1][7] = 2;
+	allReflections[1][3] = 6;
+	allReflections[1][6] = 3;
+	allReflections[1][4] = 5;
+	allReflections[1][5] = 4;
+
+	//P-3
+	allReflections[2][4] = 6;
+	allReflections[2][6] = 4;
+	allReflections[2][3] = 7;
+	allReflections[2][7] = 3;
+
+	//P-4
+	allReflections[3][6] = 5;
+	allReflections[3][5] = 6;
+	allReflections[3][4] = 7;
+	allReflections[3][7] = 4;
+	allReflections[3][2] = 3;
+	allReflections[3][3] = 2;
+
+	//P-5
+	allReflections[4][5] = 7;
+	allReflections[4][7] = 5;
+	allReflections[4][2] = 4;
+	allReflections[4][4] = 2;
+
+	//P-6
+	allReflections[5][3] = 4;
+	allReflections[5][4] = 3;
+	allReflections[5][2] = 5;
+	allReflections[5][5] = 2;
+	allReflections[5][6] = 7;
+	allReflections[5][7] = 6;
+
+	//P-7
+	allReflections[6][2] = 6;
+	allReflections[6][6] = 2;
+	allReflections[6][3] = 5;
+	allReflections[6][5] = 3;
+
+	//Inv
+	allReflections[7][0] = 1;
+	allReflections[7][1] = 0;
+	allReflections[7][4] = 7;
+	allReflections[7][7] = 4;
+	allReflections[7][3] = 6;
+	allReflections[7][6] = 3;
+	allReflections[7][2] = 5;
+	allReflections[7][5] = 2;
+
+	//S6-1-p
+	allReflections[8][0] = 1;
+	allReflections[8][1] = 0;
+	allReflections[8][2] = 3;
+	allReflections[8][3] = 4;
+	allReflections[8][4] = 5;
+	allReflections[8][5] = 6;
+	allReflections[8][6] = 7;
+	allReflections[8][7] = 2;
+
+	//S6-1-m
+	allReflections[9][0] = 1;
+	allReflections[9][1] = 0;
+	allReflections[9][2] = 7;
+	allReflections[9][7] = 6;
+	allReflections[9][6] = 5;
+	allReflections[9][5] = 4;
+	allReflections[9][4] = 3;
+	allReflections[9][3] = 2;
+
+	//S3-1-p
+	allReflections[10][0] = 1;
+	allReflections[10][1] = 0;
+	allReflections[10][2] = 4;
+	allReflections[10][4] = 6;
+	allReflections[10][6] = 2;
+	allReflections[10][3] = 5;
+	allReflections[10][5] = 7;
+	allReflections[10][7] = 3;
+
+	//S3-1-m
+	allReflections[11][0] = 1;
+	allReflections[11][1] = 0;
+	allReflections[11][2] = 6;
+	allReflections[11][6] = 4;
+	allReflections[11][4] = 2;
+	allReflections[11][3] = 7;
+	allReflections[11][7] = 5;
+	allReflections[11][5] = 3;
+
+}
+
+string Geometries::geometry8HBPYSymmetryFlags(
+	int iSymmetry,
+	int symmetryType)
+{
+	if (symmetryType == 0)
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "C6-1-p";
+		case 1:
+			return "C3-1-p";
+		case 2:
+			return "C2-1 ";
+		case 3:
+			return "C3-1-m";
+		case 4:
+			return "C6-1-m";
+		case 5:
+			return "C2-2 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )";
+		case 6:
+			return "C2-3 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )";
+		case 7:
+			return "C2-4 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )";
+		case 8:
+			return "C2-5 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )";
+		case 9:
+			return "C2-6 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )";
+		case 10:
+			return "C2-7 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )";
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	else
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "P-1 ( C6-1-p C3-1-p C2-1 C6-1-m C3-1-m )";
+		case 1:
+			return "P-2 ( C2-3 )";
+		case 2:
+			return "P-3 ( C2-7 )";
+		case 3:
+			return "P-4 ( C2-4 )";
+		case 4:
+			return "P-5 ( C2-5 )";
+		case 5:
+			return "P-6 ( C2-2 )";
+		case 6:
+			return "P-7 ( C2-6 )";
+		case 7:
+			return "Inv";
+		case 8:
+			return "S6-1-p";
+		case 9:
+			return "S6-1-m";
+		case 10:
+			return "S3-1-p";
+		case 11:
+			return "S3-1-m";
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	return "ERROR";
+}
+
+
+
+
 void Geometries::geometry8BTPRotherSymmetries(
 	std::vector< std::vector<int> > &allReflections)
 {
@@ -3507,6 +3850,684 @@ string Geometries::geometry8BTPRSymmetryFlags(
 	}
 	return "ERROR";
 }
+
+
+void Geometries::geometry8TDDotherSymmetries(
+	std::vector< std::vector<int> > &allReflections)
+{
+	int size = 8;
+	allReflections.resize(4);
+	for (size_t i = 0; i < allReflections.size(); i++)
+	{
+		allReflections[i].resize(size);
+		for (size_t j = 0; j < allReflections[i].size(); j++)
+		{
+			allReflections[i][j] = j;
+		}
+	}
+	//P-1
+	allReflections[0][0] = 2;
+	allReflections[0][2] = 0;
+	allReflections[0][4] = 6;
+	allReflections[0][6] = 4;
+
+	//P-2
+	allReflections[1][5] = 7;
+	allReflections[1][7] = 5;
+	allReflections[1][1] = 3;
+	allReflections[1][3] = 1;
+
+	//S4-1-p
+	allReflections[2][0] = 7;
+	allReflections[2][7] = 2;
+	allReflections[2][2] = 5;
+	allReflections[2][5] = 0;
+	allReflections[2][3] = 6;
+	allReflections[2][6] = 1;
+	allReflections[2][1] = 4;
+	allReflections[2][4] = 3;
+
+	//S4-1-m
+	allReflections[3][0] = 5;
+	allReflections[3][5] = 2;
+	allReflections[3][2] = 7;
+	allReflections[3][7] = 0;
+	allReflections[3][1] = 6;
+	allReflections[3][6] = 3;
+	allReflections[3][3] = 4;
+	allReflections[3][4] = 1;
+
+}
+
+
+string Geometries::geometry8TDDSymmetryFlags(
+	int iSymmetry,
+	int symmetryType)
+{
+	if (symmetryType == 0)
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "C2-1 ( C2-2 C2-3 )";
+		case 1:
+			return "C2-2 ( C2-1 C2-3 )";
+		case 2:
+			return "C2-3 ( C2-1 C2-2 )";
+
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	else
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "P-1 ";
+		case 1:
+			return "P-2 ";
+		case 2:
+			return "S4-1-p";
+		case 3:
+			return "S4-1-m";
+
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	return "ERROR";
+}
+
+void Geometries::geometry8CUotherSymmetries(
+	std::vector< std::vector<int> > &allReflections)
+{
+	int size = 8;
+	allReflections.resize(24);
+	for (size_t i = 0; i < allReflections.size(); i++)
+	{
+		allReflections[i].resize(size);
+		for (size_t j = 0; j < allReflections[i].size(); j++)
+		{
+			allReflections[i][j] = j;
+		}
+	}
+	//P-1 ( C4-1-p C2-1 C4-1-m )
+	allReflections[0][0] = 3;
+	allReflections[0][3] = 0;
+	allReflections[0][1] = 5;
+	allReflections[0][5] = 1;
+	allReflections[0][4] = 7;
+	allReflections[0][7] = 4;
+	allReflections[0][2] = 6;
+	allReflections[0][6] = 2;
+
+	//P-2 (C4-2-p C2-2 C4-2-m )
+	allReflections[1][0] = 2;
+	allReflections[1][2] = 0;
+	allReflections[1][3] = 6;
+	allReflections[1][6] = 3;
+	allReflections[1][5] = 7;
+	allReflections[1][7] = 5;
+	allReflections[1][1] = 4;
+	allReflections[1][4] = 1;
+
+	//P-3 (C4-3-p C2-3 C4-3-m )
+	allReflections[2][0] = 3;
+	allReflections[2][3] = 0;
+	allReflections[2][2] = 6;
+	allReflections[2][6] = 2;
+	allReflections[2][4] = 7;
+	allReflections[2][7] = 4;
+	allReflections[2][1] = 5;
+	allReflections[2][5] = 1;
+
+	//P4 ( C2-4 )
+	allReflections[3][0] = 6;
+	allReflections[3][6] = 0;
+	allReflections[3][1] = 7;
+	allReflections[3][7] = 1;
+
+	//P5 ( C2-5 )
+	allReflections[4][0] = 5;
+	allReflections[4][5] = 0;
+	allReflections[4][2] = 7;
+	allReflections[4][7] = 2;
+
+	//P6 ( C2-6 )
+	allReflections[5][0] = 4;
+	allReflections[5][4] = 0;
+	allReflections[5][3] = 7;
+	allReflections[5][7] = 3;
+
+	//P7 ( C2-7 )
+	allReflections[6][2] = 3;
+	allReflections[6][3] = 2;
+	allReflections[6][4] = 5;
+	allReflections[6][5] = 4;
+
+	//P8 ( C2-8 )
+	allReflections[7][1] = 3;
+	allReflections[7][3] = 1;
+	allReflections[7][4] = 6;
+	allReflections[7][6] = 4;
+
+	//P9 ( C2-9 )
+	allReflections[8][1] = 2;
+	allReflections[8][2] = 1;
+	allReflections[8][5] = 6;
+	allReflections[8][6] = 5;
+
+	//Inv
+	allReflections[9][0] = 7;
+	allReflections[9][7] = 0;
+	allReflections[9][3] = 4;
+	allReflections[9][4] = 3;
+	allReflections[9][1] = 6;
+	allReflections[9][6] = 1;
+	allReflections[9][2] = 5;
+	allReflections[9][5] = 2;
+
+	//S4-1-p
+	allReflections[10][0] = 4;
+	allReflections[10][4] = 6;
+	allReflections[10][6] = 5;
+	allReflections[10][5] = 0;
+	allReflections[10][2] = 7;
+	allReflections[10][7] = 3;
+	allReflections[10][3] = 1;
+	allReflections[10][1] = 2;
+
+	//S4-1-m
+	allReflections[11][0] = 5;
+	allReflections[11][5] = 6;
+	allReflections[11][6] = 4;
+	allReflections[11][4] = 0;
+	allReflections[11][2] = 1;
+	allReflections[11][1] = 3;
+	allReflections[11][3] = 7;
+	allReflections[11][7] = 2;
+
+	//S4-2-p
+	allReflections[12][0] = 6;
+	allReflections[12][6] = 5;
+	allReflections[12][5] = 4;
+	allReflections[12][4] = 0;
+	allReflections[12][3] = 7;
+	allReflections[12][7] = 1;
+	allReflections[12][1] = 2;
+	allReflections[12][2] = 3;
+
+	//S4-2-m
+	allReflections[13][0] = 4;
+	allReflections[13][4] = 5;
+	allReflections[13][5] = 6;
+	allReflections[13][6] = 0;
+	allReflections[13][3] = 2;
+	allReflections[13][2] = 1;
+	allReflections[13][1] = 7;
+	allReflections[13][7] = 3;
+
+	//S4-3-p
+	allReflections[14][0] = 5;
+	allReflections[14][5] = 4;
+	allReflections[14][4] = 6;
+	allReflections[14][6] = 0;
+	allReflections[14][1] = 7;
+	allReflections[14][7] = 2;
+	allReflections[14][2] = 3;
+	allReflections[14][3] = 1;
+
+	//S4-3-m
+	allReflections[15][0] = 6;
+	allReflections[15][6] = 4;
+	allReflections[15][4] = 5;
+	allReflections[15][5] = 0;
+	allReflections[15][1] = 3;
+	allReflections[15][3] = 2;
+	allReflections[15][2] = 7;
+	allReflections[15][7] = 1;
+
+	//S6-1-p
+	allReflections[16][0] = 7;
+	allReflections[16][7] = 0;
+	allReflections[16][1] = 4;
+	allReflections[16][4] = 2;
+	allReflections[16][2] = 6;
+	allReflections[16][6] = 3;
+	allReflections[16][3] = 5;
+	allReflections[16][5] = 1;
+
+	//S6-1-m
+	allReflections[17][0] = 7;
+	allReflections[17][7] = 0;
+	allReflections[17][1] = 5;
+	allReflections[17][5] = 3;
+	allReflections[17][3] = 6;
+	allReflections[17][6] = 2;
+	allReflections[17][2] = 4;
+	allReflections[17][4] = 1;
+
+	//S6-2-p
+	allReflections[18][1] = 6;
+	allReflections[18][6] = 1;
+	allReflections[18][0] = 3;
+	allReflections[18][3] = 5;
+	allReflections[18][5] = 7;
+	allReflections[18][7] = 4;
+	allReflections[18][4] = 2;
+	allReflections[18][2] = 0;
+
+	//S6-2-m
+	allReflections[19][1] = 6;
+	allReflections[19][6] = 1;
+	allReflections[19][0] = 2;
+	allReflections[19][2] = 4;
+	allReflections[19][4] = 7;
+	allReflections[19][7] = 5;
+	allReflections[19][5] = 3;
+	allReflections[19][3] = 0;
+
+	//S6-3-p
+	allReflections[20][2] = 5;
+	allReflections[20][5] = 2;
+	allReflections[20][0] = 1;
+	allReflections[20][1] = 4;
+	allReflections[20][4] = 7;
+	allReflections[20][7] = 6;
+	allReflections[20][6] = 3;
+	allReflections[20][3] = 0;
+
+	//S6-3-m
+	allReflections[21][2] = 5;
+	allReflections[21][5] = 2;
+	allReflections[21][0] = 3;
+	allReflections[21][3] = 6;
+	allReflections[21][6] = 7;
+	allReflections[21][7] = 4;
+	allReflections[21][4] = 1;
+	allReflections[21][1] = 0;
+
+	//S6-4-p
+	allReflections[22][3] = 4;
+	allReflections[22][4] = 3;
+	allReflections[22][0] = 1;
+	allReflections[22][1] = 5;
+	allReflections[22][5] = 7;
+	allReflections[22][7] = 6;
+	allReflections[22][6] = 2;
+	allReflections[22][2] = 0;
+
+	//S6-4-m
+	allReflections[23][3] = 4;
+	allReflections[23][4] = 3;
+	allReflections[23][0] = 2;
+	allReflections[23][2] = 6;
+	allReflections[23][6] = 7;
+	allReflections[23][7] = 5;
+	allReflections[23][5] = 1;
+	allReflections[23][1] = 0;
+
+}
+
+
+string Geometries::geometry8CUSymmetryFlags(
+	int iSymmetry,
+	int symmetryType)
+{
+	if (symmetryType == 0)
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "C4-1-p";
+		case 1:
+			return "C2-1 ( C4-2-p C2-2 C4-2-m C4-3-p C2-3 C4-3-m C2-4 C2-7 )";
+		case 2:
+			return "C4-1-m";
+		case 3:
+			return "C4-2-p";
+		case 4:
+			return "C2-2 ( C4-1-p C2-1 C4-1-m C4-3-p C2-3 C4-3-m C2-5 C2-8 )";
+		case 5:
+			return "C4-2-m";
+		case 6:
+			return "C4-3-p";
+		case 7:
+			return "C2-3 ( C4-1-p C2-1 C4-1-m C4-2-p C2-2 C4-2-m C2-6 C2-9 )";
+		case 8:
+			return "C4-3-m";
+		case 9:
+			return "C3-1-p";
+		case 10:
+			return "C3-1-m";
+		case 11:
+			return "C3-2-p";
+		case 12:
+			return "C3-2-m";
+		case 13:
+			return "C3-3-p";
+		case 14:
+			return "C3-3-m";
+		case 15:
+			return "C3-4-p";
+		case 16:
+			return "C3-4-m";
+		case 17:
+			return "C2-4 ( C3-3-p C3-3-m C3-4-p C3-4-m C4-1-p C2-1 C4-1-m )";
+		case 18:
+			return "C2-5 ( C3-2-p C3-2-m C3-4-p C4-4-m C4-2-p C2-2 C4-2-m )";
+		case 19:
+			return "C2-6 ( C3-2-p C3-2-m C3-3-p C3-3-m C4-3-p C2-3 C4-3-m )";
+		case 20:
+			return "C2-7 ( C3-1-p C3-1-m C3-2-p C3-2-m C4-1-p C2-1 C4-1-m )";
+		case 21:
+			return "C2-8 ( C3-1-p C3-1-m C3-3-p C3-3-m C4-2-p C2-2 C4-2-m )";
+		case 22:
+			return "C2-9 ( C3-1-p C3-1-m C3-4-p C3-4-m C4-3-p C2-3 C4-3-m )";
+
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	else
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "P-1 ";
+		case 1:
+			return "P-2 ";
+		case 2:
+			return "S4-1-p";
+		case 3:
+			return "S4-1-m";
+
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	return "ERROR";
+}
+
+
+
+void Geometries::geometry8SAPRotherSymmetries(
+	std::vector< std::vector<int> > &allReflections)
+{
+	int size = 8;
+	allReflections.resize(8);
+	for (size_t i = 0; i < allReflections.size(); i++)
+	{
+		allReflections[i].resize(size);
+		for (size_t j = 0; j < allReflections[i].size(); j++)
+		{
+			allReflections[i][j] = j;
+		}
+	}
+
+	//P-1
+	allReflections[0][3] = 4;
+	allReflections[0][4] = 3;
+	allReflections[0][6] = 7;
+	allReflections[0][7] = 6;
+	allReflections[0][1] = 2;
+	allReflections[0][2] = 1;
+
+	//P-2
+	allReflections[1][1] = 5;
+	allReflections[1][5] = 1;
+	allReflections[1][4] = 6;
+	allReflections[1][6] = 4;
+	allReflections[1][0] = 2;
+	allReflections[1][2] = 0;
+
+	//P-3
+	allReflections[2][0] = 5;
+	allReflections[2][5] = 0;
+	allReflections[2][3] = 6;
+	allReflections[2][6] = 3;
+	allReflections[2][4] = 7;
+	allReflections[2][7] = 4;
+
+	//P-4
+	allReflections[3][0] = 1;
+	allReflections[3][1] = 0;
+	allReflections[3][2] = 5;
+	allReflections[3][5] = 2;
+	allReflections[3][3] = 7;
+	allReflections[3][7] = 3;
+
+	//S8-1-p
+	allReflections[4][0] = 3;
+	allReflections[4][3] = 2;
+	allReflections[4][2] = 6;
+	allReflections[4][6] = 5;
+	allReflections[4][5] = 7;
+	allReflections[4][7] = 1;
+	allReflections[4][1] = 4;
+	allReflections[4][4] = 0;
+
+	//S8-1-pp
+	allReflections[5][0] = 6;
+	allReflections[5][6] = 1;
+	allReflections[5][1] = 3;
+	allReflections[5][3] = 5;
+	allReflections[5][5] = 4;
+	allReflections[5][4] = 2;
+	allReflections[5][2] = 7;
+	allReflections[5][7] = 0;
+
+	//S8-1-m
+	allReflections[6][0] = 4;
+	allReflections[6][4] = 1;
+	allReflections[6][1] = 7;
+	allReflections[6][7] = 5;
+	allReflections[6][5] = 6;
+	allReflections[6][6] = 2;
+	allReflections[6][2] = 3;
+	allReflections[6][3] = 0;
+
+	//S8-1-mm
+	allReflections[7][0] = 7;
+	allReflections[7][7] = 2;
+	allReflections[7][2] = 4;
+	allReflections[7][4] = 5;
+	allReflections[7][5] = 3;
+	allReflections[7][3] = 1;
+	allReflections[7][1] = 6;
+	allReflections[7][6] = 0;
+
+}
+
+
+string Geometries::geometry8SAPRSymmetryFlags(
+	int iSymmetry,
+	int symmetryType)
+{
+	if (symmetryType == 0)
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "C4-1-p";
+		case 1:
+			return "C2-1 ";
+		case 2:
+			return "C4-1-m";
+		case 3:
+			return "C2-2 ( C4-1-p C2-1 C4-1-m )";
+		case 4:
+			return "C2-3 ( C4-1-p C2-1 C4-1-m )";
+		case 5:
+			return "C2-4 ( C4-1-p C2-1 C4-1-m )";
+		case 6:
+			return "C2-5 ( C4-1-p C2-1 C4-1-m )";
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	else
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "P-1 ";
+		case 1:
+			return "P-2 ";
+		case 2:
+			return "P-3 ";
+		case 3:
+			return "P-4 ";
+		case 4:
+			return "S8-1-p";
+		case 5:
+			return "S8-1-pp";
+		case 6:
+			return "S8-1-m";
+		case 7:
+			return "S8-1-mm";
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	return "ERROR";
+}
+
+
+
+void Geometries::geometry9TCTPRotherSymmetries(
+	std::vector< std::vector<int> > &allReflections)
+{
+	int size = 9;
+	allReflections.resize(6);
+	for (size_t i = 0; i < allReflections.size(); i++)
+	{
+		allReflections[i].resize(size);
+		for (size_t j = 0; j < allReflections[i].size(); j++)
+		{
+			allReflections[i][j] = j;
+		}
+	}
+	//P-1 ( C3-1-p C3-1-m )
+	allReflections[0][2] = 3;
+	allReflections[0][3] = 2;
+	allReflections[0][7] = 8;
+	allReflections[0][8] = 7;
+	allReflections[0][1] = 4;
+	allReflections[0][4] = 1;
+
+	//P-2
+	allReflections[1][3] = 4;
+	allReflections[1][4] = 3;
+	allReflections[1][1] = 2;
+	allReflections[1][2] = 1;
+	allReflections[1][6] = 5;
+	allReflections[1][5] = 6;
+
+	//P-3
+	allReflections[2][3] = 8;
+	allReflections[2][8] = 3;
+	allReflections[2][2] = 7;
+	allReflections[2][7] = 2;
+	allReflections[2][0] = 5;
+	allReflections[2][5] = 0;
+
+	//P-4
+	allReflections[3][4] = 8;
+	allReflections[3][8] = 4;
+	allReflections[3][1] = 7;
+	allReflections[3][7] = 1;
+	allReflections[3][0] = 6;
+	allReflections[3][6] = 0;
+
+	//S3-1-p
+	allReflections[4][1] = 3;
+	allReflections[4][3] = 7;
+	allReflections[4][7] = 4;
+	allReflections[4][4] = 2;
+	allReflections[4][2] = 8;
+	allReflections[4][8] = 1;
+	allReflections[4][0] = 6;
+	allReflections[4][6] = 5;
+	allReflections[4][5] = 0;
+
+	//S3-1-m
+	allReflections[5][1] = 8;
+	allReflections[5][8] = 2;
+	allReflections[5][2] = 4;
+	allReflections[5][4] = 7;
+	allReflections[5][7] = 3;
+	allReflections[5][3] = 1;
+	allReflections[5][0] = 5;
+	allReflections[5][5] = 6;
+	allReflections[5][6] = 0;
+
+}
+
+
+string Geometries::geometry9TCTPRSymmetryFlags(
+	int iSymmetry,
+	int symmetryType)
+{
+	if (symmetryType == 0)
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "C2-1 ( C3-1-p C3-1-m )";
+		case 1:
+			return "C2-2 ( C3-1-p C3-1-m )";
+		case 2:
+			return "C2-3 ( C3-1-p C3-1-m )";
+		case 3:
+			return "C3-1-p";
+		case 4:
+			return "C3-1-m";
+
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	else
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "P-1 ( C3-1-p C3-1-m )";
+		case 1:
+			return "P-2 ";
+		case 2:
+			return "P-3 ";
+		case 3:
+			return "P-4 ";
+		case 4:
+			return "S3-1-p";
+		case 5:
+			return "S3-1-m";
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	return "ERROR";
+}
+
 
 
 void Geometries::geometry9CSAPRotherSymmetries(
@@ -3602,6 +4623,8 @@ string Geometries::geometry9CSAPRSymmetryFlags(
 	}
 	return "ERROR";
 }
+
+
 
 
 void Geometries::geometry9MFFotherSymmetries(

@@ -120,10 +120,17 @@ int GroupPointIdentify::findOtherCnAxis(
 		string axisI = rotationCode(allSymmetries[i]);
 		if (axisI != princAxisName)
 		{
-			if (rotI > maxRot)
+			if (axisI[0] == 'C')
 			{
-				maxRot = rotI;
-				maxPos = i;
+				if ((axisI[3] != princAxisName[3]) ||
+					(axisI[4] != princAxisName[4]))
+				{
+					if (rotI > maxRot)
+					{
+						maxRot = rotI;
+						maxPos = i;
+					}
+				}
 			}
 		}
 	}
@@ -225,9 +232,11 @@ int GroupPointIdentify::rotationNumber(string code)
 
 string GroupPointIdentify::rotationCode(string code)
 {
+	if (code[0] != 'C')
+		return "";
 	string axisName = codeOnly(code);
 	stringstream axisTypeLine;
-	axisTypeLine << axisName[0] << axisName[1];
+	axisTypeLine << axisName[0] << axisName[1] << axisName[2];
 	for (size_t i = 3; i < axisName.size(); i++)
 	{
 		if ((axisName[i] == '-')|| (axisName[i] == ' '))

@@ -67,9 +67,9 @@ int main(int argc, char *argv[])
 {
 
 	/* GRUPO PONTUAL */
-	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\TPR\\";
-	string responseName = "response-combinations6.txt";
-	int geoCode = 61;
+	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\TCTPR\\";
+	string responseName = "response-combinations9.txt";
+	int geoCode = 90;
 	Geometries geo_;
 	ReadWriteFormats rwf_;
 	string geomName = geo_.sizeToGeometryCode(geoCode);

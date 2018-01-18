@@ -186,7 +186,8 @@ private:
 		int symmetryType);
 
 
-	void geometry7COCotherSymmetries(std::vector< std::vector<int> > &allReflections);
+	void geometry7COCotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
 	std::string geometry7COCSymmetryFlags(
 		int iSymmetry,
 		int symmetryType);
@@ -197,12 +198,49 @@ private:
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry7PBPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry7PBPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+
 	void geometry8BTPRotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
 	std::string geometry8BTPRSymmetryFlags(
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry8HBPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry8HBPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry8SAPRotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry8SAPRSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry8TDDotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry8TDDSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry8CUotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry8CUSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+
+	void geometry9TCTPRotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9TCTPRSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
 
 	void geometry9CSAPRotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);

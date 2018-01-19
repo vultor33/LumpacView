@@ -160,6 +160,14 @@ private:
 	///////////////////////////////////
 	////////// REFLECTIONS ////////////
 	///////////////////////////////////
+
+	void geometry4TetrahedronotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry4TetrahedronSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+
 	void geometry5SPYotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
 	std::string geometry5SPYSymmetryFlags(

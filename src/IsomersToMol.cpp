@@ -625,8 +625,8 @@ void IsomersToMol::setParameters(
 void IsomersToMol::setParameters(
 	int coordination)
 {
-	cout << "IsomersToMol::setParameters need attention - RASWIN format" << endl;
-	exit(1);
+	//cout << "IsomersToMol::setParameters need attention - RASWIN format" << endl;
+	//exit(1);
 
 	atomLabels.resize(12);
 	atomLabels[0] = "Ca";
@@ -665,7 +665,7 @@ void IsomersToMol::setParameters(
 		break;
 
 	case 8:
-		geo_.selectGeometry(82, complex, cutAngle, reflection);
+		geo_.selectGeometry(81, complex, cutAngle, reflection);
 		break;
 
 	case 9:

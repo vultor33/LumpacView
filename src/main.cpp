@@ -66,10 +66,10 @@ void buildCsvFile(int size, string skeletonName);
 int main(int argc, char *argv[])
 {
 
-	/* GRUPO PONTUAL */
-	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\TCTPR\\";
-	string responseName = "response-combinations9.txt";
-	int geoCode = 90;
+	/* GRUPO PONTUAL 
+	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#4\\T\\";
+	string responseName = "response-combinations4.txt";
+	int geoCode = 40;
 	Geometries geo_;
 	ReadWriteFormats rwf_;
 	string geomName = geo_.sizeToGeometryCode(geoCode);
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 			pathRead);
 	}
 	return 0;
-	
+	*/
 
 	
 	//CauchyIndex cif3f_(60);
@@ -162,9 +162,9 @@ int main(int argc, char *argv[])
 	//return 0;
 
 	/* IDENTIFY ISOMERS */
-	//UtilityRun util_;
-	//util_.identifyOne();
-	//return 0;
+	UtilityRun util_;
+	util_.identifyOne();
+	return 0;
 	
 	  
 	

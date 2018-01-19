@@ -32,9 +32,9 @@ void IdentifyIsomers::coordinatesToPermutation(
 	string countingFile)
 
 {
-	cout << "CHANGE TO RASWIN ON --> void IsomersToMol::setParameters(int coordination)"
-		<< endl;
-	exit(1);
+	//cout << "CHANGE TO RASWIN ON --> void IsomersToMol::setParameters(int coordination)"
+	//	<< endl;
+	//exit(1);
 
 	translateToCenterOfMassAndReescale(mol0);
 	for (size_t i = 0; i < mol0.size(); i++)

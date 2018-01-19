@@ -160,13 +160,13 @@ void UtilityRun::identifyOne()
 	double cutAngle;
 	int size;
 
-	size = 80;
+	size = 81;
 	geom_.selectGeometry(size, mol0, cutAngle, reflection);
 	ident_.coordinatesToPermutation(
 		mol0,
-		"SAPR-8-Mab(AB)3.csv",
+		"TDD-8-Ma3b(AB)(CD).csv",
 		"",
-		"XIPKOW.xyz",
+		"LAWPOQ-cores(2).xyz",
 		getCountingPath(size));
 
 

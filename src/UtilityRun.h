@@ -32,6 +32,8 @@ private:
 	std::string getCountingPath(int geoCode);
 
 	std::string getResultsPath(int geoCode);
+
+	std::string getResultsPathLinux(int geoCode);
 };
 
 

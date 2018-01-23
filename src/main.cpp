@@ -66,7 +66,7 @@ void buildCsvFile(int size, string skeletonName);
 int main(int argc, char *argv[])
 {	
 	UtilityRun util_;
-	util_.formatToSymmetryAndFiles(91);
+	util_.formatToSymmetryAndFiles(82);
 	return 0;
 
 

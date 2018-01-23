@@ -173,6 +173,8 @@ void ChangeNames::createNewCounting(
 		string newCombinationName = rwf_.newCodeToString(combinationCode);
 		newCombinationName = "M" + newCombinationName;
 		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
+
+
 		vector<int> rcw;
 		vector<int> count;
 		vector<string> pGroup;

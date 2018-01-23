@@ -7,7 +7,7 @@
 #include <sstream>
 #include <algorithm>
 #include <ctime>
-#include <time.h>d
+#include <time.h>
 #include <math.h>
 #include <sys/stat.h>
 #include <iomanip>
@@ -64,12 +64,20 @@ void waitSlurmFinish(int usedProc);
 void buildCsvFile(int size, string skeletonName);
 
 int main(int argc, char *argv[])
-{
+{	
+	UtilityRun util_;
+	util_.formatToSymmetryAndFiles(40);
+	return 0;
+
+
+//	UtilityRun util_;
+//	util_.formatIsomersFiles();
+//	return 0;
 
 	/* GRUPO PONTUAL 
-	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#4\\T\\";
+	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#4\\SP\\";
 	string responseName = "response-combinations4.txt";
-	int geoCode = 40;
+	int geoCode = 41;
 	Geometries geo_;
 	ReadWriteFormats rwf_;
 	string geomName = geo_.sizeToGeometryCode(geoCode);
@@ -96,6 +104,7 @@ int main(int argc, char *argv[])
 	}
 	return 0;
 	*/
+	
 
 	
 	//CauchyIndex cif3f_(60);
@@ -162,11 +171,20 @@ int main(int argc, char *argv[])
 	//return 0;
 
 	/* IDENTIFY ISOMERS */
-	UtilityRun util_;
-	util_.identifyOne();
-	return 0;
+	//UtilityRun util_;
+	//util_.identifyOne();
+	//return 0;
 	
-	  
+	/* IDENTIFY TWO
+	IdentifyIsomers ident_;
+	ident_.compareTwoGeometries(
+		"VUZBOI-cores(1).xyz",
+		"VUZBOI-cores(2).xyz",
+		9,
+		6);
+	return 0;
+	*/
+
 	
 	/* CALCULATING SQUARE 
 	string composition = "C01C02";

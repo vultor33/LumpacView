@@ -30,6 +30,7 @@ public:
 	std::vector<int> vector_ordering(std::vector<int> &vetor_entrada);
 	void vector_ordering_with_instructions(std::vector<int> &vetor_entrada, const std::vector<int> &vetor_organiza);
 	void vector_ordering_with_instructions(std::vector<bool> &vetor_entrada, const std::vector<int> &vetor_organiza);
+	void vector_ordering_with_instructions(std::vector<std::string> &vetor_entrada, const std::vector<int> &vetor_organiza);
 	void vector_ordering_with_instructions(std::vector< std::vector<double> > &vetor_entrada, const std::vector<int> &vetor_organiza);
 
 

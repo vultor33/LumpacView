@@ -7,6 +7,8 @@
 #include <sstream>
 #include <stdlib.h>
 #include <iomanip>
+#include <algorithm>
+#include <iterator>
 
 #include "AllMolecularFormulas.h"
 #include "AuxMath.h"
@@ -120,8 +122,13 @@ void ChangeNames::changeNameOfFiles(
 		isomerFile_.close();
 		isomerFile_.open((pathRead + "final-" + oldCombinationNames[i]).c_str());
 		string geomCombName = geomName + " [" + allNewCombinationNames[i] + "]";
+
+		if (allNewCombinationNames[i] == "M(AA)4")
+			cout << "M(AA)4" << endl;
+
 		ofstream newFile_((pathWrite + geomName + "-" + allNewCombinationNames[i] + ".csv").c_str());
 		newFile_ << allTypeLines[i] << endl;
+		cout << "i:  " << i << "  " << geomCombName << endl;
 		changeFormat(
 			isomerFile_,
 			counting_,
@@ -135,6 +142,357 @@ void ChangeNames::changeNameOfFiles(
 
 }
 
+
+void ChangeNames::createNewCounting(
+	int geoCode,
+	string pathRead,
+	string responseName)
+{
+	Geometries geo_;
+	string geomName = geo_.sizeToGeometryCode(geoCode);
+
+	ReadWriteFormats rwf_;
+	ifstream response_((pathRead + responseName).c_str());
+	string line;
+
+	vector<string> allFormulas;
+	vector< vector<int> > allRcw;
+	vector< vector<int> > allCount;
+	vector< vector<string> > allPgroup;
+
+	while (!response_.eof())
+	{
+		getline(response_, line);
+		if (line == "")
+			break;
+		string combination;
+		stringstream convert;
+		convert << line;
+		convert >> combination;
+		vector< vector<int> > combinationCode = rwf_.compositionToNumberOld(combination);
+		string newCombinationName = rwf_.newCodeToString(combinationCode);
+		newCombinationName = "M" + newCombinationName;
+		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
+		vector<int> rcw;
+		vector<int> count;
+		vector<string> pGroup;
+		generateOrderingGroupPoint(
+			allIsomersCombinationFile,
+			rcw,
+			count,
+			pGroup);
+		allRcw.push_back(rcw);
+		allCount.push_back(count);
+		allPgroup.push_back(pGroup);
+		allFormulas.push_back(newCombinationName);
+	}
+
+	/* reordenar com hierarquia
+	bool tradePositions = true;
+	vector<int> auxRcw;
+	vector<int> auxCount;
+	vector<string> auxPgroup;
+	string auxFormula;
+	while (tradePositions)
+	{
+		tradePositions = false;
+		for (size_t i = 0; i < allRcw.size() - 1; i++)
+		{
+			bool trade = false;
+			if (allRcw[i].size() > allRcw[i + 1].size())
+				continue;
+			else if ((allRcw[i].size() < allRcw[i + 1].size()))
+				trade = true;
+			else
+			{
+				for (size_t k = 0; k < allRcw[i].size(); k++)
+				{
+					if (allPgroup[i][k] != allPgroup[i + 1][k])
+					{
+						bool hyearc = rwf_.hyerarchyOrdering(
+							allPgroup[i][k],
+							allPgroup[i + 1][k]);
+						if (!hyearc)
+						{
+							trade = true;
+							break;
+						}
+						else
+							break;
+					}
+				}
+			}
+			if (trade)
+			{
+				auxRcw = allRcw[i];
+				auxPgroup = allPgroup[i];
+				auxCount = allCount[i];
+				auxFormula = allFormulas[i];
+				allRcw[i] = allRcw[i + 1];
+				allPgroup[i] = allPgroup[i + 1];
+				allCount[i] = allCount[i + 1];
+				allFormulas[i] = allFormulas[i + 1];
+				allRcw[i + 1] = auxRcw;
+				allPgroup[i + 1] = auxPgroup;
+				allCount[i + 1] = auxCount;
+				allFormulas[i + 1] = auxFormula;
+				tradePositions = true;
+			}
+		}
+	}
+	*/
+
+	ofstream counting_((geomName + "-counting.csv").c_str());
+
+	// Complete header
+	vector<string> header = allPgroup[0];
+	for (size_t i = 1; i < allPgroup.size(); i++)
+	{
+		for (size_t j = 0; j < allPgroup[i].size(); j++)
+		{
+			vector<string>::iterator it = find(header.begin(), header.end(), allPgroup[i][j]);
+			if (it == header.end())
+			{
+				header.push_back(allPgroup[i][j]);
+			}
+		}
+	}
+
+	bool tradePositions = true;
+	while (tradePositions)
+	{
+		string auxHeaderTrade;
+		tradePositions = false;
+		for (size_t i = 0; i < header.size() - 1; i++)
+		{
+			bool hyearc = rwf_.hyerarchyOrdering(
+				header[i],
+				header[i+1]);
+			if (!hyearc)
+			{
+				auxHeaderTrade = header[i];
+				header[i] = header[i + 1];
+				header[i + 1] = auxHeaderTrade;
+				tradePositions = true;
+			}
+		}
+	}
+
+	vector<string> auxPgroup = vector<string>();
+
+	/* HEADER */
+	//reverse(header.begin(), header.end());
+	counting_ << "Formula;RCWP;";
+	for (size_t i = 0; i < header.size(); i++)
+		counting_ << header[i] << ";";
+	counting_ << endl;
+	for (size_t i = 0; i < allPgroup.size(); i++)
+	{
+		vector<int> rce(allRcw[i].size());
+		for (size_t l = 0; l < allRcw[i].size(); l++)
+			rce[l] = allCount[i][l] * allRcw[i][l];
+		int rceMin = *min_element(rce.begin(), rce.end());
+		int rcwMin = *min_element(allRcw[i].begin(), allRcw[i].end());
+
+		counting_ << allFormulas[i] << "; ";
+
+		/* RCP
+		for (size_t k = 0; k < allRcw[i].size() - 1; k++)
+		{
+			if (rce[k] % rceMin != 0)
+				counting_ << fixed << setprecision(1) << (double)rce[k] / (double)rceMin << ":";
+			else
+				counting_ << rce[k] / rceMin << ":";
+		}
+		if (rce[rce.size() - 1] % rceMin != 0)
+			counting_ << fixed << setprecision(1) << (double)rce[rce.size() - 1] / (double)rceMin;
+		else
+			counting_ << rce[rce.size() - 1] / rceMin;
+		counting_ << "; ";
+		*/
+
+		// RCW
+		for (size_t k = 0; k < allRcw[i].size() - 1; k++)
+		{
+			if (allRcw[i][k] % rcwMin != 0)
+				counting_ << fixed << setprecision(1) << (double)allRcw[i][k] / (double)rcwMin << ":";
+			else
+				counting_ << allRcw[i][k] / rcwMin << ":";
+		}
+		if (allRcw[i][allRcw[i].size() - 1] % rcwMin != 0)
+			counting_ << fixed << setprecision(1) << (double)allRcw[i][allRcw[i].size() - 1] / (double)rcwMin;
+		else
+			counting_ << allRcw[i][allRcw[i].size() - 1] / rcwMin;
+		counting_ << ";";
+
+
+		for (size_t j = 0; j < header.size(); j++)
+		{
+			bool marked = false;
+			for (size_t k = 0; k < allPgroup[i].size(); k++)
+			{
+				if (allPgroup[i][k] == header[j])
+				{
+					counting_ << allCount[i][k] << ";";
+					marked = true;
+					break;
+				}
+			}
+			if (!marked)
+				counting_ << "-;";
+		}
+		counting_ << endl;
+	}
+	
+
+
+	/* Own Symmetry groups 
+	//ofstream cheackOrder_("checkOrder.csv");
+	for (size_t i = 0; i < allPgroup.size(); i++)
+	{
+		for (size_t k = 0; k < allPgroup[i].size(); k++)
+		{
+			cheackOrder_ << allPgroup[i][k] << " ; ";
+		}
+		cheackOrder_ << endl;
+
+
+
+		if (allPgroup[i] != auxPgroup)
+		{
+			counting_ << endl;
+			auxPgroup = allPgroup[i];
+			counting_ << "Formula;RCP;RCW;";
+			for (size_t k = 0; k < allPgroup[i].size(); k++)
+				counting_ << allPgroup[i][k] << ";";
+			counting_ << endl;
+		}
+
+		counting_ << allFormulas[i] << "; ";
+		vector<int> rce(allRcw[i].size());
+		for (size_t l = 0; l < allRcw[i].size(); l++)
+			rce[l] = allCount[i][l] * allRcw[i][l];
+		int rceMin = *min_element(rce.begin(), rce.end());
+		int rcwMin = *min_element(allRcw[i].begin(), allRcw[i].end());
+		// RCP
+		for (size_t k = 0; k < allRcw[i].size() - 1; k++)
+		{
+			if (rce[k] % rceMin != 0)
+				counting_ << fixed << setprecision(1) << (double)rce[k] / (double)rceMin << ":";
+			else
+				counting_ << rce[k] / rceMin << ":";
+		}
+		if (rce[rce.size() - 1] % rceMin != 0)
+			counting_ << fixed << setprecision(1) << (double)rce[rce.size() - 1] / (double)rceMin;
+		else
+			counting_ << rce[rce.size() - 1] / rceMin;
+		counting_ << "; ";
+
+
+		// RCW
+		for (size_t k = 0; k < allRcw[i].size() - 1; k++)
+		{
+			if (allRcw[i][k] % rcwMin != 0)
+				counting_ << fixed << setprecision(1) << (double)allRcw[i][k] / (double)rcwMin << ":";
+			else
+				counting_ << allRcw[i][k] / rcwMin << ":";
+		}
+		if (allRcw[i][allRcw[i].size() - 1] % rcwMin != 0)
+			counting_ << fixed << setprecision(1) << (double)allRcw[i][allRcw[i].size() - 1] / (double)rcwMin;
+		else
+			counting_ << allRcw[i][allRcw[i].size() - 1] / rcwMin;
+		counting_ << ";";
+
+		for (size_t k = 0; k < allCount[i].size(); k++)
+			counting_ << allCount[i][k] << ";";
+
+		counting_ << endl;
+
+	}
+	*/
+}
+
+void ChangeNames::generateOrderingGroupPoint(
+	string fileName,
+	std::vector<int> &uniqRcw,
+	std::vector<int> &uniqCount,
+	std::vector<std::string> &uniqPgroup)
+{
+	ifstream file_(fileName.c_str());
+	string firstLine;
+	getline(file_, firstLine);
+	string line;
+	ReadWriteFormats rwf_;
+	vector<int> allRcw;
+	vector<string> allVgroup;
+	vector<string> allPgroup;
+	while (!file_.eof())
+	{
+		getline(file_, line);
+		if (line == "")
+			continue;
+		stringstream convert;
+		convert << line;
+		int rcw;
+		string vGroup, pGroup;
+		rwf_.takeRcwVgroupPointGroup(line, rcw, vGroup, pGroup);
+		allRcw.push_back(rcw);
+		allVgroup.push_back(vGroup);
+		allPgroup.push_back(pGroup);
+	}
+	file_.close();
+
+	AuxMath auxMath_;
+	vector<int> instructions = auxMath_.vector_ordering(allRcw);
+	auxMath_.vector_ordering_with_instructions(allVgroup, instructions);
+	auxMath_.vector_ordering_with_instructions(allPgroup, instructions);
+
+	// unique pGroup
+	uniqRcw.push_back(allRcw[0]);
+	uniqCount.push_back(1);
+	uniqPgroup.push_back(allPgroup[0]);
+
+	for (size_t i = 1; i < allRcw.size(); i++)
+	{
+		bool found = false;
+		for (size_t j = 0; j < uniqPgroup.size(); j++)
+		{
+			if (allPgroup[i] == uniqPgroup[j])
+			{
+				if (allRcw[i] != uniqRcw[j])
+				{
+					cout << "point group problem: " << i << endl;
+					exit(1);
+				}
+				uniqCount[j]++;
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			uniqCount.push_back(1);
+			uniqRcw.push_back(allRcw[i]);
+			uniqPgroup.push_back(allPgroup[i]);
+		}
+	}
+
+	rwf_.symmetryGroupOrdering(uniqRcw, uniqPgroup, uniqCount);
+
+	/*
+	ofstream newCounting_("counting.csv");
+	for (size_t i = 0; i < uniqpGroup.size(); i++)
+	{
+		newCounting_ << uniqpGroup[i] << " ;  ; ";
+	}
+	newCounting_ << endl;
+	for (size_t i = 0; i < uniqCount.size(); i++)
+	{
+		newCounting_ << uniqCount[i] << " ; " << uniqRcw[i] << " ; ";
+	}
+	*/
+
+}
 
 vector<vultorGroup> ChangeNames::setVultorGroup(
 	vector<int> &probs,

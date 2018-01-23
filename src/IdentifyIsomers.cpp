@@ -250,9 +250,61 @@ void IdentifyIsomers::compareTwoPermutations(
 		totalDist += dist[i];
 	}
 	cout << "dist: " << totalDist << endl;
-
-
 }
+
+void IdentifyIsomers::compareTwoGeometries(
+	string file1, 
+	string file2,
+	int size,
+	int bidSize)
+{
+	vector<int> bidentateChosen1;
+	vector<int> bidentateChosen2;
+	vector<int> composition1(size);
+	vector<int> composition2(size);
+	vector<CoordXYZ> outGeometry1 = readGeometry(
+		file1,
+		composition1,
+		bidSize,
+		bidentateChosen1);
+	vector<CoordXYZ> outGeometry2 = readGeometry(
+		file2,
+		composition2,
+		bidSize,
+		bidentateChosen2);
+	MarquesEnantiomers mqRmsd_;
+
+	double tol = 7.0e-2;
+
+	applyBidentatesOnCoord(outGeometry1, bidentateChosen1);
+
+	applyBidentatesOnCoord(outGeometry2, bidentateChosen2);
+
+	double rmsd1 = mqRmsd_.marquesRmsd(outGeometry1, outGeometry2);
+
+	if (rmsd1 < tol)
+	{
+		cout << "rmsd1:  " << rmsd1 << "  - e a mesma estrutura" << endl;
+		return;
+	}
+
+	vector<CoordXYZ> mol2Mirror = outGeometry2;
+	for (size_t i = 0; i < mol2Mirror.size(); i++)
+	{
+		mol2Mirror[i].y *= -1.0e0;
+	}
+
+	double rmsd2 = mqRmsd_.marquesRmsd(outGeometry1, mol2Mirror);
+
+	if (rmsd1 < tol)
+	{
+		cout << "rmsd2:  " << rmsd2 << "  - imagem especular" << endl;
+		return;
+	}
+
+	cout << "diferentes rmsd1:  " << rmsd1 << " rmsd2: " << rmsd2 << endl;
+}
+
 
 
 void IdentifyIsomers::compareIsomers(

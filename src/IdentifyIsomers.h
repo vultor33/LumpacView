@@ -47,6 +47,13 @@ public:
 		std::string &permutation2,
 		std::vector<CoordXYZ> &mol0);
 
+	void compareTwoGeometries(
+		std::string file1,
+		std::string file2,
+		int size,
+		int bidSize);
+
+
 private:
 	double scaleFactor;
 

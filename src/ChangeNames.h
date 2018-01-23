@@ -26,6 +26,18 @@ public:
 		std::string pathRead,
 		std::string pathWrite);
 
+	void createNewCounting(
+		int geoCode,
+		std::string pathRead,
+		std::string responseName);
+
+	void generateOrderingGroupPoint(
+		std::string fileName,
+		std::vector<int> &uniqRcw,
+		std::vector<int> &uniqCount,
+		std::vector<std::string> &uniqPgroup);
+
+
 private:
 	std::vector<vultorGroup> setVultorGroup(
 		std::vector<int> &probs,

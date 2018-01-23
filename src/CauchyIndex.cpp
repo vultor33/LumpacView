@@ -2838,9 +2838,19 @@ void CauchyIndex::findAllSymmetryOperations(
 	geomet_.selectGeometrySymmetries(geoCode, otherSymmetryOperations);
 
 	GroupPointIdentify groupPoint_;
-	ofstream rotations_((fileName + "-rotations.csv").c_str());
+	ofstream rotations_((fileName).c_str());
 	string line;
-	rotations_ << "Permutation ; Rotations ";
+
+	string atomsLine = rwf_.atomTypesToAtomStrings(atomTypes);
+	rotations_ << atomsLine << "  ";
+//	for (size_t i = 0; i < atomTypes.size(); i++)
+//		rotations_ << atomTypes[i] + 1 << "  ";
+	if (bidentateAtomsChosen.size() != 0)
+		rotations_ << " / ";
+	for (size_t i = 0; i < bidentateAtomsChosen.size(); i++)
+		rotations_ << bidentateAtomsChosen[i] + 1 << "  ";
+
+
 	while (!fileIsomers_.eof())
 	{
 		int rcw;
@@ -2854,7 +2864,6 @@ void CauchyIndex::findAllSymmetryOperations(
 		rotations_ << endl;
 		vector<string> allSymmetryOperations;
 
-		rotations_ << rcw << " ; " << vCode << " ; ";
 		size_t size = mol0.size();
 		vector<int> types1(size);
 		vector<int> types2(size);
@@ -2940,12 +2949,15 @@ void CauchyIndex::findAllSymmetryOperations(
 		}
 
 		string group = groupPoint_.findGroupPoint(allSymmetryOperations);
+		rotations_ << rcw << " ; " << rwf_.includeGroupPoint(vCode, group);
 
-		rotations_ << group << " ; ";
+		/* fredapagar
+		rotations_ << group << " ; ";		
 		for(size_t i = 0; i < allSymmetryOperations.size(); i++)
 		{
 			rotations_ << groupPoint_.codeOnly(allSymmetryOperations[i]) << " ; ";		
 		}
+		*/
 	}
 	fileIsomers_.close();
 }

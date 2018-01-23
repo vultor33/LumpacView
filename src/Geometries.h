@@ -167,6 +167,12 @@ private:
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry4SquareotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry4SquareSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
 
 	void geometry5SPYotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);

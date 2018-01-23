@@ -278,4 +278,25 @@ void AuxMath::vector_ordering_with_instructions(vector<bool> &vetor_entrada, con
 	}
 }
 
+void AuxMath::vector_ordering_with_instructions(vector<string> &vetor_entrada, const vector<int> &vetor_organiza)
+{
+	int tamanho_vetor_organiza = vetor_organiza.size();
+	int tamanho_vetor_entrada = vetor_entrada.size();
+	int aux_pos1, aux_pos2;
+	string aux_primeiro;
+
+	vetor_entrada[0];
+
+	for (int i = 0; i<tamanho_vetor_organiza; i += 2)
+	{
+		// o primeiro e igual ao segundo e o segundo e igual ao primeiro.
+		aux_pos1 = vetor_organiza[i];
+		aux_pos2 = vetor_organiza[i + 1];
+		aux_primeiro = vetor_entrada[aux_pos1];
+		vetor_entrada[aux_pos1] = vetor_entrada[aux_pos2];
+		vetor_entrada[aux_pos2] = aux_primeiro;
+	}
+}
+
+
 

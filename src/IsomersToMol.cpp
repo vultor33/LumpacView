@@ -173,10 +173,18 @@ void IsomersToMol::printAllMol(
 	ifstream fileIsomers_((filePath + fileName).c_str());
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
+	/*
 	rwf_.readAtomTypesAndBidentateChosenFile(
 		fileIsomers_, 
 		atomTypes, 
 		bidentateChosen, 
+		coordination,
+		nBidentates);
+	*/
+	rwf_.readAtomTypesAndBidentateChosenFileWithLabels(
+		fileIsomers_,
+		atomTypes,
+		bidentateChosen,
 		coordination,
 		nBidentates);
 	string line;
@@ -194,7 +202,9 @@ void IsomersToMol::printAllMol(
 		vector<int> permutation = rwf_.readCauchyNotation(fileIsomers_, coordination, vGroup, rcw, vCode);
 		if (permutation.size() == 0)
 			continue;
-		ofstream fileXyz_((folderComposition + "//" + vCode + ".mol2").c_str());
+		string pGroup = rwf_.takeGroupPoint(vCode);
+		system(("md " + folderComposition + "\\" + pGroup).c_str());
+		ofstream fileXyz_((folderComposition + "//" + pGroup + "//" + vCode + ".mol2").c_str());
 		printMoleculeMolFormat(permutation, atomTypes, bidentateChosen, fileXyz_);
 		fileXyz_.close();
 	}

@@ -4,6 +4,10 @@
 #include <sstream>
 #include <iostream>
 
+#include "CauchyIndex.h"
+#include "Geometries.h"
+#include "ReadWriteFormats.h"
+
 using namespace std;
 
 GroupPointIdentify::GroupPointIdentify(){}

@@ -14,6 +14,8 @@ public:
 
 	void formatIsomersFiles();
 
+	void formatToSymmetryAndFiles(int geoCode);
+
 	void identifyAll();
 
 	void generateAllIsomersMol2Files();
@@ -21,8 +23,11 @@ public:
 	//testing
 	void identifyOne();
 
+	void findAllGroupPoint(int geoCode);
 
 private:
+
+	std::string getResponseName(int size);
 
 	std::string getCountingPath(int geoCode);
 

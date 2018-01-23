@@ -44,6 +44,42 @@ void ReadWriteFormats::readAtomTypesAndBidentateChosenFile(
 	}
 }
 
+// labels / bidentares   --> format
+void ReadWriteFormats::readAtomTypesAndBidentateChosenFileWithLabels(
+	ifstream & file_,
+	vector<int> & atomTypes,
+	vector<int> & bidentateChosen,
+	int systemSize,
+	int nBidentates)
+{
+	string line;
+	getline(file_, line);
+	stringstream auxline;
+	vector<string> atomLabels;
+	auxline << line;
+	for (int i = 0; i < systemSize; i++)
+	{
+		string aux;
+		auxline >> aux;
+		atomLabels.push_back(aux);
+	}
+
+	atomTypes = atomStringToAtomTypes(atomLabels);
+
+	if (nBidentates != 0)
+	{
+		string dummy;
+		auxline >> dummy;
+		for (int i = 0; i < 2 * nBidentates; i++)
+		{
+			int aux;
+			auxline >> aux;
+			bidentateChosen.push_back(aux - 1);
+		}
+	}
+}
+
+
 
 // {SAPR-8 [Ma2b2c2] [1 2 3 4 5 6 7 8] Aa} --> format
 vector<int> ReadWriteFormats::readCauchyNotationsEnantiomers(
@@ -637,6 +673,270 @@ void ReadWriteFormats::typeLineToNumberCodes(
 }
 
 
+void ReadWriteFormats::takeRcwVgroupPointGroup(
+	string line,
+	int &rcw,
+	string & vGroup,
+	string & pGroup)
+{
+	stringstream convert;
+	convert << line;
+	convert >> rcw;
+	size_t sep1Temp = line.find(";");
+	size_t sep2Temp = line.find(";", sep1Temp + 1, 1);
+	size_t sepGroup1 = line.find("]");
+	size_t sepGroup2 = line.find("[", sepGroup1 + 1, 1);
+	vGroup = line.substr(sep1Temp + 2, sep2Temp - sep1Temp - 3);
+	pGroup = line.substr(sepGroup1 + 2, sepGroup2 - sepGroup1 - 3);
+}
+
+void ReadWriteFormats::symmetryGroupOrdering(
+	vector<int> &uniqRcw,
+	vector<string> &uniqPgroup,
+	vector<int> &uniqCount)
+{
+	bool tradePositions = true;
+	int auxRcw, auxCount;
+	string auxpGroup;
+	while (tradePositions)
+	{
+		tradePositions = false;
+		for (size_t i = 0; i < uniqRcw.size() - 1; i++)
+		{
+			bool trade = hyerarchyOrdering(
+				uniqRcw[i],
+				uniqRcw[i + 1],
+				uniqPgroup[i],
+				uniqPgroup[i + 1]);
+			if (trade)
+			{
+				auxRcw = uniqRcw[i];
+				auxpGroup = uniqPgroup[i];
+				auxCount = uniqCount[i];
+				uniqRcw[i] = uniqRcw[i + 1];
+				uniqPgroup[i] = uniqPgroup[i + 1];
+				uniqCount[i] = uniqCount[i + 1];
+				uniqRcw[i + 1] = auxRcw;
+				uniqPgroup[i + 1] = auxpGroup;
+				uniqCount[i + 1] = auxCount;
+				tradePositions = true;
+			}
+		}
+	}
+}
+
+bool ReadWriteFormats::hyerarchyOrdering(
+	int rcw1,
+	int rcw2,
+	string gPoint1,
+	string gPoint2)
+{
+	return !hyerarchyOrdering(
+		gPoint1,
+		gPoint2);
+
+	string pHyerarchy = "hidvs";
+	if (rcw1 > rcw2)
+	{
+		return false;
+	}
+	else if (rcw1 < rcw2)
+	{
+		return true;
+	}
+	else
+	{
+		int k1 = pHyerarchy.size();
+		int k2 = pHyerarchy.size();
+		for (size_t k = 0; k < gPoint1.size(); k++)
+		{
+			int pos = findCharOnString(pHyerarchy, gPoint1[k]);
+			if (pos < pHyerarchy.size())
+			{
+				k1 = pos;
+				break;
+			}
+		}
+		for (size_t k = 0; k < gPoint2.size(); k++)
+		{
+			int pos = findCharOnString(pHyerarchy, gPoint2[k]);
+			if (pos < pHyerarchy.size())
+			{
+				k2 = pos;
+				break;
+			}
+		}
+		if (k1 < k2)
+			return true;
+		else if (k1 > k2)
+			return false;
+	}
+
+	if (rcw1 == rcw2)
+	{
+		if ((gPoint1[0] != gPoint2[0]))
+		{
+			if (gPoint1[0] == 'O')
+				return false;
+			else if (gPoint2[0] == 'O')
+				return true;
+			else if (gPoint1[0] == 'T')
+				return false;
+			else if (gPoint2[0] == 'T')
+				return true;
+			else if (gPoint1[0] == 'D')
+				return false;
+			else if (gPoint2[0] == 'D')
+				return true;
+			else if (gPoint1[0] == 'S')
+				return false;
+			else if (gPoint2[0] == 'S')
+				return true;
+		}
+		else if ((gPoint1[1] != 's') &
+			(gPoint1[1] != 'i') &
+			(gPoint2[1] != 's') &
+			(gPoint2[1] != 'i'))
+		{
+			stringstream convert2;
+			int auxN1, auxN2;
+			convert2 << gPoint1[1] << " " << gPoint2[1];
+			convert2 >> auxN1 >> auxN2;
+			return auxN1 < auxN2;
+		}
+	}
+
+	return false;
+}
+
+string ReadWriteFormats::includeGroupPoint(
+	string vCode,
+	string gPoint)
+{
+	size_t found = vCode.find("]");
+	string code1 = vCode.substr(0, found + 1);
+	string code2 = vCode.substr(found + 2, vCode.size() - found - 1);
+	return code1 + " " + gPoint + " " + code2;
+}
+
+string ReadWriteFormats::takeGroupPoint(string vCode)
+{
+	size_t sepGroup1 = vCode.find("]");
+	size_t sepGroup2 = vCode.find("[", sepGroup1 + 1, 1);
+	string pGroup = vCode.substr(sepGroup1 + 2, sepGroup2 - sepGroup1 - 3);
+	return pGroup;
+}
+
+string ReadWriteFormats::atomTypesToAtomStrings(
+	vector<int> atomTypes)
+{
+	stringstream convert;
+	for (size_t i = 0; i < atomTypes.size(); i++)
+		convert << atomLabels[atomTypes[i]] << "  ";
+
+	return convert.str();
+}
+
+vector<int> ReadWriteFormats::atomStringToAtomTypes(
+	vector<string> &atomsStrings)
+{
+	vector<int> atomTypes;
+	for (size_t i = 0; i < atomsStrings.size(); i++)
+	{
+		for (size_t j = 0; j < atomLabels.size(); j++)
+		{
+			if (atomsStrings[i] == atomLabels[j])
+				atomTypes.push_back(j);
+		}
+	}
+	return atomTypes;
+}
+
+bool ReadWriteFormats::hyerarchyOrdering(
+	string gPoint1,
+	string gPoint2)
+{
+	if ((gPoint1[0] != gPoint2[0]))
+	{
+		if (gPoint1[0] == 'O')
+			return false;
+		else if (gPoint2[0] == 'O')
+			return true;
+		else if (gPoint1[0] == 'T')
+			return false;
+		else if (gPoint2[0] == 'T')
+			return true;
+		else if (gPoint1[0] == 'D')
+			return false;
+		else if (gPoint2[0] == 'D')
+			return true;
+		else if (gPoint1[0] == 'S')
+			return false;
+		else if (gPoint2[0] == 'S')
+			return true;
+	}
+
+
+
+	string pHyerarchy = "hidvs";
+	int k1 = pHyerarchy.size();
+	int k2 = pHyerarchy.size();
+	for (size_t k = 0; k < gPoint1.size(); k++)
+	{
+		int pos = findCharOnString(pHyerarchy, gPoint1[k]);
+		if (pos < pHyerarchy.size())
+		{
+			k1 = pos;
+			break;
+		}
+	}
+	for (size_t k = 0; k < gPoint2.size(); k++)
+	{
+		int pos = findCharOnString(pHyerarchy, gPoint2[k]);
+		if (pos < pHyerarchy.size())
+		{
+			k2 = pos;
+			break;
+		}
+	}
+	if (k1 > k2)
+		return true;
+	else if (k1 < k2)
+		return false;
+	else if ((gPoint1[1] != 's') &
+		(gPoint1[1] != 'i') &
+		(gPoint2[1] != 's') &
+		(gPoint2[1] != 'i'))
+	{
+		stringstream convert2;
+		int auxN1, auxN2;
+		convert2 << gPoint1[1] << " " << gPoint2[1];
+		convert2 >> auxN1 >> auxN2;
+		return auxN1 < auxN2;
+	}
+
+	return false;
+}
+
+
+int ReadWriteFormats::findCharOnString(
+	string word,
+	char refChar)
+{
+	int ref = word.size();
+	for (size_t i = 0; i < word.size(); i++)
+	{
+		if (word[i] == refChar)
+		{
+			ref = i;
+			break;
+		}
+	}
+	return ref;
+
+
+
+}
 
 
 ReadWriteFormats::ReadWriteFormats()
@@ -691,6 +991,22 @@ ReadWriteFormats::ReadWriteFormats()
 	elemNew[21] = "(GH)";
 	elemNew[22] = "(IJ)";
 	elemNew[23] = "(KL)";
+
+	// same as isomers to mol
+	atomLabels.resize(12);
+	atomLabels[0] = "O";// red
+	atomLabels[1] = "P";// green
+	atomLabels[2] = "N";// dark blue
+	atomLabels[3] = "I";// purple
+	atomLabels[4] = "Na";// brown
+	atomLabels[5] = "B";// light blue
+	atomLabels[6] = "Se";// dark green
+	atomLabels[7] = "C";// grey
+	atomLabels[8] = "He";// white
+	atomLabels[9] = "Ca";// light green
+	atomLabels[10] = "Ti";// gold
+	atomLabels[11] = "Sc";// gold
+	
 }
 
 

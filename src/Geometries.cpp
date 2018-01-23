@@ -135,7 +135,7 @@ void Geometries::selectGeometrySymmetries(
 		break;
 
 	case 41:
-		//return geometry4Square(mol0, cutAngle, reflectionOperation);
+		geometry4SquareotherSymmetries(allReflections);
 		break;
 
 	case 50:
@@ -246,7 +246,7 @@ std::string Geometries::selectGeometrySymmetriesFlag(
 		break;
 
 	case 41:
-		//return geometry4Square(mol0, cutAngle, reflectionOperation);
+		return geometry4SquareSymmetryFlags(iSymmetry, symmetryType);
 		break;
 
 	case 50:
@@ -586,12 +586,12 @@ std::vector<double> Geometries::geometry4Square(
 
 	vector<double> auxReferenceAxis(3);
 	// ROTATIONS
-	//c2-0
+	//C2-2 ( C4-1-p C2-1 C4-1-m C2-4 )
 	vectorRotations[0] = mol0[0].x;
 	vectorRotations[1] = mol0[0].y;
 	vectorRotations[2] = mol0[0].z;
 	vectorRotations[3] = auxMath_._pi;
-	// c2-1
+	//C2-3 ( C4-1-p C2-1 C4-1-m C2-5 )
 	auxReferenceAxis[0] = 0.5e0 * (mol0[0].x + mol0[1].x);
 	auxReferenceAxis[1] = 0.5e0 * (mol0[0].y + mol0[1].y);
 	auxReferenceAxis[2] = 0.5e0 * (mol0[0].z + mol0[1].z);
@@ -600,12 +600,12 @@ std::vector<double> Geometries::geometry4Square(
 	vectorRotations[5] = auxReferenceAxis[1];
 	vectorRotations[6] = auxReferenceAxis[2];
 	vectorRotations[7] = auxMath_._pi;
-	// c2-2
+	//C3-4 ( C4-1-p C2-1 C4-1-m C2-2 )
 	vectorRotations[8] = mol0[1].x;
 	vectorRotations[9] = mol0[1].y;
 	vectorRotations[10] = mol0[1].z;
 	vectorRotations[11] = auxMath_._pi;
-	// c2-3
+	//C2-5 ( C4-1-p C2-1 C4-1-m C2-3 )
 	auxReferenceAxis[0] = 0.5e0 * (mol0[1].x + mol0[2].x);
 	auxReferenceAxis[1] = 0.5e0 * (mol0[1].y + mol0[2].y);
 	auxReferenceAxis[2] = 0.5e0 * (mol0[1].z + mol0[2].z);
@@ -614,17 +614,17 @@ std::vector<double> Geometries::geometry4Square(
 	vectorRotations[13] = auxReferenceAxis[1];
 	vectorRotations[14] = auxReferenceAxis[2];
 	vectorRotations[15] = auxMath_._pi;
-	// c4-1
+	// C4-1-p
 	vectorRotations[16] = 0.00000000000000000;
 	vectorRotations[17] = 0.00000000000000000;
 	vectorRotations[18] = 1.00000000000000000;
 	vectorRotations[19] = auxMath_._pi / 2.0e0;
-	// c4-2
+	// C2-1 ( C2-2 C2-3 C2-4 C2-5 )
 	vectorRotations[20] = 0.00000000000000000;
 	vectorRotations[21] = 0.00000000000000000;
 	vectorRotations[22] = 1.00000000000000000;
 	vectorRotations[23] = auxMath_._pi;
-	// c4-3
+	// C4-1-m
 	vectorRotations[24] = 0.00000000000000000;
 	vectorRotations[25] = 0.00000000000000000;
 	vectorRotations[26] = 1.00000000000000000;
@@ -2994,7 +2994,7 @@ std::vector<double> Geometries::geometry12IC(
 void Geometries::geometry4TetrahedronotherSymmetries(
 	std::vector< std::vector<int> > &allReflections)
 {
-	int size = 12;
+	int size = 4;
 	allReflections.resize(12);
 	for (size_t i = 0; i < allReflections.size(); i++)
 	{
@@ -3131,6 +3131,121 @@ string Geometries::geometry4TetrahedronSymmetryFlags(
 			return "S4-3-p";
 		case 11:
 			return "S4-3-m";
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+
+	}
+
+	return "ERROR";
+}
+
+
+void Geometries::geometry4SquareotherSymmetries(
+	std::vector< std::vector<int> > &allReflections)
+{
+	int size = 4;
+	allReflections.resize(8);
+	for (size_t i = 0; i < allReflections.size(); i++)
+	{
+		allReflections[i].resize(size);
+		for (size_t j = 0; j < allReflections[i].size(); j++)
+		{
+			allReflections[i][j] = j;
+		}
+	}
+	//P-1 ( C4-1-p C2-1 C4-1-m )
+
+	//P-2 ( C2-4 )
+	allReflections[1][0] = 2;
+	allReflections[1][2] = 0;
+
+	//P-3 ( C2-2 )
+	allReflections[2][1] = 3;
+	allReflections[2][3] = 1;
+
+	//P-4 ( C2-3 )
+	allReflections[3][0] = 3;
+	allReflections[3][3] = 0;
+	allReflections[3][1] = 2;
+	allReflections[3][2] = 1;
+
+	//P-5 ( C2-5 )
+	allReflections[4][0] = 1;
+	allReflections[4][1] = 0;
+	allReflections[4][2] = 3;
+	allReflections[4][3] = 2;
+
+	//Inv 
+	allReflections[5][0] = 2;
+	allReflections[5][2] = 0;
+	allReflections[5][1] = 3;
+	allReflections[5][3] = 1;
+
+	//S4-1-p
+	allReflections[6][0] = 1;
+	allReflections[6][1] = 2;
+	allReflections[6][2] = 3;
+	allReflections[6][3] = 0;
+
+	//S4-1-m
+	allReflections[7][0] = 3;
+	allReflections[7][3] = 2;
+	allReflections[7][2] = 1;
+	allReflections[7][1] = 0;
+}
+
+string Geometries::geometry4SquareSymmetryFlags(
+	int iSymmetry,
+	int symmetryType)
+{
+	if (symmetryType == 0)
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "C2-2 ( C4-1-p C2-1 C4-1-m C2-4 )";
+		case 1:
+			return "C2-3 ( C4-1-p C2-1 C4-1-m C2-5 )";
+		case 2:
+			return "C2-4 ( C4-1-p C2-1 C4-1-m C2-2 )";
+		case 3:
+			return "C2-5 ( C4-1-p C2-1 C4-1-m C2-3 )";
+		case 4:
+			return "C4-1-p";
+		case 5:
+			return "C2-1 ( C2-2 C2-3 C2-4 C2-5 )";
+		case 6:
+			return "C4-1-m";
+
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	else
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "P-1 ( C4-1-p C2-1 C4-1-m )";
+		case 1:
+			return "P-2 ( C2-4 )";
+		case 2:
+			return "P-3 ( C2-2 )";
+		case 3:
+			return "P-4 ( C2-3 )";
+		case 4:
+			return "P-5 ( C2-5 )";
+		case 5:
+			return "Inv";
+		case 6:
+			return "S4-1-p";
+		case 7:
+			return "S4-1-m";
 		default:
 			cout << "rotation on CauchyIndex::rotationString not found" << endl;
 			exit(1);
@@ -4393,9 +4508,9 @@ string Geometries::geometry8CUSymmetryFlags(
 		case 0:
 			return "P-1 ( C4-1-p C2-1 C4-1-m )";
 		case 1:
-			return "P-2 (C4-2-p C2-2 C4-2-m )";
+			return "P-2 ( C4-2-p C2-2 C4-2-m )";
 		case 2:
-			return "P-3 (C4-3-p C2-3 C4-3-m )";
+			return "P-3 ( C4-3-p C2-3 C4-3-m )";
 		case 3:
 			return "P-4 ( C2-4 )";
 		case 4:
@@ -4847,13 +4962,8 @@ string Geometries::geometry9MFFSymmetryFlags(
 {
 	if (symmetryType == 0)
 	{
-		switch (iSymmetry)
-		{
-		default:
-			cout << "rotation on CauchyIndex::rotationString not found" << endl;
-			exit(1);
-			break;
-		}
+		cout << "rotation on CauchyIndex::rotationString not found" << endl;
+		exit(1);
 	}
 	else
 	{

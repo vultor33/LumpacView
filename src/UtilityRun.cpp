@@ -13,6 +13,8 @@
 #include "Geometries.h"
 #include "Coordstructs.h"
 #include "IsomersToMol.h"
+#include "ReadWriteFormats.h"
+
 
 using namespace std;
 
@@ -49,10 +51,33 @@ void UtilityRun::renameAtomTypes(string responseName)
 	}
 }
 
+void UtilityRun::formatToSymmetryAndFiles(int geoCode)
+{
+	Geometries geo_;
+	vector<CoordXYZ> mol0;
+	double cutAngle;
+	vector<int> reflec;
+	geo_.selectGeometry(geoCode, mol0, cutAngle, reflec);
+	string responseName = getResponseName(mol0.size());
+	
+	findAllGroupPoint(geoCode);
+
+	ChangeNames chnamessda;
+	chnamessda.createNewCounting(geoCode, "", responseName);
+
+    IsomersToMol ismol_;
+	ismol_.printAllMolFromSpecifiedGeometry(geoCode,
+		"",
+		responseName);
+
+}
+
 void UtilityRun::formatIsomersFiles()
 {
+	
 	ChangeNames chNames_;
 	string responseName = "response-combinations4.txt";
+	/*
 	chNames_.changeNameOfFiles(
 		responseName,
 		40,
@@ -111,11 +136,16 @@ void UtilityRun::formatIsomersFiles()
 		80,
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\SAPR\\",
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\SAPR\\");
+	*/
+
+	responseName = "response-combinations8.txt";
 	chNames_.changeNameOfFiles(
 		responseName,
 		81,
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\TDD\\",
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\TDD\\");
+
+	/*
 	chNames_.changeNameOfFiles(
 		responseName,
 		82,
@@ -143,11 +173,14 @@ void UtilityRun::formatIsomersFiles()
 		91,
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\CSAPR\\",
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\CSAPR\\");
+
+	responseName = "response-combinations9.txt";
 	chNames_.changeNameOfFiles(
 		responseName,
 		92,
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\MFF\\",
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\MFF\\");
+		*/
 
 }
 
@@ -160,13 +193,13 @@ void UtilityRun::identifyOne()
 	double cutAngle;
 	int size;
 
-	size = 81;
+	size = 60;
 	geom_.selectGeometry(size, mol0, cutAngle, reflection);
 	ident_.coordinatesToPermutation(
 		mol0,
-		"TDD-8-Ma3b(AB)(CD).csv",
+		"OC-6-Ma2b2(AA).csv",
 		"",
-		"LAWPOQ-cores(2).xyz",
+		"ERUJIM-cores(2).xyz",
 		getCountingPath(size));
 
 
@@ -182,6 +215,7 @@ void UtilityRun::identifyAll()
 	double cutAngle;
 	int size;
 
+	/*
 	size = 40;
 	geom_.selectGeometry(size, mol0, cutAngle, reflection);
 	ident_.coordinatesToPermutation(
@@ -1349,6 +1383,7 @@ void UtilityRun::identifyAll()
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\IDENTIFICACAO-raio-x\\CSAPR-9\\Yb-WATZEW\\",
 		"WATZEW.xyz",
 		getCountingPath(size));
+	*/
 
 	size = 92;
 	geom_.selectGeometry(size, mol0, cutAngle, reflection);
@@ -1558,6 +1593,41 @@ void UtilityRun::generateAllIsomersMol2Files()
 		responseName);
 }
 
+void UtilityRun::findAllGroupPoint(int geoCode)
+{
+	string pathRead = getResultsPath(geoCode);
+	Geometries geo_;
+	vector<CoordXYZ> mol0;
+	double cutAngle;
+	vector<int> reflec;
+	geo_.selectGeometry(geoCode, mol0, cutAngle, reflec);
+	string responseName = getResponseName(mol0.size());
+
+	ReadWriteFormats rwf_;
+	string geomName = geo_.sizeToGeometryCode(geoCode);
+	ifstream response_((pathRead + responseName).c_str());
+	string line;
+	while (!response_.eof())
+	{
+		getline(response_, line);
+		if (line == "")
+			break;
+		string combination;
+		stringstream convert;
+		convert << line;
+		convert >> combination;
+		vector< vector<int> > combinationCode = rwf_.compositionToNumberOld(combination);
+		string newCombinationName = rwf_.newCodeToString(combinationCode);
+		newCombinationName = "M" + newCombinationName;
+		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
+		CauchyIndex ciSymmetry_(geoCode);
+		ciSymmetry_.findAllSymmetryOperations(
+			geoCode,
+			allIsomersCombinationFile,
+			pathRead);
+	}
+
+}
 
 
 string UtilityRun::getCountingPath(int geoCode)
@@ -1719,3 +1789,48 @@ std::string UtilityRun::getResultsPath(int geoCode)
 	}
 }
 
+string UtilityRun::getResponseName(int size)
+{
+	switch (size)
+	{
+	case 4:
+		return "response-combinations4.txt";
+		break;
+
+	case 5:
+		return "response-combinations5.txt";
+		break;
+
+	case 6:
+		return "response-combinations6.txt";
+		break;
+
+	case 7:
+		return "response-combinations7.txt";
+		break;
+
+	case 8:
+		return "response-combinations8.txt";
+		break;
+
+	case 9:
+		return "response-combinations9.txt";
+		break;
+
+	case 10:
+		return "response-combinations10.txt";
+		break;
+
+	case 11:
+		return "response-combinations11.txt";
+		break;
+
+	case 12:
+		return "response-combinations12.txt";
+		break;
+
+	default:
+		cout << "ERROR ON UtilityRun::responseName - size not found" << endl;
+		exit(1);
+	}
+}

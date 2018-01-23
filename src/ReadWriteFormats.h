@@ -20,6 +20,14 @@ public:
 		int systemSize,
 		int nBidentates);
 
+	// labels / bidentares   --> format
+	void readAtomTypesAndBidentateChosenFileWithLabels(
+		std::ifstream & file_,
+		std::vector<int> & atomTypes,
+		std::vector<int> & bidentateChosen,
+		int systemSize,
+		int nBidentates);
+
 	// {SAPR-8 [Ma2b2c2] [1 2 3 4 5 6 7 8] Aa} --> format
 	std::vector<int> readCauchyNotationsEnantiomers(
 		std::ifstream & openendFile_,
@@ -56,11 +64,43 @@ public:
 		int & rcw,
 		std::string & allCode);
 
+	void takeRcwVgroupPointGroup(
+		std::string line,
+		int & rcw,
+		std::string & vGroup,
+		std::string & pGroup);
 
+	void symmetryGroupOrdering(
+		std::vector<int> &uniqRcw,
+		std::vector<std::string> &uniqPgroup,
+		std::vector<int> &uniqCount);
+
+	bool hyerarchyOrdering(
+		int rcw1,
+		int rcw2,
+		std::string gPoint1,
+		std::string gPoint2);
+
+	bool hyerarchyOrdering(
+		std::string gPoint1,
+		std::string gPoint2);
+
+	std::string includeGroupPoint(
+		std::string vCode,
+		std::string gPoint);
+
+	std::string takeGroupPoint(std::string vCode);
+	
+	std::string atomTypesToAtomStrings(
+		std::vector<int> atomTypes);
+
+	std::vector<int> atomStringToAtomTypes(
+		std::vector<std::string> &atomsStrings);
 
 private:
 	std::vector< std::string > elem;
 	std::vector< std::string > elemNew;
+	std::vector< std::string > atomLabels;
 	
 	int codeToType(std::string code);
 
@@ -76,7 +116,9 @@ private:
 		std::vector<int> & typeCode2,
 		std::vector<int> & typeCode3);
 
-
+	int findCharOnString(
+		std::string word,
+		char refChar);
 
 };
 

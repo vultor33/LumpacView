@@ -64,11 +64,12 @@ void UtilityRun::formatToSymmetryAndFiles(int geoCode)
 
 	ChangeNames chnamessda;
 	chnamessda.createNewCounting(geoCode, "", responseName);
-
+	/*
     IsomersToMol ismol_;
 	ismol_.printAllMolFromSpecifiedGeometry(geoCode,
 		"",
 		responseName);
+	*/
 
 }
 

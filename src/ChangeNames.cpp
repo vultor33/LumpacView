@@ -280,7 +280,7 @@ void ChangeNames::createNewCounting(
 
 	vector<string> auxPgroup = vector<string>();
 
-	/* HEADER */
+	/* HEADER 
 	//reverse(header.begin(), header.end());
 	counting_ << "Formula;RCWP;";
 	for (size_t i = 0; i < header.size(); i++)
@@ -296,7 +296,7 @@ void ChangeNames::createNewCounting(
 
 		counting_ << allFormulas[i] << "; ";
 
-		/* RCP
+		// RCP COMENTAR
 		for (size_t k = 0; k < allRcw[i].size() - 1; k++)
 		{
 			if (rce[k] % rceMin != 0)
@@ -309,7 +309,7 @@ void ChangeNames::createNewCounting(
 		else
 			counting_ << rce[rce.size() - 1] / rceMin;
 		counting_ << "; ";
-		*/
+		//////////////////////////////////////////////
 
 		// RCW
 		for (size_t k = 0; k < allRcw[i].size() - 1; k++)
@@ -343,20 +343,18 @@ void ChangeNames::createNewCounting(
 		}
 		counting_ << endl;
 	}
-	
+	*/
 
 
-	/* Own Symmetry groups 
+	/* Own Symmetry groups 	
 	//ofstream cheackOrder_("checkOrder.csv");
 	for (size_t i = 0; i < allPgroup.size(); i++)
 	{
-		for (size_t k = 0; k < allPgroup[i].size(); k++)
-		{
-			cheackOrder_ << allPgroup[i][k] << " ; ";
-		}
-		cheackOrder_ << endl;
-
-
+		//for (size_t k = 0; k < allPgroup[i].size(); k++)
+		//{
+		//	cheackOrder_ << allPgroup[i][k] << " ; ";
+		//}
+		//cheackOrder_ << endl;
 
 		if (allPgroup[i] != auxPgroup)
 		{
@@ -407,9 +405,63 @@ void ChangeNames::createNewCounting(
 			counting_ << allCount[i][k] << ";";
 
 		counting_ << endl;
-
 	}
 	*/
+
+
+
+
+	for (size_t i = 0; i < allPgroup.size(); i++)
+	{
+		vector<int> rce(allRcw[i].size());
+		for (size_t l = 0; l < allRcw[i].size(); l++)
+			rce[l] = allCount[i][l] * allRcw[i][l];
+		int rceMin = *min_element(rce.begin(), rce.end());
+		int rcwMin = *min_element(allRcw[i].begin(), allRcw[i].end());
+		counting_ << allFormulas[i] << "; ";
+
+		// RCP
+		for (size_t k = 0; k < allRcw[i].size() - 1; k++)
+		{
+			if (rce[k] % rceMin != 0)
+				counting_ << fixed << setprecision(1) << (double)rce[k] / (double)rceMin << ":";
+			else
+				counting_ << rce[k] / rceMin << ":";
+		}
+		if (rce[rce.size() - 1] % rceMin != 0)
+			counting_ << fixed << setprecision(1) << (double)rce[rce.size() - 1] / (double)rceMin;
+		else
+			counting_ << rce[rce.size() - 1] / rceMin;
+		counting_ << "; ";
+
+		// RCWP
+		for (size_t k = 0; k < allRcw[i].size() - 1; k++)
+		{
+			if (allRcw[i][k] % rcwMin != 0)
+				counting_ << fixed << setprecision(1) << (double)allRcw[i][k] / (double)rcwMin << ":";
+			else
+				counting_ << allRcw[i][k] / rcwMin << ":";
+		}
+		if (allRcw[i][allRcw[i].size() - 1] % rcwMin != 0)
+			counting_ << fixed << setprecision(1) << (double)allRcw[i][allRcw[i].size() - 1] / (double)rcwMin;
+		else
+			counting_ << allRcw[i][allRcw[i].size() - 1] / rcwMin;
+		counting_ << ";";
+
+		for (size_t k = 0; k < allCount[i].size(); k++)
+		{
+			counting_ << allPgroup[i][k] << ";"
+				<< allCount[i][k] << ";";
+		}
+
+		counting_ << endl;
+	}
+
+
+
+
+
+
 }
 
 void ChangeNames::generateOrderingGroupPoint(

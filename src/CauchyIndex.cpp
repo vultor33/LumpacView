@@ -2855,7 +2855,11 @@ void CauchyIndex::findAllSymmetryOperations(
 	{
 		int rcw;
 		string vGroup, vCode;
+
 		vector<int> permutation = rwf_.readCauchyNotation(fileIsomers_, mol0.size(), vGroup, rcw, vCode);
+
+		cout << "loop find:  " << vCode << endl;
+
 		if (permutation.size() == 0)
 		{
 			rotations_ << endl;
@@ -2948,8 +2952,15 @@ void CauchyIndex::findAllSymmetryOperations(
 			}
 		}
 
+		cout << "before group" << endl;
+
 		string group = groupPoint_.findGroupPoint(allSymmetryOperations);
+
+		cout << "group:  " << group << endl;
+
 		rotations_ << rcw << " ; " << rwf_.includeGroupPoint(vCode, group);
+
+		cout << "adicionou no rotaiion" << endl;
 
 		/* fredapagar
 		rotations_ << group << " ; ";		
@@ -2960,6 +2971,7 @@ void CauchyIndex::findAllSymmetryOperations(
 		*/
 	}
 	fileIsomers_.close();
+
 }
 
 

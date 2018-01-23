@@ -97,6 +97,9 @@ public:
 	std::vector<int> atomStringToAtomTypes(
 		std::vector<std::string> &atomsStrings);
 
+
+	void ReplaceAll(std::string & data, char toSearch, std::string addStr);
+
 private:
 	std::vector< std::string > elem;
 	std::vector< std::string > elemNew;

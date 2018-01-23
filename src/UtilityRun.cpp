@@ -59,13 +59,19 @@ void UtilityRun::formatToSymmetryAndFiles(int geoCode)
 	vector<int> reflec;
 	geo_.selectGeometry(geoCode, mol0, cutAngle, reflec);
 	string responseName = getResponseName(mol0.size());
+
+	cout << "antes do response" << endl;
 	
 	findAllGroupPoint(geoCode);
+
+	cout << "find group done" << endl;
 
 	ChangeNames chnamessda;
 	chnamessda.createNewCounting(geoCode, "", responseName);
 
-    IsomersToMol ismol_;
+	cout << "counting done" << endl;
+
+    	IsomersToMol ismol_;
 	ismol_.printAllMolFromSpecifiedGeometry(geoCode,
 		"",
 		responseName);
@@ -1595,7 +1601,7 @@ void UtilityRun::generateAllIsomersMol2Files()
 
 void UtilityRun::findAllGroupPoint(int geoCode)
 {
-	string pathRead = getResultsPath(geoCode);
+	string pathRead = getResultsPathLinux(geoCode);
 	Geometries geo_;
 	vector<CoordXYZ> mol0;
 	double cutAngle;
@@ -1607,6 +1613,7 @@ void UtilityRun::findAllGroupPoint(int geoCode)
 	string geomName = geo_.sizeToGeometryCode(geoCode);
 	ifstream response_((pathRead + responseName).c_str());
 	string line;
+
 	while (!response_.eof())
 	{
 		getline(response_, line);
@@ -1620,6 +1627,9 @@ void UtilityRun::findAllGroupPoint(int geoCode)
 		string newCombinationName = rwf_.newCodeToString(combinationCode);
 		newCombinationName = "M" + newCombinationName;
 		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
+
+		cout << "loop find:  " << allIsomersCombinationFile << endl;
+
 		CauchyIndex ciSymmetry_(geoCode);
 		ciSymmetry_.findAllSymmetryOperations(
 			geoCode,
@@ -1788,6 +1798,87 @@ std::string UtilityRun::getResultsPath(int geoCode)
 		break;
 	}
 }
+
+
+std::string UtilityRun::getResultsPathLinux(int geoCode)
+{
+	switch (geoCode)
+	{
+	case(40):
+		return "//home//vultor//lumpacview//FORMATADO//#4//T//";
+		break;
+
+	case(41):
+		return "//home//vultor//lumpacview//FORMATADO//#4//SP//";
+		break;
+
+	case(50):
+		return "//home//vultor//lumpacview//FORMATADO//#5//TBPY//";
+		break;
+
+	case(51):
+		return "//home//vultor//lumpacview//FORMATADO//#5//SPY//";
+		break;
+
+	case(60):
+		return "//home//vultor//lumpacview//FORMATADO//#6//OC//";
+		break;
+
+	case(61):
+		return "//home//vultor//lumpacview//FORMATADO//#6//TPR//";
+		break;
+
+	case(70):
+		return "//home//vultor//lumpacview//FORMATADO//#7//COC//";
+		break;
+
+	case(71):
+		return "//home//vultor//lumpacview//FORMATADO//#7//PBPY//";
+		break;
+
+	case(72):
+		return "//home//vultor//lumpacview//FORMATADO//#7//CTPR//";
+		break;
+
+	case(80):
+		return "//home//vultor//lumpacview//FORMATADO//#8//SAPR//";
+		break;
+
+	case(81):
+		return "//home//vultor//lumpacview//FORMATADO//#8//TDD//";
+		break;
+
+	case(82):
+		return "//home//vultor//lumpacview//FORMATADO//#8//BTPR//";
+		break;
+
+	case(83):
+		return "//home//vultor//lumpacview//FORMATADO//#8//HBPY//";
+		break;
+
+	case(84):
+		return "//home//vultor//lumpacview//FORMATADO//#8//CU//";
+		break;
+
+	case(90):
+		return "//home//vultor//lumpacview//FORMATADO//#9//TCTPR//";
+		break;
+
+	case(91):
+		return "//home//vultor//lumpacview//FORMATADO//#9//CSAPR//";
+		break;
+
+	case(92):
+		return "//home//vultor//lumpacview//FORMATADO//#9//MFF//";
+		break;
+
+	default:
+		cout << "UtilityRun::getCountingPath geoCode not found" << endl;
+		exit(1);
+		break;
+	}
+}
+
 
 string UtilityRun::getResponseName(int size)
 {

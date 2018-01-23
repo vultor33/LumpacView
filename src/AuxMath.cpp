@@ -3,6 +3,8 @@
 #include <cmath>
 #include <stdlib.h>
 #include <vector>
+#include <string>
+
 
 /* fredoldnormal - normalVectorFrom3Points - v1x = x1 - x2;	v1y = y1 - y2;	v1z = z1 - z2;	v2x = x1 - x3;	v2y = y1 - y3;	v2z = z1 - z3; e no rotateOnX1 o angle era + */
 

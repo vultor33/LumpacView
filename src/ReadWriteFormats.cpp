@@ -125,6 +125,7 @@ std::vector<int> ReadWriteFormats::readCauchyNotation(
 	string & allCode)
 {
 	vector<int> notation;
+
 	if (openendFile_.eof())
 		return notation;
 
@@ -132,6 +133,7 @@ std::vector<int> ReadWriteFormats::readCauchyNotation(
 	getline(openendFile_, auxline);
 	if (auxline == "")
 		return notation;
+
 	notation.resize(size);
 
 	stringstream convert;
@@ -937,6 +939,24 @@ int ReadWriteFormats::findCharOnString(
 
 
 }
+
+
+void ReadWriteFormats::ReplaceAll(std::string & data, char toSearch, std::string addStr)
+{
+	string auxData;
+        for(size_t i = 0; i < data.size(); i++)
+        {
+                if(data[i] == toSearch)
+                {
+                        auxData += addStr;
+                }
+                auxData += data[i];
+        }
+	data = auxData;
+
+}
+ 
+
 
 
 ReadWriteFormats::ReadWriteFormats()

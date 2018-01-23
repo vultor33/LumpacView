@@ -126,7 +126,7 @@ void IsomersToMol::printAllMolFromSpecifiedGeometry(
 	std::string pathRead,
 	std::string responseName)
 {
-	cout << "WARNING --- WORKS ONLY ON WINDOWS" << endl;
+	cout << "WARNING --- WORKS ONLY ON LINUX" << endl;
 
 	Geometries geo_;
 	ReadWriteFormats rwf_;
@@ -134,7 +134,8 @@ void IsomersToMol::printAllMolFromSpecifiedGeometry(
 	ifstream response_((pathRead + responseName).c_str());
 	string line;
 	string folder = geo_.sizeToGeometryCode(geoCode);
-	system(("md " + folder).c_str());
+
+	system(("mkdir " + folder).c_str());
 	while (!response_.eof())
 	{
 		getline(response_, line);
@@ -191,9 +192,27 @@ void IsomersToMol::printAllMol(
 
 	Geometries geo_;
 	string folder = geo_.sizeToGeometryCode(geoCode);
-	string folderComposition = folder + "\\" + composition;
-	system(("md " + folderComposition).c_str());
-	system(("copy " + filePath + fileName + "  " + folderComposition).c_str());
+	string folderCompositionZero = folder + "//" + composition;
+
+	string folderComposition;
+
+	string folderComp = composition;
+
+	rwf_.ReplaceAll(folderComp,'(',"\\");
+	rwf_.ReplaceAll(folderComp,')',"\\");
+	//replace(folderComp.begin(),folderComp.end(),'(','[');
+	//replace(folderComp.begin(),folderComp.end(),')',']');
+
+	folderComposition = folder + "//" + folderComp;
+
+	system(("mkdir " + folderComposition).c_str());
+
+	rwf_.ReplaceAll(fileName,'(',"\\");
+	rwf_.ReplaceAll(fileName,')',"\\");
+	//replace(fileName.begin(),fileName.end(),'(','[');
+	//replace(fileName.begin(),fileName.end(),')',']');
+
+	system(("cp " + filePath + fileName + "  " + folderComposition).c_str());
 
 	while (!fileIsomers_.eof())
 	{
@@ -203,8 +222,8 @@ void IsomersToMol::printAllMol(
 		if (permutation.size() == 0)
 			continue;
 		string pGroup = rwf_.takeGroupPoint(vCode);
-		system(("md " + folderComposition + "\\" + pGroup).c_str());
-		ofstream fileXyz_((folderComposition + "//" + pGroup + "//" + vCode + ".mol2").c_str());
+		system(("mkdir " + folderComposition + "//" + pGroup).c_str());
+		ofstream fileXyz_((folderCompositionZero + "//" + pGroup + "//" + vCode + ".mol2").c_str());
 		printMoleculeMolFormat(permutation, atomTypes, bidentateChosen, fileXyz_);
 		fileXyz_.close();
 	}

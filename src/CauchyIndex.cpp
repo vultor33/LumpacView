@@ -2851,6 +2851,8 @@ void CauchyIndex::findAllSymmetryOperations(
 		rotations_ << bidentateAtomsChosen[i] + 1 << "  ";
 
 
+	// quero uma copia disso aqui que cospe o indice de ciclos.
+
 	while (!fileIsomers_.eof())
 	{
 		int rcw;
@@ -2975,8 +2977,118 @@ void CauchyIndex::findAllSymmetryOperations(
 }
 
 
+void CauchyIndex::cycleIndices(
+	int geoCode)
+{
+	Geometries geomet_;
+	vector< vector<int> > otherSymmetryOperations;
+	geomet_.selectGeometrySymmetries(geoCode, otherSymmetryOperations);
+
+	ofstream cycleIndices_("cycleIndices.txt");
+	//print rotations
+	cycleIndices_ << "rotations" << endl;
+	for (size_t i = 0; i < allRotationTransforms.size(); i++)
+	{
+		for (size_t j = 0; j < allRotationTransforms[i].size(); j++)
+		{
+			cycleIndices_ << j << "  ";
+		}
+		cycleIndices_ << endl;
+		for (size_t j = 0; j < allRotationTransforms[i].size(); j++)
+		{
+			cycleIndices_ << allRotationTransforms[i][j] << "  ";
+		}
+		cycleIndices_ << endl;
+		
+		cycleIndices_ << calculateCycleIndex(allRotationTransforms[i]) << endl;
+		
+		cycleIndices_ << endl;
+	}
+	//print other symmetries
+	cycleIndices_ << "other symmetries" << endl;
+	for (size_t i = 0; i < otherSymmetryOperations.size(); i++)
+	{
+		for (size_t j = 0; j < otherSymmetryOperations[i].size(); j++)
+		{
+			cycleIndices_ << j << "  ";
+		}
+		cycleIndices_ << endl;
+		for (size_t j = 0; j < otherSymmetryOperations[i].size(); j++)
+		{
+			cycleIndices_ << otherSymmetryOperations[i][j] << "  ";
+		}
+		cycleIndices_ << endl;
+		
+		cycleIndices_ << calculateCycleIndex(otherSymmetryOperations[i]) << endl;
+		
+		cycleIndices_ << endl;
+	}
+	cycleIndices_.close();
+
+}
+
+std::string CauchyIndex::calculateCycleIndex(
+	std::vector<int> &codeCauchyFormat)
+{
+	vector<bool> taken(codeCauchyFormat.size());
+	for (size_t i = 0; i < taken.size(); i++)
+		taken[i] = false;
+
+	stringstream indexString;
+	while (true)
+	{
+		int workWith = -1;
+		for (size_t i = 0; i < taken.size(); i++)
+		{
+			if (!taken[i])
+			{
+				workWith = i;
+				break;
+			}
+		}
+		if (workWith == -1)
+			break;
+
+		/*
+		if (find(
+			kSmallGroup.begin(),
+			kSmallGroup.end(),
+			workWith) !=
+			kSmallGroup.end())
+		*/
 
 
+		taken[workWith] = true;
+		int kPot = 1;
+		int work0 = workWith;
+		if (workWith == codeCauchyFormat[workWith])
+		{
+			taken[workWith] = true;
+			indexString << "x" << kPot << " ";
+			continue;
+		}
+		else
+		{
+			while (true)
+			{
+				if(codeCauchyFormat[workWith] == work0)
+				{
+					taken[workWith] = true;
+					indexString << "x" << kPot << " ";
+					break;
+				}
+				else
+				{
+					workWith = codeCauchyFormat[workWith];
+					taken[workWith] = true;
+					kPot++;
+				}
+			}
+		}
+	}
+
+	return indexString.str();
+}
 
 
 

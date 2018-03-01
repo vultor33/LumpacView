@@ -65,9 +65,21 @@ void buildCsvFile(int size, string skeletonName);
 
 int main(int argc, char *argv[])
 {	
-	UtilityRun util_;
-	util_.formatToSymmetryAndFiles(82);
+
+	/* OBTENDO INDICE DE CICLOS */
+	int geoCode = 92;
+	CauchyIndex ci2312_(geoCode);
+	ci2312_.cycleIndices(
+		geoCode);
 	return 0;
+
+
+	/* GERANDO SIMETRIAS 
+	UtilityRun util_;
+	util_.formatToSymmetryAndFiles(51);
+	return 0;
+	*/
+	
 
 
 //	UtilityRun util_;

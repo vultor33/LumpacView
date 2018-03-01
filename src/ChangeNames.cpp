@@ -179,7 +179,7 @@ void ChangeNames::createNewCounting(
 		vector<int> count;
 		vector<string> pGroup;
 		generateOrderingGroupPoint(
-			allIsomersCombinationFile,
+			pathRead + allIsomersCombinationFile,
 			rcw,
 			count,
 			pGroup);
@@ -458,12 +458,6 @@ void ChangeNames::createNewCounting(
 
 		counting_ << endl;
 	}
-
-
-
-
-
-
 }
 
 void ChangeNames::generateOrderingGroupPoint(

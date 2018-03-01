@@ -1600,7 +1600,9 @@ void UtilityRun::generateAllIsomersMol2Files()
 
 void UtilityRun::findAllGroupPoint(int geoCode)
 {
-	string pathRead = getResultsPathLinux(geoCode);
+	cout << "ONLY ON WINDOWS  --- to linux, change: getResultsPath" << endl;
+
+	string pathRead = getResultsPath(geoCode);
 	Geometries geo_;
 	vector<CoordXYZ> mol0;
 	double cutAngle;

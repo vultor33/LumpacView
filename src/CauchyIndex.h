@@ -212,6 +212,14 @@ public:
 		int geoCode,
 		std::string fileName,
 		std::string filePath);
+
+	void cycleIndices(
+		int geoCode);
+
+	std::string calculateCycleIndex(std::vector<int> &codeCauchyFormat);
+
+
+
 private:
 	//data rotations
 	std::vector<CoordXYZ> mol0;

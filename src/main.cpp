@@ -66,13 +66,13 @@ void buildCsvFile(int size, string skeletonName);
 int main(int argc, char *argv[])
 {	
 
-	/* OBTENDO INDICE DE CICLOS */
+	/* OBTENDO INDICE DE CICLOS 
 	int geoCode = 92;
 	CauchyIndex ci2312_(geoCode);
 	ci2312_.cycleIndices(
 		geoCode);
 	return 0;
-
+	*/
 
 	/* GERANDO SIMETRIAS 
 	UtilityRun util_;
@@ -260,10 +260,16 @@ int main(int argc, char *argv[])
 	chNames_.changeNameOfFiles(
 		responseName,
 		60,
-		"",
+		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\OC\\",
 		"");
+	chNames_.createNewCounting(60, "", responseName);
 	return 0;
 	*/
+
+	UtilityRun util_;
+	util_.formatToSymmetryAndFiles(60);
+	return 0;
+	
 	
 	
 	

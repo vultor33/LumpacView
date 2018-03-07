@@ -122,10 +122,6 @@ void ChangeNames::changeNameOfFiles(
 		isomerFile_.close();
 		isomerFile_.open((pathRead + "final-" + oldCombinationNames[i]).c_str());
 		string geomCombName = geomName + " [" + allNewCombinationNames[i] + "]";
-
-		if (allNewCombinationNames[i] == "M(AA)4")
-			cout << "M(AA)4" << endl;
-
 		ofstream newFile_((pathWrite + geomName + "-" + allNewCombinationNames[i] + ".csv").c_str());
 		newFile_ << allTypeLines[i] << endl;
 		cout << "i:  " << i << "  " << geomCombName << endl;
@@ -159,6 +155,7 @@ void ChangeNames::createNewCounting(
 	vector< vector<int> > allRcw;
 	vector< vector<int> > allCount;
 	vector< vector<string> > allPgroup;
+	vector< vector<int> > allRce;
 
 	while (!response_.eof())
 	{
@@ -187,7 +184,21 @@ void ChangeNames::createNewCounting(
 		allCount.push_back(count);
 		allPgroup.push_back(pGroup);
 		allFormulas.push_back(newCombinationName);
+
+		vector<int> rce(rcw.size());
+		for (size_t i = 0; i < rcw.size(); i++)
+			rce[i] = rcw[i] * count[i];
+		allRce.push_back(rce);
 	}
+
+	// REORDENAR AQUI COM RCP E CRITERIOS.
+
+
+
+
+
+
+
 
 	/* reordenar com hierarquia
 	bool tradePositions = true;
@@ -525,7 +536,7 @@ void ChangeNames::generateOrderingGroupPoint(
 		}
 	}
 
-	rwf_.symmetryGroupOrdering(uniqRcw, uniqPgroup, uniqCount);
+	//rwf_.symmetryGroupOrdering(uniqRcw, uniqPgroup, uniqCount);
 
 	/*
 	ofstream newCounting_("counting.csv");

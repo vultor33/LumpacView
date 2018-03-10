@@ -120,7 +120,7 @@ public:
 		std::string & pGroup,
 		std::string & permut);
 
-
+	bool isachiral(std::string pGroup);
 
 private:
 	std::vector< std::string > elem;
@@ -141,9 +141,11 @@ private:
 		std::vector<int> & typeCode2,
 		std::vector<int> & typeCode3);
 
+
 	int findCharOnString(
 		std::string word,
 		char refChar);
+
 
 };
 

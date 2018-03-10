@@ -155,6 +155,7 @@ void ChangeNames::createNewCounting(
 	vector< vector<string> > allPgroup;
 	vector< vector<int> > allRce;
 	vector< vector<int> > allNumbersCA;
+	vector< vector<string> > allLettersSets;
 
 	while (!response_.eof())
 	{
@@ -215,6 +216,7 @@ void ChangeNames::createNewCounting(
 		allPgroup.push_back(pGroup);
 		allFormulas.push_back(newCombinationName);
 		allRce.push_back(rce);
+		allLettersSets.push_back(lettersSetsGroups);
 
 		ofstream printIso_(("resultados/" + allIsomersCombinationFile).c_str());
 		printIso_ << firstLine << endl;
@@ -562,7 +564,7 @@ void ChangeNames::createNewCounting(
 */
 
 
-// RCE BASED ORDERING
+/* RCE BASED ORDERING
 for (size_t i = 0; i < allPgroup.size(); i++)
 {
 	int rceMin = *min_element(allRce[i].begin(), allRce[i].end());
@@ -602,6 +604,74 @@ for (size_t i = 0; i < allPgroup.size(); i++)
 	}
 	counting_ << endl;
 }
+*/
+
+for (size_t i = 0; i < allPgroup.size(); i++)
+{
+	int rceMin = *min_element(allRce[i].begin(), allRce[i].end());
+	counting_ << allFormulas[i] << ";";
+
+	counting_ << allNumbersCA[i][0] + allNumbersCA[i][1]
+		<< ";" << allNumbersCA[i][0]
+		<< ";" << allNumbersCA[i][1] << ";";
+	
+	counting_ << " ";
+
+	// RCP
+	for (size_t k = 0; k < allRce[i].size() - 1; k++)
+	{
+		if (allRce[i][k] % rceMin != 0)
+		{
+			counting_ << fixed
+				<< setprecision(1)
+				<< (double)allRce[i][k] / (double)rceMin
+				<< ":";
+		}
+		else
+		{
+			counting_ << allRce[i][k] / rceMin
+				<< ":";
+		}
+	}
+	if (allRce[i][allRce[i].size() - 1] % rceMin != 0)
+	{
+		counting_ << fixed
+			<< setprecision(1)
+			<< (double)allRce[i][allRce[i].size() - 1] / (double)rceMin;
+	}
+	else
+	{
+		counting_ << allRce[i][allRce[i].size() - 1] / rceMin;
+	}
+	counting_ << ";";
+
+	int k = 0;
+	for (size_t j = 0; j < allRce[i].size(); j++)
+	{
+		k++;
+		if (k == 3)
+		{
+			counting_ << endl;
+			counting_ << ";;;;;";
+			k = 0;
+		}
+		
+		string chiralLetter;
+		if (rwf_.isachiral(allPgroup[i][j]))
+			chiralLetter = "a";
+		else
+			chiralLetter = "c";
+
+		counting_ << allLettersSets[i][j] << ";"
+			<< allPgroup[i][j] << ";"
+			<< chiralLetter << ";"
+			<< allCount[i][j] << ";"
+			<< allRcw[i][j] << ";";
+	}
+	counting_ << endl;
+}
+
+
 
 }
 

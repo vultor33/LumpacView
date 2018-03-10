@@ -1087,6 +1087,19 @@ void ReadWriteFormats::ReplaceAll(std::string & data, char toSearch, std::string
 
 }
  
+bool ReadWriteFormats::isachiral(string pGroup)
+{
+	return ((findCharOnString(pGroup, 's')
+		!= (int)pGroup.size()) ||
+		(findCharOnString(pGroup, 'h')
+			!= (int)pGroup.size()) ||
+			(findCharOnString(pGroup, 'v')
+				!= (int)pGroup.size()) ||
+				(findCharOnString(pGroup, 'd')
+					!= (int)pGroup.size()) ||
+					(findCharOnString(pGroup, 'i')
+						!= (int)pGroup.size()));
+}
 
 
 

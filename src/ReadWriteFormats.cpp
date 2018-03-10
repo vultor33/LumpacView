@@ -692,6 +692,72 @@ void ReadWriteFormats::takeRcwVgroupPointGroup(
 	pGroup = line.substr(sepGroup1 + 2, sepGroup2 - sepGroup1 - 3);
 }
 
+void ReadWriteFormats::takeRcwVgroupPointGroupNca(
+	string line,
+	int & rcw,
+	int & chiral,
+	int & achiral,
+	string & vGroup,
+	string & pGroup)
+{
+	stringstream convert;
+	convert << line;
+	convert >> rcw;
+	size_t sep1Temp = line.find(";");
+	size_t sep2Temp = line.find(";", sep1Temp + 1, 1);
+	size_t sepGroup1 = line.find("]");
+	size_t sepGroup2 = line.find("[", sepGroup1 + 1, 1);
+	vGroup = line.substr(sep1Temp + 2, sep2Temp - sep1Temp - 3);
+	pGroup = line.substr(sepGroup1 + 2, sepGroup2 - sepGroup1 - 3);
+	if (vGroup[vGroup.size() - 2] == 'c')
+	{
+		chiral = 1;
+		achiral = 0;
+	}
+	else if (vGroup[vGroup.size() - 2] == 'a')
+	{
+		chiral = 0;
+		achiral = 1;
+	}
+}
+
+
+void ReadWriteFormats::takeAllElementsFromCode(
+	string line,
+	int & rcw,
+	int & chiral,
+	int & achiral,
+	string & vGroup,
+	string & pGroup,
+	string & permut)
+{
+	stringstream convert;
+	convert << line;
+	convert >> rcw;
+	size_t sep1Temp = line.find(";");
+	size_t sep2Temp = line.find(";", sep1Temp + 1, 1);
+	size_t sepGroup1 = line.find("]");
+	size_t sepGroup2 = line.find("[", sepGroup1 + 1, 1);
+	size_t sepGroup3 = line.find("]", sepGroup2 + 1, 1);
+	vGroup = line.substr(sep1Temp + 2, sep2Temp - sep1Temp - 3);
+	pGroup = line.substr(sepGroup1 + 2, sepGroup2 - sepGroup1 - 3);
+	permut = line.substr(sepGroup2 + 1, sepGroup3 - sepGroup2 - 1);
+
+
+	if (vGroup[vGroup.size() - 2] == 'c')
+	{
+		chiral = 1;
+		achiral = 0;
+	}
+	else if (vGroup[vGroup.size() - 2] == 'a')
+	{
+		chiral = 0;
+		achiral = 1;
+	}
+}
+
+
+
 void ReadWriteFormats::symmetryGroupOrdering(
 	vector<int> &uniqRcw,
 	vector<string> &uniqPgroup,
@@ -873,6 +939,70 @@ bool ReadWriteFormats::hyerarchyOrdering(
 		else if (gPoint2[0] == 'D')
 			return true;
 		else if (gPoint1[0] == 'S')
+			return true;
+		else if (gPoint2[0] == 'S')
+			return false;
+	}
+
+	// mesma letra - e C ou D - verificar rotacoes
+	if ((gPoint1[1] != 's') &
+		(gPoint1[1] != 'i') &
+		(gPoint2[1] != 's') &
+		(gPoint2[1] != 'i'))
+	{
+		stringstream convert2;
+		int auxN1, auxN2;
+		convert2 << gPoint1[1] << " " << gPoint2[1];
+		convert2 >> auxN1 >> auxN2;
+		if (auxN1 != auxN2)
+			return auxN1 < auxN2;
+	}
+
+	string pHyerarchy = "hidvs";
+	int k1 = pHyerarchy.size();
+	int k2 = pHyerarchy.size();
+	for (size_t k = 0; k < gPoint1.size(); k++)
+	{
+		int pos = findCharOnString(pHyerarchy, gPoint1[k]);
+		if (pos < pHyerarchy.size())
+		{
+			k1 = pos;
+			break;
+		}
+	}
+	for (size_t k = 0; k < gPoint2.size(); k++)
+	{
+		int pos = findCharOnString(pHyerarchy, gPoint2[k]);
+		if (pos < pHyerarchy.size())
+		{
+			k2 = pos;
+			break;
+		}
+	}
+	
+	return k1 > k2;
+}
+
+
+bool ReadWriteFormats::hyerarchyOrdering2(
+	string gPoint1,
+	string gPoint2)
+{
+	if ((gPoint1[0] != gPoint2[0]))
+	{
+		if (gPoint1[0] == 'O')
+			return false;
+		else if (gPoint2[0] == 'O')
+			return true;
+		else if (gPoint1[0] == 'T')
+			return false;
+		else if (gPoint2[0] == 'T')
+			return true;
+		else if (gPoint1[0] == 'D')
+			return false;
+		else if (gPoint2[0] == 'D')
+			return true;
+		else if (gPoint1[0] == 'S')
 			return false;
 		else if (gPoint2[0] == 'S')
 			return true;
@@ -919,6 +1049,7 @@ bool ReadWriteFormats::hyerarchyOrdering(
 
 	return false;
 }
+
 
 
 int ReadWriteFormats::findCharOnString(

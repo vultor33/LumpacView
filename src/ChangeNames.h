@@ -35,10 +35,31 @@ public:
 		std::string fileName,
 		std::vector<int> &uniqRcw,
 		std::vector<int> &uniqCount,
+		std::vector<int> &allNumbers,
 		std::vector<std::string> &uniqPgroup);
+
+	void generateOrderingGroupPoint(
+		std::string fileName,
+		std::vector<int> &uniqRcw,
+		std::vector<int> &uniqCount,
+		std::vector<int> &allNumbers,
+		std::vector<std::string> &uniqPgroup,
+		std::string &firstLine,
+		std::vector<std::string> & listOfPermutations,
+		std::vector<std::string> & listOfChiralities,
+		std::vector<int> & listOfRcw,
+		std::vector<std::string> & listOfPGroup);
 
 
 private:
+
+	void rceOrderingCriteria(
+		std::vector<int> &rcw,
+		std::vector<int> &rce,
+		std::vector<int> &count,
+		std::vector<std::string> &pGroup,
+		std::vector<std::string> &setsLetter);
+
 	std::vector<vultorGroup> setVultorGroup(
 		std::vector<int> &probs,
 		std::vector<int> &number,

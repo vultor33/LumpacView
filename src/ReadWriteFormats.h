@@ -70,6 +70,14 @@ public:
 		std::string & vGroup,
 		std::string & pGroup);
 
+	void takeRcwVgroupPointGroupNca(
+		std::string line,
+		int & rcw,
+		int & chiral,
+		int & achiral,
+		std::string & vGroup,
+		std::string & pGroup);
+
 	void symmetryGroupOrdering(
 		std::vector<int> &uniqRcw,
 		std::vector<std::string> &uniqPgroup,
@@ -85,6 +93,10 @@ public:
 		std::string gPoint1,
 		std::string gPoint2);
 
+	bool hyerarchyOrdering2(
+		std::string gPoint1,
+		std::string gPoint2);
+
 	std::string includeGroupPoint(
 		std::string vCode,
 		std::string gPoint);
@@ -97,8 +109,18 @@ public:
 	std::vector<int> atomStringToAtomTypes(
 		std::vector<std::string> &atomsStrings);
 
-
 	void ReplaceAll(std::string & data, char toSearch, std::string addStr);
+
+	void takeAllElementsFromCode(
+		std::string line,
+		int & rcw,
+		int & chiral,
+		int & achiral,
+		std::string & vGroup,
+		std::string & pGroup,
+		std::string & permut);
+
+
 
 private:
 	std::vector< std::string > elem;

@@ -134,8 +134,6 @@ void ChangeNames::changeNameOfFiles(
 			allNewCombinationNames[i],
 			systemSize);
 	}
-
-
 }
 
 
@@ -156,6 +154,7 @@ void ChangeNames::createNewCounting(
 	vector< vector<int> > allCount;
 	vector< vector<string> > allPgroup;
 	vector< vector<int> > allRce;
+	vector< vector<int> > allNumbersCA;
 
 	while (!response_.eof())
 	{
@@ -171,32 +170,121 @@ void ChangeNames::createNewCounting(
 		newCombinationName = "M" + newCombinationName;
 		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
 
-
 		vector<int> rcw;
 		vector<int> count;
 		vector<string> pGroup;
+		vector<int> numbersCA;
+		string firstLine;
+		vector<string> listOfPermutations;
+		vector<string> listOfChiralities;
+		std::vector<int> listOfRcw;
+		std::vector<std::string> listOfPGroup;
+
 		generateOrderingGroupPoint(
 			pathRead + allIsomersCombinationFile,
 			rcw,
 			count,
+			numbersCA,
+			pGroup,
+			firstLine,
+			listOfPermutations,
+			listOfChiralities,
+			listOfRcw,
+			listOfPGroup);
+			
+
+	/*	
+		generateOrderingGroupPoint(
+			pathRead + allIsomersCombinationFile,
+			rcw,
+			count,
+			numbersCA,
 			pGroup);
-		allRcw.push_back(rcw);
-		allCount.push_back(count);
-		allPgroup.push_back(pGroup);
-		allFormulas.push_back(newCombinationName);
+	*/
 
 		vector<int> rce(rcw.size());
 		for (size_t i = 0; i < rcw.size(); i++)
 			rce[i] = rcw[i] * count[i];
+
+		vector<string> lettersSetsGroups;
+		rceOrderingCriteria(rcw, rce, count, pGroup, lettersSetsGroups);
+
+		allRcw.push_back(rcw);
+		allCount.push_back(count);
+		allNumbersCA.push_back(numbersCA);
+		allPgroup.push_back(pGroup);
+		allFormulas.push_back(newCombinationName);
 		allRce.push_back(rce);
+
+		ofstream printIso_(("resultados/" + allIsomersCombinationFile).c_str());
+		printIso_ << firstLine << endl;
+		for (size_t i = 0; i < listOfPermutations.size(); i++)
+		{
+			string letterEachIsomer = "";
+			for (size_t j = 0; j < pGroup.size(); j++)
+			{
+				if (pGroup[j] == listOfPGroup[i])
+				{
+					letterEachIsomer = lettersSetsGroups[j];
+					break;
+				}
+			}
+			if (letterEachIsomer == "")
+			{
+				cout << "ERROR ON: ChangeNames::createNewCounting" << endl;
+				exit(1);
+			}
+
+			//puxar informacao pela simetria
+			/*
+			listOfPermutations,
+				listOfChiralities,
+				listOfRcw,
+				listOfPGroup);
+				geomName
+				newCombinationName
+				lettersSetsGroups
+				*/
+
+			printIso_ << listOfRcw[i]
+				<< " ; {["
+				<< newCombinationName
+				<< "] "
+				<< geomName
+				<< " "
+				<< listOfPGroup[i]
+				<< " "
+				<< listOfChiralities[i]
+				<< " "
+				<< letterEachIsomer
+				<< " ["
+				<< listOfPermutations[i]
+				<< "]}"
+				<< endl;
+			if (listOfChiralities[i] == "c")
+			{
+				i++;
+				printIso_ << listOfRcw[i]
+					<< " ; {["
+					<< newCombinationName
+					<< "] "
+					<< geomName
+					<< " "
+					<< listOfPGroup[i]
+					<< " "
+					<< listOfChiralities[i]
+					<< " "
+					<< letterEachIsomer
+					<< " ["
+					<< listOfPermutations[i]
+					<< "]}"
+					<< endl;
+			}
+			printIso_ << endl;
+		}
+		printIso_.close();
+
 	}
-
-	// REORDENAR AQUI COM RCP E CRITERIOS.
-
-
-
-
-
 
 
 
@@ -271,7 +359,8 @@ void ChangeNames::createNewCounting(
 		}
 	}
 
-	bool tradePositions = true;
+	/*
+	tradePositions = true;
 	while (tradePositions)
 	{
 		string auxHeaderTrade;
@@ -290,10 +379,10 @@ void ChangeNames::createNewCounting(
 			}
 		}
 	}
-
-	vector<string> auxPgroup = vector<string>();
+	*/
 
 	/* HEADER 
+	vector<string> auxPgroup = vector<string>();
 	//reverse(header.begin(), header.end());
 	counting_ << "Formula;RCWP;";
 	for (size_t i = 0; i < header.size(); i++)
@@ -424,6 +513,7 @@ void ChangeNames::createNewCounting(
 
 
 
+/*
 	for (size_t i = 0; i < allPgroup.size(); i++)
 	{
 		vector<int> rce(allRcw[i].size());
@@ -469,15 +559,176 @@ void ChangeNames::createNewCounting(
 
 		counting_ << endl;
 	}
+*/
+
+
+// RCE BASED ORDERING
+for (size_t i = 0; i < allPgroup.size(); i++)
+{
+	int rceMin = *min_element(allRce[i].begin(), allRce[i].end());
+	counting_ << allFormulas[i] << "; ";
+
+	counting_ << allNumbersCA[i][0] + allNumbersCA[i][1]
+		<< ";" << allNumbersCA[i][0]
+		<< ";" << allNumbersCA[i][1] << ";";
+
+	// RCP
+	for (size_t k = 0; k < allRce[i].size() - 1; k++)
+	{
+		if (allRce[i][k] % rceMin != 0)
+		{
+			counting_ << fixed 
+				<< setprecision(1) 
+				<< (double)allRce[i][k] / (double)rceMin
+				<< "(" << allPgroup[i][k] << "):";
+		}
+		else
+		{
+			counting_ << allRce[i][k] / rceMin 
+				<< "(" << allPgroup[i][k] << "):";
+		}
+	}
+	if (allRce[i][allRce[i].size() - 1] % rceMin != 0)
+	{
+		counting_ << fixed 
+			<< setprecision(1) 
+			<< (double)allRce[i][allRce[i].size() - 1] / (double)rceMin
+			<< "(" << allPgroup[i][allRce[i].size() - 1] << ")";
+	}
+	else
+	{
+		counting_ << allRce[i][allRce[i].size() - 1] / rceMin
+			<< "(" << allPgroup[i][allRce[i].size() - 1] << ")";
+	}
+	counting_ << endl;
 }
+
+}
+
+
+
+void ChangeNames::rceOrderingCriteria(
+	std::vector<int> &rcw,
+	std::vector<int> &rce,
+	std::vector<int> &count,
+	std::vector<std::string> &pGroup,
+	std::vector<std::string> &setsLetter)
+{
+	// Transformar em uma function
+	// REORDENAR AQUI COM RCP E CRITERIOS.
+	bool tradePositions;
+	ReadWriteFormats rwf_;
+	tradePositions = true;
+	while (tradePositions)
+	{
+		tradePositions = false;
+		for (size_t j = 0; j < (rce.size() - 1); j++)
+		{
+			bool trade = false;
+			if (rce[j] > rce[j + 1])
+				continue;
+			else if (rce[j] < rce[j + 1])
+				trade = true;
+			else // iguais
+			{
+				bool hyearc = rwf_.hyerarchyOrdering(
+					pGroup[j],
+					pGroup[j + 1]);
+				if (!hyearc)
+				{
+					trade = true;
+				}
+				else
+					continue;
+			}
+			if (trade)
+			{
+				int rcwj = rcw[j];
+				int rcej = rce[j];
+				int contj = count[j];
+				string pGroupj = pGroup[j];
+
+				rcw[j] = rcw[j + 1];
+				rce[j] = rce[j + 1];
+				count[j] = count[j + 1];
+				pGroup[j] = pGroup[j + 1];
+
+				rcw[j + 1] = rcwj;
+				rce[j + 1] = rcej;
+				count[j + 1] = contj;
+				pGroup[j + 1] = pGroupj;
+				tradePositions = true;
+			}
+		}
+	}
+
+
+	vector<int> nlinhas(rce.size());
+	for (size_t i = 0; i < rce.size(); i++)
+		nlinhas[i] = 0;
+	setsLetter.resize(rce.size());
+
+	//linha igual repeticao da letra
+	for (size_t i = 0; i < rce.size(); i++)
+	{
+		if (rce.size() == 1)
+		{
+			nlinhas[0] = 0;
+			break;
+		}
+		// checa se o proximo e igual o anterior.
+		if (i != 0)
+		{
+			if (rce[i - 1] == rce[i])
+			{
+				nlinhas[i] = nlinhas[i - 1] + 1;
+			}
+			else if (i != rce.size() - 1)
+			{
+				if (rce[i + 1] == rce[i])
+				{
+					nlinhas[i] = 1;
+				}
+			}
+		}
+		else
+		{
+			if (rce[i + 1] == rce[i])
+			{
+				nlinhas[i] = 1;
+			}
+		}
+	}
+
+	int kLetter = -1;
+	setsLetter.resize(rce.size());
+	for (size_t i = 0; i < rce.size(); i++)
+	{
+		if ((nlinhas[i] == 0) || (nlinhas[i] == 1))
+			kLetter++;
+
+		string letterK = takeLetter(kLetter);
+		for (size_t j = 0; j < nlinhas[i]; j++)
+			letterK += "\'";
+
+		setsLetter[i] = letterK;
+	}
+
+}
+
+
 
 void ChangeNames::generateOrderingGroupPoint(
 	string fileName,
 	std::vector<int> &uniqRcw,
 	std::vector<int> &uniqCount,
+	std::vector<int> &allNumbers,
 	std::vector<std::string> &uniqPgroup)
 {
 	ifstream file_(fileName.c_str());
+	allNumbers.resize(2);
+	allNumbers[0] = 0;
+	allNumbers[1] = 0;
 	string firstLine;
 	getline(file_, firstLine);
 	string line;
@@ -494,7 +745,11 @@ void ChangeNames::generateOrderingGroupPoint(
 		convert << line;
 		int rcw;
 		string vGroup, pGroup;
+		int chiral, achiral;
 		rwf_.takeRcwVgroupPointGroup(line, rcw, vGroup, pGroup);
+		rwf_.takeRcwVgroupPointGroupNca(line, rcw, chiral, achiral, vGroup, pGroup);
+		allNumbers[0] += chiral;
+		allNumbers[1] += achiral;
 		allRcw.push_back(rcw);
 		allVgroup.push_back(vGroup);
 		allPgroup.push_back(pGroup);
@@ -552,6 +807,93 @@ void ChangeNames::generateOrderingGroupPoint(
 	*/
 
 }
+
+void ChangeNames::generateOrderingGroupPoint(
+	string fileName,
+	std::vector<int> &uniqRcw,
+	std::vector<int> &uniqCount,
+	std::vector<int> &allNumbers,
+	std::vector<std::string> &uniqPgroup,
+	string &firstLine,
+	std::vector<std::string> & listOfPermutations,
+	std::vector<std::string> & listOfChiralities,
+	std::vector<int> & listOfRcw,
+	std::vector<std::string> & listOfPGroup)
+{
+	ifstream file_(fileName.c_str());
+	allNumbers.resize(2);
+	allNumbers[0] = 0;
+	allNumbers[1] = 0;
+	getline(file_, firstLine);
+	string line;
+	ReadWriteFormats rwf_;
+	vector<int> allRcw;
+	vector<string> allVgroup;
+	vector<string> allPgroup;
+	while (!file_.eof())
+	{
+		getline(file_, line);
+		if (line == "")
+			continue;
+		stringstream convert;
+		convert << line;
+		int rcw;
+		string vGroup, pGroup;
+		int chiral, achiral;
+		string permut;
+		rwf_.takeAllElementsFromCode(line, rcw, chiral, achiral, vGroup, pGroup,permut);
+		allNumbers[0] += chiral;
+		allNumbers[1] += achiral;
+		allRcw.push_back(rcw);
+		allVgroup.push_back(vGroup);
+		allPgroup.push_back(pGroup);
+		listOfPermutations.push_back(permut);
+		listOfRcw.push_back(rcw);
+		listOfPGroup.push_back(pGroup);
+		if (chiral == 1)
+			listOfChiralities.push_back("c");
+		else
+			listOfChiralities.push_back("a");
+	}
+	file_.close();
+
+	AuxMath auxMath_;
+	vector<int> instructions = auxMath_.vector_ordering(allRcw);
+	auxMath_.vector_ordering_with_instructions(allVgroup, instructions);
+	auxMath_.vector_ordering_with_instructions(allPgroup, instructions);
+
+	// unique pGroup
+	uniqRcw.push_back(allRcw[0]);
+	uniqCount.push_back(1);
+	uniqPgroup.push_back(allPgroup[0]);
+
+	for (size_t i = 1; i < allRcw.size(); i++)
+	{
+		bool found = false;
+		for (size_t j = 0; j < uniqPgroup.size(); j++)
+		{
+			if (allPgroup[i] == uniqPgroup[j])
+			{
+				if (allRcw[i] != uniqRcw[j])
+				{
+					cout << "point group problem: " << i << endl;
+					exit(1);
+				}
+				uniqCount[j]++;
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			uniqCount.push_back(1);
+			uniqRcw.push_back(allRcw[i]);
+			uniqPgroup.push_back(allPgroup[i]);
+		}
+	}
+}
+
+
 
 vector<vultorGroup> ChangeNames::setVultorGroup(
 	vector<int> &probs,

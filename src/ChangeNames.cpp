@@ -645,15 +645,15 @@ for (size_t i = 0; i < allPgroup.size(); i++)
 	}
 	counting_ << ";";
 
-	int k = 0;
+//	int k = 0;
 	for (size_t j = 0; j < allRce[i].size(); j++)
 	{
-		k++;
-		if (k == 3)
+//		k++;
+		if ((j != 0) && (j % 2 == 0))
 		{
 			counting_ << endl;
 			counting_ << ";;;;;";
-			k = 0;
+//			k = 0;
 		}
 		
 		string chiralLetter;

@@ -174,20 +174,15 @@ void IsomersToMol::printAllMol(
 	ifstream fileIsomers_((filePath + fileName).c_str());
 	vector<int> atomTypes;
 	vector<int> bidentateChosen;
-	/*
-	rwf_.readAtomTypesAndBidentateChosenFile(
-		fileIsomers_, 
-		atomTypes, 
-		bidentateChosen, 
-		coordination,
-		nBidentates);
-	*/
+
+	/* Labels - O, P, N, / bidentates  ---  format */
 	rwf_.readAtomTypesAndBidentateChosenFileWithLabels(
 		fileIsomers_,
 		atomTypes,
 		bidentateChosen,
 		coordination,
 		nBidentates);
+
 	string line;
 
 	Geometries geo_;
@@ -216,12 +211,23 @@ void IsomersToMol::printAllMol(
 
 	while (!fileIsomers_.eof())
 	{
-		string vGroup, vCode;
-		int rcw;
-		vector<int> permutation = rwf_.readCauchyNotation(fileIsomers_, coordination, vGroup, rcw, vCode);
-		if (permutation.size() == 0)
+		string line;
+		getline(fileIsomers_, line);
+		if (line == "")
 			continue;
-		string pGroup = rwf_.takeGroupPoint(vCode);
+		
+		string vGroup, pGroup, vCode, setGroup, chirality;
+		int rcw;
+		vector<int> permutation;
+		rwf_.takeAllElementsFromCodeNew(line, 
+			coordination,
+			rcw,
+			chirality, 
+			vGroup,
+			pGroup,
+			setGroup,
+			permutation);
+
 		system(("mkdir " + folderComposition + "//" + pGroup).c_str());
 		ofstream fileXyz_((folderCompositionZero + "//" + pGroup + "//" + vCode + ".mol2").c_str());
 		printMoleculeMolFormat(permutation, atomTypes, bidentateChosen, fileXyz_);

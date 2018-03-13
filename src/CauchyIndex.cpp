@@ -2842,11 +2842,11 @@ void CauchyIndex::findAllSymmetryOperations(
 	string line;
 
 	string atomsLine = rwf_.atomTypesToAtomStrings(atomTypes);
-	rotations_ << atomsLine << "  ";
+	rotations_ << atomsLine;
 //	for (size_t i = 0; i < atomTypes.size(); i++)
 //		rotations_ << atomTypes[i] + 1 << "  ";
 	if (bidentateAtomsChosen.size() != 0)
-		rotations_ << " / ";
+		rotations_ << "/  ";
 	for (size_t i = 0; i < bidentateAtomsChosen.size(); i++)
 		rotations_ << bidentateAtomsChosen[i] + 1 << "  ";
 
@@ -2859,8 +2859,6 @@ void CauchyIndex::findAllSymmetryOperations(
 		string vGroup, vCode;
 
 		vector<int> permutation = rwf_.readCauchyNotation(fileIsomers_, mol0.size(), vGroup, rcw, vCode);
-
-		cout << "loop find:  " << vCode << endl;
 
 		if (permutation.size() == 0)
 		{
@@ -2954,15 +2952,9 @@ void CauchyIndex::findAllSymmetryOperations(
 			}
 		}
 
-		cout << "before group" << endl;
-
 		string group = groupPoint_.findGroupPoint(allSymmetryOperations);
 
-		cout << "group:  " << group << endl;
-
 		rotations_ << rcw << " ; " << rwf_.includeGroupPoint(vCode, group);
-
-		cout << "adicionou no rotaiion" << endl;
 
 		/* fredapagar
 		rotations_ << group << " ; ";		

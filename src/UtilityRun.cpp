@@ -60,11 +60,11 @@ void UtilityRun::formatToSymmetryAndFiles(int geoCode)
 	geo_.selectGeometry(geoCode, mol0, cutAngle, reflec);
 	string responseName = getResponseName(mol0.size());
 
-	cout << "antes do response" << endl;
+//	cout << "antes do response" << endl;
 	
 	findAllGroupPoint(geoCode);
 
-	cout << "find group done" << endl;
+//	cout << "find group done" << endl;
 
 	ChangeNames chnamessda;
 	chnamessda.createNewCounting(geoCode, "", responseName);
@@ -1628,8 +1628,6 @@ void UtilityRun::findAllGroupPoint(int geoCode)
 		string newCombinationName = rwf_.newCodeToString(combinationCode);
 		newCombinationName = "M" + newCombinationName;
 		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
-
-		cout << "loop find:  " << allIsomersCombinationFile << endl;
 
 		CauchyIndex ciSymmetry_(geoCode);
 		ciSymmetry_.findAllSymmetryOperations(

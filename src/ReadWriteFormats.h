@@ -28,6 +28,16 @@ public:
 		int systemSize,
 		int nBidentates);
 
+	/*
+	// letters / bidentares   --> format
+	void readAtomTypesAndBidentateChosenFileWithLetters(
+		std::ifstream & file_,
+		std::vector<int> & atomTypes,
+		std::vector<int> & bidentateChosen,
+		int systemSize,
+		int nBidentates);
+		*/
+
 	// {SAPR-8 [Ma2b2c2] [1 2 3 4 5 6 7 8] Aa} --> format
 	std::vector<int> readCauchyNotationsEnantiomers(
 		std::ifstream & openendFile_,
@@ -111,6 +121,7 @@ public:
 
 	void ReplaceAll(std::string & data, char toSearch, std::string addStr);
 
+	// old format
 	void takeAllElementsFromCode(
 		std::string line,
 		int & rcw,
@@ -119,6 +130,19 @@ public:
 		std::string & vGroup,
 		std::string & pGroup,
 		std::string & permut);
+
+	// format {[Ma2(AA)(AB)] OC-6 Cs a B [1 2 4 6 5 3]}
+	void takeAllElementsFromCodeNew(
+		std::string line,
+		int coordination,
+		int & rcw,
+		std::string & chirality,
+		std::string & vGroup,
+		std::string & pGroup,
+		std::string & setGroup,
+		std::vector<int> & permut);
+
+
 
 	bool isachiral(std::string pGroup);
 

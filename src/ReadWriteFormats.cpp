@@ -79,8 +79,6 @@ void ReadWriteFormats::readAtomTypesAndBidentateChosenFileWithLabels(
 	}
 }
 
-
-
 // {SAPR-8 [Ma2b2c2] [1 2 3 4 5 6 7 8] Aa} --> format
 vector<int> ReadWriteFormats::readCauchyNotationsEnantiomers(
 	ifstream & openendFile_,
@@ -756,6 +754,42 @@ void ReadWriteFormats::takeAllElementsFromCode(
 	}
 }
 
+
+
+void ReadWriteFormats::takeAllElementsFromCodeNew(
+	std::string line,
+	int coordination,
+	int & rcw,
+	string & chirality,
+	std::string & vGroup,
+	std::string & pGroup,
+	std::string & setGroup,
+	std::vector<int> & permut)
+{
+	stringstream convert;
+	convert << line;
+	convert >> rcw;
+	size_t sep1Temp = line.find(";");
+	size_t sep2Temp = line.find(";", sep1Temp + 1, 1);
+	size_t sepGroup1 = line.find("]");
+	size_t sepGroup2 = line.find("[", sepGroup1 + 1, 1);
+	size_t sepGroup3 = line.find("]", sepGroup2 + 1, 1);
+	vGroup = line.substr(sep1Temp + 2, sep2Temp - sep1Temp - 3);
+	pGroup = line.substr(sepGroup1 + 2, sepGroup2 - sepGroup1 - 3);
+
+	stringstream convert2;
+	convert2 << pGroup;
+	string aux;
+	convert2 >> aux >> pGroup >> chirality >> setGroup;
+	string auxPermut;
+
+	auxPermut = line.substr(sepGroup2 + 1, sepGroup3 - sepGroup2 - 1);
+	stringstream convert3;
+	convert3 << auxPermut;
+	permut.resize(coordination);
+	for (int i = 0; i < coordination; i++)
+		convert3 >> permut[i];
+}
 
 
 void ReadWriteFormats::symmetryGroupOrdering(

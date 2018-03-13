@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
 	// tenho que ler o response transformar no codigo novo
 	// depois entrar no arquivo e pronto, montar a arvore de diretorios
 
-	/* EXEMPLO DE PRINT ALL MOL
+	/* EXEMPLO DE PRINT ALL MOL */
 	int geoCode = 60;
 	string response = "response-combinations6.txt";
 	string path = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\OC\\";
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
 		path,
 		response);
 	return 0;
-	*/
+	
 
 	/* ENCONTRAR GRUPO PONTUAL 
 	CauchyIndex ci13_(60);
@@ -253,26 +253,30 @@ int main(int argc, char *argv[])
 	//util_.formatIsomersFiles();
 	//return 0;
 
-	/* CHANGING NAMES  
+	/* Symmetry files
+	UtilityRun util_;
+	util_.formatToSymmetryAndFiles(92);
+	return 0;
+	*/
+
+
+
+
+
+
+	/* CHANGING NAMES
 	string responseName;
 	responseName = "response-combinations6.txt";
 	ChangeNames chNames_;
 	chNames_.changeNameOfFiles(
-		responseName,
-		60,
-		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\OC\\",
-		"");
+	responseName,
+	60,
+	"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\OC\\",
+	"");
 	chNames_.createNewCounting(60, "", responseName);
 	return 0;
 	*/
 
-	UtilityRun util_;
-	util_.formatToSymmetryAndFiles(60);
-	return 0;
-	
-	
-	
-	
 	//CauchyIndex ci123_(10);
 	//ci123_.temporario();
 	//return 0;

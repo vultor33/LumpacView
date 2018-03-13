@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
 	/* EXEMPLO DE PRINT ALL MOL */
 	int geoCode = 60;
 	string response = "response-combinations6.txt";
-	string path = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\OC\\";
+	string path = "/home/vultor/lumpacview/code2/resultados/6/OC-6/";
 	IsomersToMol ismol_;
 	ismol_.printAllMolFromSpecifiedGeometry(geoCode,
 		path,

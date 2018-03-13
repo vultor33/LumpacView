@@ -150,6 +150,7 @@ void IsomersToMol::printAllMolFromSpecifiedGeometry(
 		newCombinationName = "M" + newCombinationName;
 		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
 		IsomersToMol ismol_;
+
 		ismol_.printAllMol(allIsomersCombinationFile,
 			pathRead,
 			geoCode);
@@ -183,8 +184,6 @@ void IsomersToMol::printAllMol(
 		coordination,
 		nBidentates);
 
-	string line;
-
 	Geometries geo_;
 	string folder = geo_.sizeToGeometryCode(geoCode);
 	string folderCompositionZero = folder + "//" + composition;
@@ -212,6 +211,7 @@ void IsomersToMol::printAllMol(
 	while (!fileIsomers_.eof())
 	{
 		string line;
+
 		getline(fileIsomers_, line);
 		if (line == "")
 			continue;
@@ -229,9 +229,15 @@ void IsomersToMol::printAllMol(
 			permutation);
 
 		system(("mkdir " + folderComposition + "//" + pGroup).c_str());
-		ofstream fileXyz_((folderCompositionZero + "//" + pGroup + "//" + vCode + ".mol2").c_str());
+		ofstream fileXyz_((folderCompositionZero + "//" + pGroup + "//" + vGroup + ".mol2").c_str());
+
+		for(size_t i = 0; i < permutation.size(); i++)
+			permutation[i] = permutation[i] - 1;
+
 		printMoleculeMolFormat(permutation, atomTypes, bidentateChosen, fileXyz_);
+
 		fileXyz_.close();
+
 	}
 	fileIsomers_.close();
 }
@@ -371,6 +377,7 @@ void IsomersToMol::printMoleculeMolFormat(
 	const vector<int> & bidentateAtomsChosen,
 	ofstream & printFile_)
 {
+
 	double scale = 3.0e0;
 	vector<string> atoms(permutation.size());
 	for (size_t i = 0; i < atomTypes.size(); i++)
@@ -400,6 +407,7 @@ void IsomersToMol::printMoleculeMolFormat(
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
 		<< "Au " << endl;
+
 
 	for (int i = 0; i < nAtoms; i++)
 	{

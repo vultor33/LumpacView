@@ -215,9 +215,9 @@ int main(int argc, char *argv[])
 	// depois entrar no arquivo e pronto, montar a arvore de diretorios
 
 	/* EXEMPLO DE PRINT ALL MOL */
-	int geoCode = 60;
-	string response = "response-combinations6.txt";
-	string path = "/home/vultor/lumpacview/code2/resultados/6/OC-6/";
+	int geoCode = 92;
+	string response = "response-combinations9.txt";
+	string path = "/home/vultor/lumpacview/code2/resultados/9/MFF-9/";
 	IsomersToMol ismol_;
 	ismol_.printAllMolFromSpecifiedGeometry(geoCode,
 		path,

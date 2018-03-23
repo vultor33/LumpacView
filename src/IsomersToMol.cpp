@@ -228,8 +228,10 @@ void IsomersToMol::printAllMol(
 			setGroup,
 			permutation);
 
-		system(("mkdir " + folderComposition + "//" + pGroup).c_str());
-		ofstream fileXyz_((folderCompositionZero + "//" + pGroup + "//" + vGroup + ".mol2").c_str());
+		string subFolderName = pGroup + "_" + chirality + "_" + setGroup[0];
+
+		system(("mkdir " + folderComposition + "//" + subFolderName).c_str());
+		ofstream fileXyz_((folderCompositionZero + "//" + subFolderName + "//" + vGroup + ".mol2").c_str());
 
 		for(size_t i = 0; i < permutation.size(); i++)
 			permutation[i] = permutation[i] - 1;
@@ -406,6 +408,8 @@ void IsomersToMol::printMoleculeMolFormat(
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
+		//<< fixed << setprecision(4) << setw(8) << 0.0002e0 << "  "
+		//<< fixed << setprecision(4) << setw(8) << 0.0487e0 << "  "
 		<< "Au " << endl;
 
 

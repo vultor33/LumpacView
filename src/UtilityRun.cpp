@@ -198,13 +198,13 @@ void UtilityRun::identifyOne()
 	double cutAngle;
 	int size;
 
-	size = 60;
+	size = 92;
 	geom_.selectGeometry(size, mol0, cutAngle, reflection);
 	ident_.coordinatesToPermutation(
 		mol0,
-		"OC-6-Ma2b2(AA).csv",
+		"MFF-9-Ma(AA)3(AB).csv",
 		"",
-		"ERUJIM-cores(2).xyz",
+		"JARBUZ.xyz",
 		getCountingPath(size));
 
 

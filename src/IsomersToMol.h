@@ -52,6 +52,9 @@ public:
 
 	std::vector<int> readCauchyNotationsEnantiomers(std::ifstream & openendFile_);
 
+	// molekel parameters
+	void setParameters(int coordination, int geoCode);
+
 private:
 	void printAllMol(
 		std::string fileName,
@@ -93,9 +96,6 @@ private:
 
 	// raswin parameters
 	void setParameters(int coordination);
-
-	// molekel parameters
-	void setParameters(int coordination, int geoCode);
 
 	std::vector<std::string> atomLabels;
 

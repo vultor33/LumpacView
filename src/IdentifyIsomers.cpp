@@ -134,6 +134,9 @@ void IdentifyIsomers::coordinatesToPermutation(
 	}
 	*/
 
+
+	isoMol_.setParameters(mol0.size(), 92);
+
 	isoMol_.printSingleMol(
 		permutationF,
 		atomTypes,

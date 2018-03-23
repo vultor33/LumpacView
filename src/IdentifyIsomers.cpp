@@ -26,6 +26,7 @@ IdentifyIsomers::~IdentifyIsomers(){}
 
 void IdentifyIsomers::coordinatesToPermutation(
 	vector<CoordXYZ> mol0,
+	int geoCode,
 	string permutationsFile,
 	string filePath,
 	string coordinatesFile,
@@ -135,7 +136,7 @@ void IdentifyIsomers::coordinatesToPermutation(
 	*/
 
 
-	isoMol_.setParameters(mol0.size(), 92);
+	isoMol_.setParameters(mol0.size(), geoCode);
 
 	isoMol_.printSingleMol(
 		permutationF,

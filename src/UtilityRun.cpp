@@ -198,13 +198,14 @@ void UtilityRun::identifyOne()
 	double cutAngle;
 	int size;
 
-	size = 92;
+	size = 71;
 	geom_.selectGeometry(size, mol0, cutAngle, reflection);
 	ident_.coordinatesToPermutation(
 		mol0,
-		"MFF-9-Ma(AA)3(AB).csv",
+		size,
+		"PBPY-7-Ma4b(AA).csv",
 		"",
-		"JARBUZ.xyz",
+		"MINLIE.xyz",
 		getCountingPath(size));
 
 
@@ -1390,6 +1391,7 @@ void UtilityRun::identifyAll()
 		getCountingPath(size));
 	*/
 
+/*
 	size = 92;
 	geom_.selectGeometry(size, mol0, cutAngle, reflection);
 	ident_.coordinatesToPermutation(
@@ -1500,7 +1502,7 @@ void UtilityRun::identifyAll()
 		"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\IDENTIFICACAO-raio-x\\MFF-9\\Sm-QALFAK\\",
 		"QALFAK.xyz",
 		getCountingPath(size));
-
+*/
 
 }
 

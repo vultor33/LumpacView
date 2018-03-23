@@ -27,6 +27,7 @@ public:
 
 	void coordinatesToPermutation(
 		std::vector<CoordXYZ> mol0,
+		int geoCode,
 		std::string permutationsFile,
 		std::string filePath,
 		std::string coordinatesFile,

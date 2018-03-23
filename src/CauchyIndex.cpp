@@ -2569,6 +2569,10 @@ void CauchyIndex::identifyIsomer(
 	string coordinatesFile,
 	string countingFile)
 {
+
+	cout << "NOT WORKING --- ADD GEO CODE" << endl;
+	exit(1);
+/*
 	IdentifyIsomers identIso_;
 	identIso_.coordinatesToPermutation(
 		mol0,
@@ -2576,6 +2580,7 @@ void CauchyIndex::identifyIsomer(
 		filePath,
 		coordinatesFile,
 		countingFile);
+		*/
 }
 
 

@@ -93,6 +93,10 @@ std::vector<double> Geometries::selectGeometry(
 		return geometry9MFF(mol0, cutAngle, reflectionOperation);
 		break;
 
+	case 93:
+		return geometry9CCU(mol0, cutAngle, reflectionOperation);
+		break;
+
 	case 100:
 		return geometry10PointSphere(mol0, cutAngle, reflectionOperation);
 		break;
@@ -200,6 +204,10 @@ void Geometries::selectGeometrySymmetries(
 
 	case 92:
 		geometry9MFFotherSymmetries(allReflections);
+		break;
+
+	case 93:
+		geometry9CCUotherSymmetries(allReflections);
 		break;
 
 	case 100:
@@ -313,11 +321,17 @@ std::string Geometries::selectGeometrySymmetriesFlag(
 		return geometry9MFFSymmetryFlags(iSymmetry, symmetryType);
 		break;
 
+	case 93:
+		return geometry9CCUSymmetryFlags(iSymmetry, symmetryType);
+		break;
+
 	case 100:
 		//return geometry10PointSphere(mol0, cutAngle, reflectionOperation);
 		break;
 
 	case 101:
+		cout << "OTHER SYMMETRIES NOT DONE " << endl;
+		exit(1);
 		//return geometry10TD(mol0, cutAngle, reflectionOperation);
 		break;
 
@@ -2108,6 +2122,73 @@ std::vector<double> Geometries::geometry9CSAPR(
 
 	return vectorRotations;
 }
+
+
+std::vector<double> Geometries::geometry9CCU(
+	std::vector<CoordXYZ> &mol0,
+	double & cutAngle,
+	std::vector<int> &reflectionOperation)
+{
+	int size = 9;
+	mol0.resize(size);
+	reflectionOperation.resize(size);
+	cutAngle = 91.0e0 * (auxMath_._pi / 180.0e0);
+	vector<double> vectorRotations(12);
+
+	mol0[0].x = 0.64183300;
+	mol0[0].y = 0.64183300;
+	mol0[0].z = 0.41964300;
+	mol0[1].x = 0.64183300;
+	mol0[1].y = -0.64183300;
+	mol0[1].z = 0.41964300;
+	mol0[2].x = -0.64183300;
+	mol0[2].y = 0.64183300;
+	mol0[2].z = 0.41964300;
+	mol0[3].x = -0.64183300;
+	mol0[3].y = -0.64183300;
+	mol0[3].z = 0.41964300;
+	mol0[4].x = 0.53868200;
+	mol0[4].y = 0.53868200;
+	mol0[4].z = -0.64779900;
+	mol0[5].x = 0.53868200;
+	mol0[5].y = -0.53868200;
+	mol0[5].z = -0.64779900;
+	mol0[6].x = -0.53868200;
+	mol0[6].y = 0.53868200;
+	mol0[6].z = -0.64779900;
+	mol0[7].x = -0.53868200;
+	mol0[7].y = -0.53868200;
+	mol0[7].z = -0.64779900;
+	mol0[8].x = 0.00000000;
+	mol0[8].y = 0.00000000;
+	mol0[8].z = 1.00000000;
+
+	//C4-1-p
+	vectorRotations[0] = mol0[8].x;
+	vectorRotations[1] = mol0[8].y;
+	vectorRotations[2] = mol0[8].z;
+	vectorRotations[3] = auxMath_._pi / 2.0e0;
+	//C2-1
+	vectorRotations[4] = mol0[8].x;
+	vectorRotations[5] = mol0[8].y;
+	vectorRotations[6] = mol0[8].z;
+	vectorRotations[7] = auxMath_._pi;
+	//C4-1-m
+	vectorRotations[8] = mol0[8].x;
+	vectorRotations[9] = mol0[8].y;
+	vectorRotations[10] = mol0[8].z;
+	vectorRotations[11] = -auxMath_._pi / 2.0e0;
+
+	for (size_t i = 0; i < reflectionOperation.size(); i++)
+		reflectionOperation[i] = i;
+	reflectionOperation[1] = 2;
+	reflectionOperation[2] = 1;
+	reflectionOperation[5] = 6;
+	reflectionOperation[6] = 5;
+
+	return vectorRotations;
+}
+
 
 
 std::vector<double> Geometries::geometry10PointSphere(
@@ -4971,6 +5052,100 @@ string Geometries::geometry9MFFSymmetryFlags(
 		{
 		case 0:
 			return "P-1 ";
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	return "ERROR";
+}
+
+
+void Geometries::geometry9CCUotherSymmetries(
+	std::vector< std::vector<int> > &allReflections)
+{
+	int size = 9;
+	allReflections.resize(4);
+	for (size_t i = 0; i < allReflections.size(); i++)
+	{
+		allReflections[i].resize(size);
+		for (size_t j = 0; j < allReflections[i].size(); j++)
+		{
+			allReflections[i][j] = j;
+		}
+	}
+	//P-1
+	allReflections[0][2] = 3;
+	allReflections[0][3] = 2;
+	allReflections[0][6] = 7;
+	allReflections[0][7] = 6;
+	allReflections[0][0] = 1;
+	allReflections[0][1] = 0;
+	allReflections[0][4] = 5;
+	allReflections[0][5] = 4;
+
+	//P-2
+	allReflections[1][1] = 2;
+	allReflections[1][2] = 1;
+	allReflections[1][5] = 6;
+	allReflections[1][6] = 5;
+
+	//P-3
+	allReflections[2][1] = 3;
+	allReflections[2][3] = 1;
+	allReflections[2][5] = 7;
+	allReflections[2][7] = 5;
+	allReflections[2][0] = 2;
+	allReflections[2][2] = 0;
+	allReflections[2][4] = 6;
+	allReflections[2][6] = 4;
+
+	//P-4
+	allReflections[3][0] = 3;
+	allReflections[3][3] = 0;
+	allReflections[3][4] = 7;
+	allReflections[3][7] = 4;
+
+}
+
+
+string Geometries::geometry9CCUSymmetryFlags(
+	int iSymmetry,
+	int symmetryType)
+{
+	if (symmetryType == 0)
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "C4-1-p";
+			break;
+		case 1:
+			return "C2-1 ";
+			break;
+		case 2:
+			return "C4-1-m";
+			break;
+
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	else
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "P-1 ";
+		case 1:
+			return "P-2 ";
+		case 2:
+			return "P-3 ";
+		case 3:
+			return "P-4 ";
 		default:
 			cout << "rotation on CauchyIndex::rotationString not found" << endl;
 			exit(1);

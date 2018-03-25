@@ -123,6 +123,12 @@ private:
         	double & cutAngle,
         	std::vector<int> &reflectionOperation);
 
+	std::vector<double> geometry9CCU(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+
 	std::vector<double> geometry10PointSphere(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
@@ -267,6 +273,13 @@ private:
 	std::string geometry9MFFSymmetryFlags(
 		int iSymmetry,
 		int symmetryType);
+
+	void geometry9CCUotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9CCUSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
 
 
 	AuxMath auxMath_;

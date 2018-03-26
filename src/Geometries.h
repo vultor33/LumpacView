@@ -43,6 +43,11 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
+	std::vector<double> geometry4SS(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
 	std::vector<double> geometry5TBPY(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
@@ -83,6 +88,11 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
+	std::vector<double> geometry7HPY(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
 	std::vector<double> geometry8SAPR(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
@@ -108,6 +118,21 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
+	std::vector<double> geometry8ETBPY(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry8HPY(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry8OP(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
 	std::vector<double> geometry9TCTPR(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
@@ -128,6 +153,35 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
+	std::vector<double> geometry9HH(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry9OPY(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry9EP(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry9HBPY(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry9JTC(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry9JTDIC(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
 
 	std::vector<double> geometry10PointSphere(
 		std::vector<CoordXYZ> &mol0,
@@ -179,6 +233,12 @@ private:
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry4SSotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry4SSSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
 
 	void geometry5SPYotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
@@ -224,6 +284,11 @@ private:
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry7HPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry7HPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
 
 	void geometry8BTPRotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
@@ -255,6 +320,23 @@ private:
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry8ETBPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry8ETBPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry8HPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry8HPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry8OPotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry8OPSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
 
 	void geometry9TCTPRotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
@@ -280,6 +362,41 @@ private:
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry9HHotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9HHSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry9OPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9OPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry9EPotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9EPSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry9HBPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9HBPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry9JTCotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9JTCSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry9JTDICotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry9JTDICSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
 
 
 	AuxMath auxMath_;

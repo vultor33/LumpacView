@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
 	// tenho que ler o response transformar no codigo novo
 	// depois entrar no arquivo e pronto, montar a arvore de diretorios
 
-	/* EXEMPLO DE PRINT ALL MOL */
+	/* EXEMPLO DE PRINT ALL MOL 
 	int geoCode = 92;
 	string response = "response-combinations9.txt";
 	string path = "/home/vultor/lumpacview/code2/resultados/9/MFF-9/";
@@ -229,7 +229,8 @@ int main(int argc, char *argv[])
 		path,
 		response);
 	return 0;
-	
+	*/
+
 
 	/* ENCONTRAR GRUPO PONTUAL 
 	CauchyIndex ci13_(60);

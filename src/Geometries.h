@@ -48,6 +48,11 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
+	std::vector<double> geometry4vTBPY(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
 	std::vector<double> geometry5TBPY(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
@@ -64,11 +69,6 @@ private:
 		std::vector<int> &reflectionOperation);
 
 	std::vector<double> geometry5PP(
-		std::vector<CoordXYZ> &mol0,
-		double & cutAngle,
-		std::vector<int> &reflectionOperation);
-
-	std::vector<double> geometry5vTBPY(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
@@ -274,6 +274,11 @@ private:
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry4vTBPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry4vTBPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
 
 	void geometry5SPYotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
@@ -290,12 +295,6 @@ private:
 	void geometry5PPotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
 	std::string geometry5PPSymmetryFlags(
-		int iSymmetry,
-		int symmetryType);
-
-	void geometry5vTBPYotherSymmetries(
-		std::vector< std::vector<int> > &allReflections);
-	std::string geometry5vTBPYSymmetryFlags(
 		int iSymmetry,
 		int symmetryType);
 

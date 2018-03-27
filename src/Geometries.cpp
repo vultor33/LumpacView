@@ -33,6 +33,10 @@ std::vector<double> Geometries::selectGeometry(
 		return geometry4SS(mol0, cutAngle, reflectionOperation);
 		break;
 
+	case 43:
+		return geometry4vTBPY(mol0, cutAngle, reflectionOperation);
+		break;
+
 	case 50:
 		return geometry5TBPY(mol0, cutAngle, reflectionOperation);
 		break;
@@ -47,10 +51,6 @@ std::vector<double> Geometries::selectGeometry(
 
 	case 53:
 		return geometry5PP(mol0, cutAngle, reflectionOperation);
-		break;
-
-	case 54:
-		return geometry5vTBPY(mol0, cutAngle, reflectionOperation);
 		break;
 
 	case 60:
@@ -218,6 +218,10 @@ void Geometries::selectGeometrySymmetries(
 		geometry4SSotherSymmetries(allReflections);
 		break;
 
+	case 43:
+		geometry4vTBPYotherSymmetries(allReflections);
+		break;
+
 	case 50:
 		geometry5TBPYotherSymmetries(allReflections);
 		break;
@@ -232,10 +236,6 @@ void Geometries::selectGeometrySymmetries(
 
 	case 53:
 		geometry5PPotherSymmetries(allReflections);
-		break;
-
-	case 54:
-		geometry5vTBPYotherSymmetries(allReflections);
 		break;
 
 	case 60:
@@ -405,6 +405,10 @@ std::string Geometries::selectGeometrySymmetriesFlag(
 		return geometry4SSSymmetryFlags(iSymmetry, symmetryType);
 		break;
 
+	case 43:
+		return geometry4vTBPYSymmetryFlags(iSymmetry, symmetryType);
+		break;
+
 	case 50:
 		return geometry5TBPYSymmetryFlags(iSymmetry, symmetryType);
 		break;
@@ -419,10 +423,6 @@ std::string Geometries::selectGeometrySymmetriesFlag(
 
 	case 53:
 		return geometry5PPSymmetryFlags(iSymmetry, symmetryType);
-		break;
-
-	case 54:
-		return geometry5vTBPYSymmetryFlags(iSymmetry, symmetryType);
 		break;
 
 	case 60:
@@ -588,6 +588,14 @@ string Geometries::sizeToGeometryCode(int geoCode)
 		return "SP-4";
 		break;
 
+	case 42:
+		return "SS-4";
+		break;
+
+	case 43:
+		return "vTBPY-4";
+		break;
+
 	case 50:
 		return "TBPY-5";
 		break;
@@ -600,12 +608,24 @@ string Geometries::sizeToGeometryCode(int geoCode)
 		return "vOC-5";
 		break;
 
+	case 53:
+		return "PP-5";
+		break;
+
 	case 60:
 		return "OC-6";
 		break;
 
 	case 61:
 		return "TPR-6";
+		break;
+
+	case 62:
+		return "HP-6";
+		break;
+
+	case 63:
+		return "PPY-6";
 		break;
 
 	case 70:
@@ -618,6 +638,18 @@ string Geometries::sizeToGeometryCode(int geoCode)
 
 	case 72:
 		return "CTPR-7";
+		break;
+
+	case 73:
+		return "HPY-7";
+		break;
+
+	case 74:
+		return "HP-7";
+		break;
+
+	case 75:
+		return "JETPY-7";
 		break;
 
 	case 80:
@@ -640,6 +672,22 @@ string Geometries::sizeToGeometryCode(int geoCode)
 		return "CU-8";
 		break;
 
+	case 85:
+		return "ETBPY-8";
+		break;
+
+	case 86:
+		return "HPY-8";
+		break;
+
+	case 87:
+		return "OP-8";
+		break;
+
+	case 88:
+		return "JGBF-8";
+		break;
+
 	case 90:
 		return "TCTPR-9";
 		break;
@@ -650,6 +698,34 @@ string Geometries::sizeToGeometryCode(int geoCode)
 
 	case 92:
 		return "MFF-9";
+		break;
+
+	case 93:
+		return "CCU-9";
+		break;
+
+	case 94:
+		return "HH-9";
+		break;
+
+	case 95:
+		return "OPY-9";
+		break;
+
+	case 96:
+		return "EP-9";
+		break;
+
+	case 97:
+		return "HBPY-9";
+		break;
+
+	case 98:
+		return "JTC-9";
+		break;
+
+	case 99:
+		return "JTDIC-9";
 		break;
 
 	case 100:
@@ -912,6 +988,51 @@ std::vector<double> Geometries::geometry4SS(
 	return vectorRotations;
 }
 
+std::vector<double> Geometries::geometry4vTBPY(
+	std::vector<CoordXYZ> &mol0,
+	double & cutAngle,
+	std::vector<int> &reflectionOperation)
+{
+	int size = 4;
+	mol0.resize(size);
+	reflectionOperation.resize(size);
+	cutAngle = 91.0e0 * (auxMath_._pi / 180.0e0);
+	vector<double> vectorRotations(8);
+	vector<double> auxReferenceAxis(3);
+
+	mol0[0].x = 0.00000000;
+	mol0[0].y = 0.00000000;
+	mol0[0].z = -1.00000000;
+	mol0[1].x = 1.00000000;
+	mol0[1].y = 0.00000000;
+	mol0[1].z = 0.00000000;
+	mol0[2].x = -0.50000000;
+	mol0[2].y = 0.86602540;
+	mol0[2].z = 0.00000000;
+	mol0[3].x = -0.50000000;
+	mol0[3].y = -0.86602540;
+	mol0[3].z = 0.00000000;
+
+	//C3-1-p
+	vectorRotations[0] = mol0[0].x;
+	vectorRotations[1] = mol0[0].y;
+	vectorRotations[2] = mol0[0].z;
+	vectorRotations[3] = (2.0e0 * auxMath_._pi / 3.0e0);
+	//C3-1-m
+	vectorRotations[4] = mol0[0].x;
+	vectorRotations[5] = mol0[0].y;
+	vectorRotations[6] = mol0[0].z;
+	vectorRotations[7] = 2.0e0 * (2.0e0 * auxMath_._pi / 3.0e0);
+
+	for (size_t i = 0; i < reflectionOperation.size(); i++)
+		reflectionOperation[i] = i;
+	reflectionOperation[1] = 3;
+	reflectionOperation[3] = 1;
+
+	return vectorRotations;
+}
+
+
 std::vector<double> Geometries::geometry5TBPY(
 	std::vector<CoordXYZ> &mol0,
 	double & cutAngle,
@@ -1165,51 +1286,6 @@ std::vector<double> Geometries::geometry5PP(
 
 	return vectorRotations;
 }
-
-std::vector<double> Geometries::geometry5vTBPY(
-	std::vector<CoordXYZ> &mol0,
-	double & cutAngle,
-	std::vector<int> &reflectionOperation)
-{
-	int size = 5;
-	mol0.resize(size);
-	reflectionOperation.resize(size);
-	cutAngle = 91.0e0 * (auxMath_._pi / 180.0e0);
-	vector<double> vectorRotations(8);
-	vector<double> auxReferenceAxis(3);
-
-	mol0[0].x = 0.00000000;
-	mol0[0].x = 0.00000000;
-	mol0[0].x = -1.00000000;
-	mol0[0].x = 1.00000000;
-	mol0[0].x = 0.00000000;
-	mol0[0].x = 0.00000000;
-	mol0[0].x = -0.50000000;
-	mol0[0].x = 0.86602540;
-	mol0[0].x = 0.00000000;
-	mol0[0].x = -0.50000000;
-	mol0[0].x = -0.86602540;
-	mol0[0].x = 0.00000000;
-
-	//C3-1-p
-	vectorRotations[0] = mol0[0].x;
-	vectorRotations[1] = mol0[0].y;
-	vectorRotations[2] = mol0[0].z;
-	vectorRotations[3] = (2.0e0 * auxMath_._pi / 3.0e0);
-	//C3-1-m
-	vectorRotations[4] = mol0[0].x;
-	vectorRotations[5] = mol0[0].y;
-	vectorRotations[6] = mol0[0].z;
-	vectorRotations[7] = 2.0e0 * (2.0e0 * auxMath_._pi / 3.0e0);
-
-	for (size_t i = 0; i < reflectionOperation.size(); i++)
-		reflectionOperation[i] = i;
-	reflectionOperation[1] = 3;
-	reflectionOperation[3] = 1;
-
-	return vectorRotations;
-}
-
 
 
 std::vector<double> Geometries::geometry6OC(
@@ -3934,8 +4010,6 @@ std::vector<double> Geometries::geometry9JTDIC(
 
 
 
-
-
 std::vector<double> Geometries::geometry10PointSphere(
 	std::vector<CoordXYZ> &mol0,
 	double & cutAngle,
@@ -5144,6 +5218,76 @@ string Geometries::geometry4SSSymmetryFlags(
 }
 
 
+void Geometries::geometry4vTBPYotherSymmetries(
+	std::vector< std::vector<int> > &allReflections)
+{
+	int size = 5;
+	allReflections.resize(3);
+	for (size_t i = 0; i < allReflections.size(); i++)
+	{
+		allReflections[i].resize(size);
+		for (size_t j = 0; j < allReflections[i].size(); j++)
+		{
+			allReflections[i][j] = j;
+		}
+	}
+
+	//P-1 
+	allReflections[0][1] = 2;
+	allReflections[0][2] = 1;
+
+	//P-2
+	allReflections[1][2] = 3;
+	allReflections[1][3] = 2;
+
+	//P-3
+	allReflections[2][1] = 3;
+	allReflections[2][3] = 1;
+}
+
+string Geometries::geometry4vTBPYSymmetryFlags(
+	int iSymmetry,
+	int symmetryType)
+{
+	if (symmetryType == 0)
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "C3-1-p";
+			break;
+		case 1:
+			return "C3-1-m";
+			break;
+
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+	}
+	else
+	{
+		switch (iSymmetry)
+		{
+		case 0:
+			return "P-1 ";
+		case 1:
+			return "P-2 ";
+		case 2:
+			return "P-3 ";
+		default:
+			cout << "rotation on CauchyIndex::rotationString not found" << endl;
+			exit(1);
+			break;
+		}
+
+	}
+
+	return "ERROR";
+}
+
+
 
 void Geometries::geometry5SPYotherSymmetries(
 	std::vector< std::vector<int> > &allReflections)
@@ -5478,75 +5622,6 @@ string Geometries::geometry5PPSymmetryFlags(
 			return "S5-1-mm";
 		case 9:
 			return "S5-1-m";
-		default:
-			cout << "rotation on CauchyIndex::rotationString not found" << endl;
-			exit(1);
-			break;
-		}
-
-	}
-
-	return "ERROR";
-}
-
-void Geometries::geometry5vTBPYotherSymmetries(
-	std::vector< std::vector<int> > &allReflections)
-{
-	int size = 5;
-	allReflections.resize(3);
-	for (size_t i = 0; i < allReflections.size(); i++)
-	{
-		allReflections[i].resize(size);
-		for (size_t j = 0; j < allReflections[i].size(); j++)
-		{
-			allReflections[i][j] = j;
-		}
-	}
-
-	//P-1 
-	allReflections[0][1] = 2;
-	allReflections[0][2] = 1;
-
-	//P-2
-	allReflections[1][2] = 3;
-	allReflections[1][3] = 2;
-
-	//P-3
-	allReflections[2][1] = 3;
-	allReflections[2][3] = 1;
-}
-
-string Geometries::geometry5vTBPYSymmetryFlags(
-	int iSymmetry,
-	int symmetryType)
-{
-	if (symmetryType == 0)
-	{
-		switch (iSymmetry)
-		{
-		case 0:
-			return "C3-1-p";
-			break;
-		case 1:
-			return "C3-1-m";
-			break;
-
-		default:
-			cout << "rotation on CauchyIndex::rotationString not found" << endl;
-			exit(1);
-			break;
-		}
-	}
-	else
-	{
-		switch (iSymmetry)
-		{
-		case 0:
-			return "P-1 ";
-		case 1:
-			return "P-2 ";
-		case 2:
-			return "P-3 ";
 		default:
 			cout << "rotation on CauchyIndex::rotationString not found" << endl;
 			exit(1);

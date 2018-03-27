@@ -80,11 +80,11 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-	/* GERANDO SIMETRIAS 
+	/* GERANDO SIMETRIAS */
 	UtilityRun util_;
 	util_.formatToSymmetryAndFiles(51);
 	return 0;
-	*/
+	
 	
 
 

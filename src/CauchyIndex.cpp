@@ -2961,6 +2961,9 @@ void CauchyIndex::findAllSymmetryOperations(
 
 		rotations_ << rcw << " ; " << rwf_.includeGroupPoint(vCode, group);
 
+
+
+
 		/* fredapagar
 		rotations_ << group << " ; ";		
 		for(size_t i = 0; i < allSymmetryOperations.size(); i++)

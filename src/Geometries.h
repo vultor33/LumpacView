@@ -63,12 +63,32 @@ private:
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
+	std::vector<double> geometry5PP(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry5vTBPY(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
 	std::vector<double> geometry6OC(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
 
 	std::vector<double> geometry6TPR(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry6HP(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry6PPY(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
@@ -89,6 +109,16 @@ private:
 		std::vector<int> &reflectionOperation);
 
 	std::vector<double> geometry7HPY(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry7HP(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry7JETPY(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
@@ -129,6 +159,11 @@ private:
 		std::vector<int> &reflectionOperation);
 
 	std::vector<double> geometry8OP(
+		std::vector<CoordXYZ> &mol0,
+		double & cutAngle,
+		std::vector<int> &reflectionOperation);
+
+	std::vector<double> geometry8JGBF(
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
@@ -252,6 +287,17 @@ private:
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry5PPotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry5PPSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry5vTBPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry5vTBPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
 
 	void geometry6OCotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
@@ -265,6 +311,17 @@ private:
 		int iSymmetry,
 		int symmetryType);
 
+	void geometry6HPotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry6HPSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry6PPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry6PPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
 
 	void geometry7COCotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
@@ -287,6 +344,18 @@ private:
 	void geometry7HPYotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
 	std::string geometry7HPYSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry7HPotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry7HPSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry7JETPYotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry7JETPYSymmetryFlags(
 		int iSymmetry,
 		int symmetryType);
 
@@ -335,6 +404,12 @@ private:
 	void geometry8OPotherSymmetries(
 		std::vector< std::vector<int> > &allReflections);
 	std::string geometry8OPSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry8JGBFotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry8JGBFSymmetryFlags(
 		int iSymmetry,
 		int symmetryType);
 

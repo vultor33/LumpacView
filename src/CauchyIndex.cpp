@@ -2959,7 +2959,12 @@ void CauchyIndex::findAllSymmetryOperations(
 
 		string group = groupPoint_.findGroupPoint(allSymmetryOperations);
 
-		rotations_ << rcw << " ; " << rwf_.includeGroupPoint(vCode, group);
+		rotations_ << rcw << " ; ";
+		
+		//for (size_t i = 0; i < allSymmetryOperations.size(); i++)
+		//	rotations_ << allSymmetryOperations[i] << " ; ";
+		
+		rotations_ << rwf_.includeGroupPoint(vCode, group);
 
 
 

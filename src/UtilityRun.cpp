@@ -59,9 +59,20 @@ void UtilityRun::formatToSymmetryAndFiles(int geoCode)
 	vector<int> reflec;
 	geo_.selectGeometry(geoCode, mol0, cutAngle, reflec);
 	string responseName = getResponseName(mol0.size());
+	string pathRaw = getRawPath(geoCode);
+	string pathFormatado = getResultsPath(geoCode);
 
-//	cout << "antes do response" << endl;
-	
+	/*
+	ChangeNames chNames1_;
+	chNames1_.changeNameOfFiles(
+		responseName,
+		geoCode,
+		pathRaw,
+		pathFormatado);
+		*/
+
+	//	cout << "antes do response" << endl;	
+
 	findAllGroupPoint(geoCode);
 
 //	cout << "find group done" << endl;
@@ -76,6 +87,7 @@ void UtilityRun::formatToSymmetryAndFiles(int geoCode)
 	*/
 
 }
+
 
 void UtilityRun::formatIsomersFiles()
 {
@@ -1792,6 +1804,138 @@ std::string UtilityRun::getResultsPath(int geoCode)
 	case(92):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\MFF\\";
 		break;
+
+	case(93):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\CCU\\";
+		break;
+
+	case(94):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\HH\\";
+		break;
+
+	case(95):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\OPY\\";
+		break;
+
+
+
+	case(97):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\HBPY\\";
+		break;
+
+	case(98):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\JTC\\";
+		break;
+
+	case(99):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\JTDIC\\";
+		break;
+
+	default:
+		cout << "UtilityRun::getCountingPath geoCode not found" << endl;
+		exit(1);
+		break;
+	}
+}
+
+
+std::string UtilityRun::getRawPath(int geoCode)
+{
+	switch (geoCode)
+	{
+	case(40):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#4\\T\\";
+		break;
+
+	case(41):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#4\\SP\\";
+		break;
+
+	case(50):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#5\\TBPY\\";
+		break;
+
+	case(51):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#5\\SPY\\";
+		break;
+
+	case(60):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\OC\\";
+		break;
+
+	case(61):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\TPR\\";
+		break;
+
+	case(70):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#7\\COC\\";
+		break;
+
+	case(71):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#7\\PBPY\\";
+		break;
+
+	case(72):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#7\\CTPR\\";
+		break;
+
+	case(80):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\SAPR\\";
+		break;
+
+	case(81):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\TDD\\";
+		break;
+
+	case(82):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\BTPR\\";
+		break;
+
+	case(83):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\HBPY\\";
+		break;
+
+	case(84):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\CU\\";
+		break;
+
+	case(90):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\TCTPR\\";
+		break;
+
+	case(91):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\CSAPR\\";
+		break;
+
+	case(92):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\MFF\\";
+		break;
+
+	case(93):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\CCU\\";
+		break;
+
+	case(94):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\HH\\";
+		break;
+
+	case(95):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\OPY\\";
+		break;
+
+
+	case(97):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\HBPY\\";
+		break;
+
+	case(98):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\JTC\\";
+		break;
+
+	case(99):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\JTDIC\\";
+		break;
+
 
 	default:
 		cout << "UtilityRun::getCountingPath geoCode not found" << endl;

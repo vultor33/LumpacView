@@ -90,6 +90,8 @@ private:
 		std::string &combination, 
 		int systemSize);
 
+	int symmetryNumberFromPointGroup(std::string pGroup);
+
 };
 
 #endif

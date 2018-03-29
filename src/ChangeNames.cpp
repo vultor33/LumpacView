@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <iterator>
+#include <ctype.h>
 
 #include "AllMolecularFormulas.h"
 #include "AuxMath.h"
@@ -142,8 +143,10 @@ void ChangeNames::createNewCounting(
 	string pathRead,
 	string responseName)
 {
+	cout << "WARNING - ChangeNames::createNewCounting WORKS ONLY ON WINDOWS " << endl;
 	Geometries geo_;
 	string geomName = geo_.sizeToGeometryCode(geoCode);
+	system(("md " + geomName).c_str());
 
 	ReadWriteFormats rwf_;
 	ifstream response_((pathRead + responseName).c_str());
@@ -218,7 +221,9 @@ void ChangeNames::createNewCounting(
 		allRce.push_back(rce);
 		allLettersSets.push_back(lettersSetsGroups);
 
-		ofstream printIso_(("resultados/" + allIsomersCombinationFile).c_str());
+		// aplicar calculo de simetria aqui. eu tenho string pGroup
+
+		ofstream printIso_((geomName + "/" + allIsomersCombinationFile).c_str());
 		printIso_ << firstLine << endl;
 		for (size_t i = 0; i < listOfPermutations.size(); i++)
 		{
@@ -258,6 +263,8 @@ void ChangeNames::createNewCounting(
 				<< " "
 				<< listOfChiralities[i]
 				<< " "
+				<< symmetryNumberFromPointGroup(listOfPGroup[i])
+				<< " "
 				<< letterEachIsomer
 				<< " ["
 				<< listOfPermutations[i]
@@ -275,6 +282,8 @@ void ChangeNames::createNewCounting(
 					<< listOfPGroup[i]
 					<< " "
 					<< listOfChiralities[i]
+					<< " "
+					<< symmetryNumberFromPointGroup(listOfPGroup[i])
 					<< " "
 					<< letterEachIsomer
 					<< " ["
@@ -665,8 +674,9 @@ for (size_t i = 0; i < allPgroup.size(); i++)
 		counting_ << allLettersSets[i][j] << ";"
 			<< allPgroup[i][j] << ";"
 			<< chiralLetter << ";"
-			<< allCount[i][j] << ";"
-			<< allRcw[i][j] << ";";
+			<< symmetryNumberFromPointGroup(allPgroup[i][j]) << ";"
+			<< allRcw[i][j] << ";"
+			<< allCount[i][j] << ";";
 	}
 	counting_ << endl;
 }
@@ -1216,12 +1226,14 @@ void ChangeNames::calculateVultorGroup(
 	AuxMath auxMath_;
 	vector<int> instructions = auxMath_.vector_ordering(entropyOrdering);
 	// ORDER VECTOR WITH INSTRUCTIONS
+	/*fredmudar
 	for (size_t i = 0; i < instructions.size(); i += 2)
 	{
 		cout << "inversion" << endl;
 		vGroup[instructions[i]] = auxVGroup[instructions[i + 1]];
 		vGroup[instructions[i + 1]] = auxVGroup[instructions[i]];
 	}
+	*/
 	for (size_t i = 0; i < vGroup.size(); i++)
 	{
 		vGroup[i].blockName[0] = takeLetter(i)[0];
@@ -1425,3 +1437,43 @@ string ChangeNames::generateNewTypeLine(string pathRead, string &combination, in
 	}
 	return convert2.str();
 }
+
+int ChangeNames::symmetryNumberFromPointGroup(string pGroup)
+{
+	// O T D S
+	bool diedral = false;
+	bool improper = false;
+	if (pGroup[0] == 'O')
+		return 24;
+	else if (pGroup[0] == 'T')
+		return 12;
+	else if (pGroup[0] == 'D')
+		diedral = true;
+	else if (pGroup[0] == 'S')
+		improper = true;
+
+	// take number
+	string symNumber = "";
+	for (size_t i = 1; i < pGroup.size(); i++)
+	{
+		if (isdigit(pGroup[i]))
+			symNumber += pGroup[i];
+	}
+
+	if(symNumber == "")
+		return 1;
+
+	stringstream convert;
+	convert << symNumber;
+	int rot;
+	convert >> rot;
+
+	if (diedral)
+		return 2 * rot;
+	else if (improper)
+		return rot / 2;
+	else
+		return rot;
+}
+
+

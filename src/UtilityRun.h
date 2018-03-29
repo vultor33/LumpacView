@@ -33,6 +33,8 @@ private:
 
 	std::string getResultsPath(int geoCode);
 
+	std::string getRawPath(int geoCode);
+
 	std::string getResultsPathLinux(int geoCode);
 };
 

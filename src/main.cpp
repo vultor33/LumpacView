@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 
 	/* GERANDO SIMETRIAS */
 	UtilityRun util_;
-	util_.formatToSymmetryAndFiles(51);
+	util_.formatToSymmetryAndFiles(60);
 	return 0;
 	
 	
@@ -181,27 +181,11 @@ int main(int argc, char *argv[])
 	exit(0);
 	*/
 
-	// Na hora de realizar uma reacao quimica, os pesos deveriam ser levados em consideracao. Entropia, mais graus de liberdade. Graus de liberdade degenerados.
-	// Na quimica organica deveria ter pesos. 
-
-	//UtilityRun util_;
-	//util_.identifyAll();
-	//return 0;
 
 	/* IDENTIFY ISOMERS */
 	//UtilityRun util_;
 	//util_.identifyOne();
 	//return 0;
-	
-	/* IDENTIFY TWO
-	IdentifyIsomers ident_;
-	ident_.compareTwoGeometries(
-		"VUZBOI-cores(1).xyz",
-		"VUZBOI-cores(2).xyz",
-		9,
-		6);
-	return 0;
-	*/
 
 	
 	/* CALCULATING SQUARE 
@@ -232,12 +216,6 @@ int main(int argc, char *argv[])
 	*/
 
 
-	/* ENCONTRAR GRUPO PONTUAL 
-	CauchyIndex ci13_(60);
-	ci13_.findMissedRotations();
-	return 0;
-	*/
-
 	/* CALCULATING ANGLES 
 	vector<Ligand> allLig;
 	ComplexCreator cp_(allLig);
@@ -251,27 +229,7 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-//	UtilityRun utRun_;
-//	utRun_.renameAtomTypes("response-combinations4.txt");
-//	return 0;
-
-
-	//UtilityRun util_;
-	//util_.formatIsomersFiles();
-	//return 0;
-
-	/* Symmetry files
-	UtilityRun util_;
-	util_.formatToSymmetryAndFiles(92);
-	return 0;
-	*/
-
-
-
-
-
-
-	/* CHANGING NAMES
+	/* CHANGING NAMES 
 	string responseName;
 	responseName = "response-combinations6.txt";
 	ChangeNames chNames_;

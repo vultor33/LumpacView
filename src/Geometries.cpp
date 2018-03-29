@@ -9099,7 +9099,7 @@ void Geometries::geometry9HBPYotherSymmetries(
 	}
 	//P-1 ( C7-1-p C7-1-pp C7-1-ppp C7-1-m C7-1-mm C7-1-mmm )
 	allReflections[0][0] = 8;
-	allReflections[0][8] = 1;
+	allReflections[0][8] = 0;
 
 	//P-2
 	allReflections[1][4] = 5;

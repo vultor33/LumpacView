@@ -21,7 +21,8 @@ public:
 
 	std::vector<std::string> readAllPermutations(
 		std::string fileName, 
-		std::string fileFolder,
+		std::string file
+		,
 		std::vector<int> &atomTypes,
 		std::vector<int> &bidentateChosen);
 

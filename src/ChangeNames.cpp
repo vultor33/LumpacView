@@ -354,7 +354,7 @@ void ChangeNames::createNewCounting(
 	}
 	*/
 
-	ofstream counting_((geomName + "-counting.csv").c_str());
+	ofstream counting_((geomName + "/" + geomName + "-counting.csv").c_str());
 
 	// Complete header
 	vector<string> header = allPgroup[0];

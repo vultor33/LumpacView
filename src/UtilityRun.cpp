@@ -69,8 +69,7 @@ void UtilityRun::formatToSymmetryAndFiles(int geoCode)
 		geoCode,
 		pathRaw,
 		pathFormatado);
-		*/
-
+	*/
 	//	cout << "antes do response" << endl;	
 
 	findAllGroupPoint(geoCode);
@@ -1745,6 +1744,14 @@ std::string UtilityRun::getResultsPath(int geoCode)
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#4\\SP\\";
 		break;
 
+	case(42):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#4\\SS\\";
+		break;
+
+	case(43):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#4\\vTBPY\\";
+		break;
+
 	case(50):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#5\\TBPY\\";
 		break;
@@ -1753,12 +1760,24 @@ std::string UtilityRun::getResultsPath(int geoCode)
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#5\\SPY\\";
 		break;
 
+	case(53):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#5\\PP\\";
+		break;
+
 	case(60):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\OC\\";
 		break;
 
 	case(61):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\TPR\\";
+		break;
+
+	case(62):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\HP\\";
+		break;
+
+	case(63):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#6\\PPY\\";
 		break;
 
 	case(70):
@@ -1771,6 +1790,18 @@ std::string UtilityRun::getResultsPath(int geoCode)
 
 	case(72):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#7\\CTPR\\";
+		break;
+
+	case(73):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#7\\HPY\\";
+		break;
+
+	case(74):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#7\\HP\\";
+		break;
+
+	case(75):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#7\\JETPY\\";
 		break;
 
 	case(80):
@@ -1791,6 +1822,22 @@ std::string UtilityRun::getResultsPath(int geoCode)
 
 	case(84):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\CU\\";
+		break;
+
+	case(85):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\ETBPY\\";
+		break;
+
+	case(86):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\HPY\\";
+		break;
+
+	case(87):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\OP\\";
+		break;
+
+	case(88):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#8\\JGBF\\";
 		break;
 
 	case(90):
@@ -1817,7 +1864,9 @@ std::string UtilityRun::getResultsPath(int geoCode)
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\OPY\\";
 		break;
 
-
+	case(96):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\EP\\";
+		break;
 
 	case(97):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#9\\HBPY\\";
@@ -1851,6 +1900,14 @@ std::string UtilityRun::getRawPath(int geoCode)
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#4\\SP\\";
 		break;
 
+	case(42):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#4\\SS\\";
+		break;
+
+	case(43):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#4\\vTBPY\\";
+		break;
+
 	case(50):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#5\\TBPY\\";
 		break;
@@ -1859,12 +1916,24 @@ std::string UtilityRun::getRawPath(int geoCode)
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#5\\SPY\\";
 		break;
 
+	case(53):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#5\\PP\\";
+		break;
+
 	case(60):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\OC\\";
 		break;
 
 	case(61):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\TPR\\";
+		break;
+
+	case(62):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\HP\\";
+		break;
+
+	case(63):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\PPY\\";
 		break;
 
 	case(70):
@@ -1877,6 +1946,18 @@ std::string UtilityRun::getRawPath(int geoCode)
 
 	case(72):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#7\\CTPR\\";
+		break;
+
+	case(73):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#7\\HPY\\";
+		break;
+
+	case(74):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#7\\HP\\";
+		break;
+
+	case(75):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#7\\JETPY\\";
 		break;
 
 	case(80):
@@ -1897,6 +1978,22 @@ std::string UtilityRun::getRawPath(int geoCode)
 
 	case(84):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\CU\\";
+		break;
+
+	case(85):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\ETBPY\\";
+		break;
+
+	case(86):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\HPY\\";
+		break;
+
+	case(87):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\OP\\";
+		break;
+
+	case(88):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#8\\JGBF\\";
 		break;
 
 	case(90):
@@ -1923,6 +2020,9 @@ std::string UtilityRun::getRawPath(int geoCode)
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\OPY\\";
 		break;
 
+	case(96):
+		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\EP\\";
+		break;
 
 	case(97):
 		return "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#9\\HBPY\\";

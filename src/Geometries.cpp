@@ -976,8 +976,8 @@ std::vector<double> Geometries::geometry4SS(
 	auxMath_.normalize(auxReferenceAxis);
 
 	vectorRotations[0] = auxReferenceAxis[0];
-	vectorRotations[1] = auxReferenceAxis[0];
-	vectorRotations[2] = auxReferenceAxis[0];
+	vectorRotations[1] = auxReferenceAxis[1];
+	vectorRotations[2] = auxReferenceAxis[2];
 	vectorRotations[3] = auxMath_._pi;
 
 	for (size_t i = 0; i < reflectionOperation.size(); i++)
@@ -1236,22 +1236,22 @@ std::vector<double> Geometries::geometry5PP(
 	vectorRotations[0] = auxReferenceAxis[0];
 	vectorRotations[1] = auxReferenceAxis[1];
 	vectorRotations[2] = auxReferenceAxis[2];
-	vectorRotations[3] = (auxMath_._pi / 5.0e0);
+	vectorRotations[3] = (2.0e0 * auxMath_._pi / 5.0e0);
 	//C5-1-pp
 	vectorRotations[4] = auxReferenceAxis[0];
 	vectorRotations[5] = auxReferenceAxis[1];
 	vectorRotations[6] = auxReferenceAxis[2];
-	vectorRotations[7] = 2.0e0 * (auxMath_._pi / 5.0e0);
+	vectorRotations[7] = 2.0e0 * (2.0e0 * auxMath_._pi / 5.0e0);
 	//C5-1-mm
 	vectorRotations[8] = auxReferenceAxis[0];
 	vectorRotations[9] = auxReferenceAxis[1];
 	vectorRotations[10] = auxReferenceAxis[2];
-	vectorRotations[11] = 3.0e0 * (auxMath_._pi / 5.0e0);
+	vectorRotations[11] = 3.0e0 * (2.0e0 * auxMath_._pi / 5.0e0);
 	//C5-1-m
 	vectorRotations[12] = auxReferenceAxis[0];
 	vectorRotations[13] = auxReferenceAxis[1];
 	vectorRotations[14] = auxReferenceAxis[2];
-	vectorRotations[15] = 4.0e0 * (auxMath_._pi / 5.0e0);
+	vectorRotations[15] = 4.0e0 * (2.0e0 * auxMath_._pi / 5.0e0);
 
 	//C2-1 ( C5-1-p C5-1-pp C5-1-mm C5-1-m )
 	vectorRotations[16] = mol0[0].x;
@@ -1281,8 +1281,6 @@ std::vector<double> Geometries::geometry5PP(
 
 	for (size_t i = 0; i < reflectionOperation.size(); i++)
 		reflectionOperation[i] = i;
-	reflectionOperation[1] = 3;
-	reflectionOperation[3] = 1;
 
 	return vectorRotations;
 }
@@ -2067,7 +2065,7 @@ std::vector<double> Geometries::geometry7HP(
 	mol0[6].z = 0.00000000;
 
 	auxReferenceAxis[0] = 0.0e0;
-	auxReferenceAxis[1] = -0.08697e0;
+	auxReferenceAxis[1] = 0.0e0;
 	auxReferenceAxis[2] = -2.54417e0;
 	auxMath_.normalize(auxReferenceAxis);
 
@@ -5221,7 +5219,7 @@ string Geometries::geometry4SSSymmetryFlags(
 void Geometries::geometry4vTBPYotherSymmetries(
 	std::vector< std::vector<int> > &allReflections)
 {
-	int size = 5;
+	int size = 4;
 	allReflections.resize(3);
 	for (size_t i = 0; i < allReflections.size(); i++)
 	{
@@ -5776,8 +5774,8 @@ void Geometries::geometry6HPotherSymmetries(
 	//P-1 ( C6-1-p C3-1-p C2-1 C3-1-m C6-1-m )
 
 	//P-2 ( C2-5 )
-	allReflections[1][2] = 6;
-	allReflections[1][6] = 2;
+	allReflections[1][2] = 4;
+	allReflections[1][4] = 2;
 	allReflections[1][1] = 5;
 	allReflections[1][5] = 1;
 
@@ -8067,7 +8065,7 @@ string Geometries::geometry8OPSymmetryFlags(
 		case 14:
 			return "S8-1-m ";
 		case 15:
-			return "I ";
+			return "Inv ";
 
 		default:
 			cout << "rotation on CauchyIndex::rotationString not found" << endl;

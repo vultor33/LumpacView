@@ -968,7 +968,7 @@ std::vector<double> Geometries::geometry4SS(
 	mol0[3].y = 0.00000000;
 	mol0[3].z = 1.00000000;
 
-	//C2-1 
+	//C2-1
 	vector<double> auxReferenceAxis(3);
 	auxReferenceAxis[0] = mol0[1].x + mol0[2].x;
 	auxReferenceAxis[1] = mol0[1].y + mol0[2].y;
@@ -1128,7 +1128,7 @@ std::vector<double> Geometries::geometry5SPY(
 	vectorRotations[1] = mol0[0].y;
 	vectorRotations[2] = mol0[0].z;
 	vectorRotations[3] = auxMath_._pi / 2.0e0;
-	//C2-1 
+	//C2-1
 	vectorRotations[4] = mol0[0].x;
 	vectorRotations[5] = mol0[0].y;
 	vectorRotations[6] = mol0[0].z;
@@ -1215,7 +1215,7 @@ std::vector<double> Geometries::geometry5PP(
 	mol0[0].x = 1.00000000;
 	mol0[0].y = 0.00000000;
 	mol0[0].z = 0.00000000;
-	mol0[1].x = 0.30901699;	
+	mol0[1].x = 0.30901699;
 	mol0[1].y = 0.95105652;
 	mol0[1].z = 0.00000000;
 	mol0[2].x = -0.80901699;
@@ -1589,7 +1589,7 @@ std::vector<double> Geometries::geometry6HP(
 	vector<double> vectorRotations(44);
 	vector<double> auxReferenceAxis(3);
 
-	mol0[0].x = 1.00000000;	
+	mol0[0].x = 1.00000000;
 	mol0[0].y = 0.00000000;
 	mol0[0].z = 0.00000000;
 	mol0[1].x = 0.50000000;
@@ -1622,7 +1622,7 @@ std::vector<double> Geometries::geometry6HP(
 	vectorRotations[5] = auxReferenceAxis[1];
 	vectorRotations[6] = auxReferenceAxis[2];
 	vectorRotations[7] = 2.0e0 * (2.0e0 * auxMath_._pi / 6.0e0);
-	//C2-1 ( C2-2 C2-3 C2-4 C2-5 C2-6 C2-7 ) 
+	//C2-1 ( C2-2 C2-3 C2-4 C2-5 C2-6 C2-7 )
 	vectorRotations[8] = auxReferenceAxis[0];
 	vectorRotations[9] = auxReferenceAxis[1];
 	vectorRotations[10] = auxReferenceAxis[2];
@@ -1711,7 +1711,7 @@ std::vector<double> Geometries::geometry6PPY(
 	cutAngle = 91.0e0 * (auxMath_._pi / 180.0e0);
 	vector<double> vectorRotations(16);
 	vector<double> auxReferenceAxis(3);
-	
+
 	mol0[0].x = 0.00000000;
 	mol0[0].y = 0.00000000;
 	mol0[0].z = -1.00000000;
@@ -1943,7 +1943,7 @@ std::vector<double> Geometries::geometry7CTPR(
 	mol0[6].y = 0.0000;
 	mol0[6].z = -0.7866;
 
-	//C2-1 
+	//C2-1
 	vectorRotations[0] = mol0[0].x;
 	vectorRotations[1] = mol0[0].y;
 	vectorRotations[2] = mol0[0].z;
@@ -1974,7 +1974,7 @@ std::vector<double> Geometries::geometry7HPY(
 	mol0[0].x = 0.00000000;
 	mol0[0].y = 0.00000000;
 	mol0[0].z = -1.00000000;
-	mol0[1].x = 1.00000000;	
+	mol0[1].x = 1.00000000;
 	mol0[1].y = 0.00000000;
 	mol0[1].z = 0.00000000;
 	mol0[2].x = 0.50000000;
@@ -1993,27 +1993,27 @@ std::vector<double> Geometries::geometry7HPY(
 	mol0[6].y = -0.86602540;
 	mol0[6].z = 0.00000000;
 
-	//C6-1-p 
+	//C6-1-p
 	vectorRotations[0] = mol0[0].x;
 	vectorRotations[1] = mol0[0].y;
 	vectorRotations[2] = mol0[0].z;
 	vectorRotations[3] = (2.0e0 * auxMath_._pi / 6.0e0);
-	//C3-1-p 
+	//C3-1-p
 	vectorRotations[4] = mol0[0].x;
 	vectorRotations[5] = mol0[0].y;
 	vectorRotations[6] = mol0[0].z;
 	vectorRotations[7] = 2.0e0 * (2.0e0 * auxMath_._pi / 6.0e0);
-	//C2-1 
+	//C2-1
 	vectorRotations[8] = mol0[0].x;
 	vectorRotations[9] = mol0[0].y;
 	vectorRotations[10] = mol0[0].z;
 	vectorRotations[11] = 3.0e0 * (2.0e0 * auxMath_._pi / 6.0e0);
-	//C3-1-m 
+	//C3-1-m
 	vectorRotations[12] = mol0[0].x;
 	vectorRotations[13] = mol0[0].y;
 	vectorRotations[14] = mol0[0].z;
 	vectorRotations[15] = 4.0e0 * (2.0e0 * auxMath_._pi / 6.0e0);
-	//C6-1-m 
+	//C6-1-m
 	vectorRotations[16] = mol0[0].x;
 	vectorRotations[17] = mol0[0].y;
 	vectorRotations[18] = mol0[0].z;
@@ -2040,10 +2040,10 @@ std::vector<double> Geometries::geometry7HP(
 	reflectionOperation.resize(size);
 	cutAngle = 91.0e0 * (auxMath_._pi / 180.0e0);
 	vector<double> vectorRotations(52);
-	vector<double> auxReferenceAxis(3);	
+	vector<double> auxReferenceAxis(3);
 
 	mol0[0].x = 1.00000000;
-	mol0[0].y = 0.00000000;	
+	mol0[0].y = 0.00000000;
 	mol0[0].z = 0.00000000;
 	mol0[1].x = 0.62348980;
 	mol0[1].y = 0.78183148;
@@ -2069,32 +2069,32 @@ std::vector<double> Geometries::geometry7HP(
 	auxReferenceAxis[2] = -2.54417e0;
 	auxMath_.normalize(auxReferenceAxis);
 
-	//C7-1-p 
+	//C7-1-p
 	vectorRotations[0] = auxReferenceAxis[0];
 	vectorRotations[1] = auxReferenceAxis[1];
 	vectorRotations[2] = auxReferenceAxis[2];
 	vectorRotations[3] = (2.0e0 * auxMath_._pi / 7.0e0);
-	//C7-1-pp 
+	//C7-1-pp
 	vectorRotations[4] = auxReferenceAxis[0];
 	vectorRotations[5] = auxReferenceAxis[1];
 	vectorRotations[6] = auxReferenceAxis[2];
 	vectorRotations[7] = 2.0e0 * (2.0e0 * auxMath_._pi / 7.0e0);
-	//C7-1-ppp 
+	//C7-1-ppp
 	vectorRotations[8] = auxReferenceAxis[0];
 	vectorRotations[9] = auxReferenceAxis[1];
 	vectorRotations[10] = auxReferenceAxis[2];
 	vectorRotations[11] = 3.0e0 * (2.0e0 * auxMath_._pi / 7.0e0);
-	//C7-1-mmm 
+	//C7-1-mmm
 	vectorRotations[12] = auxReferenceAxis[0];
 	vectorRotations[13] = auxReferenceAxis[1];
 	vectorRotations[14] = auxReferenceAxis[2];
 	vectorRotations[15] = 4.0e0 * (2.0e0 * auxMath_._pi / 7.0e0);
-	//C7-1-mm 
+	//C7-1-mm
 	vectorRotations[16] = auxReferenceAxis[0];
 	vectorRotations[17] = auxReferenceAxis[1];
 	vectorRotations[18] = auxReferenceAxis[2];
 	vectorRotations[19] = 5.0e0 * (2.0e0 * auxMath_._pi / 7.0e0);
-	//C7-1-m 
+	//C7-1-m
 	vectorRotations[20] = auxReferenceAxis[0];
 	vectorRotations[21] = auxReferenceAxis[1];
 	vectorRotations[22] = auxReferenceAxis[2];
@@ -2154,7 +2154,7 @@ std::vector<double> Geometries::geometry7JETPY(
 	cutAngle = 91.0e0 * (auxMath_._pi / 180.0e0);
 	vector<double> vectorRotations(8);
 	vector<double> auxReferenceAxis(3);
-	
+
 	mol0[0].x = 0.75592895;
 	mol0[0].y = 0.00000000;
 	mol0[0].z = 0.65465367;
@@ -2175,9 +2175,9 @@ std::vector<double> Geometries::geometry7JETPY(
 	mol0[5].z = -0.65465367;
 	mol0[6].x = 0.00000000;
 	mol0[6].y = 0.00000000;
-	mol0[6].z = 1.00000000;
+	mol0[6].z = 1.72353663;
 
-	//C3-1-p 
+	//C3-1-p
 	vectorRotations[0] = mol0[6].x;
 	vectorRotations[1] = mol0[6].y;
 	vectorRotations[2] = mol0[6].z;
@@ -2250,7 +2250,7 @@ std::vector<double> Geometries::geometry8SAPR(
 	vectorRotations[1] = auxReferenceAxis[1];
 	vectorRotations[2] = auxReferenceAxis[2];
 	vectorRotations[3] = auxMath_._pi / 2.0e0;
-	//C2-1 
+	//C2-1
 	vectorRotations[4] = auxReferenceAxis[0];
 	vectorRotations[5] = auxReferenceAxis[1];
 	vectorRotations[6] = auxReferenceAxis[2];
@@ -2368,7 +2368,7 @@ std::vector<double> Geometries::geometry8TDD(
 	vectorRotations[1] = auxReferenceAxis[1];
 	vectorRotations[2] = auxReferenceAxis[2];
 	vectorRotations[3] = auxMath_._pi;
-	//C2-2 ( C2-1 C2-3 ) 
+	//C2-2 ( C2-1 C2-3 )
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[5].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[5].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[5].z);
@@ -2418,15 +2418,15 @@ std::vector<double> Geometries::geometry8BTPR(
 	mol0[1].y = -0.377964473009;
 	mol0[1].z = -0.654653670708;
 	mol0[2].x = 0.654653670708;
-	mol0[2].y = -0.377964473009;	
+	mol0[2].y = -0.377964473009;
 	mol0[2].z = 0.654653670708;
 	mol0[3].x = 0.654653670708;
 	mol0[3].y = -0.377964473009;
 	mol0[3].z = -0.654653670708;
-	mol0[4].x = 0.000000000000;	
-	mol0[4].y = 0.755928946018;	
+	mol0[4].x = 0.000000000000;
+	mol0[4].y = 0.755928946018;
 	mol0[4].z = 0.654653670708;
-	mol0[5].x = 0.000000000000;	
+	mol0[5].x = 0.000000000000;
 	mol0[5].y = 0.755928946018;
 	mol0[5].z = -0.654653670708;
 	mol0[6].x = 0.000000000000;
@@ -2436,7 +2436,7 @@ std::vector<double> Geometries::geometry8BTPR(
 	mol0[7].y = 0.500000000000;
 	mol0[7].z = 0.000000000000;
 
-	// C2-1 
+	// C2-1
 	auxReferenceAxis[0] = 0.5e0 *(mol0[0].x + mol0[1].x);
 	auxReferenceAxis[1] = 0.5e0 *(mol0[0].y + mol0[1].y);
 	auxReferenceAxis[2] = 0.5e0 *(mol0[0].z + mol0[1].z);
@@ -2481,7 +2481,7 @@ std::vector<double> Geometries::geometry8HBPY(
 	mol0[2].y = -1.000000000000;
 	mol0[2].z = 0.000000000000;
 	mol0[3].x = 0.866025403784;
-	mol0[3].y = -0.500000000000;	
+	mol0[3].y = -0.500000000000;
 	mol0[3].z = 0.000000000000;
 	mol0[4].x = 0.866025403784;
 	mol0[4].y = 0.500000000000;
@@ -2493,7 +2493,7 @@ std::vector<double> Geometries::geometry8HBPY(
 	mol0[6].y = 0.500000000000;
 	mol0[6].z = 0.000000000000;
 	mol0[7].x = -0.866025403784;
-	mol0[7].y = -0.500000000000;	
+	mol0[7].y = -0.500000000000;
 	mol0[7].z = 0.000000000000;
 
 	//C6-1-p
@@ -2589,13 +2589,13 @@ std::vector<double> Geometries::geometry8CU(
 	mol0[0].y = 0.577350269190;
 	mol0[0].z = 0.577350269190;
 	mol0[1].x = 0.577350269190;
-	mol0[1].y = 0.577350269190; 
+	mol0[1].y = 0.577350269190;
 	mol0[1].z = -0.577350269190;
 	mol0[2].x = 0.577350269190;
-	mol0[2].y = -0.577350269190;	
+	mol0[2].y = -0.577350269190;
 	mol0[2].z = 0.577350269190;
 	mol0[3].x = -0.577350269190;
-	mol0[3].y = 0.577350269190;	
+	mol0[3].y = 0.577350269190;
 	mol0[3].z = 0.577350269190;
 	mol0[4].x = 0.577350269190;
 	mol0[4].y = -0.577350269190;
@@ -3138,31 +3138,34 @@ std::vector<double> Geometries::geometry8JGBF(
 	cutAngle = 91.0e0 * auxMath_._pi / 180.0e0;;
 	vector<double> vectorRotations(12);
 	vector<double> auxReferenceAxis(3);
-	
-	mol0[0].x = 0.50000000;
+
+	mol0[0].x = 0.00000000;
 	mol0[0].y = 0.00000000;
-	mol0[0].z = 0.86602540;
-	mol0[1].x = -0.50000000;
+	mol0[0].z = 0.00000000;
+	mol0[1].x = 0.50000000;
 	mol0[1].y = 0.00000000;
 	mol0[1].z = 0.86602540;
-	mol0[2].x = 0.70710678;
-	mol0[2].y = 0.70710678;
-	mol0[2].z = 0.00000000;
-	mol0[3].x = 0.70710678;
-	mol0[3].y = -0.70710678;
+	mol0[2].x = -0.50000000;
+	mol0[2].y = 0.00000000;
+	mol0[2].z = 0.86602540;
+	mol0[3].x = 0.50000000;
+	mol0[3].y = 0.50000000;
 	mol0[3].z = 0.00000000;
-	mol0[4].x = -0.70710678;
-	mol0[4].y = -0.70710678;
+	mol0[4].x = 0.50000000;
+	mol0[4].y = -0.50000000;
 	mol0[4].z = 0.00000000;
-	mol0[5].x = -0.70710678;
-	mol0[5].y = 0.70710678;
+	mol0[5].x = -0.50000000;
+	mol0[5].y = -0.50000000;
 	mol0[5].z = 0.00000000;
-	mol0[6].x = 0.00000000;
+	mol0[6].x = -0.50000000;
 	mol0[6].y = 0.50000000;
-	mol0[6].z = -0.86602540;
+	mol0[6].z = 0.00000000;
 	mol0[7].x = 0.00000000;
-	mol0[7].y = -0.50000000;
+	mol0[7].y = 0.50000000;
 	mol0[7].z = -0.86602540;
+	mol0[8].x = 0.00000000;
+	mol0[8].y = -0.50000000;
+	mol0[8].z = -0.86602540;
 
 	//C2-1 ( C2-2 C2-3 )
 	auxReferenceAxis[0] = mol0[0].x + mol0[1].x;
@@ -3762,20 +3765,20 @@ std::vector<double> Geometries::geometry9HBPY(
 	cutAngle = 91.0e0 * (auxMath_._pi / 180.0e0);
 	vector<double> vectorRotations(52);
 
-	mol0[0].x = 0.00000000;	
+	mol0[0].x = 0.00000000;
 	mol0[0].y = 0.00000000;
 	mol0[0].z = -1.00000000;
 	mol0[1].x = 1.00000000;
 	mol0[1].y = 0.00000000;
 	mol0[1].z = 0.00000000;
 	mol0[2].x = 0.62348980;
-	mol0[2].y = 0.78183148;	
+	mol0[2].y = 0.78183148;
 	mol0[2].z = 0.00000000;
 	mol0[3].x = -0.22252093;
 	mol0[3].y = 0.97492791;
 	mol0[3].z = 0.00000000;
 	mol0[4].x = -0.90096887;
-	mol0[4].y = 0.43388374;	
+	mol0[4].y = 0.43388374;
 	mol0[4].z = 0.00000000;
 	mol0[5].x = -0.90096887;
 	mol0[5].y = -0.43388374;
@@ -3881,7 +3884,7 @@ std::vector<double> Geometries::geometry9JTC(
 	vector<double> auxReferenceAxis(3);
 
 	mol0[0].x = 1.00000000;
-	mol0[0].y = 0.00000000;	
+	mol0[0].y = 0.00000000;
 	mol0[0].z = 0.00000000;
 	mol0[1].x = 0.50000000;
 	mol0[1].y = 0.86602540;
@@ -3889,7 +3892,7 @@ std::vector<double> Geometries::geometry9JTC(
 	mol0[2].x = -0.50000000;
 	mol0[2].y = 0.86602540;
 	mol0[2].z = 0.00000000;
-	mol0[3].x = -1.00000000;	
+	mol0[3].x = -1.00000000;
 	mol0[3].y = 0.00000000;
 	mol0[3].z = 0.00000000;
 	mol0[4].x = -0.50000000;
@@ -5076,7 +5079,7 @@ void Geometries::geometry4SquareotherSymmetries(
 	allReflections[4][2] = 3;
 	allReflections[4][3] = 2;
 
-	//Inv 
+	//Inv
 	allReflections[5][0] = 2;
 	allReflections[5][2] = 0;
 	allReflections[5][1] = 3;
@@ -5230,7 +5233,7 @@ void Geometries::geometry4vTBPYotherSymmetries(
 		}
 	}
 
-	//P-1 
+	//P-1
 	allReflections[0][1] = 2;
 	allReflections[0][2] = 1;
 
@@ -5492,7 +5495,7 @@ void Geometries::geometry5PPotherSymmetries(
 		}
 	}
 
-	//P-1 ( C5-1-p C5-1-pp C5-1-mm C5-1-m ) 
+	//P-1 ( C5-1-p C5-1-pp C5-1-mm C5-1-m )
 
 	//P-2
 	allReflections[1][2] = 3;
@@ -5770,7 +5773,7 @@ void Geometries::geometry6HPotherSymmetries(
 			allReflections[i][j] = j;
 		}
 	}
-	 
+
 	//P-1 ( C6-1-p C3-1-p C2-1 C3-1-m C6-1-m )
 
 	//P-2 ( C2-5 )
@@ -6573,7 +6576,7 @@ void Geometries::geometry7HPotherSymmetries(
 string Geometries::geometry7HPSymmetryFlags(
 	int iSymmetry,
 	int symmetryType)
-{ 
+{
 	if (symmetryType == 0)
 	{
 		switch (iSymmetry)
@@ -7837,7 +7840,7 @@ void Geometries::geometry8OPotherSymmetries(
 		}
 	}
 
-	//P-1  ( C8-1-p C4-1-p C8-1-ppp C2-1 C8-1-mmm C4-1-m C8-1-m ) 
+	//P-1  ( C8-1-p C4-1-p C8-1-ppp C2-1 C8-1-mmm C4-1-m C8-1-m )
 
 	//P-2 ( C2-6 )
 	allReflections[1][1] = 7;
@@ -8870,7 +8873,7 @@ void Geometries::geometry9EPotherSymmetries(
 	allReflections[9][1] = 8;
 	allReflections[9][8] = 1;
 
-	
+
 	//S9-1-p
 	allReflections[10][0] = 1;
 	allReflections[10][1] = 2;

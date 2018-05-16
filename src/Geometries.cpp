@@ -4260,24 +4260,29 @@ std::vector<double> Geometries::geometry10JBCSAPR(
 	mol0[9].y = 0.00000000;
 	mol0[9].z = -1.59460000;
 
+	auxReferenceAxis.resize(3);
+	auxReferenceAxis[0] = mol0[9].x;
+	auxReferenceAxis[1] = mol0[9].y;
+	auxReferenceAxis[2] = mol0[9].z;
+	auxMath_.normalize(auxReferenceAxis);
+
 	//C4 - 1
-	vectorRotations[0] = mol0[9].x;
-	vectorRotations[1] = mol0[9].y;
-	vectorRotations[2] = mol0[9].z;
+	vectorRotations[0] = auxReferenceAxis[0];
+	vectorRotations[1] = auxReferenceAxis[1];
+	vectorRotations[2] = auxReferenceAxis[2];
 	vectorRotations[3] = auxMath_._pi / 2.0e0;
 	//C4 - 2
-	vectorRotations[4] = mol0[9].x;
-	vectorRotations[5] = mol0[9].y;
-	vectorRotations[6] = mol0[9].z;
+	vectorRotations[4] = auxReferenceAxis[0];
+	vectorRotations[5] = auxReferenceAxis[1];
+	vectorRotations[6] = auxReferenceAxis[2];
 	vectorRotations[7] = auxMath_._pi;
 	//C4 - 3
-	vectorRotations[8] = mol0[9].x;
-	vectorRotations[9] = mol0[9].y;
-	vectorRotations[10] = mol0[9].z;
+	vectorRotations[8] = auxReferenceAxis[0];
+	vectorRotations[9] = auxReferenceAxis[1];
+	vectorRotations[10] = auxReferenceAxis[2];
 	vectorRotations[11] = -auxMath_._pi / 2.0e0;
 
 	//c2 - 1
-	auxReferenceAxis.resize(3);
 	auxReferenceAxis[0] = 0.5e0 * (mol0[0].x + mol0[1].x);
 	auxReferenceAxis[1] = 0.5e0 * (mol0[0].y + mol0[1].y);
 	auxReferenceAxis[2] = 0.5e0 * (mol0[0].z + mol0[1].z);

@@ -72,13 +72,13 @@ int main(int argc, char *argv[])
 
 
 
-	/* OBTENDO INDICE DE CICLOS 
-	int geoCode = 43;
+	/* OBTENDO INDICE DE CICLOS */
+	int geoCode = 60;
 	CauchyIndex ci2312_(geoCode);
 	ci2312_.cycleIndices(
 		geoCode);
 	return 0;
-	*/
+	
 
 	/* GERANDO SIMETRIAS 
 	UtilityRun util_;
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-	/* EXEMPLO DE PRINT ALL MOL */
+	/* EXEMPLO DE PRINT ALL MOL 
 	int geoCode = 88;
 	string response = "response-combinations8.txt";
 	string path = "/home/vultor/lumpacview/code2/resultados/8/JGBF-8/";
@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
 		path,
 		response);
 	return 0;
+	*/
 	
 	/* CALCULATING ANGLES 
 	vector<Ligand> allLig;

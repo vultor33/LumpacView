@@ -9587,7 +9587,7 @@ void Geometries::geometry6OCotherSymmetries(
 	allReflections[11][1] = 5;
 	allReflections[11][5] = 2;
 	allReflections[11][2] = 3;
-	allReflections[11][3] = 1;
+	allReflections[11][3] = 0;
 
 	//S6-2-p  [0 3 4]
 	allReflections[12][0] = 1;
@@ -9610,7 +9610,7 @@ void Geometries::geometry6OCotherSymmetries(
 	allReflections[14][3] = 5;
 	allReflections[14][5] = 2;
 	allReflections[14][2] = 1;
-	allReflections[14][1] = 4;
+	allReflections[14][1] = 0;
 	//S6-3-m  [0 2 3]
 	allReflections[15][0] = 1;
 	allReflections[15][1] = 2;

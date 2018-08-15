@@ -50,6 +50,7 @@ public:
 		std::vector<int> & listOfRcw,
 		std::vector<std::string> & listOfPGroup);
 
+	int symmetryNumberFromPointGroup(std::string pGroup);
 
 private:
 
@@ -89,8 +90,6 @@ private:
 		std::string pathRead,
 		std::string &combination, 
 		int systemSize);
-
-	int symmetryNumberFromPointGroup(std::string pGroup);
 
 };
 

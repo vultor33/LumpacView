@@ -46,7 +46,8 @@ data/melhor*
 *.out
 *.arc
 *.mop
-generate-isomers*
+generate-stereo*
+
 
 
 

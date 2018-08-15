@@ -62,14 +62,16 @@ void UtilityRun::formatToSymmetryAndFiles(int geoCode)
 	string pathRaw = getRawPath(geoCode);
 	string pathFormatado = getResultsPath(geoCode);
 
-	/*
+	
 	ChangeNames chNames1_;
 	chNames1_.changeNameOfFiles(
 		responseName,
 		geoCode,
-		pathRaw,
-		pathFormatado);
-	*/
+		"C:\\Users\\frederico\\source\\repos\\lumpacview\\LumpacView\\OC-RAW\\OC-6\\",
+		"C:\\Users\\frederico\\source\\repos\\lumpacview\\LumpacView\\OC-FORMATADO\\OC-6\\");
+
+//	exit(1);
+	
 	//	cout << "antes do response" << endl;	
 
 	findAllGroupPoint(geoCode);
@@ -1616,6 +1618,7 @@ void UtilityRun::findAllGroupPoint(int geoCode)
 	cout << "ONLY ON WINDOWS  --- to linux, change: getResultsPath" << endl;
 
 	string pathRead = getResultsPath(geoCode);
+	pathRead = "C:\\Users\\frederico\\source\\repos\\lumpacview\\LumpacView\\OC-FORMATADO\\OC-6\\";
 	Geometries geo_;
 	vector<CoordXYZ> mol0;
 	double cutAngle;

@@ -11,6 +11,7 @@
 #include "Coordstructs.h"
 #include "Geometries.h"
 #include "ReadWriteFormats.h"
+#include "ChangeNames.h"
 
 using namespace std;
 
@@ -139,6 +140,7 @@ void IsomersToMol::printAllMolFromSpecifiedGeometry(
 	while (!response_.eof())
 	{
 		getline(response_, line);
+		cout << "line: " << line << endl;
 		if (line == "")
 			break;
 		string combination;
@@ -219,7 +221,7 @@ void IsomersToMol::printAllMol(
 		string vGroup, pGroup, vCode, setGroup, chirality;
 		int rcw;
 		vector<int> permutation;
-		rwf_.takeAllElementsFromCodeNew(line, 
+		rwf_.takeAllElementsFromCodeNewSym(line, 
 			coordination,
 			rcw,
 			chirality, 
@@ -228,7 +230,10 @@ void IsomersToMol::printAllMol(
 			setGroup,
 			permutation);
 
-		string subFolderName = pGroup + "_" + chirality + "_" + setGroup[0];
+		ChangeNames chNames_;
+		stringstream convertSymN;
+		convertSymN << chNames_.symmetryNumberFromPointGroup(pGroup);
+		string subFolderName = pGroup + "_" + chirality + "_" + convertSymN.str() + "_" + setGroup[0];
 
 		system(("mkdir " + folderComposition + "//" + subFolderName).c_str());
 		ofstream fileXyz_((folderCompositionZero + "//" + subFolderName + "//" + vGroup + ".mol2").c_str());
@@ -404,7 +409,7 @@ void IsomersToMol::printMoleculeMolFormat(
 
 	//lantanide
 	double zero = 0.0e0;
-	printFile_ << " 1 A1 "
+	printFile_ << " 1 A1  "
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
 		<< fixed << setprecision(4) << setw(8) << zero << "  "
@@ -415,7 +420,7 @@ void IsomersToMol::printMoleculeMolFormat(
 
 	for (int i = 0; i < nAtoms; i++)
 	{
-		printFile_ << " " << i + 2 << " A" << i + 1 << "  "
+		printFile_ << " " << i + 2 << " A" << i + 2 << "  "
 			<< fixed << setprecision(4) << setw(8) << complex[i].x * scale << "  "
 			<< fixed << setprecision(4) << setw(8) << complex[i].y * scale << "  "
 			<< fixed << setprecision(4) << setw(8) << complex[i].z * scale << "  "

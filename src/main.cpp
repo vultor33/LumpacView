@@ -64,7 +64,7 @@ void waitSlurmFinish(int usedProc);
 void buildCsvFile(int size, string skeletonName);
 
 int main(int argc, char *argv[])
-{	
+{
 	//UtilityRun utilxx_;
 	//utilxx_.identifyOne();
 	//return 0;
@@ -72,83 +72,27 @@ int main(int argc, char *argv[])
 
 
 
-	/* OBTENDO INDICE DE CICLOS */
+	/* OBTENDO INDICE DE CICLOS
 	int geoCode = 60;
 	CauchyIndex ci2312_(geoCode);
 	ci2312_.cycleIndices(
 		geoCode);
 	return 0;
-	
+	*/
 
-	/* GERANDO SIMETRIAS 
+
+	/* GERANDO SIMETRIAS
 	UtilityRun util_;
-	util_.formatToSymmetryAndFiles(96);
+	util_.formatToSymmetryAndFiles(60);
 	return 0;
 	*/
-	
 
 
 //	UtilityRun util_;
 //	util_.formatIsomersFiles();
 //	return 0;
 
-	/* GRUPO PONTUAL 
-	string pathRead = "C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\FORMATADO\\#4\\SP\\";
-	string responseName = "response-combinations4.txt";
-	int geoCode = 41;
-	Geometries geo_;
-	ReadWriteFormats rwf_;
-	string geomName = geo_.sizeToGeometryCode(geoCode);
-	ifstream response_((pathRead + responseName).c_str());
-	string line;
-	while (!response_.eof())
-	{
-		getline(response_, line);
-		if (line == "")
-			break;
-		string combination;
-		stringstream convert;
-		convert << line;
-		convert >> combination;
-		vector< vector<int> > combinationCode = rwf_.compositionToNumberOld(combination);
-		string newCombinationName = rwf_.newCodeToString(combinationCode);
-		newCombinationName = "M" + newCombinationName;
-		string allIsomersCombinationFile = geomName + "-" + newCombinationName + ".csv";
-		CauchyIndex ciSymmetry_(geoCode);
-		ciSymmetry_.findAllSymmetryOperations(
-			geoCode,
-			allIsomersCombinationFile,
-			pathRead);
-	}
-	return 0;
-	*/
-	
-
-	
-	//CauchyIndex cif3f_(60);
-	//cif3f_.findAllSymmetryOperations("OC-6-Ma2(AB)2.csv","");
-	//return 0;
-
-
-	/* APAGAR 
-	ReadWriteFormats rwf_;
-	vector<int> t1, b1;
-	string names = rwf_.typeLineToLetters("3  1  4  3  2  4 / 2  5  4  6  1  3 ", t1, b1);
-	vector<int> atomTypes, bidentatChosen, a2, b2;
-	rwf_.typeLineToNumberCodes(
-		names,
-		atomTypes,
-		bidentatChosen);
-	return 0;
-	*/
-
-	/* Generate coordinates   -- falta muffin
-	UtilityRun util_;
-	util_.generateAllIsomersMol2Files();
-	return 0;
-	*/
-
-	/*	
+	/*
 	CauchyIndex ci21_(9);
 	vector<string> atoms;
 	vector<int> bid;
@@ -156,58 +100,10 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-
-	/*
-	string line;
-	string responseName = "response-combinations4.txt";
-	ifstream resp_(responseName.c_str());
-	while (!resp_.eof())
-	{
-		getline(resp_, line);
-		if (line == "")
-			break;
-		stringstream convertLine;
-		convertLine << line;
-		string code;
-		convertLine >> code;
-		CauchyIndex ci123_(4);
-		ci123_.generateAtomTypesAndBidentateChosenFile(code);
-		ci123_.generateAllIndependentIsomersWithFlagEnantiomers("enatiomers-4.log", code + "---atomTypes.txt", code);
-	}
-	string code = "m01m02m03m04m05m06";
-	CauchyIndex ci123_(6);
-	ci123_.generateAtomTypesAndBidentateChosenFile(code);
-	ci123_.generateAllIndependentIsomersWithFlagEnantiomers("enantiomers-6.log", code + "---atomTypes.txt", code);
-	exit(0);
-	*/
-
-
-	/* IDENTIFY ISOMERS */
-	//UtilityRun util_;
-	//util_.identifyOne();
-	//return 0;
-
-	
-	/* CALCULATING SQUARE 
-	string composition = "C01C02";
-	CauchyIndex ci1221_(4);
-	ci1221_.generateAtomTypesAndBidentateChosenFile(composition);
-	vector<int> atomTypes;
-	vector<int> bidentate;
-	ci1221_.generateAllIndependentIsomersWithFlagEnantiomers(
-		"isomers-4-SQ-enantiomers.txt",
-		composition + "---atomTypes.txt",
-		composition);
-	return 0;
-	*/
-
-	// tenho que ler o response transformar no codigo novo
-	// depois entrar no arquivo e pronto, montar a arvore de diretorios
-
-	/* EXEMPLO DE PRINT ALL MOL 
-	int geoCode = 92;
-	string response = "response-combinations9.txt";
-	string path = "/home/vultor/lumpacview/code2/resultados/9/MFF-9/";
+	/* EXEMPLO DE PRINT ALL MOL
+	int geoCode = 88;
+	string response = "response-combinations8.txt";
+	string path = "/home/vultor/lumpacview/code2/resultados/8/JGBF-8/";
 	IsomersToMol ismol_;
 	ismol_.printAllMolFromSpecifiedGeometry(geoCode,
 		path,
@@ -215,8 +111,7 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-
-	/* CALCULATING ANGLES 
+	/* CALCULATING ANGLES
 	vector<Ligand> allLig;
 	ComplexCreator cp_(allLig);
 	Geometries geo_;
@@ -229,121 +124,8 @@ int main(int argc, char *argv[])
 	return 0;
 	*/
 
-	/* CHANGING NAMES 
-	string responseName;
-	responseName = "response-combinations6.txt";
-	ChangeNames chNames_;
-	chNames_.changeNameOfFiles(
-	responseName,
-	60,
-	"C:\\Users\\basta\\Documents\\DOUTORADO\\!Trabalhos-Paralelo\\!QUALIFICACAO\\lumpac-view\\!!RESULTADOS\\RAW\\#6\\OC\\",
-	"");
-	chNames_.createNewCounting(60, "", responseName);
-	return 0;
-	*/
-
-	//CauchyIndex ci123_(10);
-	//ci123_.temporario();
-	//return 0;
-	/*
-	string rawIsomers2 = "enantiomers-6";
-	string composition3 = "m01m02m03m04m05m05";
-	CauchyIndex ci14_(6);
-	int kInit3 = 1;
-	int kFinal3 = 10;
-	int lDeleteI = 11;
-	int lDeleteF = 30;
-	ci14_.generateAtomTypesAndBidentateChosenFile(composition3);
-	ci14_.doBlockDeletionFlagsEnantiomers(
-			rawIsomers2,
-                        composition3 + "---atomTypes.txt" ,
-                        kInit3,
-                        kFinal3,
-                        lDeleteI,
-                        lDeleteF);
-	return 0;
-
-	int systemSize = 7;
-	string composition = "m01m02m02B01C01";
-	string blockName = "enantiomers-7.log";
-	CauchyIndex ci13_(systemSize);
-	ci13_.printAllMoleculesFromFile(composition);
-	return 0;
-	ci13_.generateAtomTypesAndBidentateChosenFile(composition);
-	ci13_.generateAllIndependentIsomersWithFlagEnantiomers(blockName, composition + "---atomTypes.txt", composition);
-	//blockName = "skeleton-6.txt";
-	//ci13_.generateAllIndependentIsomersWithFlag(blockName, composition + "---atomTypes.txt", composition);
-	return 0;
-	*/
-	/*
-	CauchyIndex ci5_(6);
-	ci5_.generateAllIndependentIsomers();
-	ci5_.createEnantiomersFiles(
-		4,
-		30,
-		"skeleton-6",
-		"",
-		"pc");
-	return 0;
-
-	CauchyIndex ci_(6);
-	int iPer = 7;
-	ci_.enantiomersOrderingBlock(iPer, 30, "skeleton-6.txt");
-	return 0;
-*/
-	// agora tenho que fazer aquele negocio ---
-	// os numeros precisam variar de 1 - 31 - 61
-	// e assim vai. cada processador vai fazer uma serie dessas.
-	// definida a serie e so chamar
-	// ci_.enantiomersOrderingBlock(i + 1, iFinal, "skeleton-6.txt", permut(i));
-	// que resolve
-
-/*
-	vector<string> atom;
-	vector<int> bidentate;
-	ci_.enantiomersOrdering();
-	return 0;
-*/
-	// TENHO QUE CRIAR UMA PARADA QUE SEPARE OS ISOMEROS NA GRAFENO.
-	// acho que e correr todos com todos mesmo, fazer o q.
-	// de cima pra baixo com numeros lidos atraves do modulo.
-
-	// colocar todos para trabalhar juntos, pega o primeiro
-	// divide o resto nos processadores (80 mil em cada)
-	// fica tipo - do 400 ao 700.
-	// se nao tiver nada eu descarto. (quando tiver eu bato la)
-
-
-
-
-
-
-
 	// ATENCAAAAAOOOOOOOOOOOOOOOOOOOO
 	// a comparacao de isomeros do 12 esta restrita
-
-/*	
-	string flagsFile = "results-m01m02m03m04m04m04";
-	FindIsomers fd_;
-	vector<int> permutation(8);
-	permutation[0] = 0;
-	permutation[1] = 1;
-	permutation[2] = 2;
-	permutation[3] = 3;
-	permutation[4] = 4;
-	permutation[5] = 6;
-	permutation[6] = 5;
-	permutation[7] = 7;
-	fd_.printSelectedIsomerCauchy(permutation, flagsFile);
-	return 0;
-	*/
-
-// !!! IMPORTANTE - mudar bool ComplexCreator::start(vector<int> & ligandsPermutation)
-
-// ele troca as coordenadas
-
-
-
 
 /*  EXEMPLO PARA RODAR
 	./lumpacview.exe generateCompositionFiles 6 30 12 3 m01m02m03m04m04m04 skeleton-6 pc
@@ -441,26 +223,26 @@ int main(int argc, char *argv[])
 		string composition, rawIsomersFile, machineType;
 
 		stringstream cGen;
-		cGen << argv[2] << "  " 
-			<< argv[3] << "  " 
-			<< argv[4] << "  " 
-			<< argv[5] << "  " 
-			<< argv[6] << "  " 
-			<< argv[7] << "  " 
+		cGen << argv[2] << "  "
+			<< argv[3] << "  "
+			<< argv[4] << "  "
+			<< argv[5] << "  "
+			<< argv[6] << "  "
+			<< argv[7] << "  "
 			<< argv[8];
-		
+
 		cGen >> systemSize
-			>> total 
+			>> total
 			>> bigBlockSize
 			>> smallBlockSize
 			>> composition
 			>> rawIsomersFile
 			>> machineType;
-		
+
 		CauchyIndex ci_(systemSize);
 		ci_.generateAtomTypesAndBidentateChosenFile(composition);
-	
-	
+
+
 		string compositionFile = workingDirectory + "/" + composition + "---atomTypes.txt";
 
 		//exit(1);// atomTypes
@@ -468,13 +250,13 @@ int main(int argc, char *argv[])
 		ci_.generateSlurmFilesToDeletionFlags(
 			systemSize,
 			total,
-			bigBlockSize,	
+			bigBlockSize,
 			smallBlockSize,
 			compositionFile,
 			workingDirectory + "/" + rawIsomersFile,
 			workingDirectory,
 			machineType);
-	}	
+	}
 	else if (execType == "compositionBlockDeletion")
 	{
 		int systemSize, kRotateInit, kRotateEnd, lDeleteInit, lDeleteEnd;
@@ -984,10 +766,10 @@ void buildCsvFile(int size, string skeletonName)
 			lineSkel << line2;
 			for(int i = 0; i < size; i++)
 				lineSkel >> permutSkeleton[i];
-			
+
 			if(permutSkeleton == permutCsv)
 			{
-				csvFileNumber_ << aux1 << "  " 
+				csvFileNumber_ << aux1 << "  "
 				<< aux2 << " " << k1 << " ; ";
 				for(int i = 0; i < size; i++)
 					csvFileNumber_ << permutCsv[i] << "  ";

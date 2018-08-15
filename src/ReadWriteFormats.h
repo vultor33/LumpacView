@@ -143,6 +143,16 @@ public:
 		std::vector<int> & permut);
 
 
+	// format {[Ma2(AA)(AB)] OC-6 Cs a 1 B [1 2 4 6 5 3]}
+	void takeAllElementsFromCodeNewSym(
+		std::string line,
+		int coordination,
+		int & rcw,
+		std::string & chirality,
+		std::string & vGroup,
+		std::string & pGroup,
+		std::string & setGroup,
+		std::vector<int> & permut);
 
 	bool isachiral(std::string pGroup);
 

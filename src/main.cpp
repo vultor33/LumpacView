@@ -72,13 +72,13 @@ int main(int argc, char *argv[])
 
 
 
-	/* OBTENDO INDICE DE CICLOS
-	int geoCode = 60;
+	/* OBTENDO INDICE DE CICLOS */
+	int geoCode = 103;
 	CauchyIndex ci2312_(geoCode);
 	ci2312_.cycleIndices(
 		geoCode);
 	return 0;
-	*/
+	
 
 
 	/* GERANDO SIMETRIAS

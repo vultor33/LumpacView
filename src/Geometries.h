@@ -12,13 +12,13 @@ class Geometries
 public:
 	Geometries();
 	~Geometries();
-	
+
 	std::vector<double> selectGeometry(
 		int select,
 		std::vector<CoordXYZ> &mol0,
 		double & cutAngle,
 		std::vector<int> &reflectionOperation);
-	
+
 	void selectGeometrySymmetries(
 		int select,
 		std::vector< std::vector<int> > &allReflections);
@@ -471,6 +471,25 @@ private:
 	std::string geometry9JTDICSymmetryFlags(
 		int iSymmetry,
 		int symmetryType);
+
+	void geometry10TDotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry10TDSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry10JSPCotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry10JSPCSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
+	void geometry10JBCSAPRotherSymmetries(
+		std::vector< std::vector<int> > &allReflections);
+	std::string geometry10JBCSAPRSymmetryFlags(
+		int iSymmetry,
+		int symmetryType);
+
 
 
 	AuxMath auxMath_;

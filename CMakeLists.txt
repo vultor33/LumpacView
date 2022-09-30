@@ -6,7 +6,9 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 #headers
-include_directories(src src/complexbuild src/enumeration src/identifier src/optimization src/tools)
+include_directories(src src/complexbuild 
+    src/enumeration src/identifier src/optimization
+    src/tools src/tasks)
 
 #cpps
 file(GLOB CPP_FILES src/*.cpp src/*/*.cpp)
